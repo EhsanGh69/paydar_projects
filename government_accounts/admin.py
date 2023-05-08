@@ -16,7 +16,7 @@ class ReceiveAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_filter = ['receive_date', 'project', 'organization']
     search_fields = ['project', 'organization']
 
-    @admin.display(description='تاریخ دریافت', ordering='receive_date')
+    @admin.display(description='تاریخ و ساعت دریافت', ordering='receive_date')
     def get_receive_jalali(self, obj):
         return datetime2jalali(obj.receive_date).strftime('%d / %m / %Y - %H:%M:%S')
 
@@ -28,7 +28,7 @@ class ReceiveAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_filter = ['payment_date', 'project', 'organization']
     search_fields = ['project', 'organization']
 
-    @admin.display(description='تاریخ پرداخت', ordering='payment_date')
+    @admin.display(description='تاریخ و ساعت پرداخت', ordering='payment_date')
     def get_payment_jalali(self, obj):
         return datetime2jalali(obj.payment_date).strftime('%d / %m / %Y - %H:%M:%S')
 
@@ -41,7 +41,7 @@ class ReceiveAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_filter = ['activity_date', 'project', 'organization', 'activity_result']
     search_fields = ['project', 'organization']
 
-    @admin.display(description='تاریخ فعالیت', ordering='activity_date')
+    @admin.display(description='تاریخ و ساعت فعالیت', ordering='activity_date')
     def get_activity_jalali(self, obj):
         return datetime2jalali(obj.activity_date).strftime('%d / %m / %Y - %H:%M:%S')
 
