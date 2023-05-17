@@ -65,5 +65,25 @@ class Personnel(models.Model):
     contract_tag.short_description = "تصویر قرارداد"
 
 
+class Partners(models.Model):
+    investment_amount = models.BigIntegerField(default=0, verbose_name='مبلغ سرمایه‌گذاری')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_partners', verbose_name='پروژه')
+    contract_image = models.ImageField(upload_to='images/partners', verbose_name="تصویر قرارداد")
+    full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
+    address = models.TextField(verbose_name="آدرس")
+    phone = models.CharField(max_length=20, verbose_name="شماره تماس")
+
+    class Meta:
+        verbose_name = "شریک"
+        verbose_name_plural = "شرکاء"
+
+
+    def __str__(self):
+        return self.full_name
+    
+    def contract_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.contract_image.url))
+    contract_tag.short_description = "تصویر قرارداد"
+
 
 
