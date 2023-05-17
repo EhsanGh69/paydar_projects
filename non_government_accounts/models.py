@@ -50,7 +50,7 @@ class Personnel(models.Model):
     job = models.CharField(max_length=100, verbose_name="رشته شغلی")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
     address = models.TextField(verbose_name="آدرس")
-    contract_image = models.ImageField(upload_to='images', verbose_name="تصویر قرارداد")
+    contract_image = models.ImageField(upload_to='images/personnel', verbose_name="تصویر قرارداد")
 
     class Meta:
         verbose_name = "پرسنل"

@@ -8,9 +8,9 @@ from django.utils.html import format_html
 class Owners(models.Model):
     full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
-    national_card_image = models.ImageField(upload_to='images', verbose_name="تصویر کارت ملی")
-    birth_certificate_image = models.ImageField(upload_to='images', verbose_name="تصویر شناسنامه")
-    ownership_document_image = models.ImageField(upload_to='images', verbose_name="تصویر سند مالکیت")
+    national_card_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر کارت ملی")
+    birth_certificate_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر شناسنامه")
+    ownership_document_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر سند مالکیت")
 
     class Meta:
         verbose_name = "مالک"
