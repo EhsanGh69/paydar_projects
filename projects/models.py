@@ -46,9 +46,9 @@ class Project(models.Model):
     title = models.CharField(max_length=250, verbose_name="عنوان پروژه")
     contract_type = models.CharField(max_length=2, choices=CONTRACT_CHOICES, verbose_name="نوع قرارداد")
     owners = models.ManyToManyField(Owners, related_name="projects", verbose_name="مالکین")
-    contractual_salary = models.BigIntegerField(default=0, verbose_name="دستمزد قرارداد پیمانی")
+    contractual_salary = models.PositiveBigIntegerField(default=0, verbose_name="دستمزد قرارداد پیمانی")
     contractual_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0, verbose_name="درصد قرارداد پیمانی")
-    costs_estimation = models.BigIntegerField(default=0, editable=False, verbose_name="برآورد ریالی کل هزینه")
+    costs_estimation = models.PositiveBigIntegerField(default=0, editable=False, verbose_name="برآورد ریالی کل هزینه")
 
 
     class Meta:

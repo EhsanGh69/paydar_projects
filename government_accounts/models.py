@@ -23,7 +23,7 @@ class Receive(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name="ارگان")
     receive_for = models.CharField(max_length=250, verbose_name="دریافت بابت")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_receives', verbose_name="پروژه")
-    receive_amount = models.BigIntegerField(default=0, verbose_name="مبلغ دریافتی")
+    receive_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ دریافتی")
     receive_date = models.DateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت دریافت")
 
     class Meta:
@@ -40,7 +40,7 @@ class Payment(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name="ارگان")
     payment_for = models.CharField(max_length=250, verbose_name="پرداخت بابت")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_payments', verbose_name="پروژه")
-    payment_amount = models.BigIntegerField(default=0, verbose_name="مبلغ پرداختی")
+    payment_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ پرداختی")
     payment_date = models.DateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت پرداخت")
 
     class Meta:
