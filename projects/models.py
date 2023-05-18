@@ -59,6 +59,6 @@ class Project(models.Model):
         return self.title
     
     def owners_to_str(self):
-        return " ،".join([owners.full_name for owners in self.owners])
+        return " ،".join([owners.full_name for owners in self.owners.all()])
     owners_to_str.short_description = "مالکین"
 
