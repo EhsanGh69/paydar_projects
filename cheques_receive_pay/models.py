@@ -34,7 +34,7 @@ class Cheques(models.Model):
 
 
     def __str__(self):
-        return self.full_number
+        return self.cheque_number
     
     def cheque_tag(self):
         return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.cheque_image.url))

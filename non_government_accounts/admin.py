@@ -38,6 +38,23 @@ class ContractorsAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
 
 
+@admin.register(BuyersSellers)
+class BuyersSellersAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    list_display = ['buyer_seller', 'full_name', 'phone', 'contract_tag',
+                    'payment_order', 'get_buyers_sellers_jalali', 'cash_amount',
+                    'cheque_payment', 'delivery_amount', 'delivery_cheque',
+                    'doc_transfer_amount', 'doc_transfer_cheque'
+                    ]
+    ordering = ['buyer_seller', 'payment_order', 'full_name']
+    list_filter = ['payment_order', 'full_name']
+    search_fields = ['payment_order', 'full_name']
+
+    @admin.display(description='تاریخ و ساعت پرداخت نقدی', ordering='cash_date')
+    def get_buyers_sellers_jalali(self, obj):
+        return datetime2jalali(obj.cash_date).strftime('%d / %m / %Y - %H:%M:%S')
+
+
+
 
 
 

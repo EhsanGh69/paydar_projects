@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.utils.html import format_html
 
 from projects.models import Project
-
+from cheques_receive_pay.models import Cheques
 
 
 
@@ -88,26 +88,57 @@ class Partners(models.Model):
 
 
 
-# class BuyersSellers(models.Model):
-#     BUYER_SELLER_CHOICES = (
-#         ('buy', 'خریدار'),
-#         ('sel', 'فروشنده')
-#     )
-#     PAYMENT_ORDER_CHOICES = (
-#         ('csh', 'نقدی'),
-#         ('chq', 'چک'),
-#         ('del', 'حین تحویل'),
-#         ('dtr', 'انتقال سند'),
-#     )
-#     buyer_seller = models.CharField(max_length=3, choices=BUYER_SELLER_CHOICES, verbose_name='خریدار / فروشنده')
-#     full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
-#     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
-#     address = models.TextField(verbose_name="آدرس")
-#     contract_image = models.ImageField(upload_to='images/buyers_sellers', verbose_name="تصویر قرارداد")
-#     payment_order = models.CharField(max_length=3, choices=PAYMENT_ORDER_CHOICES, verbose_name='ترتیب پرداخت')
-#     cash_date = models.DateTimeField(default=timezone.now, verbose_name='تاریخ پرداخت نقدی')
-#     cash_amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ پرداخت نقدی')
-#     cheque_payment = models.ForeignKey()
+class BuyersSellers(models.Model):
+    BUYER_SELLER_CHOICES = (
+        ('buy', 'خریدار'),
+        ('sel', 'فروشنده')
+    )
+    PAYMENT_ORDER_CHOICES = (
+        ('csh', 'نقدی'),
+        ('chq', 'چک'),
+        ('del', 'حین تحویل'),
+        ('dtr', 'انتقال سند'),
+    )
+    buyer_seller = models.CharField(max_length=3, choices=BUYER_SELLER_CHOICES, verbose_name='خریدار / فروشنده')
+    full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
+    phone = models.CharField(max_length=20, verbose_name="شماره تماس")
+    address = models.TextField(verbose_name="آدرس")
+    contract_image = models.ImageField(upload_to='images/buyers_sellers', verbose_name="تصویر قرارداد")
+    payment_order = models.CharField(max_length=3, choices=PAYMENT_ORDER_CHOICES, verbose_name='ترتیب پرداخت')
+    cash_date = models.DateTimeField(default=timezone.now, verbose_name='تاریخ پرداخت نقدی')
+    cash_amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ پرداخت نقدی')
+    cheque_payment = models.ForeignKey(Cheques,
+                                        on_delete=models.CASCADE,
+                                        related_name='cheque_payments',
+                                        verbose_name='پرداخت به صورت چک',
+                                        help_text='شماره چک مورد نظر را انتخاب کنید'
+                                    )
+    delivery_amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ پرداخت حین تحویل')
+    delivery_cheque = models.ForeignKey(Cheques,
+                                        on_delete=models.CASCADE,
+                                        related_name='cheque_deliveries',
+                                        verbose_name='پرداخت حین تحویل به صورت چک',
+                                        help_text='شماره چک مورد نظر را انتخاب کنید'
+                                    )
+    doc_transfer_amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ پرداخت انتقال سند')
+    doc_transfer_cheque = models.ForeignKey(Cheques,
+                                        on_delete=models.CASCADE,
+                                        related_name='cheque_doc_transfers',
+                                        verbose_name='پرداخت انتقال سند به صورت چک',
+                                        help_text='شماره چک مورد نظر را انتخاب کنید'
+                                    )
+    
 
+    class Meta:
+        verbose_name = "خریدار / فروشنده"
+        verbose_name_plural = "خریداران / فروشندگان"
+
+
+    def __str__(self):
+        return self.full_name
+    
+    def contract_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.contract_image.url))
+    contract_tag.short_description = "تصویر قرارداد"
 
 
