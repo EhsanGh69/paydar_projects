@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
-
+from django.utils import timezone
 
 
 
@@ -61,4 +61,26 @@ class Project(models.Model):
     def owners_to_str(self):
         return " ،".join([owners.full_name for owners in self.owners.all()])
     owners_to_str.short_description = "مالکین"
+
+
+
+class WorkReference(models.Model):
+    project = models.ForeignKey(Project, 
+                                on_delete=models.CASCADE, 
+                                related_name='project_work_references',
+                                verbose_name='پروژه'
+                            )
+    activity_type = models.CharField(max_length=250, verbose_name='نوع فعالیت')
+    referrer = models.CharField(max_length=250, verbose_name='ارجاع دهنده')
+    doing_agent = models.CharField(max_length=250, verbose_name='مأمور انجام')
+    follow_confirm = models.BooleanField(default=False, verbose_name='تأیید پیگیری')
+    follow_date = models.DateTimeField(default=timezone.now, verbose_name='تاریخ پیگیری')
+    result_explan = models.TextField(default='بدون توضیح')
+
+    class Meta:
+        verbose_name = "ارجاع کار"
+        verbose_name_plural = "ارجاع کارها"
+
+    def __str__(self):
+        return self.activity_type
 

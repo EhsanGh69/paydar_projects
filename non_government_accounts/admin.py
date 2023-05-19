@@ -76,6 +76,12 @@ class OrdersAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
 
 
+@admin.register(NoticeConflictOrders)
+class ContractorsAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    list_display = ['order', 'conflict_type', 'conflict_amount']
+    ordering = ['conflict_type', 'order']
+    list_filter = ['conflict_type']
+    search_fields = ['conflict_type']
 
 
 
