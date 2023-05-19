@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from django.utils import timezone
 from django.utils.html import format_html
 
@@ -33,7 +34,6 @@ class Suppliers(models.Model):
     job = models.CharField(max_length=100, verbose_name="رشته شغلی تأمین کننده")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس تأمین کننده")
     address = models.TextField(verbose_name="آدرس تأمین کننده")
-    supplier_demand = models.PositiveBigIntegerField(default=0, editable=False)
 
     class Meta:
         verbose_name = "تأمین کننده"
@@ -143,6 +143,23 @@ class BuyersSellers(models.Model):
     contract_tag.short_description = "تصویر قرارداد"
 
 
+# for insert in report:
+# suppliers = []
+# def create_supplier_demand_tuple(id, demand):
+#     supplier_demand_tuple = (id, demand)
+#     suppliers.append(supplier_demand_tuple)
+#     return suppliers
+
+
+
+# def get_total_supplier_demand(id):
+#     sum = 0
+#     for supplier in suppliers:
+#         if supplier[0] == id:
+#             sum += supplier[1]
+#     return sum
+
+
 
 class Orders(models.Model):
     MEASUREMENT_UNIT_CHOICES = (
@@ -174,7 +191,7 @@ class Orders(models.Model):
     sending_date = models.DateTimeField(default=timezone.now, verbose_name='تاریخ ارسال', help_text='ارسال در تاریخ مشخص')
     sended_image = models.ImageField(upload_to='images/sended_images', verbose_name='تصویر سفارش ارسال شده')
     sended_image_type = models.CharField(max_length=3, choices=SENDED_IMAGE_TYPE_CHOICES, verbose_name='نوع تصویر سفارش ارسال شده')
-    explan_order_cancel = models.TextField(default='بدون توضیح')
+    explan_order_cancel = models.TextField(default='بدون توضیح', verbose_name='توضیح علت لغو سفارش')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_orders', verbose_name='پروژه')
 
     class Meta:
@@ -183,7 +200,7 @@ class Orders(models.Model):
 
 
     def __str__(self):
-        return self.order_type
+        return f"{self.order_type} - {self.order_date}"
     
     def sended_tag(self):
         return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.sended_image.url))
@@ -196,9 +213,20 @@ class Orders(models.Model):
     get_order_total_price.short_description = 'قیمت کل سفارش'
 
 
-    def get_supplier_demand(self):
-        self.supplier.supplier_demand += self.order_total_price
-        return self.supplier.supplier_demand
-    get_supplier_demand.short_description = 'طلب تأمین کننده'
+    # for insert in report
+    # def get_supplier_demand(self):
+    #     create_supplier_demand_tuple(self.supplier.pk, self.order_total_price)
+    #     return get_total_supplier_demand(self.supplier.pk)
+    # get_supplier_demand.short_description = 'طلب تأمین کننده'
 
+
+
+class NoticeConflictOrders(models.Model):
+    CONFLICT_TYPE_CHOICES = (
+        ('pos', 'بیشتر از سفارش'),
+        ('neg', 'کمتر از سفارش'),
+    )
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE, related_name='order_conflicts', verbose_name='سفارش')
+    conflict_type = models.CharField(max_length=3, choices=CONFLICT_TYPE_CHOICES, verbose_name="نوع مغایرت")
+    conflict_amount = models.PositiveIntegerField(default=0, verbose_name='مقدار مغایرت')
 

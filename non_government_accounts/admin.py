@@ -52,6 +52,28 @@ class BuyersSellersAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     @admin.display(description='تاریخ و ساعت پرداخت نقدی', ordering='cash_date')
     def get_buyers_sellers_jalali(self, obj):
         return datetime2jalali(obj.cash_date).strftime('%d / %m / %Y - %H:%M:%S')
+    
+
+
+@admin.register(Orders)
+class OrdersAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    list_display = ['supplier', 'order_type', 'measurement_unit', 'unit_price',
+                    'order_amount', 'get_order_date_jalali', 'order_respite', 'order_result',
+                    'get_sending_date_jalali', 'sended_image_type','explan_order_cancel',
+                    'project', 'sended_tag', 'get_order_total_price'
+                    ]
+    ordering = ['order_date', 'supplier', 'order_type']
+    list_filter = ['order_date', 'order_type']
+    search_fields = ['supplier', 'order_type']
+
+    @admin.display(description='تاریخ و ساعت سفارش', ordering='order_date')
+    def get_order_date_jalali(self, obj):
+        return datetime2jalali(obj.order_date).strftime('%d / %m / %Y - %H:%M:%S')
+    
+    @admin.display(description='تاریخ و ساعت سفارش', ordering='sending_date')
+    def get_sending_date_jalali(self, obj):
+        return datetime2jalali(obj.sending_date).strftime('%d / %m / %Y - %H:%M:%S')
+
 
 
 
