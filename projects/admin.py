@@ -24,7 +24,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 @admin.register(WorkReference)
-class ReceiveAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+class WorkReferenceAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = ['project', 'activity_type', 'referrer', 'doing_agent', 'follow_confirm', 'get_follow_date_jalali']
     ordering = ['project', 'activity_type']
     list_filter = ['project', 'activity_type', 'follow_date']
@@ -33,6 +33,28 @@ class ReceiveAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     @admin.display(description='تاریخ و ساعت پیگیری', ordering='follow_date')
     def get_follow_date_jalali(self, obj):
         return datetime2jalali(obj.follow_date).strftime('%d / %m / %Y - %H:%M:%S')
+    
+
+@admin.register(Costs)
+class CostsAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {"fields": 
+                    ("project", )
+                }
+        ),
+        ("هزینه انشعابات", {"fields": 
+                                ("water_branch", "electricity_branch", "gas_branch", "phone_subscription")
+                            }
+        ),
+        ("هزینه های نظام مهندسی", {"fields": 
+                                ("designer_office", "supervisors", "engineer_system", "sketch_map")
+                            }
+        ),
+        ("هزینه های شهرداری", {"fields": 
+                                ("export_permit", "export_end_work")
+                            }
+        ),
+    )
 
 
 

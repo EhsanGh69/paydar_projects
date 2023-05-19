@@ -83,4 +83,30 @@ class WorkReference(models.Model):
 
     def __str__(self):
         return self.activity_type
+    
 
+
+class Costs(models.Model):
+    project = models.ForeignKey(Project, 
+                                on_delete=models.CASCADE, 
+                                related_name='project_costs',
+                                verbose_name='پروژه'
+                            )
+    water_branch = models.PositiveIntegerField(default=0, verbose_name='هزینه انشعاب آب')
+    electricity_branch = models.PositiveIntegerField(default=0, verbose_name='هزینه انشعاب برق')
+    gas_branch = models.PositiveIntegerField(default=0, verbose_name='هزینه انشعاب گاز')
+    phone_subscription = models.PositiveIntegerField(default=0, verbose_name='هزینه اشتراک تلفن')
+    designer_office = models.PositiveIntegerField(default=0, verbose_name='هزینه دفتر طراح')
+    supervisors = models.PositiveIntegerField(default=0, verbose_name='هزینه ناظرین')
+    engineer_system = models.PositiveIntegerField(default=0, verbose_name='هزینه نظام مهندسی')
+    sketch_map = models.PositiveIntegerField(default=0, verbose_name='هزینه نقشه کروکی')
+    export_permit = models.PositiveIntegerField(default=0, verbose_name='هزینه صدور پروانه')
+    export_end_work = models.PositiveIntegerField(default=0, verbose_name='هزینه صدور پایان کار')
+
+
+    class Meta:
+        verbose_name = "هزینه"
+        verbose_name_plural = "هزینه ها"
+
+    def __str__(self):
+        return self.project.title
