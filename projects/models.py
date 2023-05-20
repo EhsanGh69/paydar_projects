@@ -110,3 +110,67 @@ class Costs(models.Model):
 
     def __str__(self):
         return self.project.title
+    
+
+
+class ImagesPaymentReceipts(models.Model):
+    project = models.ForeignKey(Project, 
+                                on_delete=models.CASCADE, 
+                                related_name='project_payment_receipts',
+                                verbose_name='پروژه'
+                            )
+    
+    designer_office = models.ImageField(upload_to='images/payment_receipts', verbose_name='دفتر طراح')
+    supervisors = models.ImageField(upload_to='images/payment_receipts', verbose_name='ناظرین')
+    engineer_system = models.ImageField(upload_to='images/payment_receipts', verbose_name='نظام مهندسی')
+    sketch_map = models.ImageField(upload_to='images/payment_receipts', verbose_name='نقشه کروکی')
+    export_permit = models.ImageField(upload_to='images/payment_receipts', verbose_name='عوارض صدور پروانه')
+    visit_toll = models.ImageField(upload_to='images/payment_receipts', verbose_name='عوارض بازدید')
+    education_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم آموزش و پرورش')
+    fire_stations_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم آتشنشانی')
+    social_security_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم تأمین اجتماعی')
+    
+
+    class Meta:
+        verbose_name = "تصویر فیش پرداختی"
+        verbose_name_plural = "تصاویر فیش های پرداختی"
+
+
+    def __str__(self):
+        return self.project.title
+    
+    def designer_office_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.designer_office.url))
+    designer_office_tag.short_description = "تصویر فیش دفتر طراح"
+
+    def supervisors_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.supervisors.url))
+    supervisors_tag.short_description = "تصویر فیش ناظرین"
+
+    def engineer_system_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.engineer_system.url))
+    engineer_system_tag.short_description = "تصویر فیش نظام مهندسی"
+
+    def sketch_map_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.sketch_map.url))
+    sketch_map_tag.short_description = "تصویر فیش نقشه کروکی"
+
+    def export_permit_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.export_permit.url))
+    export_permit_tag.short_description = "تصویر فیش عوارض صدور پروانه"
+
+    def visit_toll_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.visit_toll.url))
+    visit_toll_tag.short_description = "تصویر فیش عوارض بازدید"
+
+    def education_share_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.education_share.url))
+    education_share_tag.short_description = "تصویر فیش سهم آموزش و پرورش"
+
+    def fire_stations_share_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.fire_stations_share.url))
+    fire_stations_share_tag.short_description = "تصویر فیش سهم آتشنشانی"
+
+    def social_security_share_tag(self):
+        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.social_security_share.url))
+    social_security_share_tag.short_description = "تصویر فیش سهم تأمین اجتماعی"

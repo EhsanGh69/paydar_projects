@@ -230,3 +230,11 @@ class NoticeConflictOrders(models.Model):
     conflict_type = models.CharField(max_length=3, choices=CONFLICT_TYPE_CHOICES, verbose_name="نوع مغایرت")
     conflict_amount = models.PositiveIntegerField(default=0, verbose_name='مقدار مغایرت')
 
+    class Meta:
+        verbose_name = "مغایرت سفارش"
+        verbose_name_plural = "مغایرت سفارشات"
+
+
+    def __str__(self):
+        return f"{self.order_type} - {self.order_date}"
+

@@ -53,8 +53,43 @@ class CostsAdmin(admin.ModelAdmin):
         ("هزینه های شهرداری", {"fields": 
                                 ("export_permit", "export_end_work")
                             }
-        ),
+        )
     )
+    list_display = ['project',
+                    "water_branch", "electricity_branch", "gas_branch", "phone_subscription",
+                    "designer_office", "supervisors", "engineer_system", "sketch_map",
+                    "export_permit", "export_end_work"
+                    ]
+    ordering = ['project']
+    list_filter = ['project']
+    search_fields = ['project']
+
+
+@admin.register(ImagesPaymentReceipts)
+class ImagesPaymentReceiptsAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {"fields": 
+                    ("project", )
+                }
+        ),
+        ("تصاویر فیش های پرداختی نظام مهندسی", {"fields": 
+                                ("designer_office", "supervisors", "engineer_system", "sketch_map")
+                            }
+        ),
+        ("تصاویر فیش های پرداختی شهرداری", {"fields": 
+                                ("export_permit", "visit_toll", "education_share", 
+                                 "fire_stations_share","social_security_share")
+                            }
+        )
+    )
+    list_display = ['project',
+                    "designer_office_tag", "supervisors_tag", "engineer_system_tag", "sketch_map_tag",
+                    "export_permit_tag", "visit_toll_tag", "education_share_tag", 
+                    "fire_stations_share_tag","social_security_share_tag"
+                    ]
+    ordering = ['project']
+    list_filter = ['project']
+    search_fields = ['project']
 
 
 
