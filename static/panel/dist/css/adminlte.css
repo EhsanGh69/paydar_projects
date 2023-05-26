@@ -11394,7 +11394,8 @@ body,
 }
 
 .nav-sidebar.nav-child-indent .nav-treeview {
-  transition: padding 0.3s ease-in-out;
+  /*transition: padding 0.3s ease-in-out;*/
+  transition: all linear;
   padding-left: 1rem;
 }
 

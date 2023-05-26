@@ -10,10 +10,10 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="{% static 'panel/plugins/fontawesome-free/css/all.min.css' %}"
-    />
+{#    <link#}
+{#      rel="stylesheet"#}
+{#      href="{% static 'panel/plugins/fontawesome-free/css/all.min.css' %}"#}
+{#    />#}
     <!-- Ionicons -->
     <link
       rel="stylesheet"
@@ -64,6 +64,7 @@
       rel="stylesheet"
       href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Custom style for RTL -->
     <link rel="stylesheet" href="{% static 'panel/dist/css/custom.css' %}" />
   </head>
@@ -81,7 +82,7 @@
             ></a>
           </li>
           <li>
-              <h3 class="m-0 text-dark">{% block title %}عنوان صفحه{% endblock %}</h3>
+              <h3 class="m-0 text-dark">{% block title %}صفحه اصلی{% endblock %}</h3>
           </li>
         </ul>
 
@@ -107,7 +108,7 @@
     
         <!-- Main content -->
         <section class="content">
-          <div class="container-fluid">
+          <div class="container">
             
             {% block main %}
     
@@ -117,6 +118,7 @@
         </section>
         <!-- /.content -->
       </div>
+
       <!-- /.content-wrapper -->
       <footer class="main-footer">
         <strong>Copyright &copy; 2023 <a href="#">تمام حقوق این نرم‌افزار برای گروه فناوری بل محفوظ است</a></strong>
