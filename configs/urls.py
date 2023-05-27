@@ -19,11 +19,13 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 
-from .views import index
+from .views import home, line_chart, line_chart_json
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
+    path('', home),
+    path('chart', line_chart, name='line_chart'),
+    path('chartJSON', line_chart_json, name='line_chart_json'),
     path('account/', include('account.urls'))
 ]
 

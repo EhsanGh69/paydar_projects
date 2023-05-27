@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'jalali_date',
     'widget_tweaks',
+    'chartjs',
     'account.apps.AccountConfig',
     'projects.apps.ProjectsConfig',
     'government_accounts.apps.GovernmentAccountsConfig',

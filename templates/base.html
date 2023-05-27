@@ -6,14 +6,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>{% block title %}{% endblock %}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Font Awesome -->
-{#    <link#}
-{#      rel="stylesheet"#}
-{#      href="{% static 'panel/plugins/fontawesome-free/css/all.min.css' %}"#}
-{#    />#}
+
     <!-- Ionicons -->
     <link
       rel="stylesheet"
@@ -67,8 +63,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Custom style for RTL -->
     <link rel="stylesheet" href="{% static 'panel/dist/css/custom.css' %}" />
+
   </head>
-  <body class="hold-transition sidebar-mini layout-fixed">
+  <body class="hold-transition sidebar-mini layout-fixed p-0">
 
     <div class="wrapper">
 
@@ -77,12 +74,12 @@
         <!-- Left navbar links -->
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#"
-              ><i class="fas fa-bars"></i
-            ></a>
+            <a class="nav-link" data-widget="pushmenu" href="#">
+                <i class="fas fa-bars"></i>
+            </a>
           </li>
-          <li>
-              <h3 class="m-0 text-dark">{% block title %}صفحه اصلی{% endblock %}</h3>
+          <li class="nav-item">
+              <h4 class="m-0 text-dark">{% block page_title %}صفحه اصلی{% endblock %}</h4>
           </li>
         </ul>
 
@@ -92,8 +89,7 @@
               class="nav-link"
               data-widget="control-sidebar"
               data-slide="true"
-              href="{% url 'account:logout' %}"
-            >
+              href="{% url 'account:logout' %}">
               <i class="fas fa-sign-out-alt text-lg"></i>
               <span>خروج</span>
             </a>
@@ -163,5 +159,7 @@
     <script src="{% static 'panel/dist/js/pages/dashboard.js' %}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{% static 'panel/dist/js/demo.js' %}"></script>
+
+    {% block scripts %}{% endblock %}
   </body>
 </html>
