@@ -17,7 +17,7 @@ class OwnersAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['title', 'contract_type', 'owners_to_str', 'contractual_salary', 'contractual_percentage', 'costs_estimation']
+    list_display = ['title', 'contract_type', 'owners_to_str', 'contractual_salary', 'contractual_percentage']
     ordering = ['title']
     list_filter = ['title']
     search_fields = ['title']

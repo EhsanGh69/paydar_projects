@@ -15,6 +15,8 @@ class Contractors(models.Model):
     job = models.CharField(max_length=100, verbose_name="رشته شغلی پیمانکار")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس پیمانکار")
     address = models.TextField(verbose_name="آدرس پیمانکار")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "پیمانکار"
@@ -34,6 +36,8 @@ class Suppliers(models.Model):
     job = models.CharField(max_length=100, verbose_name="رشته شغلی تأمین کننده")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس تأمین کننده")
     address = models.TextField(verbose_name="آدرس تأمین کننده")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "تأمین کننده"
@@ -53,6 +57,8 @@ class Personnel(models.Model):
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
     address = models.TextField(verbose_name="آدرس")
     contract_image = models.ImageField(upload_to='images/personnel', verbose_name="تصویر قرارداد")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "پرسنل"
@@ -74,6 +80,8 @@ class Partners(models.Model):
     full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
     address = models.TextField(verbose_name="آدرس")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "شریک"
@@ -128,6 +136,8 @@ class BuyersSellers(models.Model):
                                         verbose_name='پرداخت انتقال سند به صورت چک',
                                         help_text='شماره چک مورد نظر را انتخاب کنید'
                                     )
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
     
 
     class Meta:
@@ -193,6 +203,8 @@ class Orders(models.Model):
     sended_image_type = models.CharField(max_length=3, choices=SENDED_IMAGE_TYPE_CHOICES, verbose_name='نوع تصویر سفارش ارسال شده')
     explan_order_cancel = models.TextField(default='بدون توضیح', verbose_name='توضیح علت لغو سفارش')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_orders', verbose_name='پروژه')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "سفارش"
@@ -229,6 +241,8 @@ class NoticeConflictOrders(models.Model):
     order = models.ForeignKey(Orders, on_delete=models.CASCADE, related_name='order_conflicts', verbose_name='سفارش')
     conflict_type = models.CharField(max_length=3, choices=CONFLICT_TYPE_CHOICES, verbose_name="نوع مغایرت")
     conflict_amount = models.PositiveIntegerField(default=0, verbose_name='مقدار مغایرت')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "مغایرت سفارش"

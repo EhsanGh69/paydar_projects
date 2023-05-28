@@ -26,6 +26,8 @@ class Cheques(models.Model):
     account_owner = models.CharField(max_length=250, verbose_name='صاحب حساب')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_cheques', verbose_name='پروژه')
     account_party = models.CharField(max_length=250, verbose_name='طرف حساب')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
 
     class Meta:

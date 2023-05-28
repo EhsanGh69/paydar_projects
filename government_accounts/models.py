@@ -8,6 +8,7 @@ from projects.models import Project
 
 class Organization(models.Model):
     organization_name = models.CharField(max_length=50, verbose_name="نام ارگان")
+    
 
     class Meta:
         verbose_name = "ارگان"
@@ -25,6 +26,8 @@ class Receive(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_receives', verbose_name="پروژه")
     receive_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ دریافتی")
     receive_date = models.DateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت دریافت")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "دریافت"
@@ -42,6 +45,8 @@ class Payment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_payments', verbose_name="پروژه")
     payment_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ پرداختی")
     payment_date = models.DateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت پرداخت")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "پرداخت"
@@ -65,6 +70,8 @@ class Activity(models.Model):
     activity_date = models.DateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت فعالیت")
     activity_result = models.CharField(max_length=2, choices=RESULT_CHOICES, verbose_name="نتیجه فعالیت")
     activity_descriptions = models.TextField(verbose_name="توضیحات فعالیت در حال انجام", default="بدون توضیح")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "فعالیت"
