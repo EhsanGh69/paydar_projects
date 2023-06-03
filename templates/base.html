@@ -45,15 +45,12 @@
       rel="stylesheet"
       href="{% static 'panel/plugins/daterangepicker/daterangepicker.css' %}"
     />
+     <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'panel/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
     <!-- summernote -->
     <link
       rel="stylesheet"
       href="{% static 'panel/plugins/summernote/summernote-bs4.css' %}"
-    />
-    <!-- Google Font: Source Sans Pro -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
-      rel="stylesheet"
     />
     <!-- Bootstrap 4 RTL -->
     <link
@@ -104,7 +101,7 @@
     
         <!-- Main content -->
         <section class="content">
-          <div class="container">
+          <div class="container-fluid">
             
             {% block main %}
     
@@ -137,6 +134,9 @@
     <script src="{% static 'panel/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <!-- ChartJS -->
     <script src="{% static 'panel/plugins/chart.js/Chart.min.js' %}"></script>
+    <!-- DataTables -->
+    <script src="{% static 'panel/plugins/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'panel/plugins/datatables-bs4/js/dataTables.bootstrap4.js'%}"></script>
     <!-- Sparkline -->
     <script src="{% static 'panel/plugins/sparklines/sparkline.js' %}"></script>
     <!-- JQVMap -->

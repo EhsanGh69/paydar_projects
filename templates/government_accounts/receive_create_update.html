@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'receive_create' %}
+        ثبت دریافت‌
+    {% else %}
+        ویرایش دریافت‌
+    {% endif %} 
+{% endblock %}
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'receive_create' %}
+        <span>ثبت دریافت‌</span>
+    {% else %}
+        <span>ویرایش دریافت‌</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+<br><br>
+<div class="card card-primary p-5">
+
+    <div class="card-body col-sm-12 col-md-8 offset-md-2">
+
+      <form method="post">
+          {% csrf_token %}
+          <p>
+            <i>پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+          </p>
+          {% if form.non_field_errors %}
+            <div>
+                {% for error in form.non_field_errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+          {% endif %}
+          <div class="row">
+              <div class="col-6 mb-3">
+                  {{ form.organization|as_crispy_field }}
+              </div>
+              <div class="col-6 mb-3">
+                  {{ form.project|as_crispy_field }}
+              </div>
+              <div class="col-6 mb-3">
+                  {{ form.receive_for|as_crispy_field }}
+              </div>
+              <div class="col-6 mb-3">
+                  {{ form.receive_amount|as_crispy_field }}
+              </div>
+              <div class="col-6 mb-3">
+                  {{ form.receive_date|as_crispy_field }}
+                  {% if form.receive_date.errors %}
+                    <div>
+                        {% for error in form.receive_date.errors  %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                 {% endif %}
+                  <i>فرمت تاریخ: 18 - 2 - 1402 ، فرمت زمان: 56 : 33 : 15</i>
+              </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3 mb-3">
+                <button class="btn btn-success btn-block" type="submit">ثبت</button>
+              </div>
+              <div class="col-3 mb-3">
+                {% if user.is_superuser and request.resolver_match.kwargs.pk %}
+                <a href="{% url 'account:article_delete' request.resolver_match.kwargs.pk %}" 
+                class="btn btn-danger">حذف</a>
+                {% endif %}
+              </div>
+          </div>
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}

@@ -1,0 +1,5 @@
+<a href="{% url link_name %}"
+   class="nav-link
+    {% if request.resolver_match.url_name == path_name %}active{% endif %}">
+   {{ content }}
+</a>

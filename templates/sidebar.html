@@ -1,4 +1,6 @@
 {% load static %}
+{% load base_tags %}
+
 
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -34,8 +36,8 @@
 
                 <h5 class="mr-2 text-light size-32">طرف حساب دولتی</h5>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link active">
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
                         <i class="fa-solid fa-file-invoice-dollar"></i>
                         <p class="mr-2">
                             دریافت‌ها
@@ -44,270 +46,270 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link text-light">لیست دریافت‌ها</a>
+                            {% link request 'government_accounts' 'receives' 'لیست دریافت‌ها' %}
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link text-light">ثبت دریافت‌</a>
+                            {% link request 'government_accounts' 'receive_create' 'ثبت دریافت' %}
                         </li>
                     </ul>
 
                 </li>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-money-check-dollar"></i>
-                                <p class="mr-2">
-                                    پرداخت‌ها
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست پرداخت‌ها</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">ثبت پرداخت‌</a>
-                                </li>
-                            </ul>
-
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-money-check-dollar"></i>
+                        <p class="mr-2">
+                            پرداخت‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست پرداخت‌ها</a>
                         </li>
-
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-people-carry-box"></i>
-                                <p class="mr-2">
-                                    فعالیت‌ها
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست فعالیت‌ها</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">ثبت فعالیت‌</a>
-                                </li>
-                            </ul>
-
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت پرداخت‌</a>
                         </li>
+                    </ul>
+
+                </li>
+
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-people-carry-box"></i>
+                        <p class="mr-2">
+                            فعالیت‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست فعالیت‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت فعالیت‌</a>
+                        </li>
+                    </ul>
+
+                </li>
 
 
                 <h5 class="mr-2 text-light">طرف حساب غیردولتی</h5>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-person-digging"></i>
-                                <p class="mr-2">
-                                    پیمانکاران
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست پیمانکاران</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">افزودن پیمانکار</a>
-                                </li>
-                            </ul>
-
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-person-digging"></i>
+                        <p class="mr-2">
+                            پیمانکاران
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست پیمانکاران</a>
                         </li>
-
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-people-line"></i>
-                                <p class="mr-2">
-                                    تأمین کنندگان
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست تأمین کنندگان</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">افزودن تأمین کننده</a>
-                                </li>
-                            </ul>
-
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن پیمانکار</a>
                         </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-people-roof"></i>
-                                <p class="mr-2">
-                                    پرسنل
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست پرسنل</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">افزودن به پرسنل</a>
-                                </li>
-                            </ul>
+                </li>
 
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-people-line"></i>
+                        <p class="mr-2">
+                            تأمین کنندگان
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست تأمین کنندگان</a>
                         </li>
-
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-user-group"></i>
-                                <p class="mr-2">
-                                    شرکاء
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست شرکاء</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">افزودن شریک</a>
-                                </li>
-                            </ul>
-
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن تأمین کننده</a>
                         </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-store"></i>
-                                <p class="mr-2">
-                                    خریداران / فروشندگان
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست خریداران / فروشندگان</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">افزودن خریدار / فروشنده</a>
-                                </li>
-                            </ul>
+                </li>
 
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-people-roof"></i>
+                        <p class="mr-2">
+                            پرسنل
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست پرسنل</a>
                         </li>
-
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-truck"></i>
-                                <p class="mr-2">
-                                    سفارشات
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست سفارشات</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">ثبت سفارش</a>
-                                </li>
-                            </ul>
-
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن به پرسنل</a>
                         </li>
+                    </ul>
 
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-truck-ramp-box"></i>
-                                <p class="mr-2">
-                                    اعلام مغایرت سفارشات
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست مغایرت سفارشات</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">ثبت مغایرت سفارش</a>
-                                </li>
-                            </ul>
+                </li>
 
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-user-group"></i>
+                        <p class="mr-2">
+                            شرکاء
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست شرکاء</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن شریک</a>
+                        </li>
+                    </ul>
+
+                </li>
+
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-store"></i>
+                        <p class="mr-2">
+                            خریداران / فروشندگان
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست خریداران / فروشندگان</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن خریدار / فروشنده</a>
+                        </li>
+                    </ul>
+
+                </li>
+
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-truck"></i>
+                        <p class="mr-2">
+                            سفارشات
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست سفارشات</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت سفارش</a>
+                        </li>
+                    </ul>
+
+                </li>
+
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                        <p class="mr-2">
+                            اعلام مغایرت سفارشات
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست مغایرت سفارشات</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت مغایرت سفارش</a>
+                        </li>
+                    </ul>
+
+                </li>
 
 
                 <h5 class="mr-2 text-light">پروژه‌ها</h5>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-trowel-bricks"></i>
-                                <p class="mr-2">
-                                    پروژه‌ها
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست پروژه‌ها</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">افزودن پروژه‌</a>
-                                </li>
-                            </ul>
-
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-trowel-bricks"></i>
+                        <p class="mr-2">
+                            پروژه‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست پروژه‌ها</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن پروژه‌</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-person-shelter"></i>
-                                                <p class="mr-2">
-                                                    مالکین
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست مالکین</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">افزودن مالک</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-person-shelter"></i>
+                        <p class="mr-2">
+                            مالکین
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست مالکین</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن مالک</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-person-arrow-up-from-line"></i>
-                                                <p class="mr-2">
-                                                    ارجاع کار
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست ارجاع کارها</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت ارجاع کار</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-person-arrow-up-from-line"></i>
+                        <p class="mr-2">
+                            ارجاع کار
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست ارجاع کارها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت ارجاع کار</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-cash-register"></i>
-                                                <p class="mr-2">
-                                                    هزینه‌ها
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست هزینه‌ها</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت هزینه‌</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-cash-register"></i>
+                        <p class="mr-2">
+                            هزینه‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست هزینه‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت هزینه‌</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
-                    <a href="#" class="nav-link active">
+                </li>
+
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                    <a href="#" class="nav-link">
                         <i class="fa-solid fa-file-image"></i>
                         <p class="mr-2">
                             تصاویر فیش‌های پرداختی
@@ -332,125 +334,125 @@
                     <span>دریافت‌ها و پرداخت‌ها</span>
                 </h5>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-wallet"></i>
-                                <p class="mr-2">
-                                    چک‌ها
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست چک‌ها</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">ثبت چک‌</a>
-                                </li>
-                            </ul>
-
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-wallet"></i>
+                        <p class="mr-2">
+                            چک‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست چک‌ها</a>
                         </li>
-
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-money-bill-transfer"></i>
-                                <p class="mr-2">
-                                    دریافت‌ها و پرداخت‌ها
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست دریافت‌ها و پرداخت‌ها</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">ثبت دریافت‌ و پرداخت‌</a>
-                                </li>
-                            </ul>
-
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت چک‌</a>
                         </li>
+                    </ul>
+
+                </li>
+
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <p class="mr-2">
+                            دریافت‌ها و پرداخت‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست دریافت‌ها و پرداخت‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت دریافت‌ و پرداخت‌</a>
+                        </li>
+                    </ul>
+
+                </li>
 
 
                 <h5 class="mr-2 text-light">انبارداری</h5>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                <p class="mr-2">
-                                    ورود به انبار اصلی
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست ورود به انبار</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">ثبت ورود به انبار</a>
-                                </li>
-                            </ul>
-
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <p class="mr-2">
+                            ورود به انبار اصلی
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست ورود به انبار</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت ورود به انبار</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                                                <p class="mr-2">
-                                                    خروج از انبار اصلی
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست خروج از انبار</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت خروج از انبار</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <p class="mr-2">
+                            خروج از انبار اصلی
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست خروج از انبار</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت خروج از انبار</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-tent"></i>
-                                                <p class="mr-2">
-                                                    انبار پروژه
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست انبار پروژه</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">افزودن به انبار پروژه</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-tent"></i>
+                        <p class="mr-2">
+                            انبار پروژه
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست انبار پروژه</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن به انبار پروژه</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-file-import"></i>
-                                                <p class="mr-2">
-                                                    گواهی مصرف
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست گواهی مصرف‌ها</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت گواهی مصرف</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-file-import"></i>
+                        <p class="mr-2">
+                            گواهی مصرف
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست گواهی مصرف‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت گواهی مصرف</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
-                    <a href="#" class="nav-link active">
+                </li>
+
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                    <a href="#" class="nav-link">
                         <i class="fa-solid fa-boxes-stacked"></i>
                         <p class="mr-2">
                             کالاها
@@ -471,122 +473,122 @@
 
                 <h5 class="mr-2 text-light">اسناد مرتبط با پروژه‌ها</h5>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-handshake"></i>
-                                <p class="mr-2">
-                                    قراردادها
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست قراردادها</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">ثبت قرارداد</a>
-                                </li>
-                            </ul>
-
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-handshake"></i>
+                        <p class="mr-2">
+                            قراردادها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست قراردادها</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت قرارداد</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-users-between-lines"></i>
-                                                <p class="mr-2">
-                                                    صورت جلسه‌ها
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست صورت جلسه‌ها</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت صورت جلسه</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-users-between-lines"></i>
+                        <p class="mr-2">
+                            صورت جلسه‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست صورت جلسه‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت صورت جلسه</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-people-arrows"></i>
-                                                <p class="mr-2">
-                                                    توافق‌نامه‌ها
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست توافق‌نامه‌ها</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت توافق‌نامه‌</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-people-arrows"></i>
+                        <p class="mr-2">
+                            توافق‌نامه‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست توافق‌نامه‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت توافق‌نامه‌</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-file-invoice"></i>
-                                                <p class="mr-2">
-                                                    رسیدهای بانکی
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست رسیدهای بانکی</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت رسید بانکی</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-file-invoice"></i>
+                        <p class="mr-2">
+                            رسیدهای بانکی
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست رسیدهای بانکی</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت رسید بانکی</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-file-signature"></i>
-                                                <p class="mr-2">
-                                                    صورت وضعیت‌ها
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست صورت وضعیت‌ها</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت صورت وضعیت‌</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-file-signature"></i>
+                        <p class="mr-2">
+                            صورت وضعیت‌ها
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست صورت وضعیت‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت صورت وضعیت‌</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview">
-                                            <a href="#" class="nav-link active">
-                                                <i class="fa-solid fa-file-contract"></i>
-                                                <p class="mr-2">
-                                                    اسناد ثبتی
-                                                    <i class="right fas fa-angle-left"></i>
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">لیست اسناد ثبتی</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="" class="nav-link text-light">ثبت سند ثبتی‌</a>
-                                                </li>
-                                            </ul>
+                </li>
 
-                                        </li>
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-file-contract"></i>
+                        <p class="mr-2">
+                            اسناد ثبتی
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست اسناد ثبتی</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">ثبت سند ثبتی‌</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
-                    <a href="#" class="nav-link active">
+                </li>
+
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                    <a href="#" class="nav-link">
                         <i class="fa-solid fa-id-card"></i>
                         <p class="mr-2">
                             اسناد اداری
@@ -606,27 +608,27 @@
 
                 <h5 class="mr-2 text-light">اسناد غیرمرتبط با پروژه‌ها</h5>
 
-                <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link active">
-                                <i class="fa-solid fa-user-tag"></i>
-                                <p class="mr-2">
-                                    تنخواه
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست تنخواه‌ها</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="" class="nav-link text-light">افزودن تنخواه</a>
-                                </li>
-                            </ul>
-
+                <li class="nav-item has-treeview menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-user-tag"></i>
+                        <p class="mr-2">
+                            تنخواه
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">لیست تنخواه‌ها</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link text-light">افزودن تنخواه</a>
+                        </li>
+                    </ul>
 
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
-                    <a href="#" class="nav-link active">
+                </li>
+
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                    <a href="#" class="nav-link">
                         <i class="fa-solid fa-sack-dollar"></i>
                         <p class="mr-2">
                             صندوق
@@ -644,9 +646,9 @@
                 </li>
 
 
-                <li class="nav-item has-treeview mb-4">
+                <li class="nav-item has-treeview menu-open mb-4">
 
-                    <a href="#" class="nav-link active">
+                    <a href="#" class="nav-link">
                         <i class="fa-regular fa-paste"></i>
                         <p class="mr-2">
                             گزارشات
@@ -667,9 +669,9 @@
 
                 </li>
 
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
 
-                    <a href="#" class="nav-link active">
+                    <a href="#" class="nav-link">
                         <i class="fa-solid fa-comments"></i>
                         <p class="mr-2">
                             <span>
@@ -697,9 +699,9 @@
 
                 </li>
 
-                <li class="nav-item has-treeview mb-4">
+                <li class="nav-item has-treeview menu-open mb-4">
 
-                    <a href="#" class="nav-link active">
+                    <a href="#" class="nav-link">
                         <i class="fa-solid fa-users"></i>
                         <p class="mr-2">
                             کاربران
@@ -720,9 +722,9 @@
 
                 </li>
 
-                <li class="nav-item has-treeview mb-3 pb-3" style="border-bottom: 1px solid #ddd">
+                <li class="nav-item has-treeview menu-open mb-3 pb-3" style="border-bottom: 1px solid #ddd">
 
-                    <a href="#" class="nav-link active">
+                    <a href="#" class="nav-link">
                         <i class="fa-solid fa-elevator"></i>
                         <p class="mr-2">
                             دسترسی‌ها
@@ -759,3 +761,4 @@
     </div>
     <!-- /.sidebar -->
 </aside>
+
