@@ -11,8 +11,6 @@ class Owners(models.Model):
     national_card_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر کارت ملی")
     birth_certificate_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر شناسنامه")
     ownership_document_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر سند مالکیت")
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
 
     class Meta:
         verbose_name = "مالک"
@@ -50,8 +48,7 @@ class Project(models.Model):
     owners = models.ManyToManyField(Owners, related_name="projects", verbose_name="مالکین")
     contractual_salary = models.PositiveBigIntegerField(default=0, verbose_name="دستمزد قرارداد پیمانی")
     contractual_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0, verbose_name="درصد قرارداد پیمانی")
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+    costs_estimation = models.PositiveBigIntegerField(default=0, editable=False, verbose_name="برآورد ریالی کل هزینه")
 
 
     class Meta:
@@ -78,9 +75,7 @@ class WorkReference(models.Model):
     doing_agent = models.CharField(max_length=250, verbose_name='مأمور انجام')
     follow_confirm = models.BooleanField(default=False, verbose_name='تأیید پیگیری')
     follow_date = models.DateTimeField(default=timezone.now, verbose_name='تاریخ پیگیری')
-    result_explan = models.TextField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+    result_explan = models.TextField(default='بدون توضیح')
 
     class Meta:
         verbose_name = "ارجاع کار"
@@ -107,8 +102,6 @@ class Costs(models.Model):
     sketch_map = models.PositiveIntegerField(default=0, verbose_name='هزینه نقشه کروکی')
     export_permit = models.PositiveIntegerField(default=0, verbose_name='هزینه صدور پروانه')
     export_end_work = models.PositiveIntegerField(default=0, verbose_name='هزینه صدور پایان کار')
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
 
 
     class Meta:
@@ -136,8 +129,6 @@ class ImagesPaymentReceipts(models.Model):
     education_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم آموزش و پرورش')
     fire_stations_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم آتشنشانی')
     social_security_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم تأمین اجتماعی')
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
     
 
     class Meta:

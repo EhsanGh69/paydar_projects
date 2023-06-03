@@ -33,7 +33,7 @@
             <i>پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
           </p>
           {% if form.non_field_errors %}
-            <div>
+            <div class="errors">
                 {% for error in form.non_field_errors %}
                 <span>{{ error }}</span>
                 {% endfor %}
@@ -55,7 +55,7 @@
               <div class="col-6 mb-3">
                   {{ form.receive_date|as_crispy_field }}
                   {% if form.receive_date.errors %}
-                    <div>
+                    <div class="errors">
                         {% for error in form.receive_date.errors  %}
                         <span class="text-danger">{{ error }}</span>
                         {% endfor %}

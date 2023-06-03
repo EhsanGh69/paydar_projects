@@ -8,6 +8,7 @@ from .forms import ReceiveForm
 
 
 
+
 class ReceiveList(LoginRequiredMixin, ListView):
     template_name = 'government_accounts/receive_list.html'
     model = Receive
@@ -19,4 +20,6 @@ class ReceiveCreate(LoginRequiredMixin, CreateView):
     template_name = 'government_accounts/receive_create_update.html'
     form_class = ReceiveForm
     success_url = reverse_lazy("government_accounts:receives")
+
+
 

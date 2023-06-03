@@ -1,11 +1,11 @@
 from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
-
 from jalali_date.fields import JalaliDateTimeField, SplitJalaliDateTimeField
 from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
 
 from .models import Receive
+
 
 
 def none_numeric_value(value):
@@ -13,16 +13,21 @@ def none_numeric_value(value):
         is_numeric = type(int(value)) is int
     except Exception:
         return True
+    
+    if is_numeric :
+            raise ValidationError("مقدار این فیلد نمی‌تواند عددی می‌باشد", params={"value": value})
 
-    if is_numeric:
-        raise ValidationError("مقدار این فیلد نمی‌تواند عددی می‌باشد", params={"value": value})
 
 
 class ReceiveForm(forms.ModelForm):
     use_required_attribute = False
+    class Meta:
+        model = Receive
+        fields = ['organization', 'receive_for', 'project', 'receive_amount', 'receive_date']
 
-    def __int__(self, *args, **kwargs):
-        super(ReceiveForm, self).__int__(*args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        super(ReceiveForm, self).__init__(*args, **kwargs)
 
         self.fields['receive_amount'] = forms.IntegerField(
             label="مبلغ دریافتی",
@@ -40,17 +45,11 @@ class ReceiveForm(forms.ModelForm):
         )
 
         self.fields['receive_date'] = JalaliDateTimeField(
-            label="تاریخ و زمان دریافت",
+            label='تاریخ و زمان دریافت',
             widget=AdminJalaliDateWidget
         )
 
         self.fields['receive_date'] = SplitJalaliDateTimeField(
-            label="تاریخ و زمان دریافت",
+            label='تاریخ و زمان دریافت',                                           
             widget=AdminSplitJalaliDateTime
         )
-
-    class Meta:
-        model = Receive
-        fields = ['organization', 'receive_for', 'project', 'receive_amount', 'receive_date']
-
-    

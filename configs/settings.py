@@ -21,6 +21,7 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "account:login"
 LOGOUT_REDIRECT_URL = "account:login"
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -31,6 +32,7 @@ SECRET_KEY = 'django-insecure-!qs#d-@he!5pj_wmj1r22ho(jan)n-$h)$1pj8n-8da%#=t%l)
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -43,9 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'jalali_date',
     'widget_tweaks',
+    'utils',
     'crispy_forms',
     'crispy_bootstrap4',
-    'utils',
     'account.apps.AccountConfig',
     'projects.apps.ProjectsConfig',
     'government_accounts.apps.GovernmentAccountsConfig',
@@ -77,28 +79,23 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            # 'libraries': {
-            #     'base_tags': 'account.templatetags.base_tags',
-            # }
         },
     },
 ]
 
 WSGI_APPLICATION = 'configs.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'paydar_db',
-        'USER': 'postgres',
-        'PASSWORD': '1369eg',
-        'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -118,6 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -130,6 +128,7 @@ TIME_ZONE = 'Asia/Tehran'
 USE_I18N = True
 
 USE_TZ = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
