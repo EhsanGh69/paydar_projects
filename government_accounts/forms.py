@@ -2,8 +2,6 @@ from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
 
-from jalali_date.fields import JalaliDateTimeField, SplitJalaliDateTimeField
-from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
 
 from .models import Receive
 
@@ -37,16 +35,6 @@ class ReceiveForm(forms.ModelForm):
         self.fields['receive_for'] = forms.CharField(
             label="دریافت بابت",
             validators=[none_numeric_value]
-        )
-
-        self.fields['receive_date'] = JalaliDateTimeField(
-            label="تاریخ و زمان دریافت",
-            widget=AdminJalaliDateWidget
-        )
-
-        self.fields['receive_date'] = SplitJalaliDateTimeField(
-            label="تاریخ و زمان دریافت",
-            widget=AdminSplitJalaliDateTime
         )
 
     class Meta:

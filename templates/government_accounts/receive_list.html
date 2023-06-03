@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load jformat %}
 
 {% block title %}لیست دریافت‌ها{% endblock %}
 
@@ -78,7 +78,7 @@
                                     <td class="sorting_1">{{ receive.receive_for }}</td>
                                     <td class="sorting_1">{{ receive.project }}</td>
                                     <td class="sorting_1">{{ receive.persian_receive_amount }}</td>
-                                    <td class="sorting_1">{{ receive.jalali_receive_date }}</td>
+                                    <td class="sorting_1">{{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}</td>
                                     <td class="border-left">
                                         <a href="#" class="btn btn-outline-info">ویرایش</a>
                                         <a href="#" class="btn btn-outline-danger">حذف</a>
