@@ -1,14 +1,14 @@
 @font-face {
-	font-family: 'Vazir';
-	src: url('../../../farsi_fonts/Vazir.eot');
+	font-family: 'Tanha';
+	src: url('../../../farsi_fonts/Farsi-Digits/Tanha-FD.eot');
 	/* IE9 Compat Modes */
-	src: url('../../../farsi_fonts/Vazir.eot?#iefix') format('embedded-opentype'),
+	src: url('../../../farsi_fonts/Farsi-Digits/Tanha-FD.eot?#iefix') format('embedded-opentype'),
 		/* IE6-IE8 */
-		url('../../../farsi_fonts/Vazir.woff2') format('woff2'),
+		url('../../../farsi_fonts/Farsi-Digits/Tanha-FD.woff2') format('woff2'),
 		/* Modern Browsers */
-		url('../../../farsi_fonts/Vazir.woff') format('woff'),
+		url('../../../farsi_fonts/Farsi-Digits/Tanha-FD.woff') format('woff'),
 		/* Modern Browsers */
-		url('../../../farsi_fonts/Vazir.ttf') format('truetype');
+		url('../../../farsi_fonts/Farsi-Digits/Tanha-FD.ttf') format('truetype');
 	/* Safari, Android, iOS */
 	font-weight: normal;
 	font-style: normal;
@@ -18,7 +18,7 @@
 
 
 body{
-    font-family: 'Vazir';
+    font-family: 'Tanha';
 }
 
 *{

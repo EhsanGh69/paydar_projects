@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
-from jalali_date import datetime2jalali
 
-from utils.tools import persian_numbers_converter
+from django_jalali.db import models as jmodels
+
 from projects.models import Project
 
 
@@ -26,7 +26,7 @@ class Receive(models.Model):
     receive_for = models.CharField(max_length=250, verbose_name="دریافت بابت")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_receives', verbose_name="پروژه")
     receive_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ دریافتی")
-    receive_date = models.DateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت دریافت")
+    receive_date = jmodels.jDateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت دریافت")
 
     class Meta:
         verbose_name = "دریافت"
@@ -36,14 +36,8 @@ class Receive(models.Model):
     def __str__(self):
         return self.receive_for
     
-    def jalali_receive_date(self):
-        jalali_receive = datetime2jalali(self.receive_date).strftime('%d / %m / %Y - %H:%M:%S')
-        return persian_numbers_converter(jalali_receive)
-    
-    def persian_receive_amount(self):
-        formatted_number = "{:,}".format(self.receive_amount)
-        receive_amount_str = str(formatted_number)
-        return persian_numbers_converter(receive_amount_str)
+    def formatted_receive_amount(self):
+        return "{:,}".format(self.receive_amount)
     
 
 

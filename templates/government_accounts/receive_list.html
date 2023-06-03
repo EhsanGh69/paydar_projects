@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load jformat %}
 
 {% block title %}لیست دریافت‌ها{% endblock %}
 
@@ -8,8 +8,9 @@
 
 {% block main %}
 <br><br>
+<!-- 
 <div class="card">
-    <!-- /.card-header -->
+    
     <div class="card-body">
       <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
         <div class="row mb-3">
@@ -68,7 +69,7 @@
                                 <td class="sorting_1">{{ receive.persian_receive_amount }}</td>
                                 <td class="sorting_1">{{ receive.jalali_receive_date }}</td>
                                 <td class="border-left">
-                                    <a href="#" class="btn btn-outline-info">ویرایش</a>
+                                    <a href="{% url 'government_accounts:receive_update' receive.pk %}" class="btn btn-outline-info">ویرایش</a>
                                     <a href="#" class="btn btn-outline-danger">حذف</a>
                                 </td>
                             </tr>
@@ -116,16 +117,133 @@
         </div>
       </div>
     </div>
-    <!-- /.card-body -->
 </div>
+-->  
+
+
+<div class="card">
     
+    <div class="card-body">
+      <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <div id="example1_filter" class="dataTables_filter">
+                    
+                    <input type="search" class="form-control form-control-lg" placeholder="" aria-controls="example1">
+                    
+                    <button type="submit" class="btn btn-primary">جست و جو</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="example1" class="table table-bordered table-striped dataTable sortable" role="grid" aria-describedby="example1_info">
+                    <thead>
+                        <tr role="row">
+
+                            <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                ارگان
+                            </th>
+
+                            <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                                دریافت بابت
+                            </th>
+
+                            <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                                پروژه
+                            </th>
+
+                            <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                مبلغ دریافتی
+                            </th>
+
+                            <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                تاریخ و ساعت
+                            </th>
+
+                            <th class="border-left text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                اقدام
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for receive in receives %}
+                            <tr role="row" class="odd">
+                                <td>{{ receive.organization }}</td>
+                                <td>{{ receive.receive_for }}</td>
+                                <td>{{ receive.project }}</td>
+                                <td data-sort="{{ receive.receive_amount }}">
+                                    {{ receive.formatted_receive_amount }}
+                                </td>
+                                <td data-sort="{{ receive.receive_date|date:'Ymd' }}">
+                                    {{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                <td class="border-left">
+                                    <a href="{% url 'government_accounts:receive_update' receive.pk %}" 
+                                    class="btn btn-outline-info">
+                                        ویرایش
+                                    </a>
+                                    <a href="{% url 'government_accounts:receive_delete' receive.pk %}" 
+                                    class="btn btn-outline-danger">
+                                        حذف
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        
+
+                    </tbody>
+                   
+                </table>
+            </div>
+        </div>
+        <div class="row mt-3">
+           
+            <div class="col-sm-12 col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                    <ul class="pagination">
+                        <li class="paginate_button page-item previous disabled" id="example1_previous">
+                            <a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0" class="page-link">قبلی</a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                            <a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0" class="page-link">۱</a>
+                        </li>
+                        <li class="paginate_button page-item ">
+                            <a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0" class="page-link">۲</a>
+                        </li>
+                        <li class="paginate_button page-item ">
+                            <a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0" class="page-link">۳</a>
+                        </li>
+                        <li class="paginate_button page-item ">
+                            <a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0" class="page-link">۴</a>
+                        </li>
+                        <li class="paginate_button page-item ">
+                            <a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0" class="page-link">۵</a>
+                        </li>
+                        <li class="paginate_button page-item ">
+                            <a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0" class="page-link">۶</a>
+                        </li>
+                        <li class="paginate_button page-item next" id="example1_next">
+                            <a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0" class="page-link">بعدی</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div> 
+
+
 {% endblock %}
 
 
-{% block script %}
+{% block scripts %}
 
 <script>
-    $(function () {
+    /*$(function () {
       $("#example1").DataTable({
         "paging": false,
         "lengthChange": false,
@@ -136,13 +254,13 @@
       });
       $('#example2').DataTable({
         "paging": true,
-        "lengthChange": false,
+        "lengthChange": true,
         "searching": false,
         "ordering": true,
         "info": true,
         "autoWidth": false,
       });
-    });
+    });*/
   </script>
 
 {% endblock %}
