@@ -30,10 +30,10 @@
       <form method="post">
           {% csrf_token %}
           <p>
-            <i>پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
           </p>
           {% if form.non_field_errors %}
-            <div>
+            <div class="errors">
                 {% for error in form.non_field_errors %}
                 <span>{{ error }}</span>
                 {% endfor %}
@@ -55,7 +55,7 @@
               <div class="col-6 mb-3">
                   {{ form.receive_date|as_crispy_field }}
                   {% if form.receive_date.errors %}
-                    <div>
+                    <div class="errors">
                         {% for error in form.receive_date.errors  %}
                         <span class="text-danger">{{ error }}</span>
                         {% endfor %}
@@ -67,13 +67,13 @@
 
           <div class="row">
             <div class="col-3 mb-3">
-                <button class="btn btn-success btn-block" type="submit">ثبت</button>
-              </div>
-              <div class="col-3 mb-3">
-                {% if user.is_superuser and request.resolver_match.kwargs.pk %}
-                <a href="{% url 'account:article_delete' request.resolver_match.kwargs.pk %}" 
-                class="btn btn-danger">حذف</a>
-                {% endif %}
+                <button class="btn btn-success btn-block" type="submit">
+                    {% if request.resolver_match.url_name == 'receive_create' %}
+                        <span>ثبت دریافت‌</span>
+                    {% else %}
+                        <span>ویرایش دریافت‌</span>
+                    {% endif %}
+                </button>
               </div>
           </div>
       </form>

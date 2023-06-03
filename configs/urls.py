@@ -19,13 +19,13 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 
-from .views import home
+from .views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
+    path('', index),
     path('government_accounts/', include('government_accounts.urls')),
-    path('account/', include('account.urls'))
+    path('account/', include('account.urls')),
 ]
 
 
