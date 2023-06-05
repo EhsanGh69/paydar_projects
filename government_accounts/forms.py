@@ -5,7 +5,7 @@ from jalali_date.fields import JalaliDateTimeField, SplitJalaliDateTimeField
 from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
 import django_jalali.admin as jadmin
 
-from .models import Receive
+from .models import Receive, Organization
 
 
 
@@ -79,4 +79,26 @@ class ReceiveUpdateForm(forms.ModelForm):
         self.fields['receive_for'] = forms.CharField(
             label="دریافت بابت",
             validators=[none_numeric_value]
+        )
+
+
+class OrganizationForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = Organization
+        fields = ["organization_name"]
+
+    def __init__(self, *args, **kwargs):
+        super(OrganizationForm, self).__init__(*args, **kwargs)
+
+        self.fields['organization_name'] = forms.CharField(
+            label="نام ارگان",
+            validators=[
+                none_numeric_value,
+                validators.MaxLengthValidator(
+                    limit_value=50,
+                    message="تعداد کاراکترهای وارد شده نمی‌تواند بیشتر از ۵۰ باشد"
+                )
+            ]
         )

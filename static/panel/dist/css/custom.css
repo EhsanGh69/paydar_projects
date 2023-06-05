@@ -42,6 +42,16 @@ body{
     padding-left: 1rem;
 }
 
+.dataTables_paginate>ul.pagination{
+    direction: ltr !important;
+    margin-right: 43rem !important;
+    font-size: 1.2rem;
+}
+
+.dataTables_wrapper #print-table>button{
+    margin-right: 39rem;
+}
+
 [class*=icheck-]>input:first-child:checked+input[type=hidden]+label::after, 
 [class*=icheck-]>input:first-child:checked+label::after {
     right: 15px;

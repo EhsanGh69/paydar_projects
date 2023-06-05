@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+
+{% block title %}لیست ارگان‌ها{% endblock %}
+
+{% block page_title %}لیست ارگان‌ها{% endblock %}
+
+
+{% block main %}
+
+    {% if messages %}
+        <ul class="alert alert-success list-unstyled">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    <h5>
+                        <i class="fa-solid fa-circle-check"></i>
+                        {{ message }}
+                    </h5>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <br><br>
+    {% endif %}
+
+<div class="card">
+    
+    <div class="card-body">
+      <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                <table id="example1" class="table table-bordered table-striped dataTable sortable" role="grid" aria-describedby="example1_info">
+                    <thead>
+                        <tr role="row">
+
+                            <th class="text-center" rowspan="1" colspan="1" style="width: 358.797px;;">
+                                نام ارگان
+                            </th>
+                            <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                                اقدام
+                            </th>
+
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for organization in organizations %}
+                            <tr role="row" class="odd">
+                                <td>{{ organization.organization_name }}</td>
+                                <td class="border-left text-center">
+                                    <a href="{% url 'government_accounts:organization_update' organization.pk %}" 
+                                    class="btn btn-outline-info">
+                                        ویرایش
+                                    </a>
+                                    <a href="{% url 'government_accounts:organization_delete' organization.pk %}" 
+                                    class="btn btn-outline-danger">
+                                        حذف
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        
+
+                    </tbody>
+                   
+                </table>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+</div> 
+
+
+{% endblock %}

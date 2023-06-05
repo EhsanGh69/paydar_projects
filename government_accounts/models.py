@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.query import Q
 from django.utils import timezone
 
 from django_jalali.db import models as jmodels
@@ -18,6 +19,16 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.organization_name
+    
+
+class ReceiveManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(organization__organization_name__icontains=query) |
+            Q(receive_for__icontains=query) |
+            Q(project__title__icontains=query) 
+        )
+        return self.get_queryset().filter(lookup).distinct()
 
 
 
@@ -27,6 +38,8 @@ class Receive(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_receives', verbose_name="پروژه")
     receive_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ دریافتی")
     receive_date = jmodels.jDateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت دریافت")
+
+    objects = ReceiveManager()
 
     class Meta:
         verbose_name = "دریافت"
