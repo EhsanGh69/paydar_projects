@@ -1,5 +1,3 @@
-from typing import Any
-from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -17,7 +15,7 @@ class ReceiveList(LoginRequiredMixin, ListView):
     template_name = 'government_accounts/receive_list.html'
     model = Receive
     context_object_name = "receives"
-    paginate_by = 3
+    paginate_by = 9
 
 
 class ReceiveCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -47,7 +45,7 @@ class ReceiveSearch(LoginRequiredMixin, ListView):
     template_name = 'government_accounts/receive_list.html'
     model = Receive
     context_object_name = "receives"
-    paginate_by = 3
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
