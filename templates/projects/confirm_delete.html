@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'owner_delete' %}
+        تأیید حذف مالک 
+    {% endif %} 
+{% endblock %}
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'owner_delete' %}
+        <span>حذف مالک</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+<br><br>
+<div class="col-md-8 text-center mx-auto">
+
+    <div class="card card-danger ">
+
+      <div class="card-body py-4">
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if request.resolver_match.url_name == 'owner_delete' %}
+                <h4 class="py-2">آیا از حذف این مالک اطمینان دارید؟</h4>
+            {% endif %}
+            
+            {{ form }}
+
+            <input type="submit" value="بله" class="btn btn-success btn-lg ml-5">
+
+            {% if request.resolver_match.url_name == 'owner_delete' %}
+                <a href="{% url 'projects:owners' %}" class="btn btn-danger btn-lg">خیر</a>
+            {% endif %}
+            
+
+        </form>
+      </div>
+
+    </div>
+
+</div>   
+{% endblock %}

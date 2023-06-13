@@ -1,0 +1,30 @@
+<div class="row mb-3">
+    
+    <div class="col-12 col-lg-6">
+        <div id="example1_filter" class="dataTables_filter">
+            
+            <form action="{% url search_url %}" method="get">
+
+                <input type="search" class="form-control form-control" name="data_search" 
+                value="{{ request.GET.data_search }}"
+                placeholder="جستجو" style="width: 50%;">
+            
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6" id="print-table">
+
+        <button type="submit" class="btn btn-warning" id="print-btn">
+            <i class="fa-solid fa-print"></i>
+            <span>چاپ جدول</span>
+        </button>
+
+    </div>
+
+</div>

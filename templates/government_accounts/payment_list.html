@@ -2,9 +2,9 @@
 {% load static %}
 {% load jformat %}
 
-{% block title %}لیست دریافت‌ها{% endblock %}
+{% block title %}لیست پرداخت‌ها{% endblock %}
 
-{% block page_title %}لیست دریافت‌ها{% endblock %}
+{% block page_title %}لیست پرداخت‌ها{% endblock %}
 
 
 {% block main %}
@@ -21,7 +21,8 @@
     
             <div class="row">
                 <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                    <table id="data-table" class="table table-bordered table-striped sortable" 
+                    role="grid" aria-describedby="example1_info">
                         <thead>
                             <tr role="row">
     
@@ -34,7 +35,7 @@
                                 </th>
     
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    دریافت بابت
+                                    پرداخت‌ بابت
                                 </th>
     
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
@@ -42,42 +43,38 @@
                                 </th>
     
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    مبلغ دریافتی
+                                    مبلغ پرداختی
                                 </th>
     
                                 <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
                                     تاریخ و ساعت
                                 </th>
     
-                                <th class=" text-center action-th" rowspan="1" colspan="1" style="width: 172.797px;">
+                                <th class="text-center action-th" rowspan="1" colspan="1" style="width: 172.797px;">
                                     اقدام
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
     
-                            {% for receive in receives %}
+                            {% for payment in payments %}
                                 <tr role="row" class="odd">
-                                    {% if page_obj.number > 1 %}
-                                        <td>{{ forloop.counter|add:9 }}</td>
-                                    {% else %}
-                                        <td>{{ forloop.counter }}</td>
-                                    {% endif %}
-                                    <td>{{ receive.organization }}</td>
-                                    <td>{{ receive.receive_for }}</td>
-                                    <td>{{ receive.project }}</td>
-                                    <td data-sort="{{ receive.receive_amount }}">
-                                        {{ receive.formatted_receive_amount }}
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ payment.organization }}</td>
+                                    <td>{{ payment.payment_for }}</td>
+                                    <td>{{ payment.project }}</td>
+                                    <td data-sort="{{ payment.payment_amount }}">
+                                        {{ payment.formatted_payment_amount }}
                                     </td>
-                                    <td data-sort="{{ receive.receive_date|date:'Ymd' }}" class="border-left">
-                                        {{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    <td data-sort="{{ payment.payment_date|date:'Ymd' }}" class="border-left">
+                                        {{ payment.payment_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
                                     </td>
-                                    <td class="action-td">
-                                        <a href="{% url 'government_accounts:receive_update' receive.pk %}" 
+                                    <td class="border-left action-td">
+                                        <a href="{% url 'government_accounts:payment_update' payment.pk %}" 
                                         class="btn btn-outline-info mb-2">
                                             ویرایش
                                         </a>
-                                        <a href="{% url 'government_accounts:receive_delete' receive.pk %}" 
+                                        <a href="{% url 'government_accounts:payment_delete' payment.pk %}" 
                                         class="btn btn-outline-danger mb-2 ml-2">
                                             حذف
                                         </a>

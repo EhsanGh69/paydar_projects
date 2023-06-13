@@ -25,7 +25,7 @@
 <br><br>
 <div class="card card-primary p-5">
 
-    <div class="card-body col-sm-12 col-md-8 offset-md-2">
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
 
       <form method="post">
           {% csrf_token %}
@@ -40,13 +40,13 @@
             </div>
           {% endif %}
           <div class="row">
-              <div class="col-6 mb-3">
+              <div class="col-12 col-lg-10 col-xl-8 mb-3">
                   {{ form.organization_name|as_crispy_field }}
               </div>
           </div>
 
           <div class="row">
-            <div class="col-3 mb-3">
+            <div class="col-8 col-sm-6 col-xl-4 mb-3">
                 <button class="btn btn-success btn-block" type="submit">
                     {% if request.resolver_match.url_name == 'organization_create' %}
                         <span>افزودن ارگان</span>

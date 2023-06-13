@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
+{% load widget_tweaks %}
 
 
 {% block title %}
-    {% if request.resolver_match.url_name == 'receive_create' %}
-        ثبت دریافت‌
+    {% if request.resolver_match.url_name == 'owner_create' %}
+        افزودن مالک
     {% else %}
-        ویرایش دریافت‌
+        ویرایش مالک
     {% endif %} 
 {% endblock %}
 
 {% block page_title %}
-    {% if request.resolver_match.url_name == 'receive_create' %}
-        <span>ثبت دریافت‌</span>
+    {% if request.resolver_match.url_name == 'owner_create' %}
+        <span>افزودن مالک</span>
     {% else %}
-        <span>ویرایش دریافت‌</span>
+        <span>ویرایش مالک</span>
     {% endif %}
 {% endblock %}
 
@@ -27,7 +27,7 @@
 
     <div class="card-body col-12 col-lg-8 offset-lg-2">
 
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <p>
             <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
@@ -41,38 +41,29 @@
           {% endif %}
           <div class="row">
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.organization|as_crispy_field }}
+                  {{ form.full_name|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.project|as_crispy_field }}
+                  {{ form.phone|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.receive_for|as_crispy_field }}
+                {{ form.national_card_image|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.receive_amount|as_crispy_field }}
+                  {{ form.birth_certificate_image|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.receive_date|as_crispy_field }}
-                  {% if form.receive_date.errors %}
-                    <div class="errors">
-                        {% for error in form.receive_date.errors  %}
-                        <span class="text-danger">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                 {% endif %}
-                  <i>فرمت تاریخ: &nbsp;  18 - 2 - 1402 </i><br>
-                  <i> فرمت زمان: &nbsp; 56 : 33 : 15</i> 
+                  {{ form.ownership_document_image|as_crispy_field }}
               </div>
           </div>
 
           <div class="row">
-            <div class="col-8 col-sm-6 col-xl-4 mb-3">
+            <div class="col-8 col-sm-6 col-xl-4 my-5">
                 <button class="btn btn-success btn-block" type="submit">
-                    {% if request.resolver_match.url_name == 'receive_create' %}
-                        <span>ثبت دریافت‌</span>
+                    {% if request.resolver_match.url_name == 'owner_create' %}
+                        <span>افزودن مالک</span>
                     {% else %}
-                        <span>ویرایش دریافت‌</span>
+                        <span>ویرایش مالک</span>
                     {% endif %}
                 </button>
               </div>
@@ -84,3 +75,6 @@
   </div>
 
 {% endblock  %}
+
+
+

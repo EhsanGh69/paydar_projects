@@ -9,6 +9,11 @@ from projects.models import Project
 
 
 
+
+def pdf_upload_path(filename):
+    return f'government_accounts/{timezone.now().strftime("%Y-%m-%d")}_{filename}'
+
+
 class Organization(models.Model):
     organization_name = models.CharField(max_length=50, verbose_name="نام ارگان")
 
@@ -38,6 +43,7 @@ class Receive(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_receives', verbose_name="پروژه")
     receive_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ دریافتی")
     receive_date = jmodels.jDateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت دریافت")
+    pdf = models.FileField(upload_to=pdf_upload_path, blank=True)
 
     objects = ReceiveManager()
 
@@ -53,6 +59,14 @@ class Receive(models.Model):
         return "{:,}".format(self.receive_amount)
     
 
+class PaymentManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(organization__organization_name__icontains=query) |
+            Q(payment_for__icontains=query) |
+            Q(project__title__icontains=query) 
+        )
+        return self.get_queryset().filter(lookup).distinct()
 
 
 class Payment(models.Model):
@@ -60,7 +74,9 @@ class Payment(models.Model):
     payment_for = models.CharField(max_length=250, verbose_name="پرداخت بابت")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_payments', verbose_name="پروژه")
     payment_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ پرداختی")
-    payment_date = models.DateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت پرداخت")
+    payment_date = jmodels.jDateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت پرداخت")
+
+    objects = PaymentManager()
 
     class Meta:
         verbose_name = "پرداخت"
@@ -70,20 +86,36 @@ class Payment(models.Model):
     def __str__(self):
         return self.payment_for
     
+    
+    def formatted_payment_amount(self):
+        return "{:,}".format(self.payment_amount)
+    
 
+
+class ActivityManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(organization__organization_name__icontains=query) |
+            Q(activity_type__icontains=query) |
+            Q(project__title__icontains=query) 
+        )
+        return self.get_queryset().filter(lookup).distinct()
 
 
 class Activity(models.Model):
     RESULT_CHOICES = (
         ('fn', 'پایان یافته'),
-        ('do', 'در حال انجام')
+        ('do', 'در حال انجام'),
+        ('ns', 'شروع نشده'),
     )
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name="ارگان")
     activity_type = models.CharField(max_length=150, verbose_name="نوع فعالیت")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_activities', verbose_name="پروژه")
-    activity_date = models.DateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت فعالیت")
+    activity_date = jmodels.jDateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت فعالیت")
     activity_result = models.CharField(max_length=2, choices=RESULT_CHOICES, verbose_name="نتیجه فعالیت")
-    activity_descriptions = models.TextField(verbose_name="توضیحات فعالیت در حال انجام", default="بدون توضیح")
+    activity_descriptions = models.TextField(verbose_name="توضیحات فعالیت در حال انجام", blank=True)
+
+    objects = ActivityManager()
 
     class Meta:
         verbose_name = "فعالیت"

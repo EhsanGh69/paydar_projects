@@ -1,0 +1,23 @@
+{% if messages %}
+    <ul class="alert alert-success list-unstyled">
+        {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                <h5>
+                    <i class="fa-solid fa-circle-check"></i>
+                    {{ message }}
+                </h5>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <br><br>
+{% endif %}
+
+{% if not_found %}
+    <div class="alert alert-danger">
+        <h5>
+            <i class="fa-solid fa-circle-xmark"></i>
+            <span>هیچ موردی برای جستجوی شما یافت نشد</span>
+        </h5>
+    </div>
+{% endif %}

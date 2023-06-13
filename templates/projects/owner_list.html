@@ -2,9 +2,9 @@
 {% load static %}
 {% load jformat %}
 
-{% block title %}لیست دریافت‌ها{% endblock %}
+{% block title %}لیست مالکین{% endblock %}
 
-{% block page_title %}لیست دریافت‌ها{% endblock %}
+{% block page_title %}لیست مالکین{% endblock %}
 
 
 {% block main %}
@@ -30,23 +30,23 @@
                                 </th>
 
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    ارگان
+                                    نام و نام خانوادگی
                                 </th>
     
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    دریافت بابت
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    پروژه
+                                    شماره تماس
                                 </th>
     
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    مبلغ دریافتی
+                                    تصویر کارت ملی
+                                </th>
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    تصویر شناسنامه
                                 </th>
     
                                 <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    تاریخ و ساعت
+                                    تصویر سند مالکیت
                                 </th>
     
                                 <th class=" text-center action-th" rowspan="1" colspan="1" style="width: 172.797px;">
@@ -56,28 +56,39 @@
                         </thead>
                         <tbody>
     
-                            {% for receive in receives %}
+                            {% for owner in owners %}
                                 <tr role="row" class="odd">
                                     {% if page_obj.number > 1 %}
                                         <td>{{ forloop.counter|add:9 }}</td>
                                     {% else %}
                                         <td>{{ forloop.counter }}</td>
                                     {% endif %}
-                                    <td>{{ receive.organization }}</td>
-                                    <td>{{ receive.receive_for }}</td>
-                                    <td>{{ receive.project }}</td>
-                                    <td data-sort="{{ receive.receive_amount }}">
-                                        {{ receive.formatted_receive_amount }}
+                                    <td>{{ owner.full_name }}</td>
+                                    <td>{{ owner.phone }}</td>
+                                    <td class="text-center">
+                                        <a href="#">
+                                            <img src="{{ owner.national_card_image.url }}" 
+                                            class="img-fluid rounded" width="100" height="70" alt="national card image">
+                                        </a>
                                     </td>
-                                    <td data-sort="{{ receive.receive_date|date:'Ymd' }}" class="border-left">
-                                        {{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    <td class="text-center">
+                                        <a href="#">
+                                            <img src="{{ owner.birth_certificate_image.url }}" 
+                                            class="img-fluid rounded" width="100" height="70" alt="birth certificate image">
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="#">
+                                            <img src="{{ owner.ownership_document_image.url }}" 
+                                            class="img-fluid rounded" width="100" height="70" alt="ownership document image">
+                                        </a>
                                     </td>
                                     <td class="action-td">
-                                        <a href="{% url 'government_accounts:receive_update' receive.pk %}" 
+                                        <a href="{% url 'projects:owner_update' owner.pk %}" 
                                         class="btn btn-outline-info mb-2">
                                             ویرایش
                                         </a>
-                                        <a href="{% url 'government_accounts:receive_delete' receive.pk %}" 
+                                        <a href="{% url 'projects:owner_delete' owner.pk %}" 
                                         class="btn btn-outline-danger mb-2 ml-2">
                                             حذف
                                         </a>

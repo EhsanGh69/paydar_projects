@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load jformat %}
+
+{% block title %}لیست فعالیت‌ها{% endblock %}
+
+{% block page_title %}لیست فعالیت‌ها{% endblock %}
+
+
+{% block main %}
+
+    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
+
+    <div class="card">
+        
+        <div class="card-body">
+    
+        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+    
+            {% include 'partials/search_print.html' with search_url=search_url %}
+    
+            <div class="row">
+                <div class="col-sm-12 table-responsive">
+                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                        
+                        <thead>
+                            <tr role="row">
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 50.797px;">
+                                    ردیف
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    ارگان
+                                </th>
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
+                                    نوع فعالیت‌
+                                </th>
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
+                                    پروژه
+                                </th>
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    تاریخ و ساعت
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    نتیجه فعالیت
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    توضیحات فعالیت در حال انجام
+                                </th>
+    
+                                <th class="text-center border-left action-th" rowspan="1" colspan="1" style="width: 180.797px;">
+                                    اقدام
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+    
+                            {% for activity in activities %}
+                                <tr role="row" class="odd border-bottom">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ activity.organization }}</td>
+                                    <td>{{ activity.activity_type }}</td>
+                                    <td>{{ activity.project }}</td>
+                                    <td data-sort="{{ activity.activity_date|date:'Ymd' }}">
+                                        {{ activity.activity_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                    <td>
+                                        {% if activity.activity_result == 'fn' %}
+                                            <span>پایان یافته</span>
+                                        {% else %}
+                                            <span>در حال انجام</span>
+                                        {% endif %}
+                                    </td>
+                                    
+                                    {% if activity.activity_descriptions %}
+                                        <td>
+                                            {{ activity.activity_descriptions }}
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">
+                                            <span style="font-size:1.5rem;">_</span>
+                                        </td>
+                                    {% endif %}
+                                    
+                                    <td class="action-td border-left">
+                                        <a href="{% url 'government_accounts:activity_update' activity.pk %}" 
+                                        class="btn btn-outline-info mb-2">
+                                            ویرایش
+                                        </a>
+                                        <a href="{% url 'government_accounts:activity_delete' activity.pk %}" 
+                                        class="btn btn-outline-danger mb-2 ml-2">
+                                            حذف
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+    
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+    
+            {% include 'partials/pagination.html' with page_obj=page_obj %}
+    
+        </div>
+        </div>
+    </div> 
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script src="{% static 'panel/dist/js/custom.js' %}"></script>
+
+{% endblock %}

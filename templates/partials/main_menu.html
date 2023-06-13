@@ -1,0 +1,31 @@
+<li class="nav-item has-treeview
+{% if request.resolver_match.url_name == list_path_name or request.resolver_match.url_name == create_path_name or request.resolver_match.url_name == search_path_name %}
+   menu-open 
+{% endif %}">
+   <a href="#" class="nav-link
+   {% if request.resolver_match.url_name == list_path_name or request.resolver_match.url_name == create_path_name or request.resolver_match.url_name == search_path_name %}
+      active 
+   {% endif %}">
+       <i class="fa-solid {{ icon_type }}"></i>
+       <p class="mr-2">
+           {{ menu_name }}
+           <i class="right fas fa-angle-left"></i>
+       </p>
+   </a>
+   <ul class="nav nav-treeview">
+       <li class="nav-item">
+         <a href="{% url list_link_name %}"
+         class="nav-link
+          {% if request.resolver_match.url_name == list_path_name or request.resolver_match.url_name == search_path_name %}active{% endif %}">
+            {{ list_content }}
+        </a>
+       </li>
+       <li class="nav-item">
+         <a href="{% url create_link_name %}"
+         class="nav-link
+          {% if request.resolver_match.url_name == create_path_name %}active{% endif %}">
+            {{ create_content }}
+         </a>
+       </li>
+   </ul>
+</li>

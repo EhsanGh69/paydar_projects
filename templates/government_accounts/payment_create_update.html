@@ -4,18 +4,18 @@
 
 
 {% block title %}
-    {% if request.resolver_match.url_name == 'receive_create' %}
-        ثبت دریافت‌
+    {% if request.resolver_match.url_name == 'payment_create' %}
+        ثبت پرداخت‌
     {% else %}
-        ویرایش دریافت‌
+        ویرایش پرداخت‌
     {% endif %} 
 {% endblock %}
 
 {% block page_title %}
-    {% if request.resolver_match.url_name == 'receive_create' %}
-        <span>ثبت دریافت‌</span>
+    {% if request.resolver_match.url_name == 'payment_create' %}
+        <span>ثبت پرداخت‌</span>
     {% else %}
-        <span>ویرایش دریافت‌</span>
+        <span>ویرایش پرداخت‌</span>
     {% endif %}
 {% endblock %}
 
@@ -47,32 +47,32 @@
                   {{ form.project|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.receive_for|as_crispy_field }}
+                  {{ form.payment_for|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.receive_amount|as_crispy_field }}
+                  {{ form.payment_amount|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.receive_date|as_crispy_field }}
-                  {% if form.receive_date.errors %}
+                  {{ form.payment_date|as_crispy_field }}
+                  {% if form.payment_date.errors %}
                     <div class="errors">
-                        {% for error in form.receive_date.errors  %}
+                        {% for error in form.payment_date.errors  %}
                         <span class="text-danger">{{ error }}</span>
                         {% endfor %}
                     </div>
                  {% endif %}
-                  <i>فرمت تاریخ: &nbsp;  18 - 2 - 1402 </i><br>
-                  <i> فرمت زمان: &nbsp; 56 : 33 : 15</i> 
+                 <i>فرمت تاریخ: &nbsp;  18 - 2 - 1402 </i><br>
+                 <i> فرمت زمان: &nbsp; 56 : 33 : 15</i> 
               </div>
           </div>
 
           <div class="row">
             <div class="col-8 col-sm-6 col-xl-4 mb-3">
                 <button class="btn btn-success btn-block" type="submit">
-                    {% if request.resolver_match.url_name == 'receive_create' %}
-                        <span>ثبت دریافت‌</span>
+                    {% if request.resolver_match.url_name == 'payment_create' %}
+                        <span>ثبت پرداخت‌</span>
                     {% else %}
-                        <span>ویرایش دریافت‌</span>
+                        <span>ویرایش پرداخت‌</span>
                     {% endif %}
                 </button>
               </div>

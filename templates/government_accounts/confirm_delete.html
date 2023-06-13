@@ -7,6 +7,10 @@
         تأیید حذف دریافت
     {% elif request.resolver_match.url_name == 'organization_delete' %}
         تأیید حذف ارگان‌      
+    {% elif request.resolver_match.url_name == 'payment_delete' %}
+        تأیید حذف پرداخت‌
+    {% else %}
+        تأیید حذف فعالیت    
     {% endif %} 
 {% endblock %}
 
@@ -15,6 +19,10 @@
         <span>حذف دریافت‌</span>
     {% elif request.resolver_match.url_name == 'organization_delete' %}
         <span>حذف ارگان‌</span>
+    {% elif request.resolver_match.url_name == 'payment_delete' %}
+        <span>حذف پرداخت‌</span>
+    {% else %}
+        <span>حذف فعالیت</span>
     {% endif %}
 {% endblock %}
 
@@ -35,6 +43,10 @@
                 <h4 class="py-2">آیا از حذف این دریافت اطمینان دارید؟</h4>
             {% elif request.resolver_match.url_name == 'organization_delete' %}
                 <h4 class="py-2">آیا از حذف این ارگان‌ اطمینان دارید؟</h4>
+            {% elif request.resolver_match.url_name == 'payment_delete' %}
+                <h4 class="py-2">آیا از حذف این پرداخت‌ اطمینان دارید؟</h4>
+            {% else %}
+                <h4 class="py-2">آیا از حذف این فعالیت اطمینان دارید؟</h4>
             {% endif %}
             
             {{ form }}
@@ -45,6 +57,10 @@
                 <a href="{% url 'government_accounts:receives' %}" class="btn btn-danger btn-lg">خیر</a>
             {% elif request.resolver_match.url_name == 'organization_delete' %}
                 <a href="{% url 'government_accounts:organizations' %}" class="btn btn-danger btn-lg">خیر</a>
+            {% elif request.resolver_match.url_name == 'payment_delete' %}
+                <a href="{% url 'government_accounts:payments' %}" class="btn btn-danger btn-lg">خیر</a>
+            {% else %}
+                <a href="{% url 'government_accounts:activities' %}" class="btn btn-danger btn-lg">خیر</a>
             {% endif %}
             
 
