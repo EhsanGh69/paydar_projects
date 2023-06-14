@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'django_table_sort',
+    'django_render_partial',
     'account.apps.AccountConfig',
     'projects.apps.ProjectsConfig',
     'government_accounts.apps.GovernmentAccountsConfig',

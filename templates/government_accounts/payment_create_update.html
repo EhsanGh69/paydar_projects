@@ -54,13 +54,6 @@
               </div>
               <div class="col-12 col-xl-6 mb-3">
                   {{ form.payment_date|as_crispy_field }}
-                  {% if form.payment_date.errors %}
-                    <div class="errors">
-                        {% for error in form.payment_date.errors  %}
-                        <span class="text-danger">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                 {% endif %}
                  <i>فرمت تاریخ: &nbsp;  18 - 2 - 1402 </i><br>
                  <i> فرمت زمان: &nbsp; 56 : 33 : 15</i> 
               </div>

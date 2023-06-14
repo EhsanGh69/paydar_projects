@@ -32,6 +32,14 @@ class Owners(models.Model):
         return self.full_name
 
 
+class ProjectManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(title__icontains=query) |
+            Q(owners__full_name__icontains=query) 
+        )
+        return self.get_queryset().filter(lookup).distinct()
+
 
 class Project(models.Model):
     CONTRACT_CHOICES = (
@@ -43,9 +51,10 @@ class Project(models.Model):
     title = models.CharField(max_length=250, verbose_name="عنوان پروژه")
     contract_type = models.CharField(max_length=2, choices=CONTRACT_CHOICES, verbose_name="نوع قرارداد")
     owners = models.ManyToManyField(Owners, related_name="projects", verbose_name="مالکین")
-    contractual_salary = models.PositiveBigIntegerField(default=0, verbose_name="دستمزد قرارداد پیمانی")
-    contractual_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0, verbose_name="درصد قرارداد پیمانی")
+    contractual_salary = models.PositiveBigIntegerField(default=0, blank=True, null=True, verbose_name="دستمزد قرارداد پیمانی")
+    contractual_percentage = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=00.00, verbose_name="درصد قرارداد پیمانی")
 
+    objects = ProjectManager()
 
     class Meta:
         verbose_name = "پروژه"

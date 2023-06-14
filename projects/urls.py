@@ -1,6 +1,17 @@
 from django.urls import path
 
-from .views import OwnersList, OwnerCreate, OwnerUpdate, OwnerDelete, OwnerSearch
+from .views import (
+    OwnersList, 
+    OwnerCreate, 
+    OwnerUpdate, 
+    OwnerDelete, 
+    OwnerSearch,
+    ProjectList,
+    ProjectCreate,
+    ProjectUpdate,
+    ProjectDelete,
+    ProjectSearch
+)
 
 
 
@@ -13,4 +24,10 @@ urlpatterns = [
     path('owners/search', OwnerSearch.as_view(), name='owners_search'),
     path('owners/update/<int:pk>', OwnerUpdate.as_view(), name='owner_update'),
     path('owners/delete/<int:pk>', OwnerDelete.as_view(), name='owner_delete'),
+
+    path('projects/', ProjectList.as_view(), name='projects'),
+    path('projects/create', ProjectCreate.as_view(), name='project_create'),
+    path('projects/search', ProjectSearch.as_view(), name='projects_search'),
+    path('projects/update/<int:pk>', ProjectUpdate.as_view(), name='project_update'),
+    path('projects/delete/<int:pk>', ProjectDelete.as_view(), name='project_delete'),
 ]

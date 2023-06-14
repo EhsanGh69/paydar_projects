@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load jformat %}
+{% load render_partial %}
 
-{% block title %}لیست دریافت‌ها{% endblock %}
+{% block title %}لیست پروژه‌ها{% endblock %}
 
-{% block page_title %}لیست دریافت‌ها{% endblock %}
+{% block page_title %}لیست پروژه‌ها{% endblock %}
 
 
 {% block main %}
@@ -30,23 +30,23 @@
                                 </th>
 
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    ارگان
+                                    عنوان پروژه                                
                                 </th>
     
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    دریافت بابت
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    پروژه
+                                    نوع قرارداد
                                 </th>
     
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    مبلغ دریافتی
+                                    مالکین
+                                </th>
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    دستمزد قرارداد پیمانی
                                 </th>
     
                                 <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    تاریخ و ساعت
+                                    درصد قرارداد پیمانی
                                 </th>
     
                                 <th class=" text-center action-th" rowspan="1" colspan="1" style="width: 172.797px;">
@@ -56,33 +56,57 @@
                         </thead>
                         <tbody>
     
-                            {% for receive in receives %}
+                            {% for project in projects %}
                                 <tr role="row" class="odd">
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ receive.organization }}</td>
-                                    <td>{{ receive.receive_for }}</td>
-                                    <td>{{ receive.project }}</td>
-                                    <td data-sort="{{ receive.receive_amount }}">
-                                        {{ receive.formatted_receive_amount }}
+                                    <td>{{ project.title }}</td>
+                                    <td>
+                                        {% if project.contract_type == 'pc' %}
+                                            <span>مشارکت در ساخت</span>
+                                        {% elif project.contract_type == 'ow' %}
+                                            <span>مالکیت</span>
+                                        {% elif project.contract_type == 'pa' %}
+                                            <span>شراکتی</span>
+                                        {% else %}
+                                            <span>پیمانی</span>
+                                        {% endif %}
                                     </td>
-                                    <td data-sort="{{ receive.receive_date|date:'Ymd' }}" class="border-left">
-                                        {{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    <td>
+                                        {{ project.owners_to_str }}
                                     </td>
+                                    {% if project.contractual_salary == 0 %}
+                                        <td class="text-center">
+                                            <span style="font-size:1.5rem;">_</span>
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            {{ project.contractual_salary }}
+                                        </td>
+                                    {% endif %}
+
+                                    {% if project.contractual_salary == 0.00 %}
+                                        <td class="text-center">
+                                            <span style="font-size:1.5rem;">_</span>
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            {{ project.contractual_percentage }}
+                                        </td>
+                                    {% endif %}
+                                    
                                     <td class="action-td">
-                                        <a href="{% url 'government_accounts:receive_update' receive.pk %}" 
+                                        <a href="{% url 'projects:project_update' project.pk %}" 
                                         class="btn btn-outline-info mb-2">
                                             ویرایش
                                         </a>
-                                        <a href="{% url 'government_accounts:receive_delete' receive.pk %}" 
+                                        <a href="{% url 'projects:project_delete' project.pk %}" 
                                         class="btn btn-outline-danger mb-2 ml-2">
                                             حذف
                                         </a>
+                                       
                                     </td>
                                 </tr>
                             {% endfor %}
-    
-                            
-    
                         </tbody>
                     
                     </table>

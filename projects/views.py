@@ -5,12 +5,12 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 
-from .models import Owners
-from .forms import OwnerCreateForm
+from .models import Owners, Project
+from .forms import OwnerForm, ProjectForm
 
 
 
-
+# Owners - Start
 
 class OwnersList(LoginRequiredMixin, ListView):
     template_name = 'projects/owner_list.html'
@@ -27,7 +27,7 @@ class OwnersList(LoginRequiredMixin, ListView):
 class OwnerCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'projects/owner_create_update.html'
     model = Owners
-    form_class = OwnerCreateForm
+    form_class = OwnerForm
     success_url = reverse_lazy("projects:owners")
     success_message = "مالک با موفقیت اضافه شد"
 
@@ -35,7 +35,7 @@ class OwnerCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class OwnerUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'projects/owner_create_update.html'
     model = Owners
-    form_class = OwnerCreateForm
+    form_class = OwnerForm
     success_url = reverse_lazy("projects:owners")
     success_message = "مالک با موفقیت ویرایش شد"
 
@@ -71,5 +71,70 @@ class OwnerSearch(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'projects:owners_search'
+        return context
+
+
+# Owners - End
+
+# ---------------------------------------------------------
+
+class ProjectList(LoginRequiredMixin, ListView):
+    template_name = 'projects/project_list.html'
+    model = Project
+    context_object_name = "projects"
+    paginate_by = 9
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_url'] = 'projects:projects_search'
+        return context
+
+
+class ProjectCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = 'projects/project_create_update.html'
+    model = Project
+    form_class = ProjectForm
+    success_url = reverse_lazy("projects:projects")
+    success_message = "پروژه با موفقیت اضافه شد"
+
+
+class ProjectUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = 'projects/project_create_update.html'
+    model = Project
+    form_class = ProjectForm
+    success_url = reverse_lazy("projects:projects")
+    success_message = "پروژه با موفقیت ویرایش شد"
+
+class ProjectDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    template_name = 'projects/confirm_delete.html'
+    model = Project
+    success_url = reverse_lazy("projects:projects")
+    success_message = "پروژه با موفقیت حذف شد"
+
+
+class ProjectSearch(LoginRequiredMixin, ListView):
+    template_name = 'projects/project_list.html'
+    model = Project
+    context_object_name = "projects"
+    paginate_by = 9
+
+    def get_queryset(self):
+        global not_found
+        not_found = False
+        request = self.request
+        query = request.GET.get('data_search')
+        if query is not None:
+            search = Project.objects.search(query)
+            if search:
+                return search
+            else:
+                not_found = True
+        
+        return Project.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'projects:projects_search'
         return context
 

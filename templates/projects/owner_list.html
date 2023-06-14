@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load jformat %}
+
 
 {% block title %}لیست مالکین{% endblock %}
 
@@ -58,11 +58,7 @@
     
                             {% for owner in owners %}
                                 <tr role="row" class="odd">
-                                    {% if page_obj.number > 1 %}
-                                        <td>{{ forloop.counter|add:9 }}</td>
-                                    {% else %}
-                                        <td>{{ forloop.counter }}</td>
-                                    {% endif %}
+                                    <td>{{ forloop.counter }}</td>
                                     <td>{{ owner.full_name }}</td>
                                     <td>{{ owner.phone }}</td>
                                     <td class="text-center">

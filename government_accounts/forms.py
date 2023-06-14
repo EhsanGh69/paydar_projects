@@ -1,8 +1,8 @@
 from django import forms
 from django.core import validators
-from jalali_date.fields import JalaliDateTimeField, SplitJalaliDateTimeField
-from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
-import django_jalali.admin as jadmin
+from django.utils import timezone
+
+from jalali_date import datetime2jalali
 
 from .models import Receive, Organization, Payment, Activity
 from utils.tools import none_numeric_value
@@ -35,14 +35,13 @@ class ReceiveCreateForm(forms.ModelForm):
             validators=[none_numeric_value]
         )
 
-        self.fields['receive_date'] = JalaliDateTimeField(
-            label='تاریخ و زمان دریافت',
-            widget=AdminJalaliDateWidget
-        )
-
-        self.fields['receive_date'] = SplitJalaliDateTimeField(
-            label='تاریخ و زمان دریافت',                                           
-            widget=AdminSplitJalaliDateTime
+        self.fields['receive_date'] = forms.DateTimeField(
+            label="تاریخ و ساعت دریافت",
+            widget=forms.DateTimeInput(
+                attrs={
+                    'value': datetime2jalali(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
+                }
+            )
         )
 
 
@@ -120,14 +119,13 @@ class PaymentCreateForm(forms.ModelForm):
             validators=[none_numeric_value]
         )
 
-        self.fields['payment_date'] = JalaliDateTimeField(
-            label='تاریخ و زمان پرداخت',
-            widget=AdminJalaliDateWidget
-        )
-
-        self.fields['payment_date'] = SplitJalaliDateTimeField(
-            label='تاریخ و زمان پرداخت',                                           
-            widget=AdminSplitJalaliDateTime
+        self.fields['payment_date'] = forms.DateTimeField(
+            label="تاریخ و ساعت دریافت",
+            widget=forms.DateTimeInput(
+                attrs={
+                    'value': datetime2jalali(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
+                }
+            )
         )
 
 
@@ -176,14 +174,13 @@ class ActivityCreateForm(forms.ModelForm):
             validators=[none_numeric_value]
         )
 
-        self.fields['activity_date'] = JalaliDateTimeField(
-            label='تاریخ و زمان فعالیت',
-            widget=AdminJalaliDateWidget
-        )
-
-        self.fields['activity_date'] = SplitJalaliDateTimeField(
-            label='تاریخ و زمان فعالیت',                                           
-            widget=AdminSplitJalaliDateTime
+        self.fields['activity_date'] = forms.DateTimeField(
+            label="تاریخ و ساعت دریافت",
+            widget=forms.DateTimeInput(
+                attrs={
+                    'value': datetime2jalali(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
+                }
+            )
         )
 
 

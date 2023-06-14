@@ -235,10 +235,10 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="" class="nav-link text-light">لیست پروژه‌ها</a>
+                                    <a href="{% url 'projects:projects' %}" class="nav-link text-light">لیست پروژه‌ها</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="" class="nav-link text-light">افزودن پروژه‌</a>
+                                    <a href="{% url 'projects:project_create' %}" class="nav-link text-light">افزودن پروژه‌</a>
                                 </li>
                             </ul>
         
@@ -772,9 +772,9 @@
                 </li>
 
                 <li class="nav-item mb-5 border-top border-light pt-3">
-                    <a href="#" class="nav-link text-light">
-                        <i class="fa-solid fa-database ml-2 nav-icon"></i>
-                        <span>گرفتن نسخه پشتیبان</span>
+                    <a href="#" class="nav-link text-light pr-0">
+                        <i class="fa-solid fa-database nav-icon"></i>
+                        <span class="ml-3">گرفتن نسخه پشتیبان</span>
                         <br>
                         <span class="ml-5">از پایگاه داده</span>
                     </a>

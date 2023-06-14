@@ -1,49 +1,63 @@
-{% extends 'base.html' %}
+{% load static %}
 
-
-
-{% block title %}
-    {% if request.resolver_match.url_name == 'owner_delete' %}
-        تأیید حذف مالک 
-    {% endif %} 
-{% endblock %}
-
-{% block page_title %}
-    {% if request.resolver_match.url_name == 'owner_delete' %}
-        <span>حذف مالک</span>
-    {% endif %}
-{% endblock %}
-
-
-
-{% block main %}
-<br><br>
-<div class="col-md-8 text-center mx-auto">
-
-    <div class="card card-danger ">
-
-      <div class="card-body py-4">
-
-        <form method="post">
-            {% csrf_token %}
-
-            {% if request.resolver_match.url_name == 'owner_delete' %}
-                <h4 class="py-2">آیا از حذف این مالک اطمینان دارید؟</h4>
-            {% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="stylesheet"
+      href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'panel/dist/css/custom.css' %}" />
+    <title>
+        {% if request.resolver_match.url_name == 'owner_delete' %}
+            حذف مالک
+        {% elif request.resolver_match.url_name == 'project_delete' %}
+            حذف پروژه
+        {% endif %}
+    </title>
+</head>
+<body>
+    <div class="modal show" aria-hidden="false"
+        style="display: block; background-color: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    {% if request.resolver_match.url_name == 'owner_delete' %}
+                        <span>حذف مالک</span>
+                    {% elif request.resolver_match.url_name == 'project_delete' %}
+                        <span>حذف پروژه</span>
+                    {% endif %}
+                </h5>
+                
+                </div>
+                <form method="post">
+                    <div class="modal-body">
             
-            {{ form }}
-
-            <input type="submit" value="بله" class="btn btn-success btn-lg ml-5">
-
-            {% if request.resolver_match.url_name == 'owner_delete' %}
-                <a href="{% url 'projects:owners' %}" class="btn btn-danger btn-lg">خیر</a>
-            {% endif %}
-            
-
-        </form>
-      </div>
-
+                        {% if request.resolver_match.url_name == 'owner_delete' %}
+                            <h4 class="py-2">آیا از حذف این مالک اطمینان دارید؟</h4>
+                        {% elif request.resolver_match.url_name == 'project_delete' %}
+                            <h4 class="py-2">آیا از حذف این پروژه اطمینان دارید؟</h4>
+                        {% endif %}
+                        
+                        {{ form }}
+                    </div>
+                    <div class="modal-footer">
+                        {% csrf_token %}
+                    <input type="submit" value="بله" class="btn btn-success btn-lg ml-5">
+                    {% if request.resolver_match.url_name == 'owner_delete' %}
+                        <a href="{% url 'projects:owners' %}" class="btn btn-danger btn-lg">خیر</a>
+                    {% elif request.resolver_match.url_name == 'project_delete' %}
+                        <a href="{% url 'projects:projects' %}" class="btn btn-danger btn-lg">خیر</a>
+                    {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+</body>
+</html>
 
-</div>   
-{% endblock %}
+

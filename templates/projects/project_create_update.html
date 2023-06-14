@@ -3,18 +3,18 @@
 
 
 {% block title %}
-    {% if request.resolver_match.url_name == 'owner_create' %}
-        افزودن مالک
+    {% if request.resolver_match.url_name == 'project_create' %}
+        افزودن پروژه
     {% else %}
-        ویرایش مالک
+        ویرایش پروژه
     {% endif %} 
 {% endblock %}
 
 {% block page_title %}
-    {% if request.resolver_match.url_name == 'owner_create' %}
-        <span>افزودن مالک</span>
+    {% if request.resolver_match.url_name == 'project_create' %}
+        <span>افزودن پروژه</span>
     {% else %}
-        <span>ویرایش مالک</span>
+        <span>ویرایش پروژه</span>
     {% endif %}
 {% endblock %}
 
@@ -40,19 +40,19 @@
           {% endif %}
           <div class="row">
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.full_name|as_crispy_field }}
+                  {{ form.title|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.phone|as_crispy_field }}
+                  {{ form.contract_type|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                {{ form.national_card_image|as_crispy_field }}
+                {{ form.owners|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.birth_certificate_image|as_crispy_field }}
+                  {{ form.contractual_salary|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.ownership_document_image|as_crispy_field }}
+                  {{ form.contractual_percentage|as_crispy_field }}
               </div>
           </div>
 
@@ -60,9 +60,9 @@
             <div class="col-8 col-sm-6 col-xl-4 my-5">
                 <button class="btn btn-success btn-block" type="submit">
                     {% if request.resolver_match.url_name == 'owner_create' %}
-                        <span>افزودن مالک</span>
+                        <span>افزودن پروژه</span>
                     {% else %}
-                        <span>ویرایش مالک</span>
+                        <span>ویرایش پروژه</span>
                     {% endif %}
                 </button>
               </div>
@@ -74,6 +74,34 @@
   </div>
 
 {% endblock  %}
+
+
+{% block scripts %}
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#id_contractual_salary").attr("disabled","disabled");
+        $("#id_contractual_percentage").attr("disabled","disabled");
+
+        $('#id_contract_type').change(function (e) { 
+           e.preventDefault();
+
+           if($('#id_contract_type').val() == 'co'){
+                $("#id_contractual_salary").removeAttr("disabled");
+                $("#id_contractual_percentage").removeAttr("disabled");
+           }else{
+                $("#id_contractual_salary").attr("disabled","disabled");
+                $("#id_contractual_percentage").attr("disabled","disabled");
+           }
+       });
+   
+   });
+
+</script>
+
+{% endblock %}
 
 
 

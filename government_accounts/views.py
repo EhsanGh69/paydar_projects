@@ -81,7 +81,6 @@ class ReceiveSearch(LoginRequiredMixin, ListView):
         context['search_url'] = 'government_accounts:receives_search'
         return context
 
-    
 
 # Receive - End
 
