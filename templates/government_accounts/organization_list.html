@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block title %}لیست ارگان‌ها{% endblock %}
 
@@ -51,12 +51,16 @@
                                 <td>{{ organization.organization_name }}</td>
                                 <td class="border-left text-center">
                                     <a href="{% url 'government_accounts:organization_update' organization.pk %}" 
-                                    class="btn btn-outline-info mt-2">
+                                    class="btn btn-outline-info mb-2">
                                         ویرایش
                                     </a>
-                                    <a href="{% url 'government_accounts:organization_delete' organization.pk %}" 
-                                    class="btn btn-outline-danger mt-2">
-                                        حذف
+                                    <a href="javascript:void(0)"  
+                                        data-toggle="modal"
+                                        class="btn btn-outline-danger mb-2 ml-2"
+                                        data-url="{% url 'government_accounts:organization_delete' pk=organization.pk %}"
+                                        data-target="#deleteItemModal"
+                                        data-message="آیا از حذف ارگان '{{ organization.organization_name }}' اطمینان دارید؟">
+                                            حذف
                                     </a>
                                 </td>
                             </tr>
@@ -69,10 +73,19 @@
                 </table>
             </div>
         </div>
+
+        {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
       </div>
     </div>
 </div> 
 
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
 
 {% endblock %}

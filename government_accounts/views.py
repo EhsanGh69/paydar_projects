@@ -1,5 +1,4 @@
-from django.http import HttpResponse
-from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -29,6 +28,7 @@ class ReceiveList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:receives_search'
+        context['persian_object_name'] = 'دریافت'
         return context
 
 
@@ -49,10 +49,14 @@ class ReceiveUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class ReceiveDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    model = Receive
-    template_name = 'government_accounts/confirm_delete.html'
+    # model = Receive
     success_url = reverse_lazy("government_accounts:receives")
     success_message = "دریافت با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        receive = get_object_or_404(Receive, pk=_id)
+        return receive
 
 
 class ReceiveSearch(LoginRequiredMixin, ListView):
@@ -93,6 +97,11 @@ class OrganizationList(LoginRequiredMixin, ListView):
     model = Organization
     context_object_name = "organizations"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['persian_object_name'] = 'ارگان'
+        return context
+
 
 class OrganizationCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Organization
@@ -111,10 +120,14 @@ class OrganizationUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class OrganizationDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    model = Organization
-    template_name = 'government_accounts/confirm_delete.html'
+    # model = Organization
     success_url = reverse_lazy("government_accounts:organizations")
     success_message = "ارگان با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        organization = get_object_or_404(Organization, pk=_id)
+        return organization
 
 
 # Organization - End
@@ -134,6 +147,7 @@ class PaymentList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:payments_search'
+        context['persian_object_name'] = 'پرداخت'
         return context
 
 
@@ -154,10 +168,14 @@ class PaymentUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class PaymentDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    model = Payment
-    template_name = 'government_accounts/confirm_delete.html'
+    # model = Payment
     success_url = reverse_lazy("government_accounts:payments")
     success_message = "پرداخت با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        payment = get_object_or_404(Payment, pk=_id)
+        return payment
 
 
 class PaymentSearch(LoginRequiredMixin, ListView):
@@ -201,6 +219,7 @@ class ActivityList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:activities_search'
+        context['persian_object_name'] = 'فعالیت'
         return context
 
 
@@ -221,10 +240,14 @@ class ActivityUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class ActivityDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    model = Activity
-    template_name = 'government_accounts/confirm_delete.html'
+    # model = Activity
     success_url = reverse_lazy("government_accounts:activities")
     success_message = "فعالیت با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        activity = get_object_or_404(Activity, pk=_id)
+        return activity
 
 
 class ActivitySearch(LoginRequiredMixin, ListView):

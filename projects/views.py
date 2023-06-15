@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from typing import Any, Optional
+from django.db import models
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -21,6 +23,7 @@ class OwnersList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects:owners_search'
+        context['persian_object_name'] = 'مالک'
         return context
 
 
@@ -41,10 +44,14 @@ class OwnerUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class OwnerDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    template_name = 'projects/confirm_delete.html'
-    model = Owners
+    # model = Owners
     success_url = reverse_lazy("projects:owners")
     success_message = "مالک با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        owner = get_object_or_404(Owners, pk=_id)
+        return owner
 
 
 class OwnerSearch(LoginRequiredMixin, ListView):
@@ -87,6 +94,7 @@ class ProjectList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects:projects_search'
+        context['persian_object_name'] = 'پروژه'
         return context
 
 
@@ -106,10 +114,15 @@ class ProjectUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "پروژه با موفقیت ویرایش شد"
 
 class ProjectDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    template_name = 'projects/confirm_delete.html'
-    model = Project
+    # model = Project
     success_url = reverse_lazy("projects:projects")
     success_message = "پروژه با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        project = get_object_or_404(Project, pk=_id)
+        return project
+    
 
 
 class ProjectSearch(LoginRequiredMixin, ListView):

@@ -74,8 +74,12 @@
                                         class="btn btn-outline-info mb-2">
                                             ویرایش
                                         </a>
-                                        <a href="{% url 'government_accounts:payment_delete' payment.pk %}" 
-                                        class="btn btn-outline-danger mb-2 ml-2">
+                                        <a href="javascript:void(0)"  
+                                        data-toggle="modal"
+                                        class="btn btn-outline-danger mb-2 ml-2"
+                                        data-url="{% url 'government_accounts:payment_delete' pk=payment.pk %}"
+                                        data-target="#deleteItemModal"
+                                        data-message="آیا از حذف پرداخت‌ '{{ payment.payment_for }}' اطمینان دارید؟">
                                             حذف
                                         </a>
                                     </td>
@@ -89,6 +93,8 @@
                     </table>
                 </div>
             </div>
+
+            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
     
             {% include 'partials/pagination.html' with page_obj=page_obj %}
     
@@ -104,5 +110,6 @@
 
     <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
     <script src="{% static 'panel/dist/js/custom.js' %}"></script>
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
 
 {% endblock %}

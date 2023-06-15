@@ -99,8 +99,12 @@
                                         class="btn btn-outline-info mb-2">
                                             ویرایش
                                         </a>
-                                        <a href="{% url 'projects:project_delete' project.pk %}" 
-                                        class="btn btn-outline-danger mb-2 ml-2">
+                                        <a href="javascript:void(0)"  
+                                        data-toggle="modal"
+                                        class="btn btn-outline-danger mb-2 ml-2"
+                                        data-url="{% url 'projects:project_delete' pk=project.pk %}"
+                                        data-target="#deleteItemModal"
+                                        data-message="آیا از حذف پروژه '{{ project.title }}' اطمینان دارید؟">
                                             حذف
                                         </a>
                                        
@@ -112,6 +116,8 @@
                     </table>
                 </div>
             </div>
+
+            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
     
             {% include 'partials/pagination.html' with page_obj=page_obj %}
     
@@ -127,5 +133,6 @@
 
     <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
     <script src="{% static 'panel/dist/js/custom.js' %}"></script>
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
 
 {% endblock %}
