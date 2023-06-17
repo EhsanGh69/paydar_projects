@@ -39,7 +39,7 @@ class ReceiveCreateForm(forms.ModelForm):
             label="تاریخ و ساعت دریافت",
             widget=forms.DateTimeInput(
                 attrs={
-                    'value': datetime2jalali(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
+                    'value': ""
                 }
             )
         )
@@ -123,7 +123,7 @@ class PaymentCreateForm(forms.ModelForm):
             label="تاریخ و ساعت دریافت",
             widget=forms.DateTimeInput(
                 attrs={
-                    'value': datetime2jalali(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
+                    'value': ""
                 }
             )
         )
@@ -178,7 +178,7 @@ class ActivityCreateForm(forms.ModelForm):
             label="تاریخ و ساعت دریافت",
             widget=forms.DateTimeInput(
                 attrs={
-                    'value': datetime2jalali(timezone.now()).strftime('%Y-%m-%d %H:%M:%S')
+                    'value': ""
                 }
             )
         )
@@ -201,8 +201,4 @@ class ActivityUpdateForm(forms.ModelForm):
             label="نوع فعالیت",
             validators=[none_numeric_value]
         )
-
-
-
-
 

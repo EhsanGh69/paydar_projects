@@ -12,6 +12,12 @@
     {% endif %} 
 {% endblock %}
 
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+
+{% endblock %}
+
 {% block page_title %}
     {% if request.resolver_match.url_name == 'activity_create' %}
         <span>ثبت فعالیت</span>
@@ -56,9 +62,14 @@
                 {{ form.activity_descriptions|add_class:"form-control"|attr:"rows:5"|attr:"disabled:disabled" }}
               </div>
               <div class="col-12 col-xl-6 mb-3 mb-3">
-                  {{ form.activity_date|as_crispy_field }}
-                 <i>فرمت تاریخ: &nbsp;  18 - 2 - 1402 </i><br>
-                 <i> فرمت زمان: &nbsp; 56 : 33 : 15</i> 
+                  <label>{{ form.activity_date.label }}*</label>
+                  {{ form.activity_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+
+                  {% if form.activity_date.errors %}
+                        {% for error in form.activity_date.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                  {% endif %}
               </div>
           </div>
 
@@ -85,9 +96,23 @@
 
 {% block scripts %}
 
+<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+
 <script>
 
     $(document).ready(function () {
+
+        jalaliDatepicker.startWatch({ 
+            time: true
+        });
+
+        $('#id_activity_date').on('input', function (e) { 
+            e.preventDefault();
+            var date_value = $('#id_activity_date').val();
+            $('#id_activity_date').val(date_value.replaceAll('/', '-'));
+        });
+
+
         $('#id_activity_result').change(function (e) { 
            e.preventDefault();
 

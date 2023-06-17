@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
-
+{% load widget_tweaks %}
 
 
 {% block title %}
@@ -9,6 +10,12 @@
     {% else %}
         ویرایش پرداخت‌
     {% endif %} 
+{% endblock %}
+
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+
 {% endblock %}
 
 {% block page_title %}
@@ -53,9 +60,14 @@
                   {{ form.payment_amount|as_crispy_field }}
               </div>
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.payment_date|as_crispy_field }}
-                 <i>فرمت تاریخ: &nbsp;  18 - 2 - 1402 </i><br>
-                 <i> فرمت زمان: &nbsp; 56 : 33 : 15</i> 
+                  <label>{{ form.payment_date.label }}*</label>
+                  {{ form.payment_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+
+                  {% if form.payment_date.errors %}
+                        {% for error in form.payment_date.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                  {% endif %}
               </div>
           </div>
 
@@ -77,3 +89,27 @@
   </div>
 
 {% endblock  %}
+
+
+
+{% block scripts %}
+
+<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+       
+        jalaliDatepicker.startWatch({ 
+            time: true
+        });
+
+        $('#id_payment_date').on('input', function (e) { 
+            e.preventDefault();
+            var date_value = $('#id_payment_date').val();
+            $('#id_payment_date').val(date_value.replaceAll('/', '-'));
+        });
+   });
+
+</script>
+
+{% endblock %}

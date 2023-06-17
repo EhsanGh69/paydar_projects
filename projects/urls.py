@@ -6,7 +6,6 @@ from .views import (
     OwnerUpdate, 
     OwnerDelete, 
     OwnerSearch,
-    OwnerImageDetail,
     ProjectList,
     ProjectCreate,
     ProjectUpdate,
@@ -25,7 +24,6 @@ urlpatterns = [
     path('owners/search', OwnerSearch.as_view(), name='owners_search'),
     path('owners/update/<int:pk>', OwnerUpdate.as_view(), name='owner_update'),
     path('owners/delete/<int:pk>', OwnerDelete.as_view(), name='owner_delete'),
-    path('owner/detail/<int:pk>', OwnerImageDetail.as_view(), name='owner_detail'),
 
     path('projects/', ProjectList.as_view(), name='projects'),
     path('projects/create', ProjectCreate.as_view(), name='project_create'),

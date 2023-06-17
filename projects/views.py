@@ -35,17 +35,6 @@ class OwnerCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "مالک با موفقیت اضافه شد"
 
 
-class OwnerImageDetail(LoginRequiredMixin, DetailView):
-    template_name = 'projects/owner_create_update.html'
-
-    # for image observation
-    def get_object(self, queryset=None):
-        _id = int(self.kwargs.get('pk'))
-        owner_obj = get_object_or_404(Owners, pk=_id)
-        print(owner_obj)
-        return owner_obj
-
-
 class OwnerUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'projects/owner_create_update.html'
     model = Owners
@@ -96,6 +85,8 @@ class OwnerSearch(LoginRequiredMixin, ListView):
 
 # ---------------------------------------------------------
 
+# Project - Start
+
 class ProjectList(LoginRequiredMixin, ListView):
     template_name = 'projects/project_list.html'
     model = Project
@@ -124,6 +115,7 @@ class ProjectUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy("projects:projects")
     success_message = "پروژه با موفقیت ویرایش شد"
 
+
 class ProjectDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     # model = Project
     success_url = reverse_lazy("projects:projects")
@@ -134,7 +126,6 @@ class ProjectDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         project = get_object_or_404(Project, pk=_id)
         return project
     
-
 
 class ProjectSearch(LoginRequiredMixin, ListView):
     template_name = 'projects/project_list.html'
@@ -162,3 +153,7 @@ class ProjectSearch(LoginRequiredMixin, ListView):
         context['search_url'] = 'projects:projects_search'
         return context
 
+
+# Project - End
+
+# ---------------------------------------------------------
