@@ -102,6 +102,24 @@ input[type=file]:active::before {
 background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
+
+.card table td a.modal-tag{
+    display: inline-block;
+    width: 80px;
+    height: 60px;
+    /* background-color: #999; */
+    border-radius: 0.25rem;
+    color: #ddd;
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.card table td a.modal-tag:hover{
+    font-weight: bold;
+    opacity: 0.7;
+}
+
 @media (min-width: 992px){
     .sidebar-mini.sidebar-collapse .content-wrapper, .sidebar-mini.sidebar-collapse .main-footer, .sidebar-mini.sidebar-collapse .main-header {
         margin-right: 4.6rem!important;

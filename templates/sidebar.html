@@ -37,7 +37,7 @@
                 {% comment %} <h5 class="mr-2 text-light mb-3">طرف حساب دولتی</h5> {% endcomment %}
 
                 <li class="nav-item has-treeview
-                {% if request.resolver_match.app_name == 'government_accounts' %}menu-open{% endif %}">
+                    {% if request.resolver_match.app_name == 'government_accounts' %}menu-open{% endif %}">
                     <a href="#" class="nav-link 
                     {% if request.resolver_match.app_name == 'government_accounts' %}active{% endif %}">
                         <p class="mr-2 h5">
@@ -64,10 +64,8 @@
 
                 </li>
 
-                
                 <br>
                 
-
                 <li class="nav-item has-treeview border-top border-light pt-3">
                     <a href="#" class="nav-link">
                         <p class="mr-2 h5">
@@ -215,7 +213,7 @@
                 <br>
 
                 <li class="nav-item has-treeview border-top border-light pt-3 accordion
-                {% if request.resolver_match.app_name == 'projects' %}menu-open{% endif %}">
+                    {% if request.resolver_match.app_name == 'projects' %}menu-open{% endif %}">
                     <a href="#" class="nav-link h5
                     {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">
                         <p class="mr-2">
@@ -225,24 +223,7 @@
                     </a>
                     <ul class="nav nav-treeview">
 
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-trowel-bricks"></i>
-                                <p class="mr-2">
-                                    پروژه‌ها
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{% url 'projects:projects' %}" class="nav-link text-light">لیست پروژه‌ها</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{% url 'projects:project_create' %}" class="nav-link text-light">افزودن پروژه‌</a>
-                                </li>
-                            </ul>
-        
-                        </li>
+                        {% main_menu request 'projects' 'projects' 'project_create' 'projects_search' 'پروژه‌ها' 'fa-trowel-bricks' 'لیست پروژه‌ها' 'افزودن پروژه‌' %}
 
                         <p style="border-bottom: 1px dotted #fff;"></p>
         

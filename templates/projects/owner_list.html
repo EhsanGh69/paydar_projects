@@ -61,24 +61,39 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ owner.full_name }}</td>
                                     <td>{{ owner.phone }}</td>
-                                    <td class="text-center">
-                                        <a href="#">
-                                            <img src="{{ owner.national_card_image.url }}" 
-                                            class="img-fluid rounded" width="100" height="70" alt="national card image">
+                                    <td class="text-center img-td">
+                                        <a href="#" class="modal-tag bg-success" data-toggle="modal" 
+                                        data-target="#national_card{{ forloop.counter }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span>مشاهده</span>
                                         </a>
                                     </td>
-                                    <td class="text-center">
-                                        <a href="#">
-                                            <img src="{{ owner.birth_certificate_image.url }}" 
-                                            class="img-fluid rounded" width="100" height="70" alt="birth certificate image">
+
+                                    {% include 'partials/img_modal.html' with img_type='national_card' id=forloop.counter img_src=owner.national_card_image.url label='کارت ملی' owner=owner.full_name %}
+
+                                    <td class="text-center img-td">
+                                        <a href="#" data-toggle="modal" class="modal-tag bg-success"
+                                        data-target="#birth_certificate{{ forloop.counter }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span>مشاهده</span>
                                         </a>
                                     </td>
-                                    <td class="text-center">
-                                        <a href="#">
-                                            <img src="{{ owner.ownership_document_image.url }}" 
-                                            class="img-fluid rounded" width="100" height="70" alt="ownership document image">
+
+                                    {% include 'partials/img_modal.html' with img_type='birth_certificate' id=forloop.counter img_src=owner.birth_certificate_image.url label='شناسنامه' owner=owner.full_name %}
+
+                                    <td class="text-center img-td">
+                                        <a href="#" data-toggle="modal" class="modal-tag bg-success"
+                                        data-target="#ownership_document{{ forloop.counter }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span>مشاهده</span>
                                         </a>
                                     </td>
+
+                                    {% include 'partials/img_modal.html' with img_type='ownership_document' id=forloop.counter img_src=owner.ownership_document_image.url label='سند مالکیت' owner=owner.full_name %}
+
                                     <td class="action-td">
                                         <a href="{% url 'projects:owner_update' owner.pk %}" 
                                         class="btn btn-outline-info mb-2">
@@ -104,6 +119,7 @@
                 </div>
             </div>
 
+           
             {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
     
             {% include 'partials/pagination.html' with page_obj=page_obj %}

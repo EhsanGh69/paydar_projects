@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 
 from .models import Owners, Project
@@ -33,6 +33,17 @@ class OwnerCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = OwnerForm
     success_url = reverse_lazy("projects:owners")
     success_message = "مالک با موفقیت اضافه شد"
+
+
+class OwnerImageDetail(LoginRequiredMixin, DetailView):
+    template_name = 'projects/owner_create_update.html'
+
+    # for image observation
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        owner_obj = get_object_or_404(Owners, pk=_id)
+        print(owner_obj)
+        return owner_obj
 
 
 class OwnerUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

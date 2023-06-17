@@ -1,0 +1,20 @@
+<div class="modal fade" id="{{ img_type }}{{ id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            <span> تصویر</span>
+            <span> {{ label }}</span>
+            <span>'{{ owner }}'</span>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <img src="{{ img_src }}" 
+            class="img-fluid rounded" alt="national card image">
+        </div>
+      </div>
+    </div>
+</div>
