@@ -1,8 +1,6 @@
 from django import forms
 from django.core import validators
-from django.utils import timezone
 
-from jalali_date import datetime2jalali
 
 from .models import Receive, Organization, Payment, Activity
 from utils.tools import none_numeric_value

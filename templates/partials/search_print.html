@@ -1,6 +1,6 @@
 <div class="row mb-3">
     
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-6 mt-2">
         <div id="example1_filter" class="dataTables_filter">
             
             <form action="{% url search_url %}" method="get">
@@ -18,11 +18,16 @@
         </div>
     </div>
 
-    <div class="col-12 col-lg-6" id="print-table">
+    <div class="col-12 col-lg-6 mt-2" id="print-table">
+
+        <button class="btn btn-success mr-2" id="excel-btn" onclick="ExportToExcel('.xls')">
+            <i class="fa-solid fa-file-excel"></i>
+            <span>خروجی اکسل</span>
+        </button>
 
         <button type="submit" class="btn btn-warning" id="print-btn">
-            <i class="fa-solid fa-print"></i>
-            <span>چاپ جدول</span>
+            <i class="fa-solid fa-file-pdf"></i>
+            <span>خروجی پی دی اف</span>
         </button>
 
     </div>

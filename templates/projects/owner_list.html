@@ -135,7 +135,24 @@
 {% block scripts %}
 
     <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script src="{% static 'panel/dist/js/custom.js' %}"></script>
     <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+
+    <script>
+        function ExportToExcel(type, fn, dl) {
+            $('.action-th').remove();
+            $('.action-td').remove();
+            setTimeout(function(){
+                location.reload();
+            }, 1000);
+            var elt = document.getElementById('data-table');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            const now = new Date();
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('owners'+ String(now.getTime()) + (type || '.xls')));
+        }
+    </script>
 
 {% endblock %}
