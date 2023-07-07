@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 
 
 
@@ -24,6 +24,7 @@ class ReceiveList(LoginRequiredMixin, ListView):
     model = Receive
     context_object_name = "receives"
     paginate_by = 9
+    form_class = ReceiveCreateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -96,6 +97,7 @@ class OrganizationList(LoginRequiredMixin, ListView):
     template_name = 'government_accounts/organization_list.html'
     model = Organization
     context_object_name = "organizations"
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
