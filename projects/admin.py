@@ -8,7 +8,7 @@ from .models import *
 
 @admin.register(Owners)
 class OwnersAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'phone', 'national_card_tag', 'birth_certificate_tag', 'ownership_document_tag']
+    list_display = ['full_name', 'phone']
     ordering = ['full_name']
     list_filter = ['full_name']
     search_fields = ['full_name']
@@ -65,7 +65,7 @@ class CostsAdmin(admin.ModelAdmin):
     search_fields = ['project']
 
 
-@admin.register(ImagesPaymentReceipts)
+@admin.register(PaymentsImages)
 class ImagesPaymentReceiptsAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {"fields": 
@@ -82,11 +82,7 @@ class ImagesPaymentReceiptsAdmin(admin.ModelAdmin):
                             }
         )
     )
-    list_display = ['project',
-                    "designer_office_tag", "supervisors_tag", "engineer_system_tag", "sketch_map_tag",
-                    "export_permit_tag", "visit_toll_tag", "education_share_tag", 
-                    "fire_stations_share_tag","social_security_share_tag"
-                    ]
+    list_display = ['project']
     ordering = ['project']
     list_filter = ['project']
     search_fields = ['project']

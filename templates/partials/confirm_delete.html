@@ -1,0 +1,29 @@
+<div id="container_delete">
+    <div class="modal fade col-6 offset-3"  id="deleteItemModal" tabindex="-1"  role="dialog"
+         aria-labelledby="deleteItemModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document"> </div>
+        <div class="modal-content">
+    
+          <div class="modal-header">
+            <h5>تأیید حذف {{ obj_name }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+    
+          <div class="modal-body confirm-delete text-center" >
+              <div class="alert" id="delete_item_alert"></div>
+              <h5 id="modal-message"></h5>
+              <hr>
+              <form action="" method="post" id="form_confirm_modal">
+                  {% csrf_token %}
+                <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal" id="confirmButtonModal">بله</button>
+                <button type="button" class="btn btn-success btn-lg ml-3" data-dismiss="modal">خیر</button>
+              </form>
+              <input type="hidden" id="address_suppress"/>
+          </div>
+    
+        </div>
+    
+    </div>
+</div>

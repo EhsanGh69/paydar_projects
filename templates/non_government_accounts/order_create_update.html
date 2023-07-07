@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'order_create' %}
+        ثبت سفارش 
+    {% else %}
+        ویرایش سفارش
+    {% endif %} 
+{% endblock %}
+
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+
+{% endblock %}
+
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'order_create' %}
+        <span>ثبت سفارش</span>
+    {% else %}
+        <span>ویرایش سفارش</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card card-primary p-5">
+
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <p>
+            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+          </p>
+          {% if form.non_field_errors %}
+            <div class="errors">
+                {% for error in form.non_field_errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+          {% endif %}
+          <div class="row">
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.project|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                {{ form.supplier|as_crispy_field }}
+              </div>
+
+              <div class="col-12 col-xl-6 mb-3">
+                {{ form.order_type|as_crispy_field }}
+              </div>
+             
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.measurement_unit|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.unit_price|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.order_amount|as_crispy_field }}
+              </div>
+              
+              <div class="col-12 col-xl-6 mb-3">
+                  <label>{{ form.order_date.label }}*</label>
+                  {{ form.order_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+                  {% if form.order_date.errors %}
+                        {% for error in form.order_date.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                  {% endif %}
+              </div>
+              
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.order_respite|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                {{ form.order_result|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                <label>{{ form.sending_date.label }}</label>
+                {{ form.sending_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+                <small class="form-text text-muted">{{ form.sending_date.help_text }}</small>
+                {% if form.sending_date.errors %}
+                      {% for error in form.sending_date.errors %}
+                          <p class="text-danger">{{ error }}</p>
+                      {% endfor %}
+                {% endif %}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                {{ form.sended_image|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                {{ form.sended_image_type|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3 mb-3">
+                <label for="">{{ form.explan_order_cancel.label }}</label>
+                {{ form.explan_order_cancel|add_class:"form-control"|attr:"rows:5"|attr:"disabled:disabled" }}
+              </div>
+          </div>
+
+          <div class="row">
+            <div class="col-8 col-sm-6 col-xl-4 my-4">
+                <button class="btn btn-success btn-block" type="submit">
+                    {% if request.resolver_match.url_name == 'order_create' %}
+                        <span>ثبت سفارش</span>
+                    {% else %}
+                        <span>ویرایش سفارش</span>
+                    {% endif %}
+                </button>
+              </div>
+          </div>
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}
+
+
+{% block scripts %}
+
+<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+       
+        jalaliDatepicker.startWatch({ 
+            time: true
+        });
+
+        $("#id_sended_image").attr("disabled","disabled");
+        $("#id_sending_date").attr("disabled","disabled");
+        $("#id_sended_image_type").attr("disabled","disabled");
+        $("#id_explan_order_cancel").attr("disabled","disabled");
+
+        $('#id_order_date').on('input', function (e) { 
+            e.preventDefault();
+            var date_value = $('#id_order_date').val();
+            console.log(date_value.replaceAll('/', '-'));
+
+            $('#id_order_date').val(date_value.replaceAll('/', '-'));
+        });
+
+        $('#id_sending_date').on('input', function (e) { 
+            e.preventDefault();
+            var date_value = $('#id_sending_date').val();
+            console.log(date_value.replaceAll('/', '-'));
+
+            $('#id_sending_date').val(date_value.replaceAll('/', '-'));
+        });
+
+        $('#id_order_result').change(function (e) { 
+            e.preventDefault();
+ 
+            if($('#id_order_result').val() == 'spd'){
+                 $("#id_sending_date").removeAttr("disabled");
+            }else{
+                 $("#id_sending_date").attr("disabled","disabled");
+            }
+
+            if($('#id_order_result').val() == 'snd'){
+                 $("#id_sended_image").removeAttr("disabled");
+                 $("#id_sended_image_type").removeAttr("disabled");
+            }else{
+                 $("#id_sended_image").attr("disabled","disabled");
+                 $("#id_sended_image_type").attr("disabled","disabled");
+            }
+
+            if($('#id_order_result').val() == 'cld'){
+                 $("#id_explan_order_cancel").removeAttr("disabled");
+            }else{
+                 $("#id_explan_order_cancel").attr("disabled","disabled");
+            }
+        });
+   });
+
+</script>
+
+{% endblock %}
+

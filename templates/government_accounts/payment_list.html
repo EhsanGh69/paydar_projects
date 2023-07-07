@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load jformat %}
+
+{% block title %}لیست پرداخت‌ها{% endblock %}
+
+{% block page_title %}لیست پرداخت‌ها{% endblock %}
+
+
+{% block main %}
+
+    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
+
+    <div class="card">
+        
+        <div class="card-body">
+    
+        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+    
+{% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت پرداخت‌' %}
+    
+            <div class="row">
+                <div class="col-sm-12 table-responsive">
+                    <table id="data-table" class="table table-bordered table-striped sortable" 
+                    role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row">
+    
+                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
+                                    ردیف
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    ارگان
+                                </th>
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                                    پرداخت‌ بابت
+                                </th>
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                                    پروژه
+                                </th>
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    مبلغ پرداختی
+                                </th>
+    
+                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    تاریخ و ساعت
+                                </th>
+    
+                                <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    اقدام
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+    
+                            {% for payment in payments %}
+                                <tr role="row" class="odd">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ payment.organization }}</td>
+                                    <td>{{ payment.payment_for }}</td>
+                                    <td>{{ payment.project }}</td>
+                                    <td data-sort="{{ payment.payment_amount }}">
+                                        {{ payment.formatted_payment_amount }}
+                                    </td>
+                                    <td data-sort="{{ payment.payment_date|date:'Ymd' }}" class="border-left">
+                                        {{ payment.payment_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                    <td class="border-left action-td text-center">
+                                        <a href="{% url 'government_accounts:payment_update' payment.pk %}" 
+                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="javascript:void(0)"  
+                                        data-toggle="modal"
+                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                        data-url="{% url 'government_accounts:payment_delete' pk=payment.pk %}"
+                                        data-target="#deleteItemModal" title="حذف"
+                                        data-message="آیا از حذف پرداخت‌ '{{ payment.payment_for }}' اطمینان دارید؟">
+                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+    
+                            
+    
+                        </tbody>
+                    
+                    </table>
+                </div>
+            </div>
+
+            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+    
+            {% include 'partials/pagination.html' with page_obj=page_obj %}
+    
+        </div>
+        </div>
+    </div> 
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <script src="{% static 'panel/dist/js/custom.js' %}"></script>
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+    <script src="{% static 'panel/dist/js/export_excel.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#search-btn").click(function() {
+                if($('#search-input').val() != '' || $('#date-filter').val() != 'all'){
+                    $("#search-form").submit();
+               }
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,8 +1,17 @@
 from django.db import models
-from django.utils.html import format_html
+from django.db.models.query import Q
 from django.utils import timezone
 
+from django_jalali.db import models as jmodels
 
+
+
+class OwnersManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(full_name__icontains=query) 
+        )
+        return self.get_queryset().filter(lookup).distinct()
 
 
 class Owners(models.Model):
@@ -11,8 +20,8 @@ class Owners(models.Model):
     national_card_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر کارت ملی")
     birth_certificate_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر شناسنامه")
     ownership_document_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر سند مالکیت")
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+
+    objects = OwnersManager()
 
     class Meta:
         verbose_name = "مالک"
@@ -21,21 +30,15 @@ class Owners(models.Model):
 
     def __str__(self):
         return self.full_name
-    
-    def national_card_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.national_card_image.url))
-    national_card_tag.short_description = "تصویر کارت ملی"
-
-    def birth_certificate_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.birth_certificate_image.url))
-    birth_certificate_tag.short_description = "تصویر شناسنامه"
-
-    def ownership_document_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.ownership_document_image.url))
-    ownership_document_tag.short_description = "تصویر سند مالکیت"
 
 
-
+class ProjectManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(title__icontains=query) |
+            Q(owners__full_name__icontains=query) 
+        )
+        return self.get_queryset().filter(lookup).distinct()
 
 
 class Project(models.Model):
@@ -48,11 +51,10 @@ class Project(models.Model):
     title = models.CharField(max_length=250, verbose_name="عنوان پروژه")
     contract_type = models.CharField(max_length=2, choices=CONTRACT_CHOICES, verbose_name="نوع قرارداد")
     owners = models.ManyToManyField(Owners, related_name="projects", verbose_name="مالکین")
-    contractual_salary = models.PositiveBigIntegerField(default=0, verbose_name="دستمزد قرارداد پیمانی")
-    contractual_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0, verbose_name="درصد قرارداد پیمانی")
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+    contractual_salary = models.PositiveBigIntegerField(default=0, blank=True, null=True, verbose_name="دستمزد قرارداد پیمانی")
+    contractual_percentage = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=00.00, verbose_name="درصد قرارداد پیمانی")
 
+    objects = ProjectManager()
 
     class Meta:
         verbose_name = "پروژه"
@@ -65,6 +67,19 @@ class Project(models.Model):
         return " ،".join([owners.full_name for owners in self.owners.all()])
     owners_to_str.short_description = "مالکین"
 
+    def formatted_contractual_salary(self):
+        return "{:,}".format(self.contractual_salary)
+
+
+class WorkReferenceManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(project__title__icontains=query) |
+            Q(activity_type__icontains=query) |
+            Q(referrer__icontains=query) |
+            Q(doing_agent__icontains=query) 
+        )
+        return self.get_queryset().filter(lookup).distinct()
 
 
 class WorkReference(models.Model):
@@ -77,10 +92,10 @@ class WorkReference(models.Model):
     referrer = models.CharField(max_length=250, verbose_name='ارجاع دهنده')
     doing_agent = models.CharField(max_length=250, verbose_name='مأمور انجام')
     follow_confirm = models.BooleanField(default=False, verbose_name='تأیید پیگیری')
-    follow_date = models.DateTimeField(default=timezone.now, verbose_name='تاریخ پیگیری')
-    result_explan = models.TextField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+    follow_date = jmodels.jDateTimeField(default=timezone.now, verbose_name='تاریخ پیگیری')
+    result_explan = models.TextField(verbose_name='توضیح نتیجه')
+
+    objects = WorkReferenceManager()
 
     class Meta:
         verbose_name = "ارجاع کار"
@@ -91,24 +106,35 @@ class WorkReference(models.Model):
     
 
 
+class CostsManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(project__title__icontains=query)
+        )
+        return self.get_queryset().filter(lookup).distinct()
+    
+
 class Costs(models.Model):
     project = models.ForeignKey(Project, 
                                 on_delete=models.CASCADE, 
                                 related_name='project_costs',
                                 verbose_name='پروژه'
                             )
+    # branches costs
     water_branch = models.PositiveIntegerField(default=0, verbose_name='هزینه انشعاب آب')
     electricity_branch = models.PositiveIntegerField(default=0, verbose_name='هزینه انشعاب برق')
     gas_branch = models.PositiveIntegerField(default=0, verbose_name='هزینه انشعاب گاز')
     phone_subscription = models.PositiveIntegerField(default=0, verbose_name='هزینه اشتراک تلفن')
+    # engineer costs
     designer_office = models.PositiveIntegerField(default=0, verbose_name='هزینه دفتر طراح')
     supervisors = models.PositiveIntegerField(default=0, verbose_name='هزینه ناظرین')
     engineer_system = models.PositiveIntegerField(default=0, verbose_name='هزینه نظام مهندسی')
-    sketch_map = models.PositiveIntegerField(default=0, verbose_name='هزینه نقشه کروکی')
+    sketch_map = models.PositiveIntegerField(default=0, verbose_name='هزینه تهیه نقشه کروکی')
+    # mayoralty costs
     export_permit = models.PositiveIntegerField(default=0, verbose_name='هزینه صدور پروانه')
     export_end_work = models.PositiveIntegerField(default=0, verbose_name='هزینه صدور پایان کار')
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+
+    objects = CostsManager()
 
 
     class Meta:
@@ -118,9 +144,50 @@ class Costs(models.Model):
     def __str__(self):
         return self.project.title
     
+    def formatted_water_branch(self):
+        return "{:,}".format(self.water_branch)
+    
+    def formatted_electricity_branch(self):
+        return "{:,}".format(self.electricity_branch)
+    
+    def formatted_gas_branch(self):
+        return "{:,}".format(self.gas_branch)
+    
+    def formatted_phone_subscription(self):
+        return "{:,}".format(self.phone_subscription)
+    
+    def formatted_designer_office(self):
+        return "{:,}".format(self.designer_office)
+    
+    def formatted_supervisors(self):
+        return "{:,}".format(self.supervisors)
+    
+    def formatted_engineer_system(self):
+        return "{:,}".format(self.engineer_system)
+    
+    def formatted_sketch_map(self):
+        return "{:,}".format(self.sketch_map)
+    
+    def formatted_export_permit(self):
+        return "{:,}".format(self.export_permit)
+    
+    def formatted_export_end_work(self):
+        return "{:,}".format(self.export_end_work)
+    
 
 
-class ImagesPaymentReceipts(models.Model):
+
+    
+
+class PaymentsImagesManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(project__title__icontains=query)
+        )
+        return self.get_queryset().filter(lookup).distinct()
+
+
+class PaymentsImages(models.Model):
     project = models.ForeignKey(Project, 
                                 on_delete=models.CASCADE, 
                                 related_name='project_payment_receipts',
@@ -136,8 +203,8 @@ class ImagesPaymentReceipts(models.Model):
     education_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم آموزش و پرورش')
     fire_stations_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم آتشنشانی')
     social_security_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم تأمین اجتماعی')
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+
+    objects = PaymentsImagesManager()
     
 
     class Meta:
@@ -148,38 +215,3 @@ class ImagesPaymentReceipts(models.Model):
     def __str__(self):
         return self.project.title
     
-    def designer_office_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.designer_office.url))
-    designer_office_tag.short_description = "تصویر فیش دفتر طراح"
-
-    def supervisors_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.supervisors.url))
-    supervisors_tag.short_description = "تصویر فیش ناظرین"
-
-    def engineer_system_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.engineer_system.url))
-    engineer_system_tag.short_description = "تصویر فیش نظام مهندسی"
-
-    def sketch_map_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.sketch_map.url))
-    sketch_map_tag.short_description = "تصویر فیش نقشه کروکی"
-
-    def export_permit_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.export_permit.url))
-    export_permit_tag.short_description = "تصویر فیش عوارض صدور پروانه"
-
-    def visit_toll_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.visit_toll.url))
-    visit_toll_tag.short_description = "تصویر فیش عوارض بازدید"
-
-    def education_share_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.education_share.url))
-    education_share_tag.short_description = "تصویر فیش سهم آموزش و پرورش"
-
-    def fire_stations_share_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.fire_stations_share.url))
-    fire_stations_share_tag.short_description = "تصویر فیش سهم آتشنشانی"
-
-    def social_security_share_tag(self):
-        return format_html("<img src='{}' width='100' height='75' style='border-radius: 5px;'>".format(self.social_security_share.url))
-    social_security_share_tag.short_description = "تصویر فیش سهم تأمین اجتماعی"

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'project_create' %}
+        افزودن پروژه
+    {% else %}
+        ویرایش پروژه
+    {% endif %} 
+{% endblock %}
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'project_create' %}
+        <span>افزودن پروژه</span>
+    {% else %}
+        <span>ویرایش پروژه</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card card-primary p-5">
+
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <p>
+            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+          </p>
+          {% if form.non_field_errors %}
+            <div class="errors">
+                {% for error in form.non_field_errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+          {% endif %}
+          <div class="row">
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.title|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.contract_type|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                {{ form.owners|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.contractual_salary|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3">
+                  {{ form.contractual_percentage|as_crispy_field }}
+              </div>
+          </div>
+
+          <div class="row">
+            <div class="col-8 col-sm-6 col-xl-4 my-5">
+                <button class="btn btn-success btn-block" type="submit">
+                    {% if request.resolver_match.url_name == 'project_create' %}
+                        <span>افزودن پروژه</span>
+                    {% else %}
+                        <span>ویرایش پروژه</span>
+                    {% endif %}
+                </button>
+              </div>
+          </div>
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}
+
+
+{% block scripts %}
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#id_contractual_salary").attr("disabled","disabled");
+        $("#id_contractual_percentage").attr("disabled","disabled");
+
+        $('#id_contract_type').change(function (e) { 
+           e.preventDefault();
+
+           if($('#id_contract_type').val() == 'co'){
+                $("#id_contractual_salary").removeAttr("disabled");
+                $("#id_contractual_percentage").removeAttr("disabled");
+           }else{
+                $("#id_contractual_salary").attr("disabled","disabled");
+                $("#id_contractual_percentage").attr("disabled","disabled");
+           }
+       });
+   
+   });
+
+</script>
+
+{% endblock %}
+
+
+

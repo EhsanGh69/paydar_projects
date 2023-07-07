@@ -1,0 +1,11 @@
+<li class="nav-item">
+  <a href="{% url list_link_name %}"
+  class="nav-link
+   {% if request.resolver_match.url_name in all_paths %}
+      active
+   {% endif %}">
+   <i class="fa-solid {{ icon_type }} text-primary" style="font-size: 1.2rem;"></i>
+   <span class="ml-2">{{ list_content }}</span>
+ </a>
+</li>
+

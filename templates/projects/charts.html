@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}نمودارها{% endblock %}
+
+{% block page_title %}نمودارها{% endblock %}
+
+
+{% block main %}
+
+<div class="container-fluid">
+
+    <div class="card">
+
+        <div class="card-body">
+    
+            <a href="#" class="btn btn-outline-success btn-lg mb-2 pb-0" title="تعریف نمودار جدید">
+                <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+            </a>
+    
+            <div class="row border m-2 p-2">
+
+                <a href="#" class="btn btn-lg btn-outline-danger mb-2 pb-0" title="حذف نمودار">
+                    <i class="fa-solid fa-xmark" style="font-size: 1.5rem;"></i>
+                </a>
+
+                <div class="col-12">
+
+                  <div class="alert alert-info d-block d-sm-none">برای مشاهده نمودار لطفاً گوشی خود را بچرخانید</div>
+
+                  <div class="card text-right text-dark bg-white my-3 border-0 shadow d-none d-sm-block">
+
+                    <div class="card-body">
+
+                      <div class="d-flex mb-4 justify-content-between align-items-center flex-column flex-lg-row">
+                        <h5 class="card-title ml-3">نمودار پیشرفت ریالی پروژه‌ها</h5>
+            
+                        <section class="d-flex justify-content-between flex-column flex-lg-row" style="width: 57%;">
+                          <div class="btn-group btn-group-toggle" data-toggle="buttons" dir="ltr">
+                            <label class="btn btn-outline-secondary active">
+                              <input type="radio" name="options" id="option1" checked /> سال
+                            </label>
+                            <label class="btn btn-outline-secondary">
+                              <input type="radio" name="options" id="option2" /> ماه
+                            </label>
+                            <label class="btn btn-outline-secondary">
+                              <input type="radio" name="options" id="option3" /> روز
+                            </label>
+                          </div>
+            
+                          <button type="button" class="btn btn-info mt-2 mt-lg-0" 
+                          data-toggle="tooltip" data-placement="right" title="گرفتن خروجی">
+                            <i class="fas fa-file-export"></i>
+                          </button>
+                        </section>
+                      </div>
+            
+                      <canvas id="rial_progress" class="w-100" height="300"></canvas>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+
+            <div class="row border mt-3 mx-2 p-2">
+
+                <a href="#" class="btn btn-outline-danger btn-lg mb-2 pb-0" title="حذف نمودار">
+                    <i class="fa-solid fa-xmark" style="font-size: 1.5rem;"></i>
+                </a>
+
+                <div class="col-12">
+
+                  <div class="alert alert-info d-block d-sm-none">برای مشاهده نمودار لطفاً گوشی خود را بچرخانید</div>
+
+                  <div class="card text-right text-dark bg-white my-3 border-0 shadow d-none d-sm-block">
+                    <div class="card-body">
+                      <div class="d-flex mb-4 justify-content-between align-items-center flex-column flex-lg-row">
+                        <h5 class="card-title ml-3">نمودار پیشرفت زمانی پروژه‌ها</h5>
+            
+                        <section class="d-flex justify-content-between flex-column flex-lg-row" style="width: 57%;">
+                          <div class="btn-group btn-group-toggle" data-toggle="buttons" dir="ltr">
+                            <label class="btn btn-outline-secondary active">
+                              <input type="radio" name="options" id="option1" checked /> سال
+                            </label>
+                            <label class="btn btn-outline-secondary">
+                              <input type="radio" name="options" id="option2" /> ماه
+                            </label>
+                            <label class="btn btn-outline-secondary">
+                              <input type="radio" name="options" id="option3" /> روز
+                            </label>
+                          </div>
+            
+                          <button type="button" class="btn btn-info mt-2 mt-lg-0" data-toggle="tooltip"
+                            data-placement="right" title="گرفتن خروجی" >
+                            <i class="fas fa-file-export"></i>
+                          </button>
+                        </section>
+                      </div>
+            
+                      <canvas id="temporal_progress" class="w-100" height="300"></canvas>
+                    </div>
+                  </div>
+                </div>
+            </div>
+    
+        </div>
+    
+    </div>
+
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %} 
+  <script src="{% static 'panel/dist/js/chartjs-2.8.0.min.js' %}"></script> 
+  <script src="{% static 'charts/charts.js' %}"></script> 
+{% endblock %}

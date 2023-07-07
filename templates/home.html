@@ -1,105 +1,140 @@
-{% extends 'base.html' %}
-{% load static %}
-
+{% extends 'base.html' %} 
+{% load static %} 
 {% block title %}خانه{% endblock %}
 
 
-
 {% block main %}
+<div class="container">
 
-    <div class="container">
+  <div class="row pl-3">
 
-        <div class="row">
+      <div class="col-12 col-lg-3 mt-2 text-center text-lg-left pr-0">
+        <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="Paydar Logo" class="mr-5 mr-lg-0" width="130">
+      </div>
+  
+      <div class="col-12 col-lg-5 mt-2 mt-lg-5 text-center">
+        <h1 class="pr-2 font-weight-bold ml-3">سامانه پایدار</h1>
+      </div>
 
-            <div class="col-sm-12 col-md-4 mt-5">
+      <div class="col-12 col-lg-4 clock my-3 py-3 bg-primary text-light rounded text-center" 
+      onload="showTime()">
+        <p id="MyDateDisplay" class="mb-2"></p>
+        <p id="MyClockDisplay" class="mb-0"></p>
+      </div>
+  </div>
+  
+  <div class="row">
 
-                <div class="card text-white bg-success mb-3">
-                    <h4 class="card-header text-center">کاربران آنلاین</h4>
-                    <div class="card-body">
-                        <ul class="list-unstyled">
-                            <li class="mb-3">
-                                <span>-کاربر۱</span>
-                                <a href="#" title="ارسال پیام" class="text-light">
-                                    <i class="fa-solid fa-comments"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <span>-کاربر۲</span>
-                                <a href="#" title="ارسال پیام" class="text-light">
-                                    <i class="fa-solid fa-comments"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-sm-12 col-md-8 mt-5">
-
-                <div class="card text-white bg-info mb-3">
-                    <h4 class="card-header text-center">فعالیت‌های اخیر</h4>
-                    <div class="card-body">
-                        <ul class="list-unstyled">
-                            <li class="mb-3">-فعالیت۱</li>
-                            <li>-فعالیت۲</li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-
+    <div class="col-sm-12 col-md-4 mt-5">
+      <div class="card text-white bg-success mb-3">
+        <h4 class="card-header text-center">چک ها</h4>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <li class="mb-3">
+              <span>چک‌های دریافتی</span>
+              <span class="badge badge-warning">5</span>
+            </li>
+            <li>
+              <span>چک‌های پرداختی</span>
+              <span class="badge badge-warning">9</span>
+            </li>
+          </ul>
         </div>
-
-        <div class="row">
-
-            <div class="col-12 mt-5">
-
-                <div class="card text-right text-dark bg-white my-3 border-0 shadow">
-
-                    <div class="card-body">
-
-                        <div class="d-flex mb-4 justify-content-between align-items-center">
-                            <h5 class="card-title">آمار هزینه پروژه‌ها</h5>
-
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons" dir="ltr">
-                                <label class="btn btn-outline-secondary active">
-                                    <input type="radio" name="options" id="option1" checked> سال
-                                </label>
-                                <label class="btn btn-outline-secondary">
-                                    <input type="radio" name="options" id="option2"> ماه
-                                </label>
-                                <label class="btn btn-outline-secondary">
-                                    <input type="radio" name="options" id="option3"> روز
-                                </label>
-                            </div>
-
-                            <button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right"
-                                title="گرفتن خروجی">
-                                <i class="fas fa-file-export"></i>
-                            </button>
-
-                        </div>
-
-                        <canvas id="visit" class="w-100" height="300"></canvas>
-
-                    </div>
-
-
-
-                </div>
-
-
-            </div>
-
-        </div>
-
+      </div>
     </div>
 
+    <div class="col-sm-12 col-md-8 mt-5">
+      <div class="card text-white bg-info mb-3">
+        <h4 class="card-header text-center">فعالیت‌های اخیر</h4>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <li class="mb-3">-فعالیت۱</li>
+            <li>-فعالیت۲</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12 mt-4">
+      <div class="card text-right text-dark bg-white my-3 border-0 shadow">
+
+        <div class="card-header">
+          <ul class="nav nav-tabs nav-fill card-header-tabs">
+              <li class="nav-item">
+                  <a class="nav-link active" href="#rial_chart" data-toggle="tab">نمودار پیشرفت ریالی پروژه‌ها</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#temporal_chart" data-toggle="tab">نمودار پیشرفت زمانی پروژه‌ها</a>
+              </li>
+          </ul>
+      </div>
+
+      <div class="tab-content">
+
+          <div class="tab-pane fade show active" id="rial_chart">
+            <div class="card-body">
+              <section class="d-flex justify-content-between mb-3">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" dir="ltr">
+                  <label class="btn btn-outline-secondary active">
+                    <input type="radio" name="options" id="option1" checked /> سال
+                  </label>
+                  <label class="btn btn-outline-secondary">
+                    <input type="radio" name="options" id="option2" /> ماه
+                  </label>
+                  <label class="btn btn-outline-secondary">
+                    <input type="radio" name="options" id="option3" /> روز
+                  </label>
+                </div>
+
+                <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
+                  <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
+                </button>
+
+              </section>
+              <canvas id="rial_progress" class="w-100" height="300"></canvas>
+            </div>
+
+          </div>
+
+          <div class="tab-pane fade" id="temporal_chart">
+            <div class="card-body">
+                <section class="d-flex justify-content-between mb-3">
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons" dir="ltr">
+                    <label class="btn btn-outline-secondary active">
+                      <input type="radio" name="options" id="option1" checked /> سال
+                    </label>
+                    <label class="btn btn-outline-secondary">
+                      <input type="radio" name="options" id="option2" /> ماه
+                    </label>
+                    <label class="btn btn-outline-secondary">
+                      <input type="radio" name="options" id="option3" /> روز
+                    </label>
+                  </div>
+    
+                  <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
+                  </button>
+                </section>
+               <canvas id="temporal_progress" class="w-100" height="90"></canvas>
+            </div>  
+          </div>
+
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %} 
+
+{% block scripts %} 
+  <script src="{% static 'panel/dist/js/chartjs-2.8.0.min.js' %}"></script> 
+  <script src="{% static 'charts/charts.js' %}"></script> 
 {% endblock %}
 
-{% block scripts %}
-    {% static 'panel/dist/js/chartjs-2.8.0.min.js' %}
-    {% include 'charts/costs_chart.html' %}
-{% endblock %}
 

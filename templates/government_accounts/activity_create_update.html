@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'activity_create' %}
+        ثبت فعالیت
+    {% else %}
+        ویرایش فعالیت
+    {% endif %} 
+{% endblock %}
+
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+
+{% endblock %}
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'activity_create' %}
+        <span>ثبت فعالیت</span>
+    {% else %}
+        <span>ویرایش فعالیت</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card card-primary p-5">
+
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+      <form method="post">
+          {% csrf_token %}
+          <p>
+            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+          </p>
+          {% if form.non_field_errors %}
+            <div class="errors">
+                {% for error in form.non_field_errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+          {% endif %}
+          <div class="row">
+              <div class="col-12 col-xl-6 mb-3 mb-3">
+                  {{ form.organization|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3 mb-3">
+                  {{ form.project|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3 mb-3">
+                  {{ form.activity_type|as_crispy_field }}
+                  {{ form.activity_result|as_crispy_field }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3 mb-3">
+                <label for="">{{ form.activity_descriptions.label }}</label>
+                {{ form.activity_descriptions|add_class:"form-control"|attr:"rows:5"|attr:"disabled:disabled" }}
+              </div>
+              <div class="col-12 col-xl-6 mb-3 mb-3">
+                  <label>{{ form.activity_date.label }}*</label>
+                  {{ form.activity_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+
+                  {% if form.activity_date.errors %}
+                        {% for error in form.activity_date.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                  {% endif %}
+              </div>
+          </div>
+
+          <div class="row">
+            <div class="col-8 col-sm-6 col-xl-4 my-4">
+                <button class="btn btn-success btn-block" type="submit">
+                    {% if request.resolver_match.url_name == 'activity_create' %}
+                        <span>ثبت فعالیت</span>
+                    {% else %}
+                        <span>ویرایش فعالیت</span>
+                    {% endif %}
+                </button>
+              </div>
+          </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}
+
+
+{% block scripts %}
+
+<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        jalaliDatepicker.startWatch({ 
+            time: true
+        });
+
+        $('#id_activity_date').on('input', function (e) { 
+            e.preventDefault();
+            var date_value = $('#id_activity_date').val();
+            $('#id_activity_date').val(date_value.replaceAll('/', '-'));
+        });
+
+
+        $('#id_activity_result').change(function (e) { 
+           e.preventDefault();
+
+           if($('#id_activity_result').val() == 'do'){
+                $("#id_activity_descriptions").removeAttr("disabled");
+           }else{
+                $("#id_activity_descriptions").attr("disabled","disabled");
+           }
+       });
+   
+   });
+
+</script>
+
+{% endblock %}

@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // confirm delete modal
     let form_confirm = document.querySelector('#form_confirm_modal')
     let buttons = document.querySelectorAll("[data-target='#deleteItemModal']");
         buttons.forEach(button => {
@@ -19,4 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmModal.addEventListener('click', () => {
         form_confirm.submit();
     });
+
+    // image observation modal
+    
 });

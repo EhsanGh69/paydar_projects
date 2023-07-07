@@ -1,0 +1,164 @@
+{% if 'search' in request.resolver_match.url_name %}
+<a href="{% url list_url %}" class="btn btn-outline-danger btn-lg pb-0" title="پاک کردن نتایج جستجو">
+    <i class="fa-solid fa-filter-circle-xmark" style="font-size: 1.5rem;"></i>
+</a>
+{% else %}
+<a href="{% url create_url %}" class="btn btn-outline-success btn-lg pb-0" title="{{ title }}">
+    <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+</a>
+{% endif %}
+
+
+<div class="row my-2">
+    
+    <div class="col-12 col-xl-9 mt-2">
+
+        <div id="example1_filter" class="dataTables_filter">
+            
+            <form action="{% url search_url %}" method="get" id="search-form">
+
+                <div class="row pr-3">
+
+                    <div class="form-group col-12 col-xl-3 p-0">
+                        <input type="search" class="form-control w-100" name="data_search" 
+                        value="{{ request.GET.data_search }}"
+                        placeholder="جستجو" id="search-input">
+                    </div>
+
+                    {% if date_filter %}
+                        <div class="form-group col-12 col-xl-2">
+                            <select name="date_filter" class="form-control" id="date-filter">
+                                <option value="all" selected>
+                                    فیلتر تاریخ
+                                </option>
+                                <option value="today" {% if request.GET.date_filter == 'today' %}selected{% endif %}>
+                                    امروز
+                                </option>
+                                <option value="last_week" {% if request.GET.date_filter == 'last_week' %}selected{% endif %}>
+                                    هفت روز اخیر
+                                </option>
+                                <option value="last_month" {% if request.GET.date_filter == 'last_month' %}selected{% endif %}>
+                                    یک ماه اخیر
+                                </option>
+                                <option value="current_year" {% if request.GET.date_filter == 'current_year' %}selected{% endif %}>
+                                    امسال
+                                </option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'activities' or request.resolver_match.url_name == 'activities_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="activity_result" class="form-control" id="activity-result">
+                                <option value="all" selected>فیلتر نتیجه فعالیت</option>
+                                <option value="fn" {% if request.GET.activity_result == 'fn' %}selected{% endif %}>پایان یافته</option>
+                                <option value="do" {% if request.GET.activity_result == 'do' %}selected{% endif %}>در حال انجام</option>
+                                <option value="ns" {% if request.GET.activity_result == 'ns' %}selected{% endif %}>شروع نشده</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'projects' or request.resolver_match.url_name == 'projects_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="contract_type" class="form-control" id="contract-type">
+                                <option value="all" selected>فیلتر نوع قرارداد</option>
+                                <option value="pc" {% if request.GET.contract_type == 'pc' %}selected{% endif %}>مشارکت در ساخت</option>
+                                <option value="ow" {% if request.GET.contract_type == 'ow' %}selected{% endif %}>مالکیت</option>
+                                <option value="pa" {% if request.GET.contract_type == 'pa' %}selected{% endif %}>شراکتی</option>
+                                <option value="co" {% if request.GET.contract_type == 'co' %}selected{% endif %}>پیمانی</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'buyers_sellers' or request.resolver_match.url_name == 'buyers_sellers_search' %}
+                        <div class="form-group col-12 col-xl-3">
+                            <select name="payment_order" class="form-control" id="payment-order">
+                                <option value="all" selected>فیلتر ترتیب پرداخت</option>
+                                <option value="csh" {% if request.GET.payment_order == 'csh' %}selected{% endif %}>نقدی</option>
+                                <option value="chq" {% if request.GET.payment_order == 'chq' %}selected{% endif %}>چک</option>
+                                <option value="del" {% if request.GET.payment_order == 'del' %}selected{% endif %}>حین تحویل</option>
+                                <option value="dtr" {% if request.GET.payment_order == 'dtr' %}selected{% endif %}>انتقال سند</option>
+                                <option value="afh" {% if request.GET.payment_order == 'afh' %}selected{% endif %}>بعد از سفت کاری</option>
+                                <option value="aif" {% if request.GET.payment_order == 'aif' %}selected{% endif %}>بعد از اجرای تأسیسات</option>
+                                <option value="atc" {% if request.GET.payment_order == 'atc' %}selected{% endif %}>بعد از کاشی و سرامیک</option>
+                                <option value="afc" {% if request.GET.payment_order == 'afc' %}selected{% endif %}>بعد از سقف طبقه</option>
+                                <option value="aff" {% if request.GET.payment_order == 'aff' %}selected{% endif %}>بعد از فونداسیون</option>
+                                <option value="oth" {% if request.GET.payment_order == 'oth' %}selected{% endif %}>سایر</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="buyer_seller" class="form-control" id="buyer-seller">
+                                <option value="all" selected>فیلتر خریدار/فروشنده</option>
+                                <option value="buy" {% if request.GET.buyer_seller == 'buy' %}selected{% endif %}>خریدار</option>
+                                <option value="sel" {% if request.GET.buyer_seller == 'sel' %}selected{% endif %}>فروشنده</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'orders' or request.resolver_match.url_name == 'orders_search' %}
+                        <div class="form-group col-12 col-xl-3">
+                            <select name="order_result" class="form-control" id="order-result">
+                                <option value="all" selected>فیلتر نتیجه سفارش</option>
+                                <option value="spd" {% if request.GET.order_result == 'spd' %}selected{% endif %}>ارسال در تاریخ مشخص</option>
+                                <option value="snd" {% if request.GET.order_result == 'snd' %}selected{% endif %}>ارسال شده</option>
+                                <option value="cld" {% if request.GET.order_result == 'cld' %}selected{% endif %}>لغو شده</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="order_image_type" class="form-control" id="order-image-type">
+                                <option value="all" selected>فیلتر نوع تصویر سفارش</option>
+                                <option value="blg" {% if request.GET.order_image_type == 'blg' %}selected{% endif %}>بارنامه</option>
+                                <option value="fac" {% if request.GET.order_image_type == 'fac' %}selected{% endif %}>فاکتور</option>
+                                <option value="enf" {% if request.GET.order_image_type == 'enf' %}selected{% endif %}>برگه ورود</option>
+                                <option value="exf" {% if request.GET.order_image_type == 'exf' %}selected{% endif %}>برگه خروج</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'conflict_orders' or request.resolver_match.url_name == 'conflict_orders_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="conflict_type" class="form-control" id="conflict-type">
+                                <option value="all" selected>فیلتر نوع مغایرت</option>
+                                <option value="pos" {% if request.GET.conflict_type == 'pos' %}selected{% endif %}>بیشتر از سفارش</option>
+                                <option value="neg" {% if request.GET.conflict_type == 'neg' %}selected{% endif %}>کمتر از سفارش</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'cheques' or request.resolver_match.url_name == 'cheques_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="cheque_type" class="form-control" id="cheque-type">
+                                <option value="all" selected>فیلتر نوع چک</option>
+                                <option value="exp" {% if request.GET.cheque_type == 'exp' %}selected{% endif %}>صدور</option>
+                                <option value="rec" {% if request.GET.cheque_type == 'rec' %}selected{% endif %}>دریافت</option>
+                            </select>
+                        </div>
+                    {% endif %}
+                
+                    <div class="col-1 col-xl-1 p-0 {% if not date_filter %}mr-2{% endif %} ">
+                        <button type="button" class="btn btn-success" title="بگرد" id="search-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="col-12 col-xl-3 mt-2" id="print-table">
+
+        <button class="btn btn-success mr-2" id="excel-btn" onclick="ExportToExcel('.xls')" title="خروجی اکسل">
+            <i class="fa-solid fa-file-excel" style="font-size: 1.5rem;"></i>
+        </button>
+
+        <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
+            <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
+        </button>
+
+    </div>
+
+</div>

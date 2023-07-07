@@ -1,164 +1,125 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load jformat %}
+
 
 {% block title %}لیست دریافت‌ها{% endblock %}
 
 {% block page_title %}لیست دریافت‌ها{% endblock %}
 
+
 {% block main %}
-    <br><br>
+
+    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
+
     <div class="card">
-        <!-- /.card-header -->
+        
         <div class="card-body">
-            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+    
+        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-                <div class="row mb-3">
-                    <div class="col-sm-12 col-md-6">
-                        <div id="example1_filter" class="dataTables_filter">
-
-                            <input type="search" class="form-control form-control-lg" placeholder=""
-                                   aria-controls="example1">
-
-                            <button type="submit" class="btn btn-primary">جست و جو</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-12">
-                        <table id="example1" class="table table-bordered table-striped dataTable" role="grid"
-                               aria-describedby="example1_info">
-                            <thead>
+            
+    
+{% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت دریافت' %}
+    
+            <div class="row">
+                <div class="col-sm-12 table-responsive">
+                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                        <thead>
                             <tr role="row">
+    
+                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
+                                    ردیف
+                                </th>
 
-                                <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
-                                    colspan="1" aria-sort="ascending"
-                                    aria-label="Rendering engine: activate to sort column descending"
-                                    style="width: 277.969px;">
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
                                     ارگان
                                 </th>
-
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                    colspan="1"
-                                    aria-label="Browser: activate to sort column ascending"
-                                    style="width: 358.797px;">
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
                                     دریافت بابت
                                 </th>
-
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                    colspan="1"
-                                    aria-label="Platform(s): activate to sort column ascending"
-                                    style="width: 335.344px;">
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
                                     پروژه
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                    colspan="1"
-                                    aria-label="Engine version: activate to sort column ascending"
-                                    style="width: 236.094px;">
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
                                     مبلغ دریافتی
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                    colspan="1"
-                                    aria-label="CSS grade: activate to sort column ascending"
-                                    style="width: 172.797px;">
+    
+                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
                                     تاریخ و ساعت
                                 </th>
-
-                                <th class="border-left" tabindex="0" rowspan="1" colspan="1"
-                                    style="width: 172.797px;">
+    
+                                <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
                                     اقدام
                                 </th>
                             </tr>
-                            </thead>
-                            <tbody>
-
+                        </thead>
+                        <tbody>
                             {% for receive in receives %}
                                 <tr role="row" class="odd">
-                                    <td class="sorting_1">{{ receive.organization }}</td>
-                                    <td class="sorting_1">{{ receive.receive_for }}</td>
-                                    <td class="sorting_1">{{ receive.project }}</td>
-                                    <td class="sorting_1">{{ receive.persian_receive_amount }}</td>
-                                    <td class="sorting_1">{{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}</td>
-                                    <td class="border-left">
-                                        <a href="#" class="btn btn-outline-info">ویرایش</a>
-                                        <a href="#" class="btn btn-outline-danger">حذف</a>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ receive.organization }}</td>
+                                    <td>{{ receive.receive_for }}</td>
+                                    <td>{{ receive.project }}</td>
+                                    <td data-sort="{{ receive.receive_amount }}">
+                                        {{ receive.formatted_receive_amount }}
+                                    </td>
+                                    <td data-sort="{{ receive.receive_date|date:'Ymd' }}" class="border-left">
+                                        {{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                    <td class="action-td text-center">
+                                        <a href="{% url 'government_accounts:receive_update' receive.pk %}" 
+                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="javascript:void(0)"  
+                                        data-toggle="modal"
+                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                        data-url="{% url 'government_accounts:receive_delete' pk=receive.pk %}"
+                                        data-target="#deleteItemModal" title="حذف"
+                                        data-message="آیا از حذف دریافت '{{ receive.receive_for }}' اطمینان دارید؟">
+                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             {% endfor %}
-
-
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-                <div class="row mt-3">
-
-                    <div class="col-sm-12 col-md-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
-                            <ul class="pagination">
-                                <li class="paginate_button page-item previous disabled" id="example1_previous">
-                                    <a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0"
-                                       class="page-link">قبلی</a>
-                                </li>
-                                <li class="paginate_button page-item active">
-                                    <a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0"
-                                       class="page-link">۱</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0"
-                                       class="page-link">۲</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0"
-                                       class="page-link">۳</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0"
-                                       class="page-link">۴</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0"
-                                       class="page-link">۵</a>
-                                </li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0"
-                                       class="page-link">۶</a>
-                                </li>
-                                <li class="paginate_button page-item next" id="example1_next">
-                                    <a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0"
-                                       class="page-link">بعدی</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                            
+    
+                        </tbody>
+                    
+                    </table>
                 </div>
             </div>
+
+            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+    
+            {% include 'partials/pagination.html' with page_obj=page_obj %}
+    
         </div>
-        <!-- /.card-body -->
-    </div>
+        </div>
+    </div> 
+
+
 {% endblock %}
 
 
 {% block scripts %}
 
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <script src="{% static 'panel/dist/js/custom.js' %}"></script>
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+    <script src="{% static 'panel/dist/js/export_excel.js' %}"></script>
+
     <script>
-        $(function () {
-            $("#example1").DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-            });
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
+        $(document).ready(function() {
+            $("#search-btn").click(function() {
+                if($('#search-input').val() != '' || $('#date-filter').val() != 'all'){
+                    $("#search-form").submit();
+               }
             });
         });
     </script>

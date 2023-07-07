@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>ورود به پنل پایدار</title>
+    <title>ورود به سامانه پایدار</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -19,6 +19,10 @@
     <link rel="stylesheet" href="{% static 'panel/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'panel/dist/css/adminlte.min.css' %}">
+    <link
+      rel="stylesheet"
+      href="{% static 'panel/dist/css/bootstrap_rtl.min.css' %}"
+    />
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <style>
@@ -30,11 +34,11 @@
 
         @font-face {
             font-family: 'Vazir';
-            src: url('{% static "farsi_fonts/Vazir.eot" %}');
-            src: url('{% static "farsi_fonts/Vazir.eot?#iefix" %}') format('embedded-opentype'),
-            url('{% static "farsi_fonts/Vazir.woff2" %}') format('woff2'),
-            url('{% static "farsi_fonts/Vazir.woff" %} ../../../farsi_fonts/') format('woff'),
-            url('{% static "farsi_fonts/Vazir.ttf" %}') format('truetype');
+            src: url('{% static "farsi_fonts/Vazir/Vazir.eot" %}');
+            src: url('{% static "farsi_fonts/Vazir/Vazir.eot?#iefix" %}') format('embedded-opentype'),
+            url('{% static "farsi_fonts/Vazir/Vazir.woff2" %}') format('woff2'),
+            url('{% static "farsi_fonts/Vazir/Vazir.woff" %}') format('woff'),
+            url('{% static "farsi_fonts/Vazir/Vazir.ttf" %}') format('truetype');
             font-weight: normal;
             font-style: normal;
             text-rendering: optimizeLegibility;
@@ -52,86 +56,100 @@
 </head>
 <body class="hold-transition">
 
-<div class="col-8 offset-2" style="padding-top: 20rem">
+<div class="container">
 
-    <div class="card w-50 m-auto p-4" style="border-radius: 10px; opacity: 0.9">
-        <div class="card-title">
-            <h1 class="text-center">پنل پایدار</h1>
+    <div class="row">
+
+        <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3" style="padding-top: 5rem">
+
+            <div class="card m-auto p-4" style="border-radius: 10px; opacity: 0.9">
+                <div class="card-title">
+                    <h1 class="text-center">سامانه پایدار</h1>
+                </div>
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg">برای ورود به سامانه نام کاربری و رمز عبور خود را وارد نمایید</p>
+        
+                    {% if form.non_field_errors %}
+                        <div class="errors">
+                            {% for error in form.non_field_errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+        
+                    <form method="post">
+                        {% csrf_token %}
+        
+                        {% if form.username.errors %}
+                            <div class="errors">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="input-group mb-3 mb-5">
+                            {{ form.username|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:نام کاربری"|attr:"dir:rtl"}}
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+        
+        
+                        {% if form.password.errors %}
+                            <div class="errors" dir="rtl">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="input-group mb-3 mb-5">
+                            {{ form.password|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:گذرواژه"|attr:"dir:rtl"}}
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3">
+
+                            <div class="col-12">
+                                <div class="icheck-primary">
+                                    <label for="remember">
+                                        مرا به خاطر بسپار
+                                    </label>
+                                    <input type="checkbox" id="remember">
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="row mb-3">
+
+                            <div class="col-4 offset-4">
+                                <button type="submit" class="btn btn-primary btn-block btn-flat rounded">ورود</button>
+                            </div>
+
+                        </div>
+
+                    </form>
+        
+        
+                    <p class="mb-1">
+                        <a href="#">رمز عبور خود را فراموش کرده‌ام</a>
+                    </p>
+                </div>
+                
+            </div>
         </div>
-        <div class="card-body login-card-body">
-            <p class="login-box-msg">برای ورود به پنل نام کاربری و گذرواژه خود را وارد نمایید</p>
 
-            {% if form.non_field_errors %}
-                <div class="errors">
-                    {% for error in form.non_field_errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <form method="post">
-                {% csrf_token %}
-
-                {% if form.username.errors %}
-                    <div class="errors">
-                        {% for error in form.username.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <div class="input-group mb-3 mb-5">
-                    {{ form.username|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:نام کاربری"}}
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-user"></span>
-                        </div>
-                    </div>
-                </div>
-
-
-                {% if form.password.errors %}
-                    <div class="errors">
-                        {% for error in form.password.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <div class="input-group mb-3 mb-5">
-                    {{ form.password|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:گذرواژه"}}
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-8">
-                        <div class="icheck-primary">
-                            <input type="checkbox" id="remember">
-                            <label for="remember">
-                                مرا به خاطر بسپار
-                            </label>
-                        </div>
-                    </div>
-
-
-                    <div class="col-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">ورود</button>
-                    </div>
-
-                </div>
-            </form>
-
-
-            <p class="mb-1">
-                <a href="#">رمز عبور خود را فراموش کرده‌ام</a>
-            </p>
-        </div>
-        <!-- /.login-card-body -->
     </div>
+
 </div>
+
+
 
 
 <!-- jQuery -->
