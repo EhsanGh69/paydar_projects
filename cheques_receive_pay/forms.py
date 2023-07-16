@@ -1,7 +1,8 @@
 from django import forms
 from django.core import validators
 
-from .models import Cheques
+
+from .models import Cheques, Fund
 from utils.tools import none_numeric_value
 
 
@@ -67,3 +68,31 @@ class ChequesForm(forms.ModelForm):
                     }
                 )
             )
+
+
+class FundForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta():
+        model = Fund
+        fields = ['full_name', 'operation_type', 'cost_amount', 'cost_description', 'receipt_image',
+                    'charge_amount', 'charge_date', 'charge_image']
+    
+    def __init__(self, *args, **kwargs):
+        super(FundForm, self).__init__(*args, **kwargs)
+
+        self.fields['full_name'] = forms.CharField(
+            label="نام تنخواه",
+            validators=[none_numeric_value]
+        )
+
+        self.fields['cost_amount'].help_text = 'جهت عملیات برداشت از تنخواه این فیلد لازم است'
+        self.fields['receipt_image'].help_text = 'جهت عملیات برداشت از تنخواه این فیلد لازم است'
+        self.fields['charge_amount'].help_text = 'جهت عملیات واریز به تنخواه این فیلد لازم است'
+        self.fields['charge_image'].help_text = 'جهت عملیات واریز به تنخواه این فیلد لازم است'
+    
+
+        
+
+
+

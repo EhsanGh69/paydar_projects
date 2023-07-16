@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% load jformat %}
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'fund_create' %}
+        ثبت عملیات تنخواه 
+    {% else %}
+        ویرایش عملیات تنخواه
+    {% endif %} 
+{% endblock %}
+
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+
+{% endblock %}
+
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'fund_create' %}
+        <span>ثبت عملیات تنخواه</span>
+    {% else %}
+        <span>ویرایش عملیات تنخواه</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card card-primary p-5">
+
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                {#<div class="alert alert-danger"  style="position: absolute; top: 15%; z-index: 10;">#}
+                <div class="alert alert-danger">
+                    <h5>
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        <span>{{ error }}</span>
+                    </h5>
+                </div>
+            {% endfor %}
+          {% endif %}
+          
+          <div class="row">
+
+            {# ----------------------------------- Create Form ------------------------------------- #}
+            {% if request.resolver_match.url_name == 'fund_create' %}
+
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.full_name|as_crispy_field  }}
+                </div>
+
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.operation_type|as_crispy_field }}
+                </div>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">هزینه (برداشت از تنخواه)</i>
+                    </legend>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.cost_amount|as_crispy_field }}
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3 mb-3">
+                        <label for="">{{ form.cost_description.label }}</label>
+
+                        {% if form.cost_description.errors %}
+                            {{ form.cost_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
+                            {% for error in form.cost_description.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.cost_description|add_class:"form-control"|attr:"rows:5" }}  
+                        {% endif %}
+
+                        <small class="form-text text-muted">جهت عملیات برداشت از تنخواه این فیلد لازم است</small>
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.receipt_image|as_crispy_field }}
+                    </div>
+                </fieldset>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">شارژ (واریز به تنخواه)</i>
+                    </legend>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.charge_amount|as_crispy_field }}
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label>{{ form.charge_date.label }}</label>
+
+                        {% if form.charge_date.errors %}
+                        {{ form.charge_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+                            {% for error in form.charge_date.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.charge_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+                        {% endif %}
+
+                        <small class="form-text text-muted">جهت عملیات واریز به تنخواه این فیلد لازم است</small>
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.charge_image|as_crispy_field }}
+                    </div>
+                </fieldset>
+
+            {# ------------------------------------ Update Form ------------------------------------ #}
+            {% else %}
+
+
+                <div class="col-12 col-xl-6 mb-3">
+                    <label for="">{{ form.full_name.label }}</label>
+
+                    <input type="text" name="full_name" value="{{ fund.full_name }}" class="form-control {% if form.full_name.errors %} border border-danger
+                    {% endif %}" id="id_full_name" spellcheck="false" data-ms-editor="true">
+
+                    {% if form.full_name.errors %}
+                        {% for error in form.full_name.errors %}
+                            <p class="text-danger">
+                                <strong>{{ error }}</strong>
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="col-12 col-xl-6 mb-3">
+                    <label for="">{{ form.operation_type.label }}</label>
+
+                    <select name="operation_type" class="select form-control 
+                    {% if form.operation_type.errors %}border border-danger{% endif %}" 
+                    id="id_operation_type">
+                        <option value="">---------</option>
+                        <option value="rem" {% if fund.operation_type == 'rem' %}selected{% endif %}>برداشت</option>
+                        <option value="set" {% if fund.operation_type == 'set' %}selected{% endif %}>واریز</option>
+                    </select>
+                    {% if form.operation_type.errors %}
+                        {% for error in form.operation_type.errors %}
+                            <p class="text-danger">
+                                <strong>{{ error }}</strong>
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <fieldset class="input-group border-bottom mb-3">
+
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">هزینه (برداشت از تنخواه)</i>
+                    </legend>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label for="">{{ form.cost_amount.label }}</label>
+                        <input type="number" name="cost_amount" value="{{ fund.cost_amount }}" min="0" max="9223372036854775807" 
+                        class="form-control {% if form.cost_amount.errors %}border border-danger{% endif %}" id="id_cost_amount">
+                        {% if form.cost_amount.errors %}
+                            {% for error in form.cost_amount.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3 mb-3">
+                        <label for="">{{ form.cost_description.label }}</label>
+
+                        <textarea name="cost_description" cols="40" rows="5" class="form-control
+                        {% if form.cost_description.errors %}border border-danger{% endif %}"
+                        id="id_cost_description">
+                        {% if fund.cost_description %}
+                        {{ fund.cost_description }}
+                        {% endif %}
+                        </textarea>
+                        {% if form.cost_description.errors %}
+                            {% for error in form.cost_description.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+
+                        <small class="form-text text-muted">جهت عملیات برداشت از تنخواه این فیلد لازم است</small>
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label for="">{{ form.receipt_image.label }}</label>
+                        {% if fund.receipt_image %}
+                            <p><span>در حال حاضر :</span> <a href="{{ fund.receipt_image.url }}">{{ fund.receipt_image }}</a></p>
+                            <p>تغییر :</p>
+                        {% endif %}
+                        <input type="file" name="receipt_image" accept="image/*" class="form-control-file" id="id_receipt_image">
+                        {% if form.receipt_image.errors %}
+                            {% for error in form.receipt_image.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                </fieldset>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">شارژ (واریز به تنخواه)</i>
+                    </legend>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label for="">{{ form.charge_amount.label }}</label>
+                        <input type="number" name="charge_amount" value="{{ fund.charge_amount }}" min="0" max="9223372036854775807" 
+                        class="form-control {% if form.charge_amount.errors %}border border-danger{% endif %}" id="id_charge_amount">
+                        {% if form.charge_amount.errors %}
+                            {% for error in form.charge_amount.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label>{{ form.charge_date.label }}</label>
+                        <input type="text" name="charge_date" class="form-control"
+                        autocomplete="off" value="{{ fund.charge_date|jformat:'%Y-%m-%d %H:%M:%S' }}" 
+                        data-jdp id="id_charge_date" spellcheck="false" data-ms-editor="true">
+                        {% if form.charge_date.errors %}
+                            {% for error in form.charge_date.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+
+                        <small class="form-text text-muted">جهت عملیات واریز به تنخواه این فیلد لازم است</small>
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label for="">{{ form.charge_image.label }}</label>
+                        {% if fund.charge_image %}
+                            <p><span>در حال حاضر :</span> <a href="{{ fund.charge_image.url }}">{{ fund.charge_image }}</a></p>
+                            <p>تغییر :</p>
+                        {% endif %}
+                        <input type="file" name="charge_image" accept="image/*" class="form-control-file" id="id_charge_image">
+                        {% if form.charge_image.errors %}
+                            {% for error in form.charge_image.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                </fieldset>
+
+            {% endif %} 
+
+          </div>
+
+          <div class="row">
+            <div class="col-8 col-sm-6 col-xl-4 my-4">
+                <button class="btn btn-success btn-block" type="submit">
+                    {% if request.resolver_match.url_name == 'fund_create' %}
+                        <span>ثبت عملیات تنخواه</span>
+                    {% else %}
+                        <span>ویرایش عملیات تنخواه</span>
+                    {% endif %}
+                </button>
+              </div>
+          </div>
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}
+
+
+{% block scripts %}
+
+<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+       
+        jalaliDatepicker.startWatch({ 
+            time: true
+        });
+
+        $("#id_cost_amount").attr("disabled","disabled");
+        $("#id_cost_description").attr("disabled","disabled");
+        $("#id_receipt_image").attr("disabled","disabled");
+        $("#id_charge_amount").attr("disabled","disabled");
+        $("#id_charge_date").attr("disabled","disabled");
+        $("#id_charge_image").attr("disabled","disabled");
+        
+       
+        $('#id_charge_date').on('input', function (e) { 
+            e.preventDefault();
+            var date_value = $('#id_charge_date').val();
+
+            $('#id_charge_date').val(date_value.replaceAll('/', '-'));
+        });
+
+        if($('#id_operation_type').val() == 'rem'){
+            $("#id_cost_amount").removeAttr("disabled");
+            $("#id_cost_description").removeAttr("disabled");
+            $("#id_receipt_image").removeAttr("disabled");
+        }else{
+            $("#id_cost_amount").attr("disabled","disabled");
+            $("#id_cost_description").attr("disabled","disabled");
+            $("#id_receipt_image").attr("disabled","disabled");
+        }
+
+        if($('#id_operation_type').val() == 'set'){
+            $("#id_charge_amount").removeAttr("disabled");
+            $("#id_charge_date").removeAttr("disabled");
+            $("#id_charge_image").removeAttr("disabled");
+        }else{
+            $("#id_charge_amount").attr("disabled","disabled");
+            $("#id_charge_date").attr("disabled","disabled");
+            $("#id_charge_image").attr("disabled","disabled");
+        }
+
+
+        $('#id_operation_type').change(function (e) { 
+            e.preventDefault();
+ 
+            if($('#id_operation_type').val() == 'rem'){
+                $("#id_cost_amount").removeAttr("disabled");
+                $("#id_cost_description").removeAttr("disabled");
+                $("#id_receipt_image").removeAttr("disabled");
+            }else{
+                $("#id_cost_amount").attr("disabled","disabled");
+                $("#id_cost_description").attr("disabled","disabled");
+                $("#id_receipt_image").attr("disabled","disabled");
+            }
+
+            if($('#id_operation_type').val() == 'set'){
+                $("#id_charge_amount").removeAttr("disabled");
+                $("#id_charge_date").removeAttr("disabled");
+                $("#id_charge_image").removeAttr("disabled");
+            }else{
+                $("#id_charge_amount").attr("disabled","disabled");
+                $("#id_charge_date").attr("disabled","disabled");
+                $("#id_charge_image").attr("disabled","disabled");
+            }
+        });
+   });
+
+</script>
+
+{% endblock %}
+

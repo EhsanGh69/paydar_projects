@@ -134,6 +134,16 @@
                             </select>
                         </div>
                     {% endif %}
+
+                    {% if request.resolver_match.url_name == 'funds' or request.resolver_match.url_name == 'funds_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="operation_type" class="form-control" id="operation-type">
+                                <option value="all" selected>فیلتر نوع عملیات</option>
+                                <option value="rem" {% if request.GET.operation_type == 'rem' %}selected{% endif %}>برداشت</option>
+                                <option value="set" {% if request.GET.operation_type == 'set' %}selected{% endif %}>واریز</option>
+                            </select>
+                        </div>
+                    {% endif %}
                 
                     <div class="col-1 col-xl-1 p-0 {% if not date_filter %}mr-2{% endif %} ">
                         <button type="button" class="btn btn-success" title="بگرد" id="search-btn">

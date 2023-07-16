@@ -182,8 +182,10 @@
 
                 </li>
 
-                <li class="nav-item has-treeview border-top border-light">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview border-top border-light
+                {% if request.resolver_match.app_name == 'cheques_receive_pay' %}menu-open{% endif %}">
+                    <a href="#" class="nav-link
+                    {% if request.resolver_match.app_name == 'cheques_receive_pay' %}active{% endif %}">
                         <p class="mr-2" style="font-size: 1.2rem;">
                             حسابداری
                             <i class="right fas fa-angle-left"></i>
@@ -200,12 +202,8 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-user-tag text-primary" style="font-size: 1.2rem;"></i>
-                                <span class="ml-2">تنخواه</span>
-                            </a>
-                        </li>
+                        {% main_menu request 'cheques_receive_pay' 'funds' 'fund_create' 'fund_update' 'funds_search' 'fa-user-tag' 'تنخواه' %}
+
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
