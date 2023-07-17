@@ -8,8 +8,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 
 from utils.tools import filter_date_values, fund_rem_validation, fund_set_validation
-from .models import Cheques, Fund
-from .forms import ChequesForm, FundForm
+from .models import Cheques, Fund, ReceivePay
+from .forms import ChequesForm, FundForm, ReceivePayForm
 
 
 
@@ -228,6 +228,99 @@ class FundSearch(LoginRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:funds_search'
         context['list_url'] = 'cheques_receive_pay:funds'
+        return context
+
+
+# Fund - End
+
+# -------------------------------------------------
+
+
+# ReceivePay - Start
+
+class ReceivePayList(LoginRequiredMixin, ListView):
+    template_name = 'cheques_receive_pay/receive_pays_list.html'
+    model = ReceivePay
+    context_object_name = "receive_pays"
+    paginate_by = 9
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_url'] = 'cheques_receive_pay:receive_pays_search'
+        context['create_url'] = 'cheques_receive_pay:receive_pay_create'
+        context['persian_object_name'] = 'دریافت / پرداخت'
+        return context
+
+
+class ReceivePayCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = 'cheques_receive_pay/receive_pay_create_update.html'
+    model = Cheques
+    form_class = ReceivePayForm
+    success_url = reverse_lazy("cheques_receive_pay:receive_pays")
+    success_message = "دریافت / پرداخت با موفقیت ثبت شد"
+
+    def get_form_kwargs(self):
+        kwargs = super(ReceivePayCreate, self).get_form_kwargs()
+        kwargs.update({
+            'url_name': self.request.resolver_match.url_name
+        })
+        return kwargs
+    
+
+class ReceivePayUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = 'cheques_receive_pay/receive_pay_create_update.html'
+    model = Cheques
+    form_class = ReceivePayForm
+    success_url = reverse_lazy("cheques_receive_pay:receive_pays")
+    success_message = "دریافت / پرداخت با موفقیت ویرایش شد"
+
+    def get_form_kwargs(self):
+        kwargs = super(ReceivePayUpdate, self).get_form_kwargs()
+        kwargs.update({
+            'url_name': self.request.resolver_match.url_name
+        })
+        return kwargs
+
+
+class ReceivePayDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    success_url = reverse_lazy("cheques_receive_pay:receive_pays")
+    success_message = "دریافت / پرداخت با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        receive_pay = get_object_or_404(ReceivePay, pk=_id)
+        return receive_pay
+    
+
+class ReceivePaySearch(LoginRequiredMixin, ListView):
+    template_name = 'cheques_receive_pay/receive_pays_list.html'
+    model = Cheques
+    context_object_name = "receive_pays"
+
+    def get_queryset(self):
+        global not_found
+        not_found = False
+        request = self.request
+        query = request.GET.get('data_search')
+        date_filter = self.request.GET.get('date_filter')
+
+        global search_result
+
+        if date_filter != "all":
+            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all()
+        else:
+            search_result = Cheques.objects.search(query)
+
+        if not search_result:
+            not_found = True
+
+        return search_result
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'cheques_receive_pay:receive_pays_search'
+        context['list_url'] = 'cheques_receive_pay:receive_pays'
         return context
 
 

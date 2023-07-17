@@ -89,7 +89,7 @@ class Personnel(models.Model):
 
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"
+        return self.full_name
     
 
 class PartnersManager(models.Manager):

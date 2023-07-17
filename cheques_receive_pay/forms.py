@@ -2,7 +2,7 @@ from django import forms
 from django.core import validators
 
 
-from .models import Cheques, Fund
+from .models import Cheques, Fund, ReceivePay
 from utils.tools import none_numeric_value
 
 
@@ -73,7 +73,7 @@ class ChequesForm(forms.ModelForm):
 class FundForm(forms.ModelForm):
     use_required_attribute = False
 
-    class Meta():
+    class Meta:
         model = Fund
         fields = ['full_name', 'operation_type', 'cost_amount', 'cost_description', 'receipt_image',
                     'charge_amount', 'charge_date', 'charge_image']
@@ -92,7 +92,43 @@ class FundForm(forms.ModelForm):
         self.fields['charge_image'].help_text = 'جهت عملیات واریز به تنخواه این فیلد لازم است'
     
 
+class ReceivePayForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = ReceivePay
+        fields = ['organ', 'contractor', 'supplier', 'personnel', 'receive_pay',
+                   'amount', 'regard_to', 'date', 'receipt_image']
+    
+    def __init__(self, *args, **kwargs):
+        url_name = kwargs.pop('url_name')
+        super(ReceivePayForm, self).__init__(*args, **kwargs)
+
+
+        self.fields['amount'] = forms.IntegerField(
+            label="مبلغ",
+            validators=[
+                validators.MinValueValidator(
+                    limit_value=1,
+                    message="مقدار مبلغ نمی‌تواند صفر باشد"
+                )
+            ]
+        )
         
+        self.fields['regard_to'] = forms.CharField(
+            label="بابت",
+            validators=[none_numeric_value]
+        )
+
+        if url_name == 'receive_pay_create':
+            self.fields['date'] = forms.DateTimeField(
+                label="تاریخ",
+                widget=forms.DateTimeInput(
+                    attrs={
+                        'value': ""
+                    }
+                )
+            )
 
 
 

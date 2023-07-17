@@ -76,19 +76,23 @@ class ReceivePay(models.Model):
     )
     organ = models.ForeignKey(Organization,
                               on_delete=models.CASCADE, 
-                              related_name='organ_receive_pays', 
+                              related_name='organ_receive_pays',
+                              null=True, blank=True,
                               verbose_name='طرف حساب دولتی')
     contractor = models.ForeignKey(Contractors, 
                                     on_delete=models.CASCADE, 
-                                    related_name='contractor_receive_pays', 
+                                    related_name='contractor_receive_pays',
+                                    null=True, blank=True, 
                                     verbose_name='پیمانکار')
     supplier = models.ForeignKey(Suppliers, 
                                     on_delete=models.CASCADE, 
-                                    related_name='supplier_receive_pays', 
+                                    related_name='supplier_receive_pays',
+                                    null=True, blank=True, 
                                     verbose_name='تأمین کننده')
     personnel = models.ForeignKey(Personnel, 
                                     on_delete=models.CASCADE, 
-                                    related_name='personnel_receive_pays', 
+                                    related_name='personnel_receive_pays',
+                                    null=True, blank=True, 
                                     verbose_name='پرسنل')
     receive_pay = models.CharField(max_length=3, choices=RECEIVE_PAY, verbose_name='دریافت / پرداخت')
     amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ')
