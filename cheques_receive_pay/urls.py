@@ -15,7 +15,12 @@ from .views import (
     ReceivePayCreate,
     ReceivePayUpdate,
     ReceivePayDelete,
-    ReceivePaySearch
+    ReceivePaySearch,
+    CashBoxList,
+    cash_box_create,
+    cash_box_update,
+    CashBoxDelete,
+    CashBoxSearch
 )
 
 
@@ -41,4 +46,10 @@ urlpatterns = [
     path('funds/create', fund_create, name='fund_create'),
     path('funds/update/<int:pk>', fund_update, name='fund_update'),
     path('funds/delete/<int:pk>', FundDelete.as_view(), name='fund_delete'),
+
+    path('cash_boxes/', CashBoxList.as_view(), name='cash_boxes'),
+    path('cash_boxes/search', CashBoxSearch.as_view(), name='cash_boxes_search'),
+    path('cash_boxes/create', cash_box_create, name='cash_box_create'),
+    path('cash_boxes/update/<int:pk>', cash_box_update, name='cash_box_update'),
+    path('cash_boxes/delete/<int:pk>', CashBoxDelete.as_view(), name='cash_box_delete'),
 ]

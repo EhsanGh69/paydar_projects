@@ -2,7 +2,7 @@ from django import forms
 from django.core import validators
 
 
-from .models import Cheques, Fund, ReceivePay
+from .models import Cheques, Fund, ReceivePay, CashBox
 from utils.tools import none_numeric_value
 
 
@@ -132,3 +132,18 @@ class ReceivePayForm(forms.ModelForm):
 
 
 
+class CashBoxForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = CashBox
+        fields = ['operation_type', 'settle_amount', 'settle_image', 'settle_description', 
+                  'removal_amount', 'removal_image', 'removal_description']
+        
+    def __init__(self, *args, **kwargs):
+        super(CashBoxForm, self).__init__(*args, **kwargs)
+
+        self.fields['settle_amount'].help_text = 'جهت عملیات واریز به صندوق این فیلد لازم است'
+        self.fields['settle_image'].help_text = 'جهت عملیات واریز به صندوق این فیلد لازم است'
+        self.fields['removal_amount'].help_text = 'جهت عملیات برداشت از صندوق این فیلد لازم است'
+        self.fields['removal_image'].help_text = 'جهت عملیات برداشت از صندوق این فیلد لازم است'

@@ -135,7 +135,7 @@
                         </div>
                     {% endif %}
 
-                    {% if request.resolver_match.url_name == 'funds' or request.resolver_match.url_name == 'funds_search' %}
+                    {% if request.resolver_match.url_name == 'funds' or request.resolver_match.url_name == 'funds_search' or request.resolver_match.url_name == 'cash_boxes' or request.resolver_match.url_name == 'cash_boxes_search' %}
                         <div class="form-group col-11 col-xl-3">
                             <select name="operation_type" class="form-control" id="operation-type">
                                 <option value="all" selected>فیلتر نوع عملیات</option>

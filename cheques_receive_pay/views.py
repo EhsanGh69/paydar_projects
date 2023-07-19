@@ -7,9 +7,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 
-from utils.tools import filter_date_values, fund_rem_validation, fund_set_validation
-from .models import Cheques, Fund, ReceivePay
-from .forms import ChequesForm, FundForm, ReceivePayForm
+from utils.tools import filter_date_values, fund_rem_validation, fund_set_validation, cash_box_rem_validation, cash_box_set_validation
+from .models import Cheques, Fund, ReceivePay, CashBox
+from .forms import ChequesForm, FundForm, ReceivePayForm, CashBoxForm
 
 
 
@@ -181,7 +181,6 @@ def fund_update(request, *args, **kwargs):
     return render(request, 'cheques_receive_pay/fund_create_update.html', {'form': fund_form, 'fund': fund})
 
     
-
 class FundDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     success_url = reverse_lazy("cheques_receive_pay:funds")
     success_message = "عملیات تنخواه با موفقیت حذف شد"
@@ -324,4 +323,119 @@ class ReceivePaySearch(LoginRequiredMixin, ListView):
         return context
 
 
+# ReceivePay - End
 
+# ------------------------------------------------
+
+
+# CashBox - Start
+
+
+class CashBoxList(LoginRequiredMixin, ListView):
+    template_name = 'cheques_receive_pay/cash_boxes_list.html'
+    model = CashBox
+    context_object_name = "cash_boxes"
+    paginate_by = 9
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_url'] = 'cheques_receive_pay:cash_boxes_search'
+        context['create_url'] = 'cheques_receive_pay:cash_box_create'
+        context['persian_object_name'] = 'صندوق'
+        return context
+
+
+@login_required
+def cash_box_create(request):
+    cash_box_form = CashBoxForm(request.POST or None)
+    if cash_box_form.is_valid():
+        operation_type = cash_box_form.cleaned_data.get('operation_type')
+        if operation_type == 'rem':
+            removal_amount = cash_box_form.cleaned_data.get('removal_amount')
+            removal_description = cash_box_form.cleaned_data.get('removal_description')
+            validation_result = cash_box_rem_validation(req=request, model=CashBox, obj_id=False, form=cash_box_form,
+                                                     removal=removal_amount, desc=removal_description)
+            if validation_result:
+                return HttpResponseRedirect("/cheques_receive_pay/cash_boxes")
+        elif operation_type == 'set':
+            settle_amount = cash_box_form.cleaned_data.get('settle_amount')
+            settle_description = cash_box_form.cleaned_data.get('settle_description')
+            validation_result = cash_box_set_validation(req=request, model=CashBox, obj_id=False, form=cash_box_form,
+                                                    settle=settle_amount, desc=settle_description)
+            if validation_result:
+                return HttpResponseRedirect("/cheques_receive_pay/cash_boxes")
+        else:
+            cash_box_form = CashBoxForm()
+    return render(request, 'cheques_receive_pay/cash_box_create_update.html', {'form': cash_box_form}) 
+
+
+@login_required
+def cash_box_update(request, *args, **kwargs):
+    cash_box_id = kwargs['pk']
+    cash_box = get_object_or_404(CashBox, pk=cash_box_id)
+    cash_box_form = CashBoxForm(request.POST or None)
+    if cash_box_form.is_valid():
+        operation_type = cash_box_form.cleaned_data.get('operation_type')
+        if operation_type == 'rem':
+            removal_amount = cash_box_form.cleaned_data.get('removal_amount')
+            removal_description = cash_box_form.cleaned_data.get('removal_description')
+            validation_result = cash_box_rem_validation(req=request, model=CashBox, obj_id=cash_box_id, form=cash_box_form,
+                                                     removal=removal_amount, desc=removal_description)
+            if validation_result:
+                return HttpResponseRedirect("/cheques_receive_pay/cash_boxes")
+        elif operation_type == 'set':
+            settle_amount = cash_box_form.cleaned_data.get('settle_amount')
+            settle_description = cash_box_form.cleaned_data.get('settle_description')
+            validation_result = cash_box_set_validation(req=request, model=CashBox, obj_id=cash_box_id, form=cash_box_form,
+                                                    settle=settle_amount, desc=settle_description)
+            if validation_result:
+                return HttpResponseRedirect("/cheques_receive_pay/cash_boxes")
+        else:
+            cash_box_form = CashBoxForm()
+    return render(request, 'cheques_receive_pay/cash_box_create_update.html', {'form': cash_box_form, 'cash_box': cash_box})
+
+
+class CashBoxDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    success_url = reverse_lazy("cheques_receive_pay:cash_boxes")
+    success_message = "عملیات صندوق با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        cash_box = get_object_or_404(CashBox, pk=_id)
+        return cash_box
+
+
+class CashBoxSearch(LoginRequiredMixin, ListView):
+    template_name = 'cheques_receive_pay/cash_boxes_list.html'
+    model = CashBox
+    context_object_name = "cash_boxes"
+
+    def get_queryset(self):
+        global not_found
+        not_found = False
+        request = self.request
+        query = request.GET.get('data_search')
+        operation_type_filter = self.request.GET.get('operation_type')
+
+        global search_result
+
+        if operation_type_filter != "all":
+            search_result = CashBox.objects.search(query).filter(operation_type=operation_type_filter).all()
+
+        else:
+            search_result = CashBox.objects.search(query)
+        
+
+        if not search_result:
+            not_found = True
+
+        return search_result
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'cheques_receive_pay:cash_boxes_search'
+        context['list_url'] = 'cheques_receive_pay:cash_boxes'
+        return context
+
+# CashBox - End

@@ -63,6 +63,58 @@ def fund_rem_validation(**kwargs):
         kwargs['form'].errors['__all__'] = kwargs['form'].error_class(["تنخواه جدید هیچ موجودی جهت برداشت ندارد."])
 
 
+def cash_box_rem_validation(**kwargs):
+    rem_operate = kwargs['model'].objects.filter(operation_type='rem')
+    set_operate = kwargs['model'].objects.filter(operation_type='set')
+
+    if set_operate:
+
+        if kwargs['removal'] == 0 or kwargs['removal'] is None:
+                kwargs['form'].add_error('removal_amount', 'لطفا مبلغ برداشت را وارد نمایید')
+        elif kwargs['desc'] == '' or kwargs['desc'] is None:
+            kwargs['form'].add_error('removal_description', 'لطفا شرح برداشت را وارد نمایید')
+        elif not rem_operate:
+            sum_settles = set_operate.aggregate(Sum('settle_amount'))
+            check_cash = sum_settles['settle_amount__sum'] - kwargs['removal']
+            if check_cash <= 0:
+                kwargs['form'].errors['__all__'] = kwargs['form'].error_class(["موجودی صندوق جهت برداشت کافی نمی‌باشد."])
+        else:
+            sum_removals = rem_operate.aggregate(Sum('removal_amount'))
+            sum_settles = set_operate.aggregate(Sum('settle_amount'))
+            check_cash = (sum_settles['settle_amount__sum'] - sum_removals['removal_amount__sum']) - kwargs['removal']
+            if check_cash <= 0:
+                kwargs['form'].errors['__all__'] = kwargs['form'].error_class(["موجودی صندوق جهت برداشت کافی نمی‌باشد."])
+
+        try:
+            removal_image = kwargs['req'].FILES['removal_image']
+            fs = FileSystemStorage()
+            file_name = fs.save(removal_image.name, removal_image)
+            
+            if kwargs['obj_id']:
+                kwargs['model'].objects.filter(pk=kwargs['obj_id']).update(operation_type='rem', removal_amount=kwargs['removal'],
+                                                                    removal_description=kwargs['desc'], removal_image=file_name)
+                messages.success(kwargs['req'], "عملیات برداشت از صندوق با موفقیت ویرایش شد")
+                return True
+            else:
+                kwargs['model'].objects.create(operation_type='rem', removal_amount=kwargs['removal'],
+                                                removal_description=kwargs['desc'], removal_image=file_name)
+                                    
+                messages.success(kwargs['req'], "عملیات برداشت از صندوق با موفقیت انجام شد")
+                return True
+        except Exception:
+            if kwargs['obj_id']:
+                kwargs['model'].objects.filter(pk=kwargs['obj_id']).update(operation_type='rem', removal_amount=kwargs['removal'],
+                                                removal_description=kwargs['desc'])
+                messages.success(kwargs['req'], "عملیات برداشت از صندوق با موفقیت ویرایش شد")
+                return True
+            else:
+                kwargs['form'].add_error('receipt_image', 'لطفا تصویر فیش برداشت را بارگذاری نمایید')
+    
+    else:
+        kwargs['form'].errors['__all__'] = kwargs['form'].error_class(["صندوق هیچ موجودی جهت برداشت ندارد."])
+
+
+
 def fund_set_validation(**kwargs):
     if kwargs['charge'] == 0 or kwargs['charge'] is None:
         kwargs['form'].add_error('charge_amount', 'لطفا مبلغ شارژ را وارد نمایید')
@@ -94,6 +146,39 @@ def fund_set_validation(**kwargs):
                 return True
             else:
                 kwargs['form'].add_error('charge_image', 'لطفا تصویر فیش واریزی را بارگذاری نمایید')
+
+
+
+def cash_box_set_validation(**kwargs):
+    if kwargs['settle'] == 0 or kwargs['settle'] is None:
+            kwargs['form'].add_error('settle_amount', 'لطفا مبلغ واریزی را وارد نمایید')
+    elif kwargs['desc'] == '' or kwargs['desc'] is None:
+        kwargs['form'].add_error('settle_description', 'لطفا شرح واریز را وارد نمایید')
+    
+    else:
+        try:
+            settle_image = kwargs['req'].FILES['settle_image']
+            fs = FileSystemStorage()
+            file_name = fs.save(settle_image.name, settle_image)
+            
+            if kwargs['obj_id']:
+                kwargs['model'].objects.filter(pk=kwargs['obj_id']).update(operation_type='set', settle_amount=kwargs['settle'],
+                                                                    settle_description=kwargs['desc'], settle_image=file_name)
+                messages.success(kwargs['req'], "عملیات واریز به صندوق با موفقیت ویرایش شد")
+                return True
+            else:
+                kwargs['model'].objects.create(operation_type='rem', settle_amount=kwargs['settle'],
+                                                settle_description=kwargs['desc'], settle_image=file_name)              
+                messages.success(kwargs['req'], "عملیات واریز به صندوق با موفقیت انجام شد")
+                return True
+        except Exception:
+            if kwargs['obj_id']:
+                kwargs['model'].objects.filter(pk=kwargs['obj_id']).update(operation_type='set', settle_amount=kwargs['settle'],
+                                                settle_description=kwargs['desc'])
+                messages.success(kwargs['req'], "عملیات واریز به صندوق با موفقیت ویرایش شد")
+                return True
+            else:
+                kwargs['form'].add_error('receipt_image', 'لطفا تصویر فیش واریز را بارگذاری نمایید')
 
 
 

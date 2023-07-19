@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% load jformat %}
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'cash_box_create' %}
+        ثبت عملیات صندوق 
+    {% else %}
+        ویرایش عملیات صندوق
+    {% endif %} 
+{% endblock %}
+
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+
+{% endblock %}
+
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'cash_box_create' %}
+        <span>ثبت عملیات صندوق</span>
+    {% else %}
+        <span>ویرایش عملیات صندوق</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card card-primary p-5">
+
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                {#<div class="alert alert-danger"  style="position: absolute; top: 15%; z-index: 10;">#}
+                <div class="alert alert-danger">
+                    <h5>
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        <span>{{ error }}</span>
+                    </h5>
+                </div>
+            {% endfor %}
+          {% endif %}
+          
+          <div class="row">
+
+            {# ----------------------------------- Create Form ------------------------------------- #}
+            {% if request.resolver_match.url_name == 'cash_box_create' %}
+
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.operation_type|as_crispy_field }}
+                </div>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">واریز به صندوق</i>
+                    </legend>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.settle_amount|as_crispy_field }}
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3 mb-3">
+                        <label for="">{{ form.settle_description.label }}</label>
+
+                        {% if form.settle_description.errors %}
+                            {{ form.settle_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
+                            {% for error in form.settle_description.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.settle_description|add_class:"form-control"|attr:"rows:5" }}  
+                        {% endif %}
+
+                        <small class="form-text text-muted">جهت عملیات واریز به صندوق این فیلد لازم است</small>
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.settle_image|as_crispy_field }}
+                    </div>
+                </fieldset>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">برداشت از صندوق</i>
+                    </legend>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.removal_amount|as_crispy_field }}
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label>{{ form.removal_description.label }}</label>
+
+                        {% if form.removal_description.errors %}
+                        {{ form.removal_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
+                            {% for error in form.removal_description.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.removal_description|add_class:"form-control"|attr:"rows:5" }}
+                        {% endif %}
+
+                        <small class="form-text text-muted">جهت عملیات واریز به تنخواه این فیلد لازم است</small>
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.removal_image|as_crispy_field }}
+                    </div>
+                </fieldset>
+
+            {# ------------------------------------ Update Form ------------------------------------ #}
+            {% else %}
+
+                <div class="col-12 col-xl-6 mb-3">
+                    <label for="">{{ form.operation_type.label }}</label>
+
+                    <select name="operation_type" class="select form-control 
+                    {% if form.operation_type.errors %}border border-danger{% endif %}" 
+                    id="id_operation_type">
+                        <option value="">---------</option>
+                        <option value="set" {% if cash_box.operation_type == 'set' %}selected{% endif %}>واریز</option>
+                        <option value="rem" {% if cash_box.operation_type == 'rem' %}selected{% endif %}>برداشت</option>
+                    </select>
+                    {% if form.operation_type.errors %}
+                        {% for error in form.operation_type.errors %}
+                            <p class="text-danger">
+                                <strong>{{ error }}</strong>
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <fieldset class="input-group border-bottom mb-3">
+
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">واریز به صندوق</i>
+                    </legend>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label for="">{{ form.settle_amount.label }}</label>
+                        <input type="number" name="settle_amount" value="{{ cash_box.settle_amount }}" min="0" max="9223372036854775807" 
+                        class="form-control {% if form.settle_amount.errors %}border border-danger{% endif %}" id="id_settle_amount">
+                        {% if form.settle_amount.errors %}
+                            {% for error in form.settle_amount.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3 mb-3">
+                        <label for="">{{ form.settle_description.label }}</label>
+
+                        <textarea name="settle_description" cols="40" rows="5" class="form-control
+                        {% if form.settle_description.errors %}border border-danger{% endif %}"
+                        id="id_settle_description">
+                            {% if cash_box.settle_description %}
+                                {{ cash_box.settle_description }}
+                            {% endif %}
+                        </textarea>
+                        {% if form.settle_description.errors %}
+                            {% for error in form.settle_description.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label for="">{{ form.settle_image.label }}</label>
+                        {% if fund.settle_image %}
+                            <p><span>در حال حاضر :</span> <a href="{{ cash_box.settle_image.url }}">{{ cash_box.settle_image }}</a></p>
+                            <p>تغییر :</p>
+                        {% endif %}
+                        <input type="file" name="settle_image" accept="image/*" class="form-control-file" id="id_settle_image">
+                        {% if form.settle_image.errors %}
+                            {% for error in form.settle_image.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                </fieldset>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">برداشت از صندوق</i>
+                    </legend>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label for="">{{ form.removal_amount.label }}</label>
+                        <input type="number" name="removal_amount" value="{{ cash_box.removal_amount }}" min="0" max="9223372036854775807" 
+                        class="form-control {% if form.removal_amount.errors %}border border-danger{% endif %}" id="id_removal_amount">
+                        {% if form.removal_amount.errors %}
+                            {% for error in form.removal_amount.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3 mb-3">
+                        <label for="">{{ form.removal_description.label }}</label>
+
+                        <textarea name="removal_description" cols="40" rows="5" class="form-control
+                        {% if form.removal_description.errors %}border border-danger{% endif %}"
+                        id="id_removal_description">
+                            {% if cash_box.removal_description %}
+                                {{ cash_box.removal_description }}
+                            {% endif %}
+                        </textarea>
+                        {% if form.removal_description.errors %}
+                            {% for error in form.removal_description.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        <label for="">{{ form.removal_image.label }}</label>
+                        {% if fund.removal_image %}
+                            <p><span>در حال حاضر :</span> <a href="{{ cash_box.removal_image.url }}">{{ cash_box.removal_image }}</a></p>
+                            <p>تغییر :</p>
+                        {% endif %}
+                        <input type="file" name="removal_image" accept="image/*" class="form-control-file" id="id_removal_image">
+                        {% if form.removal_image.errors %}
+                            {% for error in form.removal_image.errors %}
+                                <p class="text-danger">
+                                    <strong>{{ error }}</strong>
+                                </p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                </fieldset>
+
+            {% endif %} 
+
+          </div>
+
+          <div class="row">
+            <div class="col-8 col-sm-6 col-xl-4 my-4">
+                <button class="btn btn-success btn-block" type="submit">
+                    {% if request.resolver_match.url_name == 'cash_box_create' %}
+                        <span>ثبت عملیات صندوق</span>
+                    {% else %}
+                        <span>ویرایش عملیات صندوق</span>
+                    {% endif %}
+                </button>
+              </div>
+          </div>
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}
+
+
+{% block scripts %}
+
+<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+       
+        jalaliDatepicker.startWatch({ 
+            time: true
+        });
+
+        $("#id_settle_amount").attr("disabled","disabled");
+        $("#id_settle_description").attr("disabled","disabled");
+        $("#id_settle_image").attr("disabled","disabled");
+        $("#id_removal_amount").attr("disabled","disabled");
+        $("#id_removal_description").attr("disabled","disabled");
+        $("#id_removal_image").attr("disabled","disabled");
+        
+        
+        if($('#id_operation_type').val() == 'rem'){
+            $("#id_removal_amount").removeAttr("disabled");
+            $("#id_removal_description").removeAttr("disabled");
+            $("#id_removal_image").removeAttr("disabled");
+        }else{
+            $("#id_removal_amount").attr("disabled","disabled");
+            $("#id_removal_description").attr("disabled","disabled");
+            $("#id_removal_image").attr("disabled","disabled");
+        }
+
+        if($('#id_operation_type').val() == 'set'){
+            $("#id_settle_amount").removeAttr("disabled");
+            $("#id_settle_description").removeAttr("disabled");
+            $("#id_settle_image").removeAttr("disabled");
+        }else{
+            $("#id_settle_amount").attr("disabled","disabled");
+            $("#id_settle_description").attr("disabled","disabled");
+            $("#id_settle_image").attr("disabled","disabled");
+        }
+
+
+        $('#id_operation_type').change(function (e) { 
+            e.preventDefault();
+ 
+            if($('#id_operation_type').val() == 'rem'){
+                $("#id_removal_amount").removeAttr("disabled");
+                $("#id_removal_description").removeAttr("disabled");
+                $("#id_removal_image").removeAttr("disabled");
+            }else{
+                $("#id_removal_amount").attr("disabled","disabled");
+                $("#id_removal_description").attr("disabled","disabled");
+                $("#id_removal_image").attr("disabled","disabled");
+            }
+
+            if($('#id_operation_type').val() == 'set'){
+                $("#id_settle_amount").removeAttr("disabled");
+                $("#id_settle_description").removeAttr("disabled");
+                $("#id_settle_image").removeAttr("disabled");
+            }else{
+                $("#id_settle_amount").attr("disabled","disabled");
+                $("#id_settle_description").attr("disabled","disabled");
+                $("#id_settle_image").attr("disabled","disabled");
+            }
+        });
+   });
+
+</script>
+
+{% endblock %}
+
