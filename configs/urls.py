@@ -13,6 +13,7 @@ urlpatterns = [
     path('non_government_accounts/', include('non_government_accounts.urls')),
     path('projects/', include('projects.urls')),
     path('cheques_receive_pay/', include('cheques_receive_pay.urls')),
+    path('warehousing/', include('warehousing.urls')),
     path('login/', CustomLogin.as_view(), name='login'),
     path('account/', include('account.urls')),
     path('admin/', admin.site.urls, name="home"),

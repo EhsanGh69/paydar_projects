@@ -205,13 +205,17 @@
 
                 </li>
 
-                <li class="nav-item has-treeview border-top border-light">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview border-top border-light
+                {% if request.resolver_match.app_name == 'warehousing' %}menu-open{% endif %}">
+                    <a href="#" class="nav-link
+                    {% if request.resolver_match.app_name == 'warehousing' %}active{% endif %}">
                         <p class="mr-2" style="font-size: 1.2rem;">
                             انبارداری
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
+
+
                     <ul class="nav nav-treeview">
 
                         <li class="nav-item">
@@ -242,12 +246,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-boxes-stacked text-primary" style="font-size: 1.2rem;"></i>
-                                <span class="ml-2">کالاها</span>
-                            </a>
-                        </li>
+                       {% main_menu request 'warehousing' 'stuffs' 'stuff_create' 'stuff_update' '' 'fa-boxes-stacked' 'کالاها' %}
         
                     </ul>
 

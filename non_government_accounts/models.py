@@ -207,7 +207,7 @@ class Orders(models.Model):
         ('exf', 'برگه خروج'),
     )
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_orders', verbose_name='پروژه')
-    supplier = models.ForeignKey(Suppliers, on_delete=models.CASCADE, related_name='order_supliers', verbose_name='تأمین کننده')
+    supplier = models.ForeignKey(Suppliers, on_delete=models.CASCADE, related_name='order_suppliers', verbose_name='تأمین کننده')
     order_type = models.CharField(max_length=100, verbose_name='نوع سفارش')
     measurement_unit = models.CharField(max_length=3, choices=MEASUREMENT_UNIT_CHOICES, verbose_name='واحد اندازه گیری')
     unit_price = models.PositiveBigIntegerField(default=0, verbose_name='قیمت واحد')

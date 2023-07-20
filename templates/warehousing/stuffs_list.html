@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}لیست کالاها{% endblock %}
+
+{% block page_title %}لیست کالاها{% endblock %}
+
+
+{% block main %}
+
+    {% include 'partials/messages.html' %}
+
+<div class="card">
+    
+    <div class="card-body">
+      <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+
+        <a href="{% url 'warehousing:stuff_create' %}" class="btn btn-outline-success btn-lg pb-0" title="افزودن کالا">
+            <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+        </a>
+        
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                <table id="example1" class="table table-bordered table-striped dataTable sortable" role="grid" aria-describedby="example1_info">
+                    <thead>
+                        <tr role="row">
+
+                            <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 358.797px;;">
+                                نوع کالا
+                            </th>
+                            <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 358.797px;;">
+                                موجودی انبار اصلی
+                            </th>
+                            <th class="text-center border-left rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
+                                اقدام
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for stuff in stuffs %}
+                            <tr role="row" class="odd">
+                                <td>{{ stuff.stuff_type }}</td>
+
+                                <td>
+                                    0
+                                    {% if stuff.measurement_unit == "sqm" %}
+                                        مترمربع
+                                    {% elif stuff.measurement_unit == "mel" %}
+                                        متر طول
+                                    {% elif stuff.measurement_unit == "kgm" %}
+                                        کیلوگرم
+                                    {% elif stuff.measurement_unit == "ton" %}
+                                        تن
+                                    {% else %}
+                                        عدد
+                                    {% endif %}
+                                </td>
+
+                                <td class="border-left text-center">
+                                    <a href="{% url 'warehousing:stuff_update' stuff.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a href="javascript:void(0)"  
+                                        data-toggle="modal"
+                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                        data-url="{% url 'warehousing:stuff_delete' pk=stuff.pk %}"
+                                        data-target="#deleteItemModal" title="حذف"
+                                        data-message="آیا از حذف '{{ stuff.stuff_type }}' اطمینان دارید؟">
+                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        
+
+                    </tbody>
+                   
+                </table>
+            </div>
+        </div>
+
+        {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+      </div>
+    </div>
+</div> 
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+
+{% endblock %}
