@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'warehouse_import_create' %}
+        ثبت ورود کالا به انبار 
+    {% else %}
+        ویرایش کالای وارد شده به انبار
+    {% endif %} 
+{% endblock %}
+
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+
+{% endblock %}
+
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'warehouse_import_create' %}
+        <span>ثبت ورود کالا به انبار</span>
+    {% else %}
+        <span>ویرایش کالای وارد شده به انبار</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card card-primary p-5">
+
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <p>
+            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+          </p>
+          {% if form.non_field_errors %}
+            <div class="errors">
+                {% for error in form.non_field_errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+          {% endif %}
+          <div class="row">
+
+            <fieldset class="input-group border-bottom mb-3">
+                <legend class="mb-3">
+                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">فرستنده</i>
+                </legend>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.supplier|as_crispy_field }}
+                </div>
+
+                <div class="col-12 col-xl-6 mb-3">
+                    <label for="">{{ form.other_sender.label }}</label>
+                    {{ form.other_sender|add_class:"form-control"|attr:"rows:5" }}
+                </div>
+            </fieldset>
+
+            <fieldset class="input-group border-bottom mb-3">
+                <legend class="mb-3">
+                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">کالا</i>
+                </legend>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.stuff_type|as_crispy_field }}
+                </div>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.measurement_unit|as_crispy_field }}
+                </div>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.stuff_amount|as_crispy_field }}
+                </div>
+            </fieldset>
+              
+            <div class="col-12 col-xl-6 mb-3">
+            {{ form.receiver|as_crispy_field }}
+            </div>
+            
+            <div class="col-12 col-xl-6 mb-3">
+                <label>{{ form.date_time.label }}*</label>
+                {{ form.date_time|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+                {% if form.date_time.errors %}
+                    {% for error in form.date_time.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+              
+            <fieldset class="input-group border-bottom mb-3">
+                <legend class="mb-3">
+                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">مرجوعی</i>
+                </legend>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.is_returned|as_crispy_field }}
+                </div>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.project_returned|as_crispy_field }}
+                </div>
+            </fieldset>
+              
+          </div>
+
+          <div class="row">
+            <div class="col-8 col-sm-6 col-xl-4 my-4">
+                <button class="btn btn-success btn-block" type="submit">
+                    {% if request.resolver_match.url_name == 'warehouse_import_create' %}
+                        <span>ثبت ورود کالا به انبار</span>
+                    {% else %}
+                        <span>ویرایش کالای وارد شده به انبار</span>
+                    {% endif %}
+                </button>
+              </div>
+          </div>
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}
+
+
+{% block scripts %}
+
+<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+       
+        jalaliDatepicker.startWatch({ 
+            time: true
+        });
+
+        $("#id_project_returned").attr("disabled","disabled");
+
+        $('#id_date_time').on('input', function (e) { 
+            e.preventDefault();
+            var date_value = $('#id_date_time').val();
+            console.log(date_value.replaceAll('/', '-'));
+
+            $('#id_date_time').val(date_value.replaceAll('/', '-'));
+        });
+
+        $('#id_is_returned').change(function (e) { 
+            e.preventDefault();
+            if(this.checked){
+                $("#id_project_returned").removeAttr("disabled");
+            }else{
+                $("#id_project_returned").attr("disabled","disabled");
+            }
+        });
+   });
+
+</script>
+
+{% endblock %}
+

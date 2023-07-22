@@ -3,7 +3,7 @@
 
 
 
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-cyan elevation-4">
 
     <a href="/" class="brand-link text-center">
         <i class="fa-solid fa-house"></i>
@@ -218,12 +218,8 @@
 
                     <ul class="nav nav-treeview">
 
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-arrow-right-to-bracket text-primary" style="font-size: 1.2rem;"></i>
-                                <span class="ml-2">ورود به انبار اصلی</span>
-                            </a>
-                        </li>
+                       {% main_menu request 'warehousing' 'warehouse_imports' 'warehouse_import_create' 'warehouse_import_update' 'warehouse_imports_search' 'fa-arrow-right-to-bracket' 'ورود به انبار اصلی' %}
+
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -286,7 +282,7 @@
                 <li class="nav-item border-top border-light ">
                     <a href="#" class="nav-link d-block">
                         <i class="fa-solid fa-database text-primary" style="font-size: 1.2rem;"></i>
-                        <span class="ml-3">پشتیبان گیری پایگاه داده</span>
+                        <span class="ml-2">پشتیبان گیری پایگاه داده</span>
                     </a>
                 </li>
                 

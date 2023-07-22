@@ -144,6 +144,16 @@
                             </select>
                         </div>
                     {% endif %}
+
+                    {% if request.resolver_match.url_name == 'warehouse_imports' or request.resolver_match.url_name == 'warehouse_imports_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="is_returned" class="form-control" id="is-returned">
+                                <option value="all" selected>فیلتر مرجوعی</option>
+                                <option value="0" {% if request.GET.cheque_type == '0' %}selected{% endif %}>کالاهای غیرمرجوعی</option>
+                                <option value="1" {% if request.GET.cheque_type == '1' %}selected{% endif %}>کالاهای مرجوعی</option>
+                            </select>
+                        </div>
+                    {% endif %}
                 
                     <div class="col-1 col-xl-1 p-0 {% if not date_filter %}mr-2{% endif %} ">
                         <button type="button" class="btn btn-success" title="بگرد" id="search-btn">

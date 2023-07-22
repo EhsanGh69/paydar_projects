@@ -6,8 +6,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from utils.tools import filter_date_values
 
-from .models import Stuff
-from .forms import StuffForm
+from .models import Stuff, MainWarehouseImport
+from .forms import StuffForm, MainWarehouseImportForm
 
 
 
@@ -51,12 +51,106 @@ class StuffDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         _id = int(self.kwargs.get('pk'))
         stuff = get_object_or_404(Stuff, pk=_id)
         return stuff
+
+
+# Stuff - End
+
+# ---------------------------------------
+    
+# MainWarehouseImport - Start
+
+class WarehouseImportList(LoginRequiredMixin, ListView):
+    template_name = 'warehousing/warehouse_imports_list.html'
+    model = MainWarehouseImport
+    context_object_name = "warehouse_imports"
+    paginate_by = 9
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_url'] = 'warehousing:warehouse_imports_search'
+        context['create_url'] = 'warehousing:warehouse_import_create'
+        context['persian_object_name'] = 'کالای افزوده شده به انبار'
+        return context
+
+
+class WarehouseImportCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = MainWarehouseImport
+    template_name = 'warehousing/warehouse_import_create_update.html'
+    form_class = MainWarehouseImportForm
+    success_url = reverse_lazy("warehousing:warehouse_imports")
+    success_message = "کالا با موفقیت به انبار افزوده شد"
+
+    def get_form_kwargs(self):
+        kwargs = super(WarehouseImportCreate, self).get_form_kwargs()
+        kwargs.update({
+            'url_name': self.request.resolver_match.url_name
+        })
+        return kwargs
     
 
+class WarehouseImportUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = MainWarehouseImport
+    template_name = 'warehousing/warehouse_import_create_update.html'
+    form_class = MainWarehouseImportForm
+    success_url = reverse_lazy("warehousing:warehouse_imports")
+    success_message = "کالای انبار با موفقیت ویرایش شد"
+
+    def get_form_kwargs(self):
+        kwargs = super(WarehouseImportUpdate, self).get_form_kwargs()
+        kwargs.update({
+            'url_name': self.request.resolver_match.url_name
+        })
+        return kwargs
+    
+
+class WarehouseImportDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    success_url = reverse_lazy('warehousing:warehouse_imports')
+    success_message = "کالای انبار با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        warehouse_import = get_object_or_404(MainWarehouseImport, pk=_id)
+        return warehouse_import
+    
+
+class WarehouseImportSearch(LoginRequiredMixin, ListView):
+    template_name = 'warehousing/warehouse_imports_list.html'
+    model = MainWarehouseImport
+    context_object_name = "warehouse_imports"
+
+    def get_queryset(self):
+        global not_found
+        not_found = False
+        global query
+        query = self.request.GET.get('data_search')
+        date_filter = self.request.GET.get('date_filter')
+        is_returned_filter = self.request.GET.get('is_returned')
+
+        global search_result
+
+        if is_returned_filter != "all" and date_filter == "all":
+            search_result = MainWarehouseImport.objects.search(query).filter(is_returned=bool(int(is_returned_filter))).all()
+        elif is_returned_filter == "all" and date_filter != "all":
+            search_result = MainWarehouseImport.objects.search(query).filter(date_time__date__range=filter_date_values(date_filter)).all()
+        else:
+            search_result = MainWarehouseImport.objects.search(query)
+
+        if not search_result:
+            not_found = True
+
+        return search_result
+  
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'warehousing:warehouse_imports_search'
+        context['list_url'] = 'warehousing:warehouse_imports'
+        return context
 
 
+# MainWarehouseImport - End
 
-
+# -----------------------------------------------
 
 
 

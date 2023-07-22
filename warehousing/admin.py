@@ -5,3 +5,5 @@ from .models import *
 
 
 admin.site.register(Stuff)
+
+admin.site.register(MainWarehouseImport)

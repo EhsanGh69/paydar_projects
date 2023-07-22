@@ -12,13 +12,6 @@ from non_government_accounts.models import Suppliers, Personnel
 
 
 
-class StuffManager(models.Manager):
-    def search(self, query):
-        lookup = (
-            Q(stuff_type__icontains=query)
-        )
-        return self.get_queryset().filter(lookup).distinct()
-
 
 class Stuff(models.Model):
     MEASUREMENT_UNIT_CHOICES = (
@@ -33,7 +26,6 @@ class Stuff(models.Model):
                                         choices=MEASUREMENT_UNIT_CHOICES, 
                                         verbose_name='واحد اندازه گیری')
     
-    objects = StuffManager()
 
     class Meta:
         verbose_name = "کالا"
@@ -51,7 +43,7 @@ class MainWarehouseImportManager(models.Manager):
             Q(supplier__full_name__icontains=query)|
             Q(receiver__full_name__icontains=query)|
             Q(other_sender__icontains=query)|
-            Q(stuff_type__icontains=query)|
+            Q(stuff_type__stuff_type__icontains=query)|
             Q(project_returned__title__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
@@ -92,7 +84,7 @@ class MainWarehouseImport(models.Model):
                                        verbose_name='تاریخ ارسال')
     
     # returned
-    is_returned = models.BooleanField(default=False, verbose_name='مرجوعی')
+    is_returned = models.BooleanField(default=False, verbose_name='کالا مرجوعی است')
     project_returned = models.ForeignKey(Project, 
                                 on_delete=models.CASCADE, 
                                 related_name='warehouse_returned_projects', 
