@@ -2,9 +2,9 @@
 {% load static %}
 {% load jformat %}
 
-{% block title %}لیست کالاهای وارد شده به انبار اصلی{% endblock %}
+{% block title %}لیست کالاهای خارج شده از انبار اصلی{% endblock %}
 
-{% block page_title %}لیست کالاهای وارد شده به انبار اصلی{% endblock %}
+{% block page_title %}لیست کالاهای خارج شده از انبار اصلی{% endblock %}
 
 
 {% block main %}
@@ -19,7 +19,7 @@
 
             
     
-{% include 'partials/search_print.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن کالا به انبار' %}
+{% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='افزودن کالا به انبار' %}
     
             <div class="row">
                 <div class="col-sm-12 table-responsive">
@@ -32,7 +32,7 @@
                                 </th>
 
                                 <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
-                                    فرستنده
+                                    درخواست کننده
                                 </td>
 
                                 <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
@@ -40,16 +40,12 @@
                                 </td>
 
                                 <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                                    تحویل گیرنده
+                                    تحویل دهنده
                                 </th>
 
                                 <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                                    تاریخ و زمان
+                                    پروژه
                                 </th>
-
-                                <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
-                                    مرجوعی
-                                </td>
 
                                 <th class="text-center action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
                                     اقدام
@@ -58,11 +54,11 @@
                         
                             <tr role="row">
                                 <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    تأمین کننده
+                                    پرسنل
                                 </th>
 
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    سایر
+                                    پیمانکار
                                 </th>
 
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -72,75 +68,51 @@
                                 <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
                                     مقدار
                                 </th>
-
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    مرجوعی هست یا خیر؟
-                                </th>
-
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    مرجوعی از پروژه
-                                </th>
                                 
                             </tr>
                         </thead>
                         <tbody>
     
-                            {% for warehouse_import in warehouse_imports %}
+                            {% for warehouse_export in warehouse_exports %}
                                 <tr role="row" class="odd">
                                     <td>{{ forloop.counter }}</td>
 
-                                    {% if warehouse_import.supplier %}
-                                        <td>{{ warehouse_import.supplier }}</td>
+                                    {% if warehouse_export.personnel %}
+                                        <td>{{ warehouse_export.personnel }}</td>
                                     {% else %}
                                         <td class="text-center">_</td>
                                     {% endif %}
 
-                                    {% if warehouse_import.other_sender %}
-                                        <td>{{ warehouse_import.other_sender }}</td>
+                                    {% if warehouse_export.contractor %}
+                                        <td>{{ warehouse_export.contractor }}</td>
                                     {% else %}
                                         <td class="text-center">_</td>
                                     {% endif %}
 
-                                    <td>{{ warehouse_import.stuff_type }}</td>
+                                    <td>{{ warehouse_export.stuff_type }}</td>
                                     
-                                    <td data-sort="{{ warehouse_import.stuff_amount }}">
-                                        {{ warehouse_import.stuff_amount }} 
-                                        {% if warehouse_import.measurement_unit == "sqm" %}
+                                    <td data-sort="{{ warehouse_export.stuff_amount }}">
+                                        {{ warehouse_export.stuff_amount }} 
+                                        {% if warehouse_export.measurement_unit == "sqm" %}
                                             مترمربع
-                                        {% elif warehouse_import.measurement_unit == "mel" %}
+                                        {% elif warehouse_export.measurement_unit == "mel" %}
                                             متر طول
-                                        {% elif warehouse_import.measurement_unit == "kgm" %}
+                                        {% elif warehouse_export.measurement_unit == "kgm" %}
                                             کیلوگرم
-                                        {% elif warehouse_import.measurement_unit == "ton" %}
+                                        {% elif warehouse_export.measurement_unit == "ton" %}
                                             تن
                                         {% else %}
                                             عدد
                                         {% endif %}
                                     </td>
                                     
-                                    <td>{{ warehouse_import.receiver }}</td>
-
+                                    <td>{{ warehouse_export.deliverer }}</td>
                                     
-                                    <td data-sort="{{ warehouse_import.date_time|date:'Ymd' }}">
-                                        {{ warehouse_import.date_time|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                                    </td>
-                                 
+                                    <td>{{ warehouse_export.project }}</td>
 
-                                    {% if warehouse_import.is_returned %}
-                                        <td class="text-center">بله</td>
-                                    {% else %}
-                                        <td class="text-center">خیر</td>
-                                    {% endif %}
+                                    <td class="action-td d-flex justify-content-center">
 
-                                    {% if warehouse_import.project_returned %}
-                                        <td>{{ warehouse_import.project_returned }}</td>
-                                    {% else %}
-                                        <td class="text-center">_ </td>
-                                    {% endif %}
-
-                                    <td class="action-td text-center d-flex">
-
-                                        <a href="{% url 'warehousing:warehouse_import_update' warehouse_import.pk %}" 
+                                        <a href="{% url 'warehousing:warehouse_export_update' warehouse_export.pk %}" 
                                         class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
@@ -148,7 +120,7 @@
                                         <a href="javascript:void(0)"  
                                         data-toggle="modal"
                                         class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'warehousing:warehouse_import_delete' pk=warehouse_import.pk %}"
+                                        data-url="{% url 'warehousing:warehouse_export_delete' pk=warehouse_export.pk %}"
                                         data-target="#deleteItemModal" title="حذف"
                                         data-message="آیا از حذف این کالا اطمینان دارید؟">
                                         <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>

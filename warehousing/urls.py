@@ -9,7 +9,12 @@ from .views import (
     WarehouseImportCreate,
     WarehouseImportUpdate,
     WarehouseImportDelete,
-    WarehouseImportSearch
+    WarehouseImportSearch,
+    WarehouseExportList,
+    WarehouseExportCreate,
+    WarehouseExportUpdate,
+    WarehouseExportDelete,
+    WarehouseExportSearch
 )
 
 
@@ -27,6 +32,12 @@ urlpatterns = [
     path('warehouse_imports/create', WarehouseImportCreate.as_view(), name='warehouse_import_create'),
     path('warehouse_imports/update/<int:pk>', WarehouseImportUpdate.as_view(), name='warehouse_import_update'),
     path('warehouse_imports/delete/<int:pk>', WarehouseImportDelete.as_view(), name='warehouse_import_delete'),
+
+    path('warehouse_exports/', WarehouseExportList.as_view(), name='warehouse_exports'),
+    path('warehouse_exports/search', WarehouseExportSearch.as_view(), name='warehouse_exports_search'),
+    path('warehouse_exports/create', WarehouseExportCreate.as_view(), name='warehouse_export_create'),
+    path('warehouse_exports/update/<int:pk>', WarehouseExportUpdate.as_view(), name='warehouse_export_update'),
+    path('warehouse_exports/delete/<int:pk>', WarehouseExportDelete.as_view(), name='warehouse_export_delete'),
 ]
 
 

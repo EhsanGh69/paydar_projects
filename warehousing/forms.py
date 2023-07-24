@@ -3,7 +3,7 @@ from django.core import validators
 
 from utils.tools import none_numeric_value
 
-from .models import Stuff, MainWarehouseImport
+from .models import Stuff, MainWarehouseImport, MainWarehouseExport
 
 
 
@@ -56,5 +56,32 @@ class MainWarehouseImportForm(forms.ModelForm):
                     }
                 )
             )
+
+
+class MainWarehouseExportForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = MainWarehouseExport
+        fields = ['personnel', 'contractor', 'stuff_type', 'measurement_unit', 
+                  'stuff_amount', 'deliverer', 'project']
+        
+    def __init__(self, *args, **kwargs):
+        super(MainWarehouseExportForm, self).__init__(*args, **kwargs)
+
+        self.fields['stuff_amount'] = forms.IntegerField(
+            label="مقدار",
+            validators=[
+                validators.MinValueValidator(
+                    limit_value=1,
+                    message="مقدار کالا نمی‌تواند صفر باشد"
+                )
+            ]
+        )
+
+
+
+
+
 
 

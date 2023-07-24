@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست کالاها{% endblock %}
 
@@ -26,11 +27,17 @@
                         <tr role="row">
 
                             <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 358.797px;;">
+                                ردیف
+                            </th>
+
+                            <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 358.797px;;">
                                 نوع کالا
                             </th>
+
                             <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 358.797px;;">
                                 موجودی انبار اصلی
                             </th>
+
                             <th class="text-center border-left rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
                                 اقدام
                             </th>
@@ -40,22 +47,10 @@
 
                         {% for stuff in stuffs %}
                             <tr role="row" class="odd">
+                                <td>{{ forloop.counter }}</td>
                                 <td>{{ stuff.stuff_type }}</td>
 
-                                <td>
-                                    0
-                                    {% if stuff.measurement_unit == "sqm" %}
-                                        مترمربع
-                                    {% elif stuff.measurement_unit == "mel" %}
-                                        متر طول
-                                    {% elif stuff.measurement_unit == "kgm" %}
-                                        کیلوگرم
-                                    {% elif stuff.measurement_unit == "ton" %}
-                                        تن
-                                    {% else %}
-                                        عدد
-                                    {% endif %}
-                                </td>
+                                {% total_stock stuff.stuff_type stuff.measurement_unit %}
 
                                 <td class="border-left text-center">
                                     <a href="{% url 'warehousing:stuff_update' stuff.pk %}" 

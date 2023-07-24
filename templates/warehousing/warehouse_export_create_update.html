@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'warehouse_export_create' %}
+        ثبت خروج کالا از انبار 
+    {% else %}
+        ویرایش کالای خارج شده از انبار
+    {% endif %} 
+{% endblock %}
+
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+
+{% endblock %}
+
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'warehouse_export_create' %}
+        <span>ثبت خروج کالا از انبار</span>
+    {% else %}
+        <span>ویرایش کالای خارج شده از انبار</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card card-primary p-5">
+
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <p>
+            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+          </p>
+          {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                {#<div class="alert alert-danger"  style="position: absolute; top: 15%; z-index: 10;">#}
+                <div class="alert alert-danger">
+                    <h5>
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        <span>{{ error }}</span>
+                    </h5>
+                </div>
+            {% endfor %}
+          {% endif %}
+          <div class="row">
+
+            <fieldset class="input-group border-bottom mb-3">
+                <legend class="mb-3">
+                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">درخواست کننده</i>
+                </legend>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.personnel|as_crispy_field }}
+                </div>
+
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.contractor|as_crispy_field }}
+                </div>
+            </fieldset>
+
+            <fieldset class="input-group border-bottom mb-3">
+                <legend class="mb-3">
+                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">کالا</i>
+                </legend>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.stuff_type|as_crispy_field }}
+                </div>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.measurement_unit|as_crispy_field }}
+                </div>
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.stuff_amount|as_crispy_field }}
+                </div>
+            </fieldset>
+              
+            <div class="col-12 col-xl-6 mb-3">
+                {{ form.deliverer|as_crispy_field }}
+            </div>
+
+            <div class="col-12 col-xl-6 mb-3">
+                {{ form.project|as_crispy_field }}
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-8 col-sm-6 col-xl-4 my-4">
+                <button class="btn btn-success btn-block" type="submit">
+                    {% if request.resolver_match.url_name == 'warehouse_export_create' %}
+                        <span>ثبت خروج کالا از انبار</span>
+                    {% else %}
+                        <span>ویرایش کالای خارج شده از انبار</span>
+                    {% endif %}
+                </button>
+              </div>
+          </div>
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}
+
+
+

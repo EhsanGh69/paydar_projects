@@ -1,0 +1,14 @@
+<td data-sort="{{ total_stock }}">
+    {{ formatted_total_stock }}
+    {% if measurement_unit == "sqm" %}
+        مترمربع
+    {% elif measurement_unit == "mel" %}
+        متر طول
+    {% elif measurement_unit == "kgm" %}
+        کیلوگرم
+    {% elif measurement_unit == "ton" %}
+        تن
+    {% else %}
+        عدد
+    {% endif %}
+</td>

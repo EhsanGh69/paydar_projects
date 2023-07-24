@@ -219,14 +219,8 @@
                     <ul class="nav nav-treeview">
 
                        {% main_menu request 'warehousing' 'warehouse_imports' 'warehouse_import_create' 'warehouse_import_update' 'warehouse_imports_search' 'fa-arrow-right-to-bracket' 'ورود به انبار اصلی' %}
-
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-primary" style="font-size: 1.2rem;"></i>
-                                <span class="ml-2">خروج از انبار اصلی</span>
-                            </a>
-                        </li>
+                       
+                       {% main_menu request 'warehousing' 'warehouse_exports' 'warehouse_export_create' 'warehouse_export_update' 'warehouse_exports_search' 'fa-arrow-right-from-bracket' 'خروج از انبار اصلی' %}
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">

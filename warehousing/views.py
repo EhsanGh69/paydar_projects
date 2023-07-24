@@ -1,13 +1,14 @@
+from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from utils.tools import filter_date_values
+from utils.tools import filter_date_values, warehouse_export_validation
 
-from .models import Stuff, MainWarehouseImport
-from .forms import StuffForm, MainWarehouseImportForm
+from .models import Stuff, MainWarehouseImport, MainWarehouseExport
+from .forms import StuffForm, MainWarehouseImportForm, MainWarehouseExportForm
 
 
 
@@ -86,8 +87,8 @@ class WarehouseImportCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView)
             'url_name': self.request.resolver_match.url_name
         })
         return kwargs
+        
     
-
 class WarehouseImportUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = MainWarehouseImport
     template_name = 'warehousing/warehouse_import_create_update.html'
@@ -152,5 +153,98 @@ class WarehouseImportSearch(LoginRequiredMixin, ListView):
 
 # -----------------------------------------------
 
+# MainWarehouseExport - Start
+
+class WarehouseExportList(LoginRequiredMixin, ListView):
+    template_name = 'warehousing/warehouse_exports_list.html'
+    model = MainWarehouseExport
+    context_object_name = "warehouse_exports"
+    paginate_by = 9
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_url'] = 'warehousing:warehouse_exports_search'
+        context['create_url'] = 'warehousing:warehouse_export_create'
+        context['persian_object_name'] = 'کالای خارج شده از  انبار'
+        return context
+    
+
+class WarehouseExportCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = 'warehousing/warehouse_export_create_update.html'
+    model = MainWarehouseExport
+    form_class = MainWarehouseExportForm
+    success_url = reverse_lazy("warehousing:warehouse_exports")
+    success_message = "خروج کالا از انبار با موفقیت ثبت شد"
+
+    def form_valid(self, form):
+        stuff_amount = form.cleaned_data.get('stuff_amount')
+        stuff_type = form.cleaned_data.get('stuff_type')
+        
+        validation_result = warehouse_export_validation(imp_model=MainWarehouseImport, exp_model=MainWarehouseExport,
+                                                        stuff_type=stuff_type, stuff_amount=stuff_amount, form=form)
+            
+        if not validation_result:
+            return super().form_invalid(form)
+        else:
+            return super().form_valid(form)
+        
+
+class WarehouseExportUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = 'warehousing/warehouse_export_create_update.html'
+    model = MainWarehouseExport
+    form_class = MainWarehouseExportForm
+    success_url = reverse_lazy("warehousing:warehouse_exports")
+    success_message = "کالای خارج‌ شده از انبار با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        stuff_amount = form.cleaned_data.get('stuff_amount')
+        stuff_type = form.cleaned_data.get('stuff_type')
+        validation_result = warehouse_export_validation(imp_model=MainWarehouseImport, exp_model=MainWarehouseExport,
+                                                        stuff_type=stuff_type, stuff_amount=stuff_amount, form=form)
+            
+        if not validation_result:
+            return super().form_invalid(form)
+        else:
+            return super().form_valid(form)
+
+
+class WarehouseExportDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    success_url = reverse_lazy('warehousing:warehouse_exports')
+    success_message = "کالای خارج‌ شده از انبار با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        warehouse_export = get_object_or_404(MainWarehouseExport, pk=_id)
+        return warehouse_export
+
+
+class WarehouseExportSearch(LoginRequiredMixin, ListView):
+    template_name = 'warehousing/warehouse_exports_list.html'
+    model = MainWarehouseExport
+    context_object_name = "warehouse_exports"
+
+    def get_queryset(self):
+        global not_found
+        not_found = False
+        global query
+        query = self.request.GET.get('data_search')
+
+        search_result = MainWarehouseExport.objects.search(query)
+
+        if not search_result:
+            not_found = True
+
+        return search_result
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'warehousing:warehouse_exports_search'
+        context['list_url'] = 'warehousing:warehouse_exports'
+        return context
+
+# MainWarehouseExport - End
+
+# -------------------------------------------------
 
 

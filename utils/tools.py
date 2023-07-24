@@ -114,7 +114,6 @@ def cash_box_rem_validation(**kwargs):
         kwargs['form'].errors['__all__'] = kwargs['form'].error_class(["صندوق هیچ موجودی جهت برداشت ندارد."])
 
 
-
 def fund_set_validation(**kwargs):
     if kwargs['charge'] == 0 or kwargs['charge'] is None:
         kwargs['form'].add_error('charge_amount', 'لطفا مبلغ شارژ را وارد نمایید')
@@ -148,7 +147,6 @@ def fund_set_validation(**kwargs):
                 kwargs['form'].add_error('charge_image', 'لطفا تصویر فیش واریزی را بارگذاری نمایید')
 
 
-
 def cash_box_set_validation(**kwargs):
     if kwargs['settle'] == 0 or kwargs['settle'] is None:
             kwargs['form'].add_error('settle_amount', 'لطفا مبلغ واریزی را وارد نمایید')
@@ -179,6 +177,29 @@ def cash_box_set_validation(**kwargs):
                 return True
             else:
                 kwargs['form'].add_error('receipt_image', 'لطفا تصویر فیش واریز را بارگذاری نمایید')
+
+
+def warehouse_export_validation(**kwargs):
+    imp_stuff_amount = kwargs['imp_model'].objects.filter(stuff_type=kwargs['stuff_type']).aggregate(Sum('stuff_amount'))['stuff_amount__sum']
+    exp_stuff_amount = kwargs['exp_model'].objects.filter(stuff_type=kwargs['stuff_type']).aggregate(Sum('stuff_amount'))['stuff_amount__sum']
+    total_stuff_amount = 0
+
+    if imp_stuff_amount:
+    
+        if not exp_stuff_amount:
+            total_stuff_amount = imp_stuff_amount
+        else:
+            total_stuff_amount = imp_stuff_amount - exp_stuff_amount
+
+        if  kwargs['stuff_amount'] > total_stuff_amount:
+            kwargs['form'].errors['__all__'] = kwargs['form'].error_class(["موجودی کالا در انبار کافی نمی‌باشد."])
+            return False
+        else:
+            return True
+        
+    else:
+        kwargs['form'].errors['__all__'] = kwargs['form'].error_class(["کالا در انبار هیچ موجودی ندارد."])
+        return False
 
 
 
