@@ -6,8 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-
-from utils.tools import filter_date_values, fund_rem_validation, fund_set_validation, cash_box_rem_validation, cash_box_set_validation
+from utils.tools import filter_date_values, fund_validation, cash_box_rem_validation, cash_box_set_validation
 from .models import Cheques, Fund, ReceivePay, CashBox
 from .forms import ChequesForm, FundForm, ReceivePayForm, CashBoxForm
 
@@ -121,6 +120,9 @@ class FundList(LoginRequiredMixin, ListView):
     context_object_name = "funds"
     paginate_by = 9
 
+    def get_queryset(self):
+        return Fund.objects.order_by('full_name', '-operation_type', '-id').all()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'cheques_receive_pay:funds_search'
@@ -129,56 +131,48 @@ class FundList(LoginRequiredMixin, ListView):
         return context
 
 
-@login_required
-def fund_create(request):
-    fund_form = FundForm(request.POST or None)
-    if fund_form.is_valid():
-        full_name = fund_form.cleaned_data.get('full_name')
-        operation_type = fund_form.cleaned_data.get('operation_type')
-        if operation_type == 'rem':
-            cost_amount = fund_form.cleaned_data.get('cost_amount')
-            cost_description = fund_form.cleaned_data.get('cost_description')
-            validation_result = fund_rem_validation(req=request, model=Fund, obj_id=False, name=full_name, form=fund_form,
-                                                     cost=cost_amount, desc=cost_description)
-            if validation_result:
-                return HttpResponseRedirect("/cheques_receive_pay/funds")
-        elif operation_type == 'set':
-            charge_amount = fund_form.cleaned_data.get('charge_amount')
-            charge_date = fund_form.cleaned_data.get('charge_date')
-            validation_result = fund_set_validation(req=request, model=Fund, obj_id=False, name=full_name, form=fund_form,
-                                                    charge=charge_amount, date=charge_date)
-            if validation_result:
-                return HttpResponseRedirect("/cheques_receive_pay/funds")
-        else:
-            fund_form = FundForm()
-    return render(request, 'cheques_receive_pay/fund_create_update.html', {'form': fund_form})    
-     
+class FundCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = 'cheques_receive_pay/fund_create_update.html'
+    model = Fund
+    form_class = FundForm
+    success_url = reverse_lazy("cheques_receive_pay:funds")
+    success_message = "عملیات تنخواه با موفقیت ثبت شد"
 
-@login_required
-def fund_update(request, *args, **kwargs):
-    fund_id = kwargs['pk']
-    fund = get_object_or_404(Fund, pk=fund_id)
-    fund_form = FundForm(request.POST or None)
-
-    if fund_form.is_valid():
-        full_name = fund_form.cleaned_data.get('full_name')
-        operation_type = fund_form.cleaned_data.get('operation_type')
-        if operation_type == 'rem':
-            cost_amount = fund_form.cleaned_data.get('cost_amount')
-            cost_description = fund_form.cleaned_data.get('cost_description')
-            validation_result = fund_rem_validation(req=request, model=Fund, obj_id=fund_id, obj=fund, name=full_name, form=fund_form,
-                                                    cost=cost_amount, desc=cost_description)
-            if validation_result:
-                return HttpResponseRedirect("/cheques_receive_pay/funds")
-        elif operation_type == 'set':
-            charge_amount = fund_form.cleaned_data.get('charge_amount')
-            charge_date = fund_form.cleaned_data.get('charge_date')
-            validation_result = fund_set_validation(req=request, model=Fund, obj_id=fund_id, obj=fund, name=full_name, form=fund_form,
-                                                    charge=charge_amount, date=charge_date)
-            if validation_result:
-                return HttpResponseRedirect("/cheques_receive_pay/funds")
+    def get_form_kwargs(self):
+        kwargs = super(FundCreate, self).get_form_kwargs()
+        kwargs.update({
+            'url_name': self.request.resolver_match.url_name
+        })
+        return kwargs
     
-    return render(request, 'cheques_receive_pay/fund_create_update.html', {'form': fund_form, 'fund': fund})
+    def form_valid(self, form):
+        validation_result = fund_validation(form=form, model=Fund, url_name=self.request.resolver_match.url_name)
+        if not validation_result:
+            return super().form_invalid(form)
+        else:
+            return super().form_valid(form)
+        
+
+class FundUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = 'cheques_receive_pay/fund_create_update.html'
+    model = Fund
+    form_class = FundForm
+    success_url = reverse_lazy("cheques_receive_pay:funds")
+    success_message = "عملیات تنخواه با موفقیت ویرایش شد"
+
+    def get_form_kwargs(self):
+        kwargs = super(FundUpdate, self).get_form_kwargs()
+        kwargs.update({
+            'url_name': self.request.resolver_match.url_name
+        })
+        return kwargs
+    
+    def form_valid(self, form):
+        validation_result = fund_validation(form=form, model=Fund, url_name=self.request.resolver_match.url_name)
+        if not validation_result:
+            return super().form_invalid(form)
+        else:
+            return super().form_valid(form)
 
     
 class FundDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):

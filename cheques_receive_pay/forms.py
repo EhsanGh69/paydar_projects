@@ -79,6 +79,7 @@ class FundForm(forms.ModelForm):
                     'charge_amount', 'charge_date', 'charge_image']
     
     def __init__(self, *args, **kwargs):
+        url_name = kwargs.pop('url_name')
         super(FundForm, self).__init__(*args, **kwargs)
 
         self.fields['full_name'] = forms.CharField(
@@ -86,6 +87,17 @@ class FundForm(forms.ModelForm):
             validators=[none_numeric_value]
         )
 
+        if url_name == 'fund_create':
+            self.fields['charge_date'] = forms.DateTimeField(
+                label="تاریخ واریز",
+                widget=forms.DateTimeInput(
+                    attrs={
+                        'value': ""
+                    }
+                )
+            )
+
+        self.fields['charge_date'].required = False
         self.fields['cost_amount'].help_text = 'جهت عملیات برداشت از تنخواه این فیلد لازم است'
         self.fields['receipt_image'].help_text = 'جهت عملیات برداشت از تنخواه این فیلد لازم است'
         self.fields['charge_amount'].help_text = 'جهت عملیات واریز به تنخواه این فیلد لازم است'

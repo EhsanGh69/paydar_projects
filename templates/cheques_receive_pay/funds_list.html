@@ -120,7 +120,10 @@
 
                                             {% include 'partials/img_modal.html' with img_type='receipt_image' id=forloop.counter img_src=fund.receipt_image.url label='فیش پرداختی بابت' owner=fund.cost_description %}
                                         {% else %}
-                                            <td class="text-center">_</td>
+                                            <td class="text-center">
+                                                <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
+                                                <span class="text-danger">بدون تصویر</span>
+                                            </td>
                                         {% endif %}
                                     {% else %}
                                         <td class="text-center">_</td>
@@ -135,14 +138,24 @@
                                         <td data-sort="{{ fund.charge_date|date:'Ymd' }}">
                                             {{ fund.charge_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
                                         </td>
-                                        <td class="text-center">
-                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                            data-target="#charge_image{{ forloop.counter }}">
-                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                            </a>
-                                        </td>
-    
-                                        {% include 'partials/img_modal.html' with img_type='charge_image' id=forloop.counter img_src=fund.charge_image.url label='شارژ تنخواه' owner=fund.full_name %}
+
+                                        {% if fund.charge_image %}
+                                            <td class="text-center">
+                                                <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                                data-target="#charge_image{{ forloop.counter }}">
+                                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                                </a>
+                                            </td>
+        
+                                            {% include 'partials/img_modal.html' with img_type='charge_image' id=forloop.counter img_src=fund.charge_image.url label='شارژ تنخواه' owner=fund.full_name %}
+                                        {% else %}
+                                            <td class="text-center">
+                                                <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
+                                                <span class="text-danger">بدون تصویر</span>
+                                            </td>
+                                        {% endif %}
+
+                                        
                                     {% else %}
                                         <td class="text-center">_</td>
                                         <td class="text-center">_</td>

@@ -7,8 +7,8 @@ from .views import (
     ChequesDelete,
     ChequesSearch,
     FundList,
-    fund_create,
-    fund_update,
+    FundCreate,
+    FundUpdate,
     FundSearch,
     FundDelete,
     ReceivePayList,
@@ -43,8 +43,8 @@ urlpatterns = [
 
     path('funds/', FundList.as_view(), name='funds'),
     path('funds/search', FundSearch.as_view(), name='funds_search'),
-    path('funds/create', fund_create, name='fund_create'),
-    path('funds/update/<int:pk>', fund_update, name='fund_update'),
+    path('funds/create', FundCreate.as_view(), name='fund_create'),
+    path('funds/update/<int:pk>', FundUpdate.as_view(), name='fund_update'),
     path('funds/delete/<int:pk>', FundDelete.as_view(), name='fund_delete'),
 
     path('cash_boxes/', CashBoxList.as_view(), name='cash_boxes'),
