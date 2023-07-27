@@ -1,12 +1,10 @@
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from utils.tools import filter_date_values, fund_validation, cash_box_rem_validation, cash_box_set_validation
+from utils.tools import filter_date_values, fund_validation, cash_box_validation
 from .models import Cheques, Fund, ReceivePay, CashBox
 from .forms import ChequesForm, FundForm, ReceivePayForm, CashBoxForm
 
@@ -331,6 +329,9 @@ class CashBoxList(LoginRequiredMixin, ListView):
     context_object_name = "cash_boxes"
     paginate_by = 9
 
+    def get_queryset(self):
+        return CashBox.objects.order_by('-id').all()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'cheques_receive_pay:cash_boxes_search'
@@ -339,54 +340,37 @@ class CashBoxList(LoginRequiredMixin, ListView):
         return context
 
 
-@login_required
-def cash_box_create(request):
-    cash_box_form = CashBoxForm(request.POST or None)
-    if cash_box_form.is_valid():
-        operation_type = cash_box_form.cleaned_data.get('operation_type')
-        if operation_type == 'rem':
-            removal_amount = cash_box_form.cleaned_data.get('removal_amount')
-            removal_description = cash_box_form.cleaned_data.get('removal_description')
-            validation_result = cash_box_rem_validation(req=request, model=CashBox, obj_id=False, form=cash_box_form,
-                                                     removal=removal_amount, desc=removal_description)
-            if validation_result:
-                return HttpResponseRedirect("/cheques_receive_pay/cash_boxes")
-        elif operation_type == 'set':
-            settle_amount = cash_box_form.cleaned_data.get('settle_amount')
-            settle_description = cash_box_form.cleaned_data.get('settle_description')
-            validation_result = cash_box_set_validation(req=request, model=CashBox, obj_id=False, form=cash_box_form,
-                                                    settle=settle_amount, desc=settle_description)
-            if validation_result:
-                return HttpResponseRedirect("/cheques_receive_pay/cash_boxes")
-        else:
-            cash_box_form = CashBoxForm()
-    return render(request, 'cheques_receive_pay/cash_box_create_update.html', {'form': cash_box_form}) 
 
+class CashBoxCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = 'cheques_receive_pay/cash_box_create_update.html'
+    model = CashBox
+    form_class = CashBoxForm
+    success_url = reverse_lazy("cheques_receive_pay:cash_boxes")
+    success_message = "عملیات صندوق با موفقیت ثبت شد"
 
-@login_required
-def cash_box_update(request, *args, **kwargs):
-    cash_box_id = kwargs['pk']
-    cash_box = get_object_or_404(CashBox, pk=cash_box_id)
-    cash_box_form = CashBoxForm(request.POST or None)
-    if cash_box_form.is_valid():
-        operation_type = cash_box_form.cleaned_data.get('operation_type')
-        if operation_type == 'rem':
-            removal_amount = cash_box_form.cleaned_data.get('removal_amount')
-            removal_description = cash_box_form.cleaned_data.get('removal_description')
-            validation_result = cash_box_rem_validation(req=request, model=CashBox, obj_id=cash_box_id, form=cash_box_form,
-                                                     removal=removal_amount, desc=removal_description)
-            if validation_result:
-                return HttpResponseRedirect("/cheques_receive_pay/cash_boxes")
-        elif operation_type == 'set':
-            settle_amount = cash_box_form.cleaned_data.get('settle_amount')
-            settle_description = cash_box_form.cleaned_data.get('settle_description')
-            validation_result = cash_box_set_validation(req=request, model=CashBox, obj_id=cash_box_id, form=cash_box_form,
-                                                    settle=settle_amount, desc=settle_description)
-            if validation_result:
-                return HttpResponseRedirect("/cheques_receive_pay/cash_boxes")
+    def form_valid(self, form):
+        validation_result = cash_box_validation(form=form, model=CashBox, 
+                                                url_name=self.request.resolver_match.url_name)
+        if not validation_result:
+            return super().form_invalid(form)
         else:
-            cash_box_form = CashBoxForm()
-    return render(request, 'cheques_receive_pay/cash_box_create_update.html', {'form': cash_box_form, 'cash_box': cash_box})
+            return super().form_valid(form)
+        
+
+class CashBoxUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = 'cheques_receive_pay/cash_box_create_update.html'
+    model = CashBox
+    form_class = CashBoxForm
+    success_url = reverse_lazy("cheques_receive_pay:cash_boxes")
+    success_message = "عملیات صندوق با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        validation_result = cash_box_validation(form=form, model=CashBox, 
+                                                url_name=self.request.resolver_match.url_name)
+        if not validation_result:
+            return super().form_invalid(form)
+        else:
+            return super().form_valid(form)
 
 
 class CashBoxDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):

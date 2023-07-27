@@ -88,14 +88,21 @@
                                             {{ cash_box.formatted_settle_amount }}
                                         </td>
                  
-                                        <td class="text-center">
-                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                            data-target="#settle_image{{ forloop.counter }}">
-                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                            </a>
-                                        </td>
+                                        {% if cash_box.settle_image %}
+                                            <td class="text-center">
+                                                <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                                data-target="#settle_image{{ forloop.counter }}">
+                                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                                </a>
+                                            </td>
 
-                                        {% include 'partials/img_modal.html' with img_type='settle_image' id=forloop.counter img_src=cash_box.settle_image.url label='فیش واریز به مبلغ' owner=cash_box.formatted_settle_amount %}
+                                            {% include 'partials/img_modal.html' with img_type='settle_image' id=forloop.counter img_src=cash_box.settle_image.url label='فیش واریز به مبلغ' owner=cash_box.formatted_settle_amount %}
+                                        {% else %}
+                                            <td class="text-center">
+                                                <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
+                                                <span class="text-danger">بدون تصویر</span>
+                                            </td>
+                                        {% endif %}
                                         
                                         <td>{{ cash_box.settle_description }}</td>     
                                        
@@ -109,16 +116,23 @@
                                         <td data-sort="{{ cash_box.removal_amount }}">
                                             {{ cash_box.formatted_removal_amount }}
                                         </td>
-                                        
-                                        <td class="text-center">
-                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                            data-target="#removal_image{{ forloop.counter }}">
-                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                            </a>
-                                        </td>
-    
-                                        {% include 'partials/img_modal.html' with img_type='removal_image' id=forloop.counter img_src=cash_box.removal_image.url label='فیش برداشت به مبلغ' owner=cash_box.formatted_removal_amount %}
 
+                                        {% if cash_box.removal_image %}
+                                            <td class="text-center">
+                                                <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                                data-target="#removal_image{{ forloop.counter }}">
+                                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                                </a>
+                                            </td>
+        
+                                            {% include 'partials/img_modal.html' with img_type='removal_image' id=forloop.counter img_src=cash_box.removal_image.url label='فیش برداشت به مبلغ' owner=cash_box.formatted_removal_amount %}
+                                        {% else %}
+                                            <td class="text-center">
+                                                <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
+                                                <span class="text-danger">بدون تصویر</span>
+                                            </td>
+                                        {% endif %}
+                                        
                                         <td>{{ cash_box.removal_description }}</td> 
 
                                     {% else %}
