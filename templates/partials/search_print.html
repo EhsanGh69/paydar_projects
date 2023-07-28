@@ -154,6 +154,16 @@
                             </select>
                         </div>
                     {% endif %}
+
+                    {% if request.resolver_match.url_name == 'use_certificates' or request.resolver_match.url_name == 'use_certificates_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="stuff_state" class="form-control" id="stuff-state">
+                                <option value="all" selected>فیلتر مرجوعی</option>
+                                <option value="def" {% if request.GET.cheque_type == 'def' %}selected{% endif %}>کالاهای دارای کسری</option>
+                                <option value="exc" {% if request.GET.cheque_type == 'exc' %}selected{% endif %}>کالاهای دارای مازاد</option>
+                            </select>
+                        </div>
+                    {% endif %}
                 
                     <div class="col-1 col-xl-1 p-0 {% if not date_filter %}mr-2{% endif %} ">
                         <button type="button" class="btn btn-success" title="بگرد" id="search-btn">

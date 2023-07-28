@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load jformat %}
+
+{% block title %}لیست گواهی‌های مصرف کالا{% endblock %}
+
+{% block page_title %}لیست گواهی‌های مصرف کالا{% endblock %}
+
+
+{% block main %}
+
+    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
+
+    <div class="card">
+        
+        <div class="card-body">
+    
+        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+
+            
+    
+{% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت عملیات تنخواه' %}
+    
+            <div class="row">
+                <div class="col-sm-12 table-responsive">
+                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row">
+    
+                                <th class="text-center border-bottom-0 rounded-0" rowspan="2" colspan="1" style="width: 40.797px;">
+                                    ردیف
+                                </th>
+
+                                <td class="text-center text-light" rowspan="1" colspan="5" style="width: 100.797px;background-color: #808080;">
+                                    کالا
+                                </td>
+
+                                <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                                    تاریخ شروع مصرف
+                                </th>
+
+                                <th class="text-center text-light border-left" rowspan="2" colspan="1" style="width: 100.797px;">
+                                    تاریخ پایان مصرف
+                                </th>
+
+                                <td class="text-center text-light border-left" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
+                                    مرجوعی
+                                </td>
+
+                                <th class=" text-center border-bottom-0 action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
+                                    اقدام
+                                </th>
+                            </tr>
+                            <tr role="row">
+    
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    نوع کالا
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    کسری دارد؟
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    مقدار کسری
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    مازاد دارد؟
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    مقدار مازاد
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    مرجوعی به
+                                </th>
+
+                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    تاریخ ارجاع به انبار
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+    
+                            {% for use_certificate in use_certificates %}
+                                <tr role="row" class="odd">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ use_certificate.stuff_type }}</td>
+                                    
+                                    {% if use_certificate.is_deficient %}
+                                        <td class="text-center">بله</td>
+                                        <td data-sort="{{ use_certificate.deficient_amount }}">
+                                            {{ use_certificate.formatted_deficient_amount }}
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">خیر</td>
+                                        <td class="text-center">_</td>
+                                    {% endif %}
+
+                                    {% if use_certificate.is_excess %}
+                                        <td class="text-center">بله</td>
+                                        <td data-sort="{{ use_certificate.excess_amount }}">
+                                            {{ use_certificate.formatted_excess_amount }}
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">خیر</td>
+                                        <td class="text-center">_</td>
+                                    {% endif %}
+
+                                    <td data-sort="{{ use_certificate.start_using_date|date:'Ymd' }}">
+                                        {{ use_certificate.start_using_date|jformat:'%d / %m / %Y' }}
+                                    </td>
+
+                                    <td data-sort="{{ use_certificate.finish_using_date|date:'Ymd' }}">
+                                        {{ use_certificate.finish_using_date|jformat:'%d / %m / %Y' }}
+                                    </td>
+
+                                    {% if use_certificate.is_excess %}
+                                        <td>{{ use_certificate.returned_to }}</td>
+                                        <td data-sort="{{ use_certificate.return_date|date:'Ymd' }}">
+                                            {{ use_certificate.return_date|jformat:'%d / %m / %Y' }}
+                                        </td>
+                                    {% else %}
+                                        <td class="text-center">_</td>
+                                        <td class="text-center">_</td>
+                                    {% endif %}
+
+                                    
+                                    <td class="action-td d-flex justify-content-center rounded-0 pb-4">
+
+                                        <a href="{% url 'warehousing:use_certificate_update' use_certificate.pk %}" 
+                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+
+                                        <a href="javascript:void(0)"  
+                                        data-toggle="modal"
+                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                        data-url="{% url 'warehousing:use_certificate_delete' pk=use_certificate.pk %}"
+                                        data-target="#deleteItemModal" title="حذف"
+                                        data-message="آیا از حذف این گواهی مصرف اطمینان دارید؟">
+                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+    
+                            
+    
+                        </tbody>
+                    
+                    </table>
+                </div>
+            </div>
+
+            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+    
+            {% include 'partials/pagination.html' with page_obj=page_obj %}
+    
+        </div>
+        </div>
+    </div> 
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <script src="{% static 'panel/dist/js/custom.js' %}"></script>
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+    <script src="{% static 'panel/dist/js/export_excel.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#search-btn").click(function() {
+                if($('#search-input').val() != '' || $('#stuff-state').val() != 'all'){
+                    $("#search-form").submit();
+               }
+            });
+        });
+    </script>
+
+{% endblock %}

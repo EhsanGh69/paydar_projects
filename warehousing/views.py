@@ -7,8 +7,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from utils.tools import filter_date_values, warehouse_export_validation
 
-from .models import Stuff, MainWarehouseImport, MainWarehouseExport
-from .forms import StuffForm, MainWarehouseImportForm, MainWarehouseExportForm
+from .models import Stuff, MainWarehouseImport, MainWarehouseExport, UseCertificate
+from .forms import StuffForm, MainWarehouseImportForm, MainWarehouseExportForm, UseCertificateForm
 
 
 
@@ -247,4 +247,83 @@ class WarehouseExportSearch(LoginRequiredMixin, ListView):
 
 # -------------------------------------------------
 
+# UseCertificate - Start
+
+class UseCertificateList(LoginRequiredMixin, ListView):
+    template_name = 'warehousing/use_certificates_list.html'
+    model = UseCertificate
+    context_object_name = "use_certificates"
+    paginate_by = 9
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_url'] = 'warehousing:use_certificates_search'
+        context['create_url'] = 'warehousing:use_certificate_create'
+        context['persian_object_name'] = 'گواهی مصرف کالا'
+        return context
+    
+
+class UseCertificateCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = 'warehousing/use_certificate_create_update.html'
+    model = UseCertificate
+    form_class = UseCertificateForm
+    success_url = reverse_lazy("warehousing:use_certificates")
+    success_message = "گواهی مصرف کالا با موفقیت ثبت شد"
+
+
+class UseCertificateUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = 'warehousing/use_certificate_create_update.html'
+    model = UseCertificate
+    form_class = UseCertificateForm
+    success_url = reverse_lazy("warehousing:use_certificates")
+    success_message = "گواهی مصرف کالا با موفقیت ویرایش شد"
+
+
+class UseCertificateDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    success_url = reverse_lazy('warehousing:use_certificates')
+    success_message = "گواهی مصرف کالا با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        use_certificate = get_object_or_404(UseCertificate, pk=_id)
+        return use_certificate
+    
+
+class UseCertificateSearch(LoginRequiredMixin, ListView):
+    template_name = 'warehousing/use_certificates_list.html'
+    model = UseCertificate
+    context_object_name = "use_certificates"
+
+    def get_queryset(self):
+        global not_found
+        not_found = False
+        global query
+        query = self.request.GET.get('data_search')
+        stuff_state = self.request.GET.get('stuff_state')
+
+        global search_result
+
+        if stuff_state != "all" and stuff_state == "def":
+            search_result = UseCertificate.objects.search(query).filter(is_deficient=True).all()
+        elif stuff_state != "all" and stuff_state == "exc":
+            search_result = UseCertificate.objects.search(query).filter(is_excess=True).all()
+        else:
+            search_result = UseCertificate.objects.search(query)
+
+        if not search_result:
+            not_found = True
+
+        return search_result
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'warehousing:use_certificates_search'
+        context['list_url'] = 'warehousing:use_certificates'
+        return context
+
+
+# UseCertificate - End
+
+# -------------------------------------------------
 

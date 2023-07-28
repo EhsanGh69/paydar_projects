@@ -207,17 +207,15 @@ class UseCertificate(models.Model):
     is_excess = models.BooleanField(default=False, verbose_name='مازاد دارد')
     excess_amount = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name='مقدار مازاد')
 
-    start_using_date = jmodels.jDateField(default=timezone.now, verbose_name='تاریخ شروع مصرف')
-    finish_using_date = jmodels.jDateField(default=timezone.now, verbose_name='تاریخ پایان مصرف')
+    start_using_date = jmodels.jDateField(verbose_name='تاریخ شروع مصرف')
+    finish_using_date = jmodels.jDateField(verbose_name='تاریخ پایان مصرف')
 
     # returned
     returned_to = models.CharField(max_length=3, 
                                     choices=RETURNED_TO_CHOICES,
                                     null=True, blank=True,
                                     verbose_name='مرجوعی به')
-    return_date = jmodels.jDateField(default=timezone.now,
-                                         null=True, blank=True,
-                                         verbose_name='تاریخ ارجاع به انبار')
+    return_date = jmodels.jDateField(null=True, blank=True, verbose_name='تاریخ ارجاع به انبار')
     
     objects = UseCertificateManager()
 
@@ -226,7 +224,7 @@ class UseCertificate(models.Model):
         verbose_name_plural = "گواهی‌های مصرف کالا"
 
     def __str__(self):
-        return f"{self.stuff_type} : {self.start_using_date} - {self.finish_using_date} "
+        return f"{self.stuff_type} : {self.start_using_date.year}/{self.start_using_date.month}/{self.start_using_date.day} - {self.finish_using_date.year}/{self.finish_using_date.month}/{self.finish_using_date.day} "
     
     def formatted_deficient_amount(self):
         return "{:,}".format(self.deficient_amount)
