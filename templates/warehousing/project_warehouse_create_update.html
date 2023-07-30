@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'use_certificate_create' %}
+        ثبت ورود و خروج کالا به انبار پروژه 
+    {% else %}
+        ویرایش ورود و خروج کالا به انبار پروژه
+    {% endif %} 
+{% endblock %}
+
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'use_certificate_create' %}
+        <span>ثبت ورود و خروج کالا به انبار پروژه</span>
+    {% else %}
+        <span>ویرایش ورود و خروج کالا به انبار پروژه</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+<div class="card card-primary p-5">
+
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+      <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>
+                <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+            </p>
+
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <h5>
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            <span>{{ error }}</span>
+                        </h5>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="row">
+
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.project|as_crispy_field }}
+                </div>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">درخواست کننده</i>
+                    </legend>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.personnel_apply|as_crispy_field }}
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.contractor_apply|as_crispy_field }}
+                    </div>
+                </fieldset>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">کالا</i>
+                    </legend>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.stuff_type|as_crispy_field }}
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.measurement_unit|as_crispy_field }}
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.stuff_amount|as_crispy_field }}
+                    </div>
+                    
+                </fieldset>
+
+                <fieldset class="input-group border-bottom mb-3">
+                    <legend class="mb-3">
+                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">تحویل گیرنده</i>
+                    </legend>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.personnel_delivery|as_crispy_field }}
+                    </div>
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.contractor_delivery|as_crispy_field }}
+                    </div>
+                    
+                </fieldset>
+
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.use_certificate|as_crispy_field }}
+                </div>
+
+                <div class="col-12 col-xl-6 mb-3">
+                    {{ form.status|as_crispy_field }}
+                </div>
+                
+            </div>
+
+            <div class="row">
+                <div class="col-8 col-sm-6 col-xl-4 my-4">
+                    <button class="btn btn-success btn-block" type="submit" id="submit-btn">
+                        {% if request.resolver_match.url_name == 'project_warehouse_create' %}
+                            <span>ثبت عملیات</span>
+                        {% else %}
+                            <span>ویرایش عملیات</span>
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock  %}
+
+
+
+

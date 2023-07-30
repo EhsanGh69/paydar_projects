@@ -164,6 +164,16 @@
                             </select>
                         </div>
                     {% endif %}
+
+                    {% if request.resolver_match.url_name == 'project_warehouses' or request.resolver_match.url_name == 'project_warehouses_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="stuff_status" class="form-control" id="stuff-status">
+                                <option value="all" selected>فیلتر وضعیت کالا</option>
+                                <option value="exp" {% if request.GET.cheque_type == 'exp' %}selected{% endif %}>خروج از انبار</option>
+                                <option value="imp" {% if request.GET.cheque_type == 'imp' %}selected{% endif %}>ورود به انبار</option>
+                            </select>
+                        </div>
+                    {% endif %}
                 
                     <div class="col-1 col-xl-1 p-0 {% if not date_filter %}mr-2{% endif %} ">
                         <button type="button" class="btn btn-success" title="بگرد" id="search-btn">

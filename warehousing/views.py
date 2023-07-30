@@ -7,8 +7,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from utils.tools import filter_date_values, warehouse_export_validation
 
-from .models import Stuff, MainWarehouseImport, MainWarehouseExport, UseCertificate
-from .forms import StuffForm, MainWarehouseImportForm, MainWarehouseExportForm, UseCertificateForm
+from .models import Stuff, MainWarehouseImport, MainWarehouseExport, UseCertificate, ProjectWarehouse
+from .forms import StuffForm, MainWarehouseImportForm, MainWarehouseExportForm, UseCertificateForm, ProjectWarehouseForm
 
 
 
@@ -326,4 +326,81 @@ class UseCertificateSearch(LoginRequiredMixin, ListView):
 # UseCertificate - End
 
 # -------------------------------------------------
+
+# ProjectWarehouse - Start
+
+class ProjectWarehouseList(LoginRequiredMixin, ListView):
+    template_name = 'warehousing/project_warehouses_list.html'
+    model = ProjectWarehouse
+    context_object_name = "project_warehouses"
+    paginate_by = 9
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_url'] = 'warehousing:project_warehouses_search'
+        context['create_url'] = 'warehousing:project_warehouse_create'
+        context['persian_object_name'] = 'انبار پروژه'
+        return context
+
+
+class ProjectWarehouseCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = 'warehousing/project_warehouse_create_update.html'
+    model = ProjectWarehouse
+    form_class = ProjectWarehouseForm
+    success_url = reverse_lazy("warehousing:project_warehouses")
+    success_message = "عملیات انبار پروژه با موفقیت ثبت شد"
+
+
+class ProjectWarehouseUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = 'warehousing/project_warehouse_create_update.html'
+    model = ProjectWarehouse
+    form_class = ProjectWarehouseForm
+    success_url = reverse_lazy("warehousing:project_warehouses")
+    success_message = "عملیات انبار پروژه با موفقیت ویرایش شد"
+
+
+class ProjectWarehouseDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    success_url = reverse_lazy('warehousing:project_warehouses')
+    success_message = "عملیات انبار پروژه با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        project_warehouse = get_object_or_404(ProjectWarehouse, pk=_id)
+        return project_warehouse
+
+
+class ProjectWarehouseSearch(LoginRequiredMixin, ListView):
+    template_name = 'warehousing/project_warehouses_list.html'
+    model = ProjectWarehouse
+    context_object_name = "project_warehouses"
+
+    def get_queryset(self):
+        global not_found
+        not_found = False
+        global query
+        query = self.request.GET.get('data_search')
+        stuff_status = self.request.GET.get('stuff_status')
+
+        global search_result
+
+        if stuff_status != "all" and stuff_status == "exp":
+            search_result = ProjectWarehouse.objects.search(query).filter(status="exp").all()
+        elif stuff_status != "all" and stuff_status == "imp":
+            search_result = ProjectWarehouse.objects.search(query).filter(status="imp").all()
+        else:
+            search_result = ProjectWarehouse.objects.search(query)
+
+        if not search_result:
+            not_found = True
+
+        return search_result
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'warehousing:project_warehouses_search'
+        context['list_url'] = 'warehousing:project_warehouses'
+        return context
+
+# ProjectWarehouse - End
 

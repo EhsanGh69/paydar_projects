@@ -36,7 +36,6 @@ class Stuff(models.Model):
 
 
 
-
 class MainWarehouseImportManager(models.Manager):
     def search(self, query):
         lookup = (
@@ -105,8 +104,6 @@ class MainWarehouseImport(models.Model):
         return "{:,}".format(self.stuff_amount)
     
     
-
-
 class MainWarehouseExportManager(models.Manager):
     def search(self, query):
         lookup = (
@@ -171,8 +168,6 @@ class MainWarehouseExport(models.Model):
     
 
 
-
-
 class UseCertificateManager(models.Manager):
     def search(self, query):
         lookup = (
@@ -231,7 +226,6 @@ class UseCertificate(models.Model):
     
     def formatted_excess_amount(self):
         return "{:,}".format(self.excess_amount)
-
 
 
 

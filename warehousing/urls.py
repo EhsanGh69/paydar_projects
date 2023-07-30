@@ -19,7 +19,12 @@ from .views import (
     UseCertificateCreate,
     UseCertificateUpdate,
     UseCertificateDelete,
-    UseCertificateSearch
+    UseCertificateSearch,
+    ProjectWarehouseList,
+    ProjectWarehouseCreate,
+    ProjectWarehouseUpdate,
+    ProjectWarehouseDelete,
+    ProjectWarehouseSearch
 )
 
 
@@ -49,6 +54,12 @@ urlpatterns = [
     path('use_certificates/create', UseCertificateCreate.as_view(), name='use_certificate_create'),
     path('use_certificates/update/<int:pk>', UseCertificateUpdate.as_view(), name='use_certificate_update'),
     path('use_certificates/delete/<int:pk>', UseCertificateDelete.as_view(), name='use_certificate_delete'),
+
+    path('project_warehouses/', ProjectWarehouseList.as_view(), name='project_warehouses'),
+    path('project_warehouses/search', ProjectWarehouseSearch.as_view(), name='project_warehouses_search'),
+    path('project_warehouses/create', ProjectWarehouseCreate.as_view(), name='project_warehouse_create'),
+    path('project_warehouses/update/<int:pk>', ProjectWarehouseUpdate.as_view(), name='project_warehouse_update'),
+    path('project_warehouses/delete/<int:pk>', ProjectWarehouseDelete.as_view(), name='project_warehouse_delete'),
 ]
 
 
