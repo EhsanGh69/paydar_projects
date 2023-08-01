@@ -17,9 +17,9 @@ class OwnersManager(models.Manager):
 class Owners(models.Model):
     full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
-    national_card_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر کارت ملی")
-    birth_certificate_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر شناسنامه")
-    ownership_document_image = models.ImageField(upload_to='images/owners', verbose_name="تصویر سند مالکیت")
+    national_card_image = models.ImageField(upload_to='images/owners/national_cards', verbose_name="تصویر کارت ملی")
+    birth_certificate_image = models.ImageField(upload_to='images/owners/birth_certificates', verbose_name="تصویر شناسنامه")
+    ownership_document_image = models.ImageField(upload_to='images/owners/ownership_documents', verbose_name="تصویر سند مالکیت")
 
     objects = OwnersManager()
 
@@ -176,9 +176,6 @@ class Costs(models.Model):
     
 
 
-
-    
-
 class PaymentsImagesManager(models.Manager):
     def search(self, query):
         lookup = (
@@ -194,15 +191,15 @@ class PaymentsImages(models.Model):
                                 verbose_name='پروژه'
                             )
     
-    designer_office = models.ImageField(upload_to='images/payment_receipts', verbose_name='دفتر طراح')
-    supervisors = models.ImageField(upload_to='images/payment_receipts', verbose_name='ناظرین')
-    engineer_system = models.ImageField(upload_to='images/payment_receipts', verbose_name='نظام مهندسی')
-    sketch_map = models.ImageField(upload_to='images/payment_receipts', verbose_name='نقشه کروکی')
-    export_permit = models.ImageField(upload_to='images/payment_receipts', verbose_name='عوارض صدور پروانه')
-    visit_toll = models.ImageField(upload_to='images/payment_receipts', verbose_name='عوارض بازدید')
-    education_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم آموزش و پرورش')
-    fire_stations_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم آتشنشانی')
-    social_security_share = models.ImageField(upload_to='images/payment_receipts', verbose_name='سهم تأمین اجتماعی')
+    designer_office = models.ImageField(upload_to='images/payment_receipts/designer_office', verbose_name='دفتر طراح')
+    supervisors = models.ImageField(upload_to='images/payment_receipts/supervisors', verbose_name='ناظرین')
+    engineer_system = models.ImageField(upload_to='images/payment_receipts/engineer_system', verbose_name='نظام مهندسی')
+    sketch_map = models.ImageField(upload_to='images/payment_receipts/sketch_map', verbose_name='نقشه کروکی')
+    export_permit = models.ImageField(upload_to='images/payment_receipts/export_permit', verbose_name='عوارض صدور پروانه')
+    visit_toll = models.ImageField(upload_to='images/payment_receipts/visit_toll', verbose_name='عوارض بازدید')
+    education_share = models.ImageField(upload_to='images/payment_receipts/education_share', verbose_name='سهم آموزش و پرورش')
+    fire_stations_share = models.ImageField(upload_to='images/payment_receipts/fire_stations_share', verbose_name='سهم آتشنشانی')
+    social_security_share = models.ImageField(upload_to='images/payment_receipts/social_security_share', verbose_name='سهم تأمین اجتماعی')
 
     objects = PaymentsImagesManager()
     

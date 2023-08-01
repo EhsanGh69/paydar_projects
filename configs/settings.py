@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'non_government_accounts.apps.NonGovernmentAccountsConfig',
     'cheques_receive_pay.apps.ChequesReceivePayConfig',
     'warehousing.apps.WarehousingConfig',
+    'projects_docs.apps.ProjectsDocsConfig',
 ]
 
 MIDDLEWARE = [

@@ -133,11 +133,11 @@ class Fund(models.Model):
     operation_type = models.CharField(max_length=3, choices=OPERATION_TYPES, verbose_name='نوع عملیات')
     cost_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True, verbose_name='مبلغ هزینه')
     cost_description = models.TextField(null=True, blank=True, verbose_name='شرح هزینه')
-    receipt_image = models.ImageField(upload_to='images/receive_pays', null=True, blank=True, verbose_name='تصویر فیش پرداختی')
+    receipt_image = models.ImageField(upload_to='images/fund/receipt_images', null=True, blank=True, verbose_name='تصویر فیش پرداختی')
     # fund charge
     charge_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True, verbose_name='مبلغ واریزی')
     charge_date = jmodels.jDateTimeField(null=True, blank=True, verbose_name='تاریخ واریز')
-    charge_image = models.ImageField(upload_to='images/fund', null=True, blank=True, verbose_name='تصویر فیش واریزی')
+    charge_image = models.ImageField(upload_to='images/fund/charge_images', null=True, blank=True, verbose_name='تصویر فیش واریزی')
 
     objects = FundManager()
 
@@ -157,7 +157,6 @@ class Fund(models.Model):
     
 
 
-
 class CashBoxManager(models.Manager):
     def search(self, query):
         lookup = (
@@ -175,11 +174,11 @@ class CashBox(models.Model):
     operation_type = models.CharField(max_length=3, choices=OPERATION_TYPES, verbose_name='نوع عملیات')
     # settle:
     settle_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True, verbose_name='مبلغ واریزی')
-    settle_image = models.ImageField(upload_to='images/cash_box', null=True, blank=True, verbose_name='تصویر فیش واریزی')
+    settle_image = models.ImageField(upload_to='images/cash_box/settle_images', null=True, blank=True, verbose_name='تصویر فیش واریزی')
     settle_description = models.TextField(null=True, blank=True, verbose_name='شرح واریز')
     # removal:
     removal_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True, verbose_name='مبلغ برداشت')
-    removal_image = models.ImageField(upload_to='images/cash_box', null=True, blank=True, verbose_name='تصویر فیش برداشت')
+    removal_image = models.ImageField(upload_to='images/cash_box/removal_images', null=True, blank=True, verbose_name='تصویر فیش برداشت')
     removal_description = models.TextField(null=True, blank=True, verbose_name='شرح برداشت')
 
     objects = CashBoxManager()
