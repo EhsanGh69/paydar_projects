@@ -25,6 +25,7 @@ class Contracts(models.Model):
     CONTRACT_TYPE_CHOICES = (
         ('buy', 'خرید'),
         ('sal', 'فروش'),
+        ('rnt', 'اجاره'),
         ('exc', 'معاوضه')
     )
     related_to_project = models.ForeignKey(Project, 
