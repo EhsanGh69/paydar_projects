@@ -6,15 +6,15 @@
 
 {% block title %}
     {% if request.resolver_match.url_name == 'cash_box_create' %}
-        ثبت عملیات صندوق 
+        ثبت عملیات صندوق
     {% else %}
         ویرایش عملیات صندوق
-    {% endif %} 
+    {% endif %}
 {% endblock %}
 
 {% block link %}
 
-<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
 
 {% endblock %}
 
@@ -31,216 +31,205 @@
 
 {% block main %}
 
-<div class="card card-primary p-5">
+    <div class="card card-primary p-5">
 
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
+        <div class="card-body col-12 col-lg-8 offset-lg-2">
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <p>
-                <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-            </p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>
+                    <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+                </p>
 
-            {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        <h5>
-                            <i class="fa-solid fa-circle-xmark"></i>
-                            <span>{{ error }}</span>
-                        </h5>
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <h5>
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                <span>{{ error }}</span>
+                            </h5>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row">
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.operation_type|as_crispy_field }}
                     </div>
-                {% endfor %}
-            {% endif %}
 
-            <div class="row">
+                    <fieldset class="input-group border-bottom mb-3 d-none" id="rem-field">
 
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.operation_type|as_crispy_field }}
+                        <div class="col-12 col-xl-6 mb-3">
+                            {{ form.removal_amount|as_crispy_field }}
+                        </div>
+                        <div class="col-12 col-xl-6 mb-3 mb-3">
+                            <label for="">{{ form.removal_description.label }}</label>
+
+                            {% if form.removal_description.errors %}
+                                {{ form.removal_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
+                                {% for error in form.removal_description.errors %}
+                                    <p class="text-danger">
+                                        <strong>{{ error }}</strong>
+                                    </p>
+                                {% endfor %}
+                            {% else %}
+                                {{ form.removal_description|add_class:"form-control"|attr:"rows:5" }}
+                            {% endif %}
+
+                            <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
+                        </div>
+                        <div class="col-12 col-xl-6 mb-3">
+                            {{ form.removal_image|as_crispy_field }}
+                            <span class="text-danger d-none"
+                                  id="removal_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="input-group border-bottom mb-3 d-none" id="set-field">
+
+                        <div class="col-12 col-xl-6 mb-3">
+                            {{ form.settle_amount|as_crispy_field }}
+                        </div>
+                        <div class="col-12 col-xl-6 mb-3 mb-3">
+                            <label for="">{{ form.settle_description.label }}</label>
+
+                            {% if form.settle_description.errors %}
+                                {{ form.settle_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
+                                {% for error in form.settle_description.errors %}
+                                    <p class="text-danger">
+                                        <strong>{{ error }}</strong>
+                                    </p>
+                                {% endfor %}
+                            {% else %}
+                                {{ form.settle_description|add_class:"form-control"|attr:"rows:5" }}
+                            {% endif %}
+
+                            <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
+                        </div>
+                        <div class="col-12 col-xl-6 mb-3">
+                            {{ form.settle_image|as_crispy_field }}
+                            <span class="text-danger d-none"
+                                  id="settle_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+                        </div>
+                    </fieldset>
+
                 </div>
 
-                <fieldset class="input-group border-bottom mb-3">
-                    <legend class="mb-3">
-                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">برداشت از صندوق</i>
-                    </legend>
-                    <div class="col-12 col-xl-6 mb-3">
-                        {{ form.removal_amount|as_crispy_field }}
+                <div class="row">
+                    <div class="col-8 col-sm-6 col-xl-4 my-4">
+                        <button class="btn btn-success btn-block" type="submit" id="submit-btn">
+                            {% if request.resolver_match.url_name == 'cash_box_create' %}
+                                <span>ثبت عملیات صندوق</span>
+                            {% else %}
+                                <span>ویرایش عملیات صندوق</span>
+                            {% endif %}
+                        </button>
                     </div>
-                    <div class="col-12 col-xl-6 mb-3 mb-3">
-                        <label for="">{{ form.removal_description.label }}</label>
-
-                        {% if form.removal_description.errors %}
-                            {{ form.removal_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
-                            {% for error in form.removal_description.errors %}
-                                <p class="text-danger">
-                                    <strong>{{ error }}</strong>
-                                </p>
-                            {% endfor %}
-                        {% else %}
-                            {{ form.removal_description|add_class:"form-control"|attr:"rows:5" }}  
-                        {% endif %}
-
-                        <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
-                    </div>
-                    <div class="col-12 col-xl-6 mb-3">
-                        {{ form.removal_image|as_crispy_field }}
-                        <span class="text-danger d-none" id="removal_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
-                    </div>
-                </fieldset>
-
-                <fieldset class="input-group border-bottom mb-3">
-                    <legend class="mb-3">
-                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">واریز به صندوق</i>
-                    </legend>
-                    <div class="col-12 col-xl-6 mb-3">
-                        {{ form.settle_amount|as_crispy_field }}
-                    </div>
-                    <div class="col-12 col-xl-6 mb-3 mb-3">
-                        <label for="">{{ form.settle_description.label }}</label>
-
-                        {% if form.settle_description.errors %}
-                            {{ form.settle_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
-                            {% for error in form.settle_description.errors %}
-                                <p class="text-danger">
-                                    <strong>{{ error }}</strong>
-                                </p>
-                            {% endfor %}
-                        {% else %}
-                            {{ form.settle_description|add_class:"form-control"|attr:"rows:5" }}  
-                        {% endif %}
-
-                        <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
-                    </div>
-                    <div class="col-12 col-xl-6 mb-3">
-                        {{ form.settle_image|as_crispy_field }}
-                        <span class="text-danger d-none" id="settle_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
-                    </div>
-                </fieldset>
-                
-            </div>
-
-            <div class="row">
-                <div class="col-8 col-sm-6 col-xl-4 my-4">
-                    <button class="btn btn-success btn-block" type="submit" id="submit-btn">
-                        {% if request.resolver_match.url_name == 'cash_box_create' %}
-                            <span>ثبت عملیات صندوق</span>
-                        {% else %}
-                            <span>ویرایش عملیات صندوق</span>
-                        {% endif %}
-                    </button>
                 </div>
-            </div>
-      </form>
+            </form>
+
+        </div>
 
     </div>
 
-  </div>
-
-{% endblock  %}
+{% endblock %}
 
 
 {% block scripts %}
 
-<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+    <script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
 
-<script>
-    $(document).ready(function () {
-       
-        jalaliDatepicker.startWatch({ 
-            time: true
-        });
+    {% if request.resolver_match.url_name == 'cash_box_update' %}
+        <script>
+            $(document).ready(function () {
+                $("#id_operation_type").attr("disabled", "disabled");
+            });
+        </script>
+    {% endif %}
 
-        $("#id_settle_amount").attr("disabled","disabled");
-        $("#id_settle_description").attr("disabled","disabled");
-        $("#id_settle_image").attr("disabled","disabled");
-        $("#id_removal_amount").attr("disabled","disabled");
-        $("#id_removal_description").attr("disabled","disabled");
-        $("#id_removal_image").attr("disabled","disabled");
+    <script>
+        $(document).ready(function () {
 
+            jalaliDatepicker.startWatch({
+                time: true
+            });
 
-        $('#removal_image-clear_id').change(function (e) { 
-            e.preventDefault();
-            if(this.checked){
-                $("#removal_image_alert").removeClass("d-none");
-                $("#submit-btn").attr("type","button");
-            }else{
-                $("#receipt_image_alert").addClass("d-none");
-                $("#submit-btn").attr("type","submit");
+            $("#submit-btn").attr("disabled", "disabled");
+
+            if ($('#id_operation_type').val() == 'rem') {
+                $("#rem-field").removeClass("d-none");
+                $("#set-field").addClass("d-none");
+                $("#submit-btn").removeAttr("disabled");
+            } else if ($('#id_operation_type').val() == 'set') {
+                $("#set-field").removeClass("d-none");
+                $("#rem-field").addClass("d-none");
+                $("#submit-btn").removeAttr("disabled");
+            } else {
+                $("#rem-field").addClass("d-none");
+                $("#set-field").addClass("d-none");
+                $("#submit-btn").attr("disabled", "disabled");
             }
-        });
 
-        $('#id_removal_image').change(function (e) { 
-            e.preventDefault();
-            $("#removal_image_alert").addClass("d-none");
-            $("#submit-btn").attr("type","submit");
-            $("#removal_image-clear_id").prop("checked", false);
-        });
 
-        $('#settle_image-clear_id').change(function (e) { 
-            e.preventDefault();
-            if(this.checked){
-                $("#settle_image_alert").removeClass("d-none");
-                $("#submit-btn").attr("type","button");
-            }else{
+            $('#id_operation_type').change(function (e) {
+                e.preventDefault();
+
+                if ($('#id_operation_type').val() == 'rem') {
+                    $("#rem-field").removeClass("d-none");
+                    $("#set-field").addClass("d-none");
+                    $("#submit-btn").removeAttr("disabled");
+                } else if ($('#id_operation_type').val() == 'set') {
+                    $("#set-field").removeClass("d-none");
+                    $("#rem-field").addClass("d-none");
+                    $("#submit-btn").removeAttr("disabled");
+                } else {
+                    $("#rem-field").addClass("d-none");
+                    $("#set-field").addClass("d-none");
+                    $("#submit-btn").attr("disabled", "disabled");
+                }
+            });
+
+
+            $('#removal_image-clear_id').change(function (e) {
+                e.preventDefault();
+                if (this.checked) {
+                    $("#removal_image_alert").removeClass("d-none");
+                    $("#submit-btn").attr("type", "button");
+                } else {
+                    $("#receipt_image_alert").addClass("d-none");
+                    $("#submit-btn").attr("type", "submit");
+                }
+            });
+
+            $('#id_removal_image').change(function (e) {
+                e.preventDefault();
+                $("#removal_image_alert").addClass("d-none");
+                $("#submit-btn").attr("type", "submit");
+                $("#removal_image-clear_id").prop("checked", false);
+            });
+
+            $('#settle_image-clear_id').change(function (e) {
+                e.preventDefault();
+                if (this.checked) {
+                    $("#settle_image_alert").removeClass("d-none");
+                    $("#submit-btn").attr("type", "button");
+                } else {
+                    $("#settle_image_alert").addClass("d-none");
+                    $("#submit-btn").attr("type", "submit");
+                }
+            });
+
+            $('#id_settle_image').change(function (e) {
+                e.preventDefault();
                 $("#settle_image_alert").addClass("d-none");
-                $("#submit-btn").attr("type","submit");
-            }
+                $("#submit-btn").attr("type", "submit");
+                $("#settle_image-clear_id").prop("checked", false);
+            });
+
         });
 
-        $('#id_settle_image').change(function (e) { 
-            e.preventDefault();
-            $("#settle_image_alert").addClass("d-none");
-            $("#submit-btn").attr("type","submit");
-            $("#settle_image-clear_id").prop("checked", false);
-        });
-        
-        
-        if($('#id_operation_type').val() == 'rem'){
-            $("#id_removal_amount").removeAttr("disabled");
-            $("#id_removal_description").removeAttr("disabled");
-            $("#id_removal_image").removeAttr("disabled");
-        }else{
-            $("#id_removal_amount").attr("disabled","disabled");
-            $("#id_removal_description").attr("disabled","disabled");
-            $("#id_removal_image").attr("disabled","disabled");
-        }
-
-        if($('#id_operation_type').val() == 'set'){
-            $("#id_settle_amount").removeAttr("disabled");
-            $("#id_settle_description").removeAttr("disabled");
-            $("#id_settle_image").removeAttr("disabled");
-        }else{
-            $("#id_settle_amount").attr("disabled","disabled");
-            $("#id_settle_description").attr("disabled","disabled");
-            $("#id_settle_image").attr("disabled","disabled");
-        }
-
-
-        $('#id_operation_type').change(function (e) { 
-            e.preventDefault();
- 
-            if($('#id_operation_type').val() == 'rem'){
-                $("#id_removal_amount").removeAttr("disabled");
-                $("#id_removal_description").removeAttr("disabled");
-                $("#id_removal_image").removeAttr("disabled");
-            }else{
-                $("#id_removal_amount").attr("disabled","disabled");
-                $("#id_removal_description").attr("disabled","disabled");
-                $("#id_removal_image").attr("disabled","disabled");
-            }
-
-            if($('#id_operation_type').val() == 'set'){
-                $("#id_settle_amount").removeAttr("disabled");
-                $("#id_settle_description").removeAttr("disabled");
-                $("#id_settle_image").removeAttr("disabled");
-            }else{
-                $("#id_settle_amount").attr("disabled","disabled");
-                $("#id_settle_description").attr("disabled","disabled");
-                $("#id_settle_image").attr("disabled","disabled");
-            }
-        });
-   });
-
-</script>
+    </script>
 
 {% endblock %}
 

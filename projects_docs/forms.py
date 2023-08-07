@@ -3,7 +3,7 @@ from django.core import validators
 
 from utils.tools import none_numeric_value
 
-from .models import Contracts
+from .models import Contracts, Proceedings, Agreements, BankReceipts, ConditionStatements, RegisteredDocs, OfficialDocs
 
 
 
@@ -32,6 +32,81 @@ class ContractsForm(forms.ModelForm):
         )
 
 
+class ProceedingsForm(forms.ModelForm):
+    use_required_attribute = False
 
+    class Meta:
+        model = Proceedings
+        fields = ['project', 'account_party', 'proceeding_type', 'proceeding_image', 'proceeding_date']
+
+    def __init__(self, *args, **kwargs):
+        super(ProceedingsForm, self).__init__(*args, **kwargs)
+
+        self.fields['account_party'] = forms.CharField(
+            label="طرف حساب",
+            validators=[none_numeric_value]
+        )
+
+
+
+class AgreementsForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = Agreements
+        fields = ['project', 'account_party', 'agreement_image', 'agreement_date']
+
+    def __init__(self, *args, **kwargs):
+        super(AgreementsForm, self).__init__(*args, **kwargs)
+
+        self.fields['account_party'] = forms.CharField(
+            label="طرف حساب",
+            validators=[none_numeric_value]
+        )
+
+
+
+class BankReceiptsForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = BankReceipts
+        fields = ['project', 'receive_or_pay', 'receipt_date', 'receipt_image']
+
+
+
+class ConditionStatementsForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = ConditionStatements
+        fields = ['project', 'contractor', 'work_unit', 'requested_amount', 'confirmed_amount', 
+                  'accounting_confirm', 'management_confirm', 'final_deposit_amount']
+        
+    def __init__(self, *args, **kwargs):
+        super(ConditionStatementsForm, self).__init__(*args, **kwargs)
+
+        self.fields['requested_amount'].help_text = "این فیلد توسط پیمانکار وارد شود"
+        self.fields['confirmed_amount'].help_text = "این فیلد توسط سرپرست کارگاه وارد شود"
+        self.fields['final_deposit_amount'].help_text = "این فیلد توسط حسابدار وارد شود"
+        
+
+
+class RegisteredDocsForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = RegisteredDocs
+        fields = ['project', 'doc_type', 'doc_image']
+
+
+
+class OfficialDocsForm(forms.ModelForm):
+    use_required_attribute = False
+
+    class Meta:
+        model = OfficialDocs
+        fields = ['project', 'doc_type', 'letter_type', 'license_type',
+                   'doc_title', 'doc_image', 'send_receive_date']
 
 

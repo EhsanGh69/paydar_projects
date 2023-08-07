@@ -6,15 +6,15 @@
 
 {% block title %}
     {% if request.resolver_match.url_name == 'fund_create' %}
-        ثبت عملیات تنخواه 
+        ثبت عملیات تنخواه
     {% else %}
         ویرایش عملیات تنخواه
-    {% endif %} 
+    {% endif %}
 {% endblock %}
 
 {% block link %}
 
-<link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
 
 {% endblock %}
 
@@ -31,226 +31,218 @@
 
 {% block main %}
 
-<div class="card card-primary p-5">
+    <div class="card card-primary p-5">
 
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
+        <div class="card-body col-12 col-lg-8 offset-lg-2">
 
-      <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <p>
-                <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-            </p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>
+                    <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+                </p>
 
-            {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        <h5>
-                            <i class="fa-solid fa-circle-xmark"></i>
-                            <span>{{ error }}</span>
-                        </h5>
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <h5>
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                <span>{{ error }}</span>
+                            </h5>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row">
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.full_name|as_crispy_field }}
                     </div>
-                {% endfor %}
-            {% endif %}
 
-            <div class="row">
-                
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.full_name|as_crispy_field  }}
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.operation_type|as_crispy_field }}
+                    </div>
+
+                    <fieldset class="input-group border-bottom mb-3 d-none" id="rem-field">
+
+                        <div class="col-12 col-xl-6 mb-3">
+                            {{ form.cost_amount|as_crispy_field }}
+                        </div>
+                        <div class="col-12 col-xl-6 mb-3 mb-3">
+                            <label for="">{{ form.cost_description.label }}</label>
+
+                            {% if form.cost_description.errors %}
+                                {{ form.cost_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
+                                {% for error in form.cost_description.errors %}
+                                    <p class="text-danger">
+                                        <strong>{{ error }}</strong>
+                                    </p>
+                                {% endfor %}
+                            {% else %}
+                                {{ form.cost_description|add_class:"form-control"|attr:"rows:5" }}
+                            {% endif %}
+
+                            <small class="form-text text-muted">جهت عملیات برداشت از تنخواه این فیلد لازم است</small>
+                        </div>
+                        <div class="col-12 col-xl-6 mb-3">
+                            {{ form.receipt_image|as_crispy_field }}
+                            <span class="text-danger d-none"
+                                  id="receipt_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="input-group border-bottom mb-3 d-none" id="set-field">
+
+                        <div class="col-12 col-xl-6 mb-3">
+                            {{ form.charge_amount|as_crispy_field }}
+                        </div>
+                        <div class="col-12 col-xl-6 mb-3">
+                            <label>{{ form.charge_date.label }}</label>
+
+                            {% if form.charge_date.errors %}
+                                {{ form.charge_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+                                {% for error in form.charge_date.errors %}
+                                    <p class="text-danger">
+                                        <strong>{{ error }}</strong>
+                                    </p>
+                                {% endfor %}
+                            {% else %}
+                                {{ form.charge_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+                            {% endif %}
+
+                            <small class="form-text text-muted">جهت عملیات واریز به تنخواه این فیلد لازم است</small>
+                        </div>
+                        <div class="col-12 col-xl-6 mb-3">
+                            {{ form.charge_image|as_crispy_field }}
+                            <span class="text-danger d-none"
+                                  id="charge_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+                        </div>
+                    </fieldset>
+
                 </div>
 
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.operation_type|as_crispy_field }}
+                <div class="row">
+                    <div class="col-8 col-sm-6 col-xl-4 my-4">
+                        <button class="btn btn-success btn-block" type="submit" id="submit-btn">
+                            {% if request.resolver_match.url_name == 'fund_create' %}
+                                <span>ثبت عملیات تنخواه</span>
+                            {% else %}
+                                <span>ویرایش عملیات تنخواه</span>
+                            {% endif %}
+                        </button>
+                    </div>
                 </div>
+            </form>
 
-                <fieldset class="input-group border-bottom mb-3">
-                    <legend class="mb-3">
-                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">هزینه (برداشت از تنخواه)</i>
-                    </legend>
-                    <div class="col-12 col-xl-6 mb-3">
-                        {{ form.cost_amount|as_crispy_field }}
-                    </div>
-                    <div class="col-12 col-xl-6 mb-3 mb-3">
-                        <label for="">{{ form.cost_description.label }}</label>
-
-                        {% if form.cost_description.errors %}
-                            {{ form.cost_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
-                            {% for error in form.cost_description.errors %}
-                                <p class="text-danger">
-                                    <strong>{{ error }}</strong>
-                                </p>
-                            {% endfor %}
-                        {% else %}
-                            {{ form.cost_description|add_class:"form-control"|attr:"rows:5" }}  
-                        {% endif %}
-
-                        <small class="form-text text-muted">جهت عملیات برداشت از تنخواه این فیلد لازم است</small>
-                    </div>
-                    <div class="col-12 col-xl-6 mb-3">
-                        {{ form.receipt_image|as_crispy_field }}
-                        <span class="text-danger d-none" id="receipt_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
-                    </div>
-                </fieldset>
-
-                <fieldset class="input-group border-bottom mb-3">
-                    <legend class="mb-3">
-                        <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">شارژ (واریز به تنخواه)</i>
-                    </legend>
-                    <div class="col-12 col-xl-6 mb-3">
-                        {{ form.charge_amount|as_crispy_field }}
-                    </div>
-                    <div class="col-12 col-xl-6 mb-3">
-                        <label>{{ form.charge_date.label }}</label>
-
-                        {% if form.charge_date.errors %}
-                        {{ form.charge_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
-                            {% for error in form.charge_date.errors %}
-                                <p class="text-danger">
-                                    <strong>{{ error }}</strong>
-                                </p>
-                            {% endfor %}
-                        {% else %}
-                            {{ form.charge_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
-                        {% endif %}
-
-                        <small class="form-text text-muted">جهت عملیات واریز به تنخواه این فیلد لازم است</small>
-                    </div>
-                    <div class="col-12 col-xl-6 mb-3">
-                        {{ form.charge_image|as_crispy_field }}
-                        <span class="text-danger d-none" id="charge_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
-                    </div>
-                </fieldset>
-                
-            </div>
-
-            <div class="row">
-                <div class="col-8 col-sm-6 col-xl-4 my-4">
-                    <button class="btn btn-success btn-block" type="submit" id="submit-btn">
-                        {% if request.resolver_match.url_name == 'fund_create' %}
-                            <span>ثبت عملیات تنخواه</span>
-                        {% else %}
-                            <span>ویرایش عملیات تنخواه</span>
-                        {% endif %}
-                    </button>
-                </div>
-            </div>
-      </form>
+        </div>
 
     </div>
 
-  </div>
-
-{% endblock  %}
+{% endblock %}
 
 
 {% block scripts %}
 
-<script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+    <script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
 
-<script>
-    $(document).ready(function () {
-       
-        jalaliDatepicker.startWatch({ 
-            time: true
-        });
+    {% if request.resolver_match.url_name == 'fund_update' %}
+        <script>
+            $(document).ready(function () {
+                $("#id_full_name").attr("disabled", "disabled");
+                $("#id_operation_type").attr("disabled", "disabled");
+            });
+        </script>
+    {% endif %}
 
-        $("#id_cost_amount").attr("disabled","disabled");
-        $("#id_cost_description").attr("disabled","disabled");
-        $("#id_receipt_image").attr("disabled","disabled");
-        $("#id_charge_amount").attr("disabled","disabled");
-        $("#id_charge_date").attr("disabled","disabled");
-        $("#id_charge_image").attr("disabled","disabled");
+    <script>
+        $(document).ready(function () {
 
-        $('#receipt_image-clear_id').change(function (e) { 
-            e.preventDefault();
-            if(this.checked){
-                $("#receipt_image_alert").removeClass("d-none");
-                $("#submit-btn").attr("type","button");
-            }else{
+            jalaliDatepicker.startWatch({
+                time: true
+            });
+
+            $("#submit-btn").attr("disabled", "disabled");
+
+            if ($('#id_operation_type').val() == 'rem') {
+                $("#rem-field").removeClass("d-none");
+                $("#set-field").addClass("d-none");
+                $("#submit-btn").removeAttr("disabled");
+            } else if ($('#id_operation_type').val() == 'set') {
+                $("#set-field").removeClass("d-none");
+                $("#rem-field").addClass("d-none");
+                $("#submit-btn").removeAttr("disabled");
+            } else {
+                $("#rem-field").addClass("d-none");
+                $("#set-field").addClass("d-none");
+                $("#submit-btn").attr("disabled", "disabled");
+            }
+
+
+            $('#id_operation_type').change(function (e) {
+                e.preventDefault();
+
+                if ($('#id_operation_type').val() == 'rem') {
+                    $("#rem-field").removeClass("d-none");
+                    $("#set-field").addClass("d-none");
+                    $("#submit-btn").removeAttr("disabled");
+                } else if ($('#id_operation_type').val() == 'set') {
+                    $("#set-field").removeClass("d-none");
+                    $("#rem-field").addClass("d-none");
+                    $("#submit-btn").removeAttr("disabled");
+                } else {
+                    $("#rem-field").addClass("d-none");
+                    $("#set-field").addClass("d-none");
+                    $("#submit-btn").attr("disabled", "disabled");
+                }
+            });
+
+
+            $('#receipt_image-clear_id').change(function (e) {
+                e.preventDefault();
+                if (this.checked) {
+                    $("#receipt_image_alert").removeClass("d-none");
+                    $("#submit-btn").attr("type", "button");
+                } else {
+                    $("#receipt_image_alert").addClass("d-none");
+                    $("#submit-btn").attr("type", "submit");
+                }
+            });
+
+            $('#id_receipt_image').change(function (e) {
+                e.preventDefault();
                 $("#receipt_image_alert").addClass("d-none");
-                $("#submit-btn").attr("type","submit");
-            }
-        });
+                $("#submit-btn").attr("type", "submit");
+                $("#receipt_image-clear_id").prop("checked", false);
+            });
 
-        $('#id_receipt_image').change(function (e) { 
-            e.preventDefault();
-            $("#receipt_image_alert").addClass("d-none");
-            $("#submit-btn").attr("type","submit");
-            $("#receipt_image-clear_id").prop("checked", false);
-        });
+            $('#charge_image-clear_id').change(function (e) {
+                e.preventDefault();
+                if (this.checked) {
+                    $("#charge_image_alert").removeClass("d-none");
+                    $("#submit-btn").attr("type", "button");
+                } else {
+                    $("#charge_image_alert").addClass("d-none");
+                    $("#submit-btn").attr("type", "submit");
+                }
+            });
 
-        $('#charge_image-clear_id').change(function (e) { 
-            e.preventDefault();
-            if(this.checked){
-                $("#charge_image_alert").removeClass("d-none");
-                $("#submit-btn").attr("type","button");
-            }else{
+            $('#id_charge_image').change(function (e) {
+                e.preventDefault();
                 $("#charge_image_alert").addClass("d-none");
-                $("#submit-btn").attr("type","submit");
-            }
+                $("#submit-btn").attr("type", "submit");
+                $("#charge_image-clear_id").prop("checked", false);
+            });
+
+
+            $('#id_charge_date').on('input', function (e) {
+                e.preventDefault();
+                var date_value = $('#id_charge_date').val();
+
+                $('#id_charge_date').val(date_value.replaceAll('/', '-'));
+            });
+
         });
 
-        $('#id_charge_image').change(function (e) { 
-            e.preventDefault();
-            $("#charge_image_alert").addClass("d-none");
-            $("#submit-btn").attr("type","submit");
-            $("#charge_image-clear_id").prop("checked", false);
-        });
-        
-       
-        $('#id_charge_date').on('input', function (e) { 
-            e.preventDefault();
-            var date_value = $('#id_charge_date').val();
-
-            $('#id_charge_date').val(date_value.replaceAll('/', '-'));
-        });
-
-        if($('#id_operation_type').val() == 'rem'){
-            $("#id_cost_amount").removeAttr("disabled");
-            $("#id_cost_description").removeAttr("disabled");
-            $("#id_receipt_image").removeAttr("disabled");
-        }else{
-            $("#id_cost_amount").attr("disabled","disabled");
-            $("#id_cost_description").attr("disabled","disabled");
-            $("#id_receipt_image").attr("disabled","disabled");
-        }
-
-        if($('#id_operation_type').val() == 'set'){
-            $("#id_charge_amount").removeAttr("disabled");
-            $("#id_charge_date").removeAttr("disabled");
-            $("#id_charge_image").removeAttr("disabled");
-        }else{
-            $("#id_charge_amount").attr("disabled","disabled");
-            $("#id_charge_date").attr("disabled","disabled");
-            $("#id_charge_image").attr("disabled","disabled");
-        }
-
-
-        $('#id_operation_type').change(function (e) { 
-            e.preventDefault();
- 
-            if($('#id_operation_type').val() == 'rem'){
-                $("#id_cost_amount").removeAttr("disabled");
-                $("#id_cost_description").removeAttr("disabled");
-                $("#id_receipt_image").removeAttr("disabled");
-            }else{
-                $("#id_cost_amount").attr("disabled","disabled");
-                $("#id_cost_description").attr("disabled","disabled");
-                $("#id_receipt_image").attr("disabled","disabled");
-            }
-
-            if($('#id_operation_type').val() == 'set'){
-                $("#id_charge_amount").removeAttr("disabled");
-                $("#id_charge_date").removeAttr("disabled");
-                $("#id_charge_image").removeAttr("disabled");
-            }else{
-                $("#id_charge_amount").attr("disabled","disabled");
-                $("#id_charge_date").attr("disabled","disabled");
-                $("#id_charge_image").attr("disabled","disabled");
-            }
-        });
-   });
-
-</script>
+    </script>
 
 {% endblock %}
 

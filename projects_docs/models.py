@@ -3,20 +3,17 @@ from django.db.models.query import Q
 
 from django_jalali.db import models as jmodels
 
-
 from projects.models import Project
 from non_government_accounts.models import Contractors
-
-
 
 
 class ContractsManager(models.Manager):
     def search(self, query):
         lookup = (
-            Q(related_to_project__title__icontains=query)|
-            Q(unrelated_to_project__icontains=query)|
-            Q(contract_title__icontains=query)|
-            Q(contract_party__icontains=query)
+                Q(related_to_project__title__icontains=query) |
+                Q(unrelated_to_project__icontains=query) |
+                Q(contract_title__icontains=query) |
+                Q(contract_party__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -28,11 +25,11 @@ class Contracts(models.Model):
         ('rnt', 'اجاره'),
         ('exc', 'معاوضه')
     )
-    related_to_project = models.ForeignKey(Project, 
-                                on_delete=models.CASCADE, 
-                                related_name='contract_projects',
-                                null=True, blank=True,
-                                verbose_name='مرتبط با پروژه‌ها')
+    related_to_project = models.ForeignKey(Project,
+                                           on_delete=models.CASCADE,
+                                           related_name='contract_projects',
+                                           null=True, blank=True,
+                                           verbose_name='مرتبط با پروژه‌ها')
     unrelated_to_project = models.TextField(null=True, blank=True, verbose_name='غیرمرتبط با پروژه‌ها')
 
     contract_type = models.CharField(max_length=3, choices=CONTRACT_TYPE_CHOICES, verbose_name='نوع قرارداد')
@@ -49,15 +46,13 @@ class Contracts(models.Model):
 
     def __str__(self):
         return self.contract_title
-    
-    
 
 
 class ProceedingsManager(models.Manager):
     def search(self, query):
         lookup = (
-            Q(project__title__icontains=query)|
-            Q(account_party__icontains=query)
+                Q(project__title__icontains=query) |
+                Q(account_party__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -67,8 +62,8 @@ class Proceedings(models.Model):
         ('del', 'تحویل'),
         ('oth', 'متفرقه')
     )
-    project = models.ForeignKey(Project, 
-                                on_delete=models.CASCADE, 
+    project = models.ForeignKey(Project,
+                                on_delete=models.CASCADE,
                                 related_name='proceeding_projects',
                                 verbose_name='پروژه‌')
     account_party = models.CharField(max_length=250, verbose_name='طرف حساب')
@@ -84,28 +79,26 @@ class Proceedings(models.Model):
 
     def __str__(self):
         return f'{self.account_party} - پروژه {self.project}'
-    
-
 
 
 class AgreementsManager(models.Manager):
     def search(self, query):
         lookup = (
-            Q(project__title__icontains=query)|
-            Q(account_party__icontains=query)
+                Q(project__title__icontains=query) |
+                Q(account_party__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
 
 class Agreements(models.Model):
-    project = models.ForeignKey(Project, 
-                                on_delete=models.CASCADE, 
+    project = models.ForeignKey(Project,
+                                on_delete=models.CASCADE,
                                 related_name='agreement_projects',
                                 verbose_name='پروژه‌')
     account_party = models.CharField(max_length=250, verbose_name='طرف حساب')
     agreement_image = models.ImageField(upload_to='images/agreement_images', verbose_name='تصویر توافق‌نامه')
     agreement_date = jmodels.jDateField(verbose_name='تاریخ توافق‌نامه')
-    
+
     objects = AgreementsManager()
 
     class Meta:
@@ -116,7 +109,6 @@ class Agreements(models.Model):
         return f'{self.account_party} - پروژه {self.project}'
 
 
-
 class BankReceiptsManager(models.Manager):
     def search(self, query):
         lookup = (
@@ -124,16 +116,17 @@ class BankReceiptsManager(models.Manager):
         )
         return self.get_queryset().filter(lookup).distinct()
 
+
 class BankReceipts(models.Model):
     RECEIVE_PAY_CHOICES = (
         ('rec', 'دریافت'),
         ('pay', 'پرداخت')
     )
-    project = models.ForeignKey(Project, 
-                                on_delete=models.CASCADE, 
+    project = models.ForeignKey(Project,
+                                on_delete=models.CASCADE,
                                 related_name='bank_receipt_projects',
                                 verbose_name='پروژه‌')
-    receive_or_pay = models.CharField(max_length=3, choices='', verbose_name='دریافت / پرداخت')
+    receive_or_pay = models.CharField(max_length=3, choices=RECEIVE_PAY_CHOICES, verbose_name='دریافت / پرداخت')
     receipt_date = jmodels.jDateField(verbose_name='تاریخ')
     receipt_image = models.ImageField(upload_to='images/receipt_images', verbose_name='تصویر رسید بانکی')
 
@@ -148,14 +141,13 @@ class BankReceipts(models.Model):
             return f'رسید دریافت - پروژه {self.project}'
         else:
             return f'رسید پرداخت - پروژه {self.project}'
-        
 
 
 class ConditionStatementsManager(models.Manager):
     def search(self, query):
         lookup = (
-            Q(project__title__icontains=query)|
-            Q(contractor__full_name__icontains=query)
+                Q(project__title__icontains=query) |
+                Q(contractor__full_name__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -172,26 +164,26 @@ class ConditionStatements(models.Model):
         ('nco', 'تأیید نشده'),
         ('awc', 'در انتظار تأیید')
     )
-    project = models.ForeignKey(Project, 
-                                on_delete=models.CASCADE, 
+    project = models.ForeignKey(Project,
+                                on_delete=models.CASCADE,
                                 related_name='condition_statement_projects',
                                 verbose_name='پروژه‌')
-    contractor = models.ForeignKey(Contractors, 
-                                on_delete=models.CASCADE, 
-                                related_name='condition_statement_contractors',
-                                verbose_name='پیمانکار')
+    contractor = models.ForeignKey(Contractors,
+                                   on_delete=models.CASCADE,
+                                   related_name='condition_statement_contractors',
+                                   verbose_name='پیمانکار')
     work_unit = models.CharField(max_length=3, choices=WORK_UNIT_CHOICES, verbose_name='واحد کار')
     requested_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True,
-                                                       verbose_name='مبلغ درخواستی')
-    confirmed_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True, 
-                                                      verbose_name='مبلغ تایید شده')
+                                                      verbose_name='مبلغ درخواستی پیمانکار')
+    confirmed_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True,
+                                                      verbose_name='مبلغ تأییدشده سرپرست کارگاه')
     accounting_confirm = models.CharField(max_length=3, default='awc', choices=CONFIRM_CHOICES,
-                                           verbose_name='وضعیت تأیید حسابداری')
+                                          verbose_name='وضعیت تأیید حسابداری')
     management_confirm = models.CharField(max_length=3, default='awc', choices=CONFIRM_CHOICES,
-                                           verbose_name='وضعیت تأیید مدیریت')
-    final_deposit_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True, 
-                                                      verbose_name='مبلغ واریزی نهایی')
-    
+                                          verbose_name='وضعیت تأیید مدیریت')
+    final_deposit_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True,
+                                                          verbose_name='مبلغ واریزی نهایی')
+
     objects = ConditionStatementsManager()
 
     class Meta:
@@ -201,7 +193,14 @@ class ConditionStatements(models.Model):
     def __str__(self):
         return f'صورت وضعیت {self.contractor} - پروژه {self.project}'
 
+    def formatted_requested_amount(self):
+        return "{:,}".format(self.requested_amount)
 
+    def formatted_confirmed_amount(self):
+        return "{:,}".format(self.confirmed_amount)
+
+    def formatted_final_deposit_amount(self):
+        return "{:,}".format(self.final_deposit_amount)
 
 
 class RegisteredDocsManager(models.Manager):
@@ -210,7 +209,7 @@ class RegisteredDocsManager(models.Manager):
             Q(project__title__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
-    
+
 
 class RegisteredDocs(models.Model):
     DOC_TYPE_CHOICES = (
@@ -219,8 +218,8 @@ class RegisteredDocs(models.Model):
         ('sic', 'گواهی امضاء'),
         ('unl', 'تعهدنامه'),
     )
-    project = models.ForeignKey(Project, 
-                                on_delete=models.CASCADE, 
+    project = models.ForeignKey(Project,
+                                on_delete=models.CASCADE,
                                 related_name='registered_doc_projects',
                                 verbose_name='پروژه‌')
     doc_type = models.CharField(max_length=3, choices=DOC_TYPE_CHOICES, verbose_name='نوع سند')
@@ -229,20 +228,18 @@ class RegisteredDocs(models.Model):
     objects = RegisteredDocsManager()
 
     class Meta:
-        verbose_name = 'سند ثبتی' 
+        verbose_name = 'سند ثبتی'
         verbose_name_plural = 'اسناد ثبتی'
 
     def __str__(self):
         return f'سند {self.doc_type} - پروژه {self.project}'
-    
-
 
 
 class OfficialDocsManager(models.Manager):
     def search(self, query):
         lookup = (
-            Q(project__title__icontains=query)|
-            Q(doc_title__icontains=query)
+                Q(project__title__icontains=query) |
+                Q(doc_title__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -261,20 +258,20 @@ class OfficialDocs(models.Model):
         ('des', 'تخریب'),
         ('con', 'ساخت'),
         ('dac', 'تخریب و ساخت'),
-        ('tci', 'شناسنامه فنی')
+        ('tci', 'شناسنامه‌ی فنی')
     )
-    project = models.ForeignKey(Project, 
-                                on_delete=models.CASCADE, 
+    project = models.ForeignKey(Project,
+                                on_delete=models.CASCADE,
                                 related_name='official_docs_projects',
                                 verbose_name='پروژه‌')
-    
+
     doc_type = models.CharField(max_length=3, choices=DOC_TYPE_CHOICES, verbose_name='نوع سند')
     letter_type = models.CharField(max_length=3, choices=LETTER_TYPE_CHOICES,
                                    null=True, blank=True,
-                                    verbose_name='نوع سند')
+                                   verbose_name='نوع نامه')
     license_type = models.CharField(max_length=3, choices=LETTER_TYPE_CHOICES,
                                     null=True, blank=True,
-                                    verbose_name='نوع سند')
+                                    verbose_name='نوع پروانه')
     doc_title = models.CharField(max_length=250, verbose_name='عنوان سند')
     doc_image = models.ImageField(upload_to='images/official_doc_images', verbose_name='تصویر سند')
     send_receive_date = jmodels.jDateField(verbose_name='تاریخ ارسال / دریافت')
@@ -287,6 +284,3 @@ class OfficialDocs(models.Model):
 
     def __str__(self):
         return f'{self.doc_type} - {self.doc_title} - {self.project}'
-
-
-

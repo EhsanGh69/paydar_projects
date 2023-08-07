@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'condition_statement_create' %}
+        ثبت صورت وضعیت
+    {% else %}
+        ویرایش صورت وضعیت
+    {% endif %}
+{% endblock %}
+
+
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'condition_statement_create' %}
+        <span>ثبت صورت وضعیت جدید</span>
+    {% else %}
+        <span>ویرایش صورت وضعیت</span>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block main %}
+
+    <div class="card card-primary p-5">
+
+        <div class="card-body col-12 col-lg-8 offset-lg-2">
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>
+                    <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+                </p>
+
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <h5>
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                <span>{{ error }}</span>
+                            </h5>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.project|as_crispy_field }}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.contractor|as_crispy_field }}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.work_unit|as_crispy_field }}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.requested_amount|as_crispy_field }}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.confirmed_amount|as_crispy_field }}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.accounting_confirm|as_crispy_field }}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.management_confirm|as_crispy_field }}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.final_deposit_amount|as_crispy_field }}
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-8 col-sm-6 col-xl-4 my-4">
+                        <button class="btn btn-success btn-block" type="submit">
+                            {% if request.resolver_match.url_name == 'condition_statement_create' %}
+                                <span>ثبت صورت وضعیت جدید</span>
+                            {% else %}
+                                <span>ویرایش صورت وضعیت</span>
+                            {% endif %}
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {% if request.resolver_match.url_name == 'condition_statement_create' %}
+        <script>
+            $(document).ready(function () {
+
+                $("#id_final_deposit_amount").attr("disabled", "disabled");
+
+                $('#id_management_confirm').change(function (e) {
+                    e.preventDefault();
+
+                    if ($('#id_management_confirm').val() == 'con') {
+                        $("#id_final_deposit_amount").removeAttr("disabled");
+                    } else {
+                        $("#id_final_deposit_amount").attr("disabled", "disabled");
+                    }
+                });
+
+                if ($("#id_management_confirm").val() == 'con') {
+                    $("#id_final_deposit_amount").removeAttr("disabled");
+                } else {
+                    $("#id_final_deposit_amount").attr("disabled", "disabled");
+                }
+            });
+        </script>
+    {% endif %}
+{% endblock %}

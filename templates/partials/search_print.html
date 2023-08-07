@@ -186,6 +186,78 @@
                             </select>
                         </div>
                     {% endif %}
+
+                    {% if request.resolver_match.url_name == 'proceedings' or request.resolver_match.url_name == 'proceedings_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="proceeding_type" class="form-control" id="proceeding-type">
+                                <option value="all" selected>فیلتر نوع صورت جلسه</option>
+                                <option value="del" {% if request.GET.cheque_type == 'del' %}selected{% endif %}>تحویل</option>
+                                <option value="oth" {% if request.GET.cheque_type == 'oth' %}selected{% endif %}>متفرقه</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'bank_receipts' or request.resolver_match.url_name == 'bank_receipts_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="receipt_type" class="form-control" id="receipt-type">
+                                <option value="all" selected>فیلتر نوع رسید بانکی</option>
+                                <option value="rec" {% if request.GET.cheque_type == 'rec' %}selected{% endif %}>دریافت</option>
+                                <option value="pay" {% if request.GET.cheque_type == 'pay' %}selected{% endif %}>پرداخت</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'condition_statements' or request.resolver_match.url_name == 'condition_statements_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="accounting_confirm" class="form-control" id="accounting-confirm">
+                                <option value="all" selected>فیلتر وضعیت تأیید حسابداری</option>
+                                <option value="con" {% if request.GET.cheque_type == 'con' %}selected{% endif %}>تأیید شده</option>
+                                <option value="nco" {% if request.GET.cheque_type == 'nco' %}selected{% endif %}>تأیید نشده</option>
+                                <option value="awc" {% if request.GET.cheque_type == 'awc' %}selected{% endif %}>در انتظار تأیید</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="management_confirm" class="form-control" id="management-confirm">
+                                <option value="all" selected>فیلتر وضعیت تأیید مدیریت</option>
+                                <option value="con" {% if request.GET.cheque_type == 'con' %}selected{% endif %}>تأیید شده</option>
+                                <option value="nco" {% if request.GET.cheque_type == 'nco' %}selected{% endif %}>تأیید نشده</option>
+                                <option value="awc" {% if request.GET.cheque_type == 'awc' %}selected{% endif %}>در انتظار تأیید</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'registered_docs' or request.resolver_match.url_name == 'registered_docs_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="doc_type" class="form-control" id="doc-type">
+                                <option value="all" selected>فیلتر نوع سند</option>
+                                <option value="owd" {% if request.GET.cheque_type == 'owd' %}selected{% endif %}>سند مالکیت</option>
+                                <option value="atd" {% if request.GET.cheque_type == 'atd' %}selected{% endif %}>سند وکالت</option>
+                                <option value="sic" {% if request.GET.cheque_type == 'sic' %}selected{% endif %}>گواهی امضاء</option>
+                                <option value="unl" {% if request.GET.cheque_type == 'unl' %}selected{% endif %}>تعهدنامه</option>
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    {% if request.resolver_match.url_name == 'official_docs' or request.resolver_match.url_name == 'official_docs_search' %}
+                        <div class="form-group col-11 col-xl-3">
+                            <select name="doc_type" class="form-control" id="doc-type">
+                                <option value="all" selected>فیلتر نوع سند</option>
+                                
+                                <option value="let" {% if request.GET.cheque_type == 'let' %}selected{% endif %}>همه‌ی نامه‌ها</option>
+                                <option value="snd" {% if request.GET.cheque_type == 'snd' %}selected{% endif %}>نامه‌های ارسالی</option>
+                                <option value="rec" {% if request.GET.cheque_type == 'rec' %}selected{% endif %}>نامه‌های دریافتی</option>
+
+                                <option value="lic" {% if request.GET.cheque_type == 'lic' %}selected{% endif %}>همه‌ی پروانه‌ها</option>
+                                <option value="des" {% if request.GET.cheque_type == 'des' %}selected{% endif %}>پروانه‌های تخریب</option>
+                                <option value="con" {% if request.GET.cheque_type == 'con' %}selected{% endif %}>پروانه‌های ساخت</option>
+                                <option value="dac" {% if request.GET.cheque_type == 'dac' %}selected{% endif %}>پروانه‌های تخریب و ساخت</option>
+                                <option value="tci" {% if request.GET.cheque_type == 'tci' %}selected{% endif %}>پروانه‌های شناسنامه‌ی فنی</option>
+
+                                <option value="crt" {% if request.GET.cheque_type == 'crt' %}selected{% endif %}>گواهی‌ها</option>
+                            </select>
+                        </div>
+                    {% endif %}
                 
                     <div class="col-1 col-xl-1 p-0 {% if not date_filter %}mr-2{% endif %} ">
                         <button type="button" class="btn btn-success" title="بگرد" id="search-btn">
