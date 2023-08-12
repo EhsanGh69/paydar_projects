@@ -5,21 +5,21 @@
 
 <aside class="main-sidebar sidebar-dark-cyan elevation-4">
 
-    <a href="/" class="brand-link text-center">
-        <i class="fa-solid fa-house"></i>
-        <span>خانه</span>
-    </a>
-
-    <!-- Brand Logo -->
-    <a href="/" class="brand-link">
-        <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="AdminLTE Logo" style="opacity: .8" width="70">
-        <span class="brand-text mr-2">املاک پایدار</span>
-    </a>
+    
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar h-100">
+        
+
+         <!-- Brand Logo -->
+        <a href="/" class="nav-link" style="border-bottom: 1px solid #4f5962;">
+            <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="AdminLTE Logo" style="opacity: .8" width="70">
+            <span class="brand-text mr-2">املاک پایدار</span>
+        </a>
+    
+       
         <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-around">
             <div class="image">
                 <img src="{% static 'panel/dist/img/co.png' %}" class="img-circle elevation-2" alt="User Image">
             </div>
@@ -141,20 +141,10 @@
                         {% main_menu request 'projects_docs' 'bank_receipts' 'bank_receipt_create' 'bank_receipt_update' 'bank_receipts_search' 'fa-file-invoice' 'رسیدهای بانکی' %}
                         
                         {% main_menu request 'projects_docs' 'condition_statements' 'condition_statement_create' 'condition_statement_update' 'condition_statements_search' 'fa-file-signature' 'صورت وضعیت‌ها' %}
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-file-contract text-primary" style="font-size: 1.2rem;"></i>
-                                <span class="ml-2">اسناد ثبتی</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-id-card text-primary" style="font-size: 1.2rem;"></i>
-                                <span class="ml-2">اسناد اداری</span>
-                            </a>
-                        </li>
+                        
+                        {% main_menu request 'projects_docs' 'registered_docs' 'registered_doc_create' 'registered_doc_update' 'registered_docs_search' 'fa-file-contract' 'اسناد ثبتی' %}
+                        
+                        {% main_menu request 'projects_docs' 'official_docs' 'official_doc_create' 'official_doc_update' 'official_docs_search' 'fa-id-card' 'اسناد اداری' %}
 
                     </ul>
 
@@ -241,7 +231,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item border-top border-light ">
+                <li class="nav-item border-top border-light mb-3">
                     <a href="#" class="nav-link d-block">
                         <i class="fa-solid fa-database text-primary" style="font-size: 1.2rem;"></i>
                         <span class="ml-2">پشتیبان گیری پایگاه داده</span>

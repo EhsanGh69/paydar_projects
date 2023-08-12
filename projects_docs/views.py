@@ -571,6 +571,19 @@ class OfficialDocsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy("projects_docs:official_docs")
     success_message = "سند اداری با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        doc_type = form.cleaned_data.get('doc_type')
+        letter_type = form.cleaned_data.get('letter_type')
+        license_type = form.cleaned_data.get('license_type')
+        if doc_type == "let" and letter_type is None:
+            form.add_error('letter_type', 'لطفا نوع نامه را انتخاب کنید')
+            return super().form_invalid(form)
+        elif doc_type == "lic" and license_type is None:
+            form.add_error('license_type', 'لطفا نوع پروانه را انتخاب کنید')
+            return super().form_invalid(form)
+        else:
+            return super().form_valid(form)
+
 
 class OfficialDocsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = OfficialDocs
@@ -578,6 +591,19 @@ class OfficialDocsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = OfficialDocsForm
     success_url = reverse_lazy("projects_docs:official_docs")
     success_message = "سند اداری با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        doc_type = form.cleaned_data.get('doc_type')
+        letter_type = form.cleaned_data.get('letter_type')
+        license_type = form.cleaned_data.get('license_type')
+        if doc_type == "let" and letter_type is None:
+            form.add_error('letter_type', 'لطفا نوع نامه را انتخاب کنید')
+            return super().form_invalid(form)
+        elif doc_type == "lic" and license_type is None:
+            form.add_error('license_type', 'لطفا نوع پروانه را انتخاب کنید')
+            return super().form_invalid(form)
+        else:
+            return super().form_valid(form)
 
 
 class OfficialDocsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
