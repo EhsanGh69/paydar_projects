@@ -4,7 +4,11 @@
 </a>
 {% else %}
 <a href="{% url create_url %}" class="btn btn-outline-success btn-lg pb-0" title="{{ title }}">
-    <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+    {% if request.resolver_match.url_name == 'users' or request.resolver_match.url_name == 'users_search' %}
+        <i class="fa-solid fa-user-plus" style="font-size: 1.5rem;"></i>
+    {% else %}
+        <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+    {% endif %}
 </a>
 {% endif %}
 
@@ -18,12 +22,21 @@
             <form action="{% url search_url %}" method="get" id="search-form">
 
                 <div class="row pr-3">
-
-                    <div class="form-group col-12 col-xl-3 p-0">
-                        <input type="search" class="form-control w-100" name="data_search" 
-                        value="{{ request.GET.data_search }}"
-                        placeholder="جستجو" id="search-input">
-                    </div>
+                    {% if request.resolver_match.url_name == 'users' or request.resolver_match.url_name == 'users_search' %}
+                        <div class="form-group col-12 col-sm-9 col-md-7 col-lg-5 col-xl-3 p-0">
+                            <input type="search" class="form-control w-100" name="data_search" 
+                            value="{{ request.GET.data_search }}"
+                            placeholder="جستجوی کاربر"
+                            id="search-input">
+                        </div>
+                    {% else %}
+                        <div class="form-group col-12 col-xl-3 p-0">
+                            <input type="search" class="form-control w-100" name="data_search" 
+                            value="{{ request.GET.data_search }}"
+                            placeholder="جستجو"
+                            id="search-input">
+                        </div>
+                    {% endif %}
 
                     {% if date_filter %}
                         <div class="form-group col-12 col-xl-2">
@@ -272,17 +285,18 @@
         </div>
     </div>
 
+    {% if request.resolver_match.url_name != 'users' and request.resolver_match.url_name != 'users_search' %}
+        <div class="col-12 col-xl-3 mt-2" id="print-table">
 
-    <div class="col-12 col-xl-3 mt-2" id="print-table">
+            <button class="btn btn-success mr-2" id="excel-btn" onclick="ExportToExcel('.xls')" title="خروجی اکسل">
+                <i class="fa-solid fa-file-excel" style="font-size: 1.5rem;"></i>
+            </button>
 
-        <button class="btn btn-success mr-2" id="excel-btn" onclick="ExportToExcel('.xls')" title="خروجی اکسل">
-            <i class="fa-solid fa-file-excel" style="font-size: 1.5rem;"></i>
-        </button>
+            <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
+                <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
+            </button>
 
-        <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
-            <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
-        </button>
-
-    </div>
-
+        </div>
+    {% endif %}
+    
 </div>

@@ -146,7 +146,7 @@ class FundCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         validation_result = fund_validation(form=form, model=Fund, url_name=self.request.resolver_match.url_name)
         if not validation_result:
-            return super().form_invalid(form)
+            return super().form_invalid(form)  # type: ignore
         else:
             return super().form_valid(form)
         
@@ -168,7 +168,7 @@ class FundUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def form_valid(self, form):
         validation_result = fund_validation(form=form, model=Fund, url_name=self.request.resolver_match.url_name)
         if not validation_result:
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
 
@@ -352,7 +352,7 @@ class CashBoxCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         validation_result = cash_box_validation(form=form, model=CashBox, 
                                                 url_name=self.request.resolver_match.url_name)
         if not validation_result:
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
         
@@ -368,7 +368,7 @@ class CashBoxUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         validation_result = cash_box_validation(form=form, model=CashBox, 
                                                 url_name=self.request.resolver_match.url_name)
         if not validation_result:
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
 
