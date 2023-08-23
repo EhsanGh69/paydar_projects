@@ -4,16 +4,21 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, DeleteView, FormView
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
+
+from utils.tools import valid_permissions
 
 from .models import User
-from .forms import AuthenticateForm, AddUserForm, UpdateUserForm
+from .forms import AuthenticateForm, AddUserForm, UpdateUserForm, AddGroupForm, UpdateGroupForm
 
 
 class CustomLogin(LoginView):
     redirect_authenticated_user = True
     form_class = AuthenticateForm
 
+
+
+# Users - Start
 
 
 class UsersList(LoginRequiredMixin, ListView):
@@ -56,7 +61,6 @@ class CreateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return super().form_valid(form)
     
 
-
 class UpdateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
     template_name = 'account/user_create_update.html'
     form_class = UpdateUserForm
@@ -80,7 +84,6 @@ class UpdateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
         context = super().get_context_data(**kwargs)
         id = int(self.kwargs.get('pk'))
         user = get_object_or_404(User, pk=id)
-        context['user'] = user
         context['user_groups'] = user.groups.all()
         context['all_groups'] = Group.objects.all()
         return context
@@ -95,7 +98,17 @@ class UpdateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
         access_groups = form.cleaned_data.get('access_groups')
         is_active = form.cleaned_data.get('is_active')
         user_groups = user.groups.all()
-        
+
+        other_users = User.objects.exclude(id=id)
+        is_exits_username = other_users.filter(username=username).exists()
+        is_exits_mobile_number = other_users.filter(mobile_number=mobile_number).exists()
+        if is_exits_username:
+            form.add_error('username', 'کاربری با نام کاربری وارد شده وجود دارد، لطفا نام کاربری دیگری وارد کنید')
+            return super().form_invalid(form) # type: ignore
+        elif is_exits_mobile_number:
+            form.add_error('mobile_number', 'شماره همراه وارد شده از قبل وجود دارد، لطفا شماره همراه دیگری وارد کنید')
+            return super().form_invalid(form) # type: ignore
+                
         if not is_active:
             User.objects.filter(pk=id).update(username=username, mobile_number=mobile_number,
                                                     first_name=first_name, last_name=last_name, is_active=False)
@@ -146,4 +159,102 @@ class SearchUsers(LoginRequiredMixin, ListView):
         context['search_url'] = 'account:users_search'
         context['list_url'] = 'account:users'
         return context
+
+
+# Users - End
+
+# ----------------------------------------------
+
+
+# Group - Start
+
+
+class GroupList(LoginRequiredMixin, ListView):
+    template_name = 'account/groups_list.html'
+    model = Group
+    context_object_name = 'groups'
+    paginate_by = 9
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['persian_object_name'] = 'گروه دسترسی'
+        return context
+
+
+class CreateGroup(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    template_name = 'account/group_create_update.html'
+    form_class = AddGroupForm
+    success_url = reverse_lazy('account:groups')
+    success_message = "گروه دسترسی جدید با موفقیت به سامانه اضافه گردید"
     
+    def form_valid(self, form):
+        group_name = form.cleaned_data.get('group_name')
+        codenames = form.cleaned_data.get('permissions')
+        group = Group.objects.create(name=group_name)
+
+        for codename in codenames:
+            permission = get_object_or_404(Permission, codename=codename)
+            group.permissions.add(permission)
+
+        return super().form_valid(form)
+
+
+class UpdateGroup(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    template_name = 'account/group_create_update.html'
+    form_class = UpdateGroupForm
+    success_url = reverse_lazy('account:groups')
+    success_message = "گروه دسترسی با موفقیت ویرایش شد"
+
+    def get_initial(self):
+        initial = super(UpdateGroup, self).get_initial()
+        id = int(self.kwargs.get('pk'))
+        group = get_object_or_404(Group, pk=id)
+        initial.update({
+            'group_name': group.name
+        })
+        return initial
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = int(self.kwargs.get('pk'))
+        group = get_object_or_404(Group, pk=id)
+        context['group_permissions'] = group.permissions.all()
+        context['valid_permissions'] = valid_permissions
+        return context
+    
+    def form_valid(self, form):
+        id = int(self.kwargs.get('pk'))
+        group = get_object_or_404(Group, pk=id)
+        group_name = form.cleaned_data.get('group_name')
+        codenames = form.cleaned_data.get('permissions')
+        group_permissions = group.permissions.all()
+
+        other_groups = Group.objects.exclude(id=id)
+        is_exits_group_name = other_groups.filter(name=group_name).exists()
+        if is_exits_group_name:
+            form.add_error('group_name', 'گروه دسترسی با این نام وجود دارد، لطفا نام دیگری وارد کنید')
+            return super().form_invalid(form) # type: ignore
+
+        Group.objects.filter(pk=id).update(name=group_name)
+
+        for group_permission in group_permissions:
+            permission = get_object_or_404(Permission, codename=group_permission.codename)
+            group.permissions.remove(permission)
+        
+        for codename in codenames:
+            permission = get_object_or_404(Permission, codename=codename)
+            group.permissions.add(permission)
+        return super().form_valid(form)
+
+
+
+class DeleteGroup(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    success_url = reverse_lazy("account:groups")
+    success_message = "گروه دسترسی با موفقیت حذف شد"
+
+    def get_object(self, queryset=None):
+        _id = int(self.kwargs.get('pk'))
+        group = get_object_or_404(Group, pk=_id)
+        return group
+
+# Group - End

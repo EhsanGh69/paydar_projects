@@ -1,9 +1,23 @@
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db.models import Sum
+from django.contrib.auth.models import Permission
 
 import jdatetime
 
+
+
+invalid_codenames = [
+    'add_logentry', 'change_logentry', 'delete_logentry', 'view_logentry',
+    'add_permission', 'change_permission', 'delete_permission', 'view_permission',
+    'add_contenttype', 'change_contenttype', 'delete_contenttype', 'view_contenttype',
+    'add_session', 'change_session', 'delete_session', 'view_session',
+    'add_user', 'change_user', 'delete_user', 'view_user',
+    'add_group', 'change_group', 'delete_group', 'view_group',
+]
+
+valid_permissions = [permission for permission in Permission.objects.all() if permission.codename not in invalid_codenames] 
+valid_select_permissions = [(permission.codename, permission.name) for permission in Permission.objects.all() if permission.codename not in invalid_codenames] 
 
 
 def none_numeric_value(value):

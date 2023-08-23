@@ -45,7 +45,7 @@ class ProjectForm(forms.ModelForm):
             validators=[none_numeric_value]
         )
 
-        self.fields['owners'].help_text = """برای انتخاب بیش از یک مورد:
+        self.fields['owners'].help_text = """برای انتخاب یا حذف بیش از یک مورد:
                                              <br>
                                              در ویندوز دکمه 'Ctrl' را نگه دارید
                                              <br>

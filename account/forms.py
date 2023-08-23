@@ -3,7 +3,7 @@ from django.core import validators
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import AuthenticationForm
 
-from utils.tools import none_numeric_value
+from utils.tools import none_numeric_value, valid_select_permissions
 
 from .models import User
 
@@ -134,7 +134,13 @@ class AddUserForm(forms.Form):
             raise forms.ValidationError('تأیید رمز عبور با رمز عبور وارد شده یکسان نیست')
         
         return confirm_password
+    
+    def clean_mobile_number(self):
+        mobile_number = self.cleaned_data.get('mobile_number')
+        is_exits_mobile_number = User.objects.filter(mobile_number=mobile_number).exists()
 
+        if is_exits_mobile_number:
+            raise forms.ValidationError('شماره همراه وارد شده از قبل وجود دارد، لطفا شماره همراه دیگری وارد کنید')
 
 
 class UpdateUserForm(forms.Form):
@@ -213,3 +219,44 @@ class UpdateUserForm(forms.Form):
         
         return username
         
+
+class AddGroupForm(forms.Form):
+    use_required_attribute = False
+    PERMISSIONS_CHOICES = valid_select_permissions
+    
+    group_name = forms.CharField(
+        widget=forms.TextInput(),
+        required=True,
+        label='نام گروه'
+    )
+
+    permissions = forms.MultipleChoiceField(
+        choices=PERMISSIONS_CHOICES,
+        required=True,
+        label='‌دسترسی‌ها'
+    )
+
+    def clean_group_name(self):
+        group_name = self.cleaned_data.get('group_name')
+        is_exits_group_name = Group.objects.filter(name=group_name).exists()
+        if is_exits_group_name:
+            raise forms.ValidationError('گروه دسترسی با این نام وجود دارد، لطفا نام دیگری وارد کنید')
+        
+        return group_name
+        
+
+class UpdateGroupForm(forms.Form):
+    use_required_attribute = False
+    PERMISSIONS_CHOICES = valid_select_permissions
+    
+    group_name = forms.CharField(
+        widget=forms.TextInput(),
+        required=True,
+        label='نام گروه'
+    )
+
+    permissions = forms.MultipleChoiceField(
+        choices=PERMISSIONS_CHOICES,
+        required=True,
+        label='‌دسترسی‌ها'
+    )
