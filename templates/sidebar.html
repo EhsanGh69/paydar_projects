@@ -32,57 +32,84 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-                <li class="nav-item has-treeview
-                    {% if request.resolver_match.app_name == 'government_accounts' %}menu-open{% endif %}">
-                    <a href="#" class="nav-link 
-                    {% if request.resolver_match.app_name == 'government_accounts' %}active{% endif %}">
-                        <p class="mr-2" style="font-size: 1.2rem;">
-                            طرف حساب دولتی
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        {% main_menu request 'government_accounts' 'organizations' 'organization_create' 'organization_update' '' 'fa-building-columns' 'ارگان‌ها' %}
+                {% if perms.government_accounts %}
+                    <li class="nav-item has-treeview
+                        {% if request.resolver_match.app_name == 'government_accounts' %}menu-open{% endif %}">
+                        <a href="#" class="nav-link 
+                        {% if request.resolver_match.app_name == 'government_accounts' %}active{% endif %}">
+                            <p class="mr-2" style="font-size: 1.2rem;">
+                                طرف حساب دولتی
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
 
-                        {% main_menu request 'government_accounts' 'receives' 'receive_create' 'receive_update' 'receives_search' 'fa-file-invoice-dollar' 'دریافت‌ها' %}
+                            {% if perms.government_accounts.view_organization %}
+                                {% main_menu request 'government_accounts' 'organizations' 'organization_create' 'organization_update' '' 'fa-building-columns' 'ارگان‌ها' %}
+                            {% endif %}
 
-                        {% main_menu request 'government_accounts' 'payments' 'payment_create' 'payment_update' 'payments_search' 'fa-money-check-dollar' 'پرداخت‌ها' %}
+                            {% if perms.government_accounts.view_receive %}
+                                {% main_menu request 'government_accounts' 'receives' 'receive_create' 'receive_update' 'receives_search' 'fa-file-invoice-dollar' 'دریافت‌ها' %}
+                            {% endif %}
 
-                        {% main_menu request 'government_accounts' 'activities' 'activity_create' 'activity_update' 'activities_search' 'fa-people-carry-box' 'فعالیت‌ها' %}
+                            {% if perms.government_accounts.view_payment %}
+                                {% main_menu request 'government_accounts' 'payments' 'payment_create' 'payment_update' 'payments_search' 'fa-money-check-dollar' 'پرداخت‌ها' %}
+                            {% endif %}
 
-                    </ul>
+                            {% if perms.government_accounts.view_activity %}
+                                {% main_menu request 'government_accounts' 'activities' 'activity_create' 'activity_update' 'activities_search' 'fa-people-carry-box' 'فعالیت‌ها' %}
+                            {% endif %}
 
-                </li>
+                        </ul>
 
-                <li class="nav-item has-treeview border-top border-light 
-                    {% if request.resolver_match.app_name == 'non_government_accounts' %}menu-open{% endif %}">
-                    <a href="#" class="nav-link
-                    {% if request.resolver_match.app_name == 'non_government_accounts' %}active{% endif %}">
-                        <p class="mr-2" style="font-size: 1.2rem;">
-                            طرف حساب غیردولتی
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
+                    </li>
+                {% endif %}
 
-                    <ul class="nav nav-treeview">
+                {% if perms.non_government_accounts %}
+                    <li class="nav-item has-treeview border-top border-light 
+                        {% if request.resolver_match.app_name == 'non_government_accounts' %}menu-open{% endif %}">
+                        <a href="#" class="nav-link
+                        {% if request.resolver_match.app_name == 'non_government_accounts' %}active{% endif %}">
+                            <p class="mr-2" style="font-size: 1.2rem;">
+                                طرف حساب غیردولتی
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
 
-                        {% main_menu request 'non_government_accounts' 'contractors' 'contractor_create' 'contractor_update' 'contractors_search' 'fa-person-digging' 'پیمانکاران' %}
-                        
-                        {% main_menu request 'non_government_accounts' 'suppliers' 'supplier_create' 'supplier_update' 'suppliers_search' 'fa-people-line' 'تأمین کنندگان' %}
-                        
-                        {% main_menu request 'non_government_accounts' 'personnel' 'personnel_create' 'personnel_update' 'personnel_search' 'fa-people-roof' 'پرسنل' %}
-                        
-                        {% main_menu request 'non_government_accounts' 'partners' 'partner_create' 'partner_update' 'partners_search' 'fa-user-group' 'شرکاء' %}
+                        <ul class="nav nav-treeview">
 
-                        {% main_menu request 'non_government_accounts' 'buyers_sellers' 'buyer_seller_create' 'buyer_seller_update' 'buyers_sellers_search' 'fa-store' 'خریداران و فروشندگان' %}
-                        
-                        {% main_menu request 'non_government_accounts' 'orders' 'order_create' 'order_update' 'orders_search' 'fa-truck' 'سفارشات' %}
-                        
-                        {% main_menu request 'non_government_accounts' 'conflict_orders' 'conflict_order_create' 'conflict_order_update' 'conflict_orders_search' 'fa-truck-ramp-box' 'مغایرت سفارشات' %}
-        
-                    </ul>
+                            {% if perms.non_government_accounts.view_contractors %}
+                                {% main_menu request 'non_government_accounts' 'contractors' 'contractor_create' 'contractor_update' 'contractors_search' 'fa-person-digging' 'پیمانکاران' %}
+                            {% endif %}
 
-                </li>
+                            {% if perms.non_government_accounts.view_suppliers %}
+                                {% main_menu request 'non_government_accounts' 'suppliers' 'supplier_create' 'supplier_update' 'suppliers_search' 'fa-people-line' 'تأمین کنندگان' %}
+                            {% endif %}
+
+                            {% if perms.non_government_accounts.view_personnel %}
+                                {% main_menu request 'non_government_accounts' 'personnel' 'personnel_create' 'personnel_update' 'personnel_search' 'fa-people-roof' 'پرسنل' %}
+                            {% endif %}
+
+                            {% if perms.non_government_accounts.view_partners %}
+                                {% main_menu request 'non_government_accounts' 'partners' 'partner_create' 'partner_update' 'partners_search' 'fa-user-group' 'شرکاء' %}
+                            {% endif %}
+
+                            {% if perms.non_government_accounts.view_buyerssellers %}
+                                {% main_menu request 'non_government_accounts' 'buyers_sellers' 'buyer_seller_create' 'buyer_seller_update' 'buyers_sellers_search' 'fa-store' 'خریداران و فروشندگان' %}
+                            {% endif %}
+
+                            {% if perms.non_government_accounts.view_orders %}
+                                {% main_menu request 'non_government_accounts' 'orders' 'order_create' 'order_update' 'orders_search' 'fa-truck' 'سفارشات' %}
+                            {% endif %}
+
+                            {% if perms.non_government_accounts.view_conflictorders %}
+                                {% main_menu request 'non_government_accounts' 'conflict_orders' 'conflict_order_create' 'conflict_order_update' 'conflict_orders_search' 'fa-truck-ramp-box' 'مغایرت سفارشات' %}
+                            {% endif %}
+                            
+                        </ul>
+
+                    </li>
+                {% endif %}
 
                 <li class="nav-item has-treeview border-top border-light accordion
                     {% if request.resolver_match.app_name == 'projects' %}menu-open{% endif %}">

@@ -16,92 +16,99 @@
         
         <div class="card-body">
     
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-            
-    
-{% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت دریافت' %}
-    
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
-                                    ردیف
-                                </th>
+                {% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت دریافت' create_perm=perms.government_accounts.add_receive %}
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    ارگان
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    دریافت بابت
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    پروژه
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    مبلغ دریافتی
-                                </th>
-    
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    تاریخ و ساعت
-                                </th>
-    
-                                <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for receive in receives %}
-                                <tr role="row" class="odd">
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ receive.organization }}</td>
-                                    <td>{{ receive.receive_for }}</td>
-                                    <td>{{ receive.project }}</td>
-                                    <td data-sort="{{ receive.receive_amount }}">
-                                        {{ receive.formatted_receive_amount }}
-                                    </td>
-                                    <td data-sort="{{ receive.receive_date|date:'Ymd' }}" class="border-left">
-                                        {{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                                    </td>
-                                    <td class="action-td text-center">
-                                        <a href="{% url 'government_accounts:receive_update' receive.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'government_accounts:receive_delete' pk=receive.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف دریافت '{{ receive.receive_for }}' اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-                                    </td>
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+        
+                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
+                                        ردیف
+                                    </th>
+
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        ارگان
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                                        دریافت بابت
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                                        پروژه
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        مبلغ دریافتی
+                                    </th>
+        
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        تاریخ و ساعت
+                                    </th>
+
+                                    {% if perms.government_accounts.delete_receive or perms.government_accounts.change_receive %}
+                                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                                            اقدام
+                                        </th>
+                                    {% endif %}
+                                    
                                 </tr>
-                            {% endfor %}
-                            
-    
-                        </tbody>
-                    
-                    </table>
-                </div>
-            </div>
+                            </thead>
+                            <tbody>
+                                {% for receive in receives %}
+                                    <tr role="row" class="odd">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ receive.organization }}</td>
+                                        <td>{{ receive.receive_for }}</td>
+                                        <td>{{ receive.project }}</td>
+                                        <td data-sort="{{ receive.receive_amount }}">
+                                            {{ receive.formatted_receive_amount }}
+                                        </td>
+                                        <td data-sort="{{ receive.receive_date|date:'Ymd' }}" class="border-left">
+                                            {{ receive.receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                        </td>
+                                        {% if perms.government_accounts.delete_receive or perms.government_accounts.change_receive %}
+                                            <td class="action-td text-center">
+                                                {% if perms.government_accounts.change_receive %}
+                                                    <a href="{% url 'government_accounts:receive_update' receive.pk %}" 
+                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                {% endif %}
 
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
+                                                {% if perms.government_accounts.delete_receive %}
+                                                    <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'government_accounts:receive_delete' pk=receive.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف دریافت '{{ receive.receive_for }}' اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        
+                        </table>
+                    </div>
+                </div>
+
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% include 'partials/pagination.html' with page_obj=page_obj %}
+
+            </div>
+            
         </div>
     </div> 
-
 
 {% endblock %}
 

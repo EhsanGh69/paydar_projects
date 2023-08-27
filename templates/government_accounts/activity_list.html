@@ -15,113 +15,122 @@
         
         <div class="card-body">
     
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-    
-{% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت فعالیت' %}
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        
+                {% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت فعالیت' create_perm=perms.government_accounts.add_activity %}
 
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 50.797px;">
-                                    ردیف
-                                </th>
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                            
+                            <thead>
+                                <tr role="row">
+        
+                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 50.797px;">
+                                        ردیف
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    ارگان
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
-                                    نوع فعالیت‌
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
-                                    پروژه
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    تاریخ و ساعت
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        ارگان
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
+                                        نوع فعالیت‌
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
+                                        پروژه
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        تاریخ و ساعت
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    نتیجه فعالیت
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        نتیجه فعالیت
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    توضیحات فعالیت در حال انجام
-                                </th>
-    
-                                <th class="text-center border-left action-th rounded-0" rowspan="1" colspan="1" style="width: 180.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-    
-                            {% for activity in activities %}
-                                <tr role="row" class="odd border-bottom">
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ activity.organization }}</td>
-                                    <td>{{ activity.activity_type }}</td>
-                                    <td>{{ activity.project }}</td>
-                                    <td data-sort="{{ activity.activity_date|date:'Ymd' }}">
-                                        {{ activity.activity_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                                    </td>
-                                    <td>
-                                        {% if activity.activity_result == 'fn' %}
-                                            <span>پایان یافته</span>
-                                        {% elif activity.activity_result == 'do' %}
-                                            <span>در حال انجام</span>
-                                        {% else %}
-                                            <span>شروع نشده</span>
-                                        {% endif %}
-                                    </td>
-                                    
-                                    {% if activity.activity_descriptions %}
-                                        <td>
-                                            {{ activity.activity_descriptions }}
-                                        </td>
-                                    {% else %}
-                                        <td class="text-center">
-                                            <span style="font-size:1.5rem;">_</span>
-                                        </td>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        توضیحات فعالیت در حال انجام
+                                    </th>
+        
+                                    {% if perms.government_accounts.delete_activity or perms.government_accounts.change_activity %}
+                                        <th class="text-center border-left action-th rounded-0" rowspan="1" colspan="1" style="width: 180.797px;">
+                                            اقدام
+                                        </th>
                                     {% endif %}
-                                    
-                                    <td class="action-td border-left text-center">
-                                        <a href="{% url 'government_accounts:activity_update' activity.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'government_accounts:activity_delete' pk=activity.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف فعالیت '{{ activity.activity_type }}' اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-                                    </td>
                                 </tr>
-                            {% endfor %}
-    
-                        </tbody>
+                            </thead>
 
-                    </table>
+                            <tbody>
+        
+                                {% for activity in activities %}
+                                    <tr role="row" class="odd border-bottom">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ activity.organization }}</td>
+                                        <td>{{ activity.activity_type }}</td>
+                                        <td>{{ activity.project }}</td>
+                                        <td data-sort="{{ activity.activity_date|date:'Ymd' }}">
+                                            {{ activity.activity_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                        </td>
+                                        <td>
+                                            {% if activity.activity_result == 'fn' %}
+                                                <span>پایان یافته</span>
+                                            {% elif activity.activity_result == 'do' %}
+                                                <span>در حال انجام</span>
+                                            {% else %}
+                                                <span>شروع نشده</span>
+                                            {% endif %}
+                                        </td>
+                                        
+                                        {% if activity.activity_descriptions %}
+                                            <td>
+                                                {{ activity.activity_descriptions }}
+                                            </td>
+                                        {% else %}
+                                            <td class="text-center">
+                                                <span style="font-size:1.5rem;">_</span>
+                                            </td>
+                                        {% endif %}
+                                        
+                                        {% if perms.government_accounts.delete_activity or perms.government_accounts.change_activity %}
+                                            <td class="action-td border-left text-center">
+                                                {% if perms.government_accounts.change_activity %}
+                                                    <a href="{% url 'government_accounts:activity_update' activity.pk %}" 
+                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if perms.government_accounts.delete_activity %}
+                                                    <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'government_accounts:activity_delete' pk=activity.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف فعالیت '{{ activity.activity_type }}' اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+        
+                            </tbody>
+
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% include 'partials/pagination.html' with page_obj=page_obj %}
+        
+            </div>
+            
         </div>
     </div> 
-
 
 {% endblock %}
 

@@ -1,5 +1,6 @@
 from django import template
 from django.db.models import Sum
+from django.utils.translation import gettext_lazy as _
 
 from cheques_receive_pay.models import Fund, CashBox
 from warehousing.models import MainWarehouseImport, MainWarehouseExport
@@ -73,5 +74,15 @@ def total_stock(stuff_type, measurement_unit):
         "measurement_unit": measurement_unit
     }
 
+
+@register.filter
+def index(iterable, index):
+    return iterable[index]
+
+
+@register.filter
+def translate_names(name):
+    permission_translate = [_(w).replace('Can', '').replace('add', 'افزودن').replace('change', 'ویرایش').replace('delete', 'حذف').replace('view', 'مشاهده') for w in (name).split()] # type: ignore
+    return ' '.join(permission_translate)
 
 

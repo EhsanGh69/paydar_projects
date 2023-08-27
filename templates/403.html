@@ -1,0 +1,22 @@
+{% extends 'err_pages_base.html' %}
+
+{% block title %}محدودیت دسترسی{% endblock  %}
+
+{% block message %}
+    
+    <div class="row d-flex justify-content-around w-100 mr-lg-5">
+        <p class="err">4</p>
+        <i class="far fa-question-circle fa-spin"></i>
+        <p class="err2">3</p>
+    </div>
+    <div class="msg row d-flex flex-column text-center">
+        <h2>صفحه‌ایی که به دنبال آن هستید در دسترس نمی‌باشد</h2>
+        <p class="mt-4">
+            <a href="/" class="btn btn-warning btn-lg">
+                <span>بازگشت به خانه</span>
+                <i class="fa-solid fa-house"></i>
+            </a>
+        </p>
+    </div>
+    
+{% endblock  %}

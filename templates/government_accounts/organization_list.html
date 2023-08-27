@@ -10,67 +10,78 @@
 
     {% include 'partials/messages.html' %}
 
-<div class="card">
-    
-    <div class="card-body">
-      <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-
-        <a href="{% url 'government_accounts:organization_create' %}" class="btn btn-outline-success btn-lg pb-0" title="افزودن ارگان">
-            <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
-        </a>
+    <div class="card">
         
-        <div class="row">
-            <div class="col-sm-6 offset-sm-3">
-                <table id="example1" class="table table-bordered table-striped dataTable sortable" role="grid" aria-describedby="example1_info">
-                    <thead>
-                        <tr role="row">
+        <div class="card-body">
+        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-                            <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 358.797px;;">
-                                نام ارگان
-                            </th>
-                            <th class="text-center border-left rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
-                                اقدام
-                            </th>
+            {% if perms.government_accounts.add_organization %}
+                <a href="{% url 'government_accounts:organization_create' %}" class="btn btn-outline-success btn-lg pb-0" title="افزودن ارگان">
+                    <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+                </a>
+            {% endif %}
+            
+            <div class="row">
+                <div class="col-sm-6 offset-sm-3">
+                    <table id="example1" class="table table-bordered table-striped dataTable sortable" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row">
+
+                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 358.797px;;">
+                                    نام ارگان
+                                </th>
+
+                                {% if perms.government_accounts.delete_organization or perms.government_accounts.change_organization %}
+                                    <th class="text-center border-left rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
+                                        اقدام
+                                    </th>
+                                {% endif %}
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for organization in organizations %}
+                                <tr role="row" class="odd">
+                                    <td>{{ organization.organization_name }}</td>
+
+                                    {% if perms.government_accounts.delete_organization or perms.government_accounts.change_organization %}
+                                        <td class="border-left text-center">
+                                            {% if perms.government_accounts.change_organization %}
+                                                <a href="{% url 'government_accounts:organization_update' organization.pk %}" 
+                                                class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if perms.government_accounts.delete_organization %}
+                                                <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'government_accounts:organization_delete' pk=organization.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف ارگان '{{ organization.organization_name }}' اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
 
                             
-                        </tr>
-                    </thead>
-                    <tbody>
 
-                        {% for organization in organizations %}
-                            <tr role="row" class="odd">
-                                <td>{{ organization.organization_name }}</td>
-                                <td class="border-left text-center">
-                                    <a href="{% url 'government_accounts:organization_update' organization.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                    <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'government_accounts:organization_delete' pk=organization.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف ارگان '{{ organization.organization_name }}' اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-
-                        
-
-                    </tbody>
-                   
-                </table>
+                        </tbody>
+                    
+                    </table>
+                </div>
             </div>
+
+            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+            
         </div>
-
-        {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-        
-      </div>
-    </div>
-</div> 
-
+        </div>
+    </div> 
 
 {% endblock %}
 

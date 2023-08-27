@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load base_tags %}
 
 
 {% block title %}لیست گروه‌های دسترسی سامانه{% endblock %}
@@ -53,7 +54,7 @@
                                         <td>{{ group.name }}</td>
                                         <td>
                                             {% for permission in group.permissions.all %}
-                                                {{ permission }} <br>
+                                                {{ permission.name|translate_names }} <br>
                                             {% endfor %}
                                         </td>
                                         

@@ -2,9 +2,16 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.auth.models import Permission
+from django.utils.translation import gettext_lazy as _
 
 import jdatetime
 
+
+
+
+def translate_permissions_names(name):
+    permission_translate = [_(w).replace('Can', '').replace('add', 'افزودن').replace('change', 'ویرایش').replace('delete', 'حذف').replace('view', 'مشاهده') for w in (name).split()] # type: ignore
+    return ' '.join(permission_translate)
 
 
 invalid_codenames = [
@@ -16,8 +23,9 @@ invalid_codenames = [
     'add_group', 'change_group', 'delete_group', 'view_group',
 ]
 
-valid_permissions = [permission for permission in Permission.objects.all() if permission.codename not in invalid_codenames] 
-valid_select_permissions = [(permission.codename, permission.name) for permission in Permission.objects.all() if permission.codename not in invalid_codenames] 
+valid_select_permissions = [(permission.codename, translate_permissions_names(permission.name)) for permission in Permission.objects.all() if permission.codename not in invalid_codenames] 
+
+
 
 
 def none_numeric_value(value):

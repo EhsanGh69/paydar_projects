@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -11,7 +11,8 @@ from .forms import ContractorForm, SupplierForm, PersonnelForm, PartnersForm, Bu
 
 # Contractors - Start
 
-class ContractorsList(LoginRequiredMixin, ListView):
+class ContractorsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_contractors'
     template_name = 'non_government_accounts/contractors_list.html'
     model = Contractors
     context_object_name = "contractors"
@@ -25,7 +26,8 @@ class ContractorsList(LoginRequiredMixin, ListView):
         return context
 
 
-class ContractorCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ContractorCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'non_government_accounts.add_contractors'
     model = Contractors
     template_name = 'non_government_accounts/contractor_create_update.html'
     form_class = ContractorForm
@@ -33,7 +35,8 @@ class ContractorCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "پیمانکار با موفقیت اضافه شد"
 
 
-class ContractorUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ContractorUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'non_government_accounts.change_contractors'
     model = Contractors
     template_name = 'non_government_accounts/contractor_create_update.html'
     form_class = ContractorForm
@@ -41,7 +44,8 @@ class ContractorUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "پیمانکار با موفقیت ویرایش شد"
 
 
-class ContractorDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ContractorDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'non_government_accounts.delete_contractors'
     success_url = reverse_lazy("non_government_accounts:contractors")
     success_message = "پیمانکار با موفقیت حذف شد"
 
@@ -51,7 +55,8 @@ class ContractorDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return contractor
     
 
-class ContractorSearch(LoginRequiredMixin, ListView):
+class ContractorSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_contractors'
     template_name = 'non_government_accounts/contractors_list.html'
     model = Contractors
     context_object_name = "contractors"
@@ -83,7 +88,8 @@ class ContractorSearch(LoginRequiredMixin, ListView):
 
 # Suppliers - Start
 
-class SuppliersList(LoginRequiredMixin, ListView):
+class SuppliersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_suppliers'
     template_name = 'non_government_accounts/suppliers_list.html'
     model = Suppliers
     context_object_name = "suppliers"
@@ -97,7 +103,8 @@ class SuppliersList(LoginRequiredMixin, ListView):
         return context
     
 
-class SupplierCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class SupplierCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'non_government_accounts.add_suppliers'
     model = Suppliers
     template_name = 'non_government_accounts/supplier_create_update.html'
     form_class = SupplierForm
@@ -105,7 +112,8 @@ class SupplierCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "تأمین کننده با موفقیت اضافه شد"
 
 
-class SupplierUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class SupplierUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'non_government_accounts.change_suppliers'
     model = Suppliers
     template_name = 'non_government_accounts/supplier_create_update.html'
     form_class = SupplierForm
@@ -113,7 +121,8 @@ class SupplierUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "تأمین کننده با موفقیت ویرایش شد"
 
 
-class SupplierDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class SupplierDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'non_government_accounts.delete_suppliers'
     success_url = reverse_lazy("non_government_accounts:suppliers")
     success_message = "تأمین کننده با موفقیت حذف شد"
 
@@ -123,7 +132,8 @@ class SupplierDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return supplier
     
 
-class SupplierSearch(LoginRequiredMixin, ListView):
+class SupplierSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_suppliers'
     template_name = 'non_government_accounts/suppliers_list.html'
     model = Suppliers
     context_object_name = "suppliers"
@@ -155,7 +165,8 @@ class SupplierSearch(LoginRequiredMixin, ListView):
 
 # Personnel - Start
 
-class PersonnelList(LoginRequiredMixin, ListView):
+class PersonnelList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_personnel'
     template_name = 'non_government_accounts/personnel_list.html'
     model = Personnel
     context_object_name = "personnel"
@@ -169,7 +180,8 @@ class PersonnelList(LoginRequiredMixin, ListView):
         return context
 
 
-class PersonnelCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class PersonnelCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'non_government_accounts.add_personnel'
     model = Personnel
     template_name = 'non_government_accounts/personnel_create_update.html'
     form_class = PersonnelForm
@@ -177,7 +189,8 @@ class PersonnelCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "شخص با موفقیت به پرسنل اضافه شد"
 
 
-class PersonnelUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class PersonnelUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'non_government_accounts.change_personnel'
     model = Personnel
     template_name = 'non_government_accounts/personnel_create_update.html'
     form_class = PersonnelForm
@@ -185,7 +198,8 @@ class PersonnelUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "شخص پرسنل با موفقیت ویرایش شد"
 
 
-class PersonnelDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class PersonnelDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'non_government_accounts.delete_personnel'
     success_url = reverse_lazy("non_government_accounts:personnel")
     success_message = "شخص پرسنل با موفقیت حذف شد"
 
@@ -195,7 +209,8 @@ class PersonnelDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return person
     
 
-class PersonnelSearch(LoginRequiredMixin, ListView):
+class PersonnelSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_personnel'
     template_name = 'non_government_accounts/personnel_list.html'
     model = Personnel
     context_object_name = "personnel"
@@ -227,7 +242,8 @@ class PersonnelSearch(LoginRequiredMixin, ListView):
 
 # Partners - Start
 
-class PartnersList(LoginRequiredMixin, ListView):
+class PartnersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_partners'
     template_name = 'non_government_accounts/partners_list.html'
     model = Partners
     context_object_name = "partners"
@@ -241,7 +257,8 @@ class PartnersList(LoginRequiredMixin, ListView):
         return context
     
 
-class PartnersCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class PartnersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'non_government_accounts.add_partners'
     model = Partners
     template_name = 'non_government_accounts/partner_create_update.html'
     form_class = PartnersForm
@@ -249,7 +266,8 @@ class PartnersCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "شریک با موفقیت اضافه شد"
 
 
-class PartnersUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class PartnersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'non_government_accounts.change_partners'
     model = Partners
     template_name = 'non_government_accounts/partner_create_update.html'
     form_class = PartnersForm
@@ -257,7 +275,8 @@ class PartnersUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "شریک با موفقیت ویرایش شد"
 
 
-class PartnersDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class PartnersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'non_government_accounts.delete_partners'
     success_url = reverse_lazy("non_government_accounts:partners")
     success_message = "شریک با موفقیت حذف شد"
 
@@ -267,7 +286,8 @@ class PartnersDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return partner
     
 
-class PartnerSearch(LoginRequiredMixin, ListView):
+class PartnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_partners'
     template_name = 'non_government_accounts/partners_list.html'
     model = Partners
     context_object_name = "partners"
@@ -299,7 +319,8 @@ class PartnerSearch(LoginRequiredMixin, ListView):
 
 # BuyersSellers - Start
 
-class BuyersSellersList(LoginRequiredMixin, ListView):
+class BuyersSellersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_buyerssellers'
     template_name = 'non_government_accounts/buyers_sellers_list.html'
     model = BuyersSellers
     context_object_name = "buyers_sellers"
@@ -313,7 +334,8 @@ class BuyersSellersList(LoginRequiredMixin, ListView):
         return context
 
 
-class BuyersSellersCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class BuyersSellersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'non_government_accounts.add_buyerssellers'
     model = BuyersSellers
     template_name = 'non_government_accounts/buyer_seller_create_update.html'
     form_class = BuyersSellersForm
@@ -328,7 +350,8 @@ class BuyersSellersCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
 
-class BuyersSellersUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class BuyersSellersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'non_government_accounts.change_buyerssellers'
     model = BuyersSellers
     template_name = 'non_government_accounts/buyer_seller_create_update.html'
     form_class = BuyersSellersForm
@@ -343,7 +366,8 @@ class BuyersSellersUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return kwargs
 
 
-class BuyersSellersDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class BuyersSellersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'non_government_accounts.delete_buyerssellers'
     success_url = reverse_lazy("non_government_accounts:buyers_sellers")
     success_message = "خریدار / فروشنده با موفقیت حذف شد"
 
@@ -353,7 +377,8 @@ class BuyersSellersDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return buyer_seller
 
 
-class BuyersSellersSearch(LoginRequiredMixin, ListView):
+class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_buyerssellers'
     template_name = 'non_government_accounts/buyers_sellers_list.html'
     model = Partners
     context_object_name = "buyers_sellers"
@@ -413,7 +438,8 @@ class BuyersSellersSearch(LoginRequiredMixin, ListView):
 
 # Orders - Start
 
-class OrdersList(LoginRequiredMixin, ListView):
+class OrdersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_orders'
     template_name = 'non_government_accounts/orders_list.html'
     model = Orders
     context_object_name = "orders"
@@ -427,7 +453,8 @@ class OrdersList(LoginRequiredMixin, ListView):
         return context
     
 
-class OrdersCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class OrdersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'non_government_accounts.add_orders'
     model = Orders
     template_name = 'non_government_accounts/order_create_update.html'
     form_class = OrdersForm
@@ -442,7 +469,8 @@ class OrdersCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
 
-class OrdersUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class OrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'non_government_accounts.change_orders'
     model = Orders
     template_name = 'non_government_accounts/order_create_update.html'
     form_class = OrdersForm
@@ -457,7 +485,8 @@ class OrdersUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return kwargs
 
 
-class OrdersDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class OrdersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'non_government_accounts.delete_orders'
     success_url = reverse_lazy("non_government_accounts:orders")
     success_message = "سفارش با موفقیت حذف شد"
 
@@ -467,7 +496,8 @@ class OrdersDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return order
 
 
-class OrdersSearch(LoginRequiredMixin, ListView):
+class OrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_orders'
     template_name = 'non_government_accounts/orders_list.html'
     model = Orders
     context_object_name = "orders"
@@ -525,7 +555,8 @@ class OrdersSearch(LoginRequiredMixin, ListView):
 
 # ConflictOrders - Start
 
-class ConflictOrdersList(LoginRequiredMixin, ListView):
+class ConflictOrdersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_conflictorders'
     template_name = 'non_government_accounts/conflict_orders_list.html'
     model = ConflictOrders
     context_object_name = "conflict_orders"
@@ -539,7 +570,8 @@ class ConflictOrdersList(LoginRequiredMixin, ListView):
         return context
 
 
-class ConflictOrdersCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ConflictOrdersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'non_government_accounts.add_conflictorders'
     model = ConflictOrders
     template_name = 'non_government_accounts/conflict_order_create_update.html'
     form_class = ConflictOrdersForm
@@ -547,7 +579,8 @@ class ConflictOrdersCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "مغایرت سفارش با موفقیت ثبت شد"
 
 
-class ConflictOrdersUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ConflictOrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'non_government_accounts.change_conflictorders'
     model = ConflictOrders
     template_name = 'non_government_accounts/conflict_order_create_update.html'
     form_class = ConflictOrdersForm
@@ -555,7 +588,8 @@ class ConflictOrdersUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "مغایرت سفارش با موفقیت ویرایش شد"
 
 
-class ConflictOrdersDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ConflictOrdersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'non_government_accounts.delete_conflictorders'
     success_url = reverse_lazy("non_government_accounts:conflict_orders")
     success_message = "مغایرت سفارش با موفقیت حذف شد"
 
@@ -565,7 +599,8 @@ class ConflictOrdersDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return conflict_order
 
 
-class ConflictOrdersSearch(LoginRequiredMixin, ListView):
+class ConflictOrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'non_government_accounts.view_conflictorders'
     template_name = 'non_government_accounts/conflict_orders_list.html'
     model = ConflictOrders
     context_object_name = "conflict_orders"

@@ -15,89 +15,95 @@
         
         <div class="card-body">
     
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-            
-    
-{% include 'partials/search_print.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='افزودن تأمین کننده' %}
-    
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
-                                    ردیف
-                                </th>
+                {% include 'partials/search_print.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='افزودن تأمین کننده' create_perm=perms.non_government_accounts.add_suppliers %}
+        
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+        
+                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
+                                        ردیف
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    پروژه
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    نام  و نام خانوادگی
-                                </th>
-    
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    رشته شغلی
-                                </th>
-    
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    شماره تماس
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        پروژه
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                                        نام  و نام خانوادگی
+                                    </th>
+        
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        رشته شغلی
+                                    </th>
+        
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        شماره تماس
+                                    </th>
 
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    آدرس
-                                </th>
-    
-                                <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-    
-                            {% for supplier in suppliers %}
-                                <tr role="row" class="odd">
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ supplier.project }}</td>
-                                    <td>{{ supplier.full_name }}</td>
-                                    <td>{{ supplier.job }}</td>
-                                    <td>{{ supplier.phone }}</td>
-                                    <td>{{ supplier.address }}</td>
-                                    
-                                    <td class="action-td text-center">
-                                        <a href="{% url 'non_government_accounts:supplier_update' supplier.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'non_government_accounts:supplier_delete' pk=supplier.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف '{{ supplier.full_name }}' اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-                                    </td>
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        آدرس
+                                    </th>
+        
+                                    {% if perms.non_government_accounts.delete_suppliers or perms.non_government_accounts.change_suppliers %}
+                                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                                            اقدام
+                                        </th>
+                                    {% endif %}
                                 </tr>
-                            {% endfor %}
-    
-                            
-    
-                        </tbody>
-                    
-                    </table>
+                            </thead>
+                            <tbody>
+        
+                                {% for supplier in suppliers %}
+                                    <tr role="row" class="odd">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ supplier.project }}</td>
+                                        <td>{{ supplier.full_name }}</td>
+                                        <td>{{ supplier.job }}</td>
+                                        <td>{{ supplier.phone }}</td>
+                                        <td>{{ supplier.address }}</td>
+                                        
+                                        {% if perms.non_government_accounts.delete_suppliers or perms.non_government_accounts.change_suppliers %}
+                                            <td class="action-td text-center">
+                                                {% if perms.non_government_accounts.change_suppliers %}
+                                                    <a href="{% url 'non_government_accounts:supplier_update' supplier.pk %}" 
+                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if perms.non_government_accounts.delete_suppliers %}
+                                                    <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'non_government_accounts:supplier_delete' pk=supplier.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف '{{ supplier.full_name }}' اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+        
+                            </tbody>
+                        
+                        </table>
+                    </div>
                 </div>
+
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% include 'partials/pagination.html' with page_obj=page_obj %}
+        
             </div>
 
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
         </div>
     </div> 
 

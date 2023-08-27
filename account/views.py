@@ -6,7 +6,7 @@ from django.views.generic import ListView, DeleteView, FormView
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import Group, Permission
 
-from utils.tools import valid_permissions
+from utils.tools import valid_select_permissions
 
 from .models import User
 from .forms import AuthenticateForm, AddUserForm, UpdateUserForm, AddGroupForm, UpdateGroupForm
@@ -218,8 +218,8 @@ class UpdateGroup(LoginRequiredMixin, SuccessMessageMixin, FormView):
         context = super().get_context_data(**kwargs)
         id = int(self.kwargs.get('pk'))
         group = get_object_or_404(Group, pk=id)
-        context['group_permissions'] = group.permissions.all()
-        context['valid_permissions'] = valid_permissions
+        context['group_permissions'] = [permission.codename for permission in group.permissions.all()]
+        context['valid_permissions'] = valid_select_permissions
         return context
     
     def form_valid(self, form):

@@ -17,7 +17,7 @@
     
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
     
-{% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت پرداخت‌' %}
+            {% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت پرداخت‌' create_perm=perms.government_accounts.add_payment %}
     
             <div class="row">
                 <div class="col-sm-12 table-responsive">
@@ -49,10 +49,12 @@
                                 <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
                                     تاریخ و ساعت
                                 </th>
-    
-                                <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    اقدام
-                                </th>
+                                
+                                {% if perms.government_accounts.delete_payment or perms.government_accounts.change_payment %}
+                                    <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        اقدام
+                                    </th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -69,20 +71,28 @@
                                     <td data-sort="{{ payment.payment_date|date:'Ymd' }}" class="border-left">
                                         {{ payment.payment_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
                                     </td>
-                                    <td class="border-left action-td text-center">
-                                        <a href="{% url 'government_accounts:payment_update' payment.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'government_accounts:payment_delete' pk=payment.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف پرداخت‌ '{{ payment.payment_for }}' اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-                                    </td>
+
+                                    {% if perms.government_accounts.delete_payment or perms.government_accounts.change_payment %}
+                                        <td class="border-left action-td text-center">
+                                            {% if perms.government_accounts.change_payment %}
+                                                <a href="{% url 'government_accounts:payment_update' payment.pk %}" 
+                                                class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if perms.government_accounts.delete_payment %}
+                                                <a href="javascript:void(0)"  
+                                                data-toggle="modal"
+                                                class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                data-url="{% url 'government_accounts:payment_delete' pk=payment.pk %}"
+                                                data-target="#deleteItemModal" title="حذف"
+                                                data-message="آیا از حذف پرداخت‌ '{{ payment.payment_for }}' اطمینان دارید؟">
+                                                <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
     
@@ -101,7 +111,6 @@
         </div>
         </div>
     </div> 
-
 
 {% endblock %}
 

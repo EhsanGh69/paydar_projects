@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -16,8 +16,8 @@ from .forms import (
 
 # Receive - Start
 
-class ReceiveList(LoginRequiredMixin, ListView):
-    template_name = 'government_accounts/receive_list.html'
+class ReceiveList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'government_accounts.view_receive'
     model = Receive
     context_object_name = "receives"
     paginate_by = 9
@@ -30,7 +30,8 @@ class ReceiveList(LoginRequiredMixin, ListView):
         return context
 
 
-class ReceiveCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ReceiveCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'government_accounts.add_receive'
     model = Receive
     template_name = 'government_accounts/receive_create_update.html'
     form_class = ReceiveForm
@@ -45,7 +46,8 @@ class ReceiveCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
     
 
-class ReceiveUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ReceiveUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'government_accounts.change_receive'
     model = Receive
     template_name = 'government_accounts/receive_create_update.html'
     form_class = ReceiveForm
@@ -60,7 +62,8 @@ class ReceiveUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return kwargs
 
 
-class ReceiveDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ReceiveDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'government_accounts.delete_receive'
     success_url = reverse_lazy("government_accounts:receives")
     success_message = "دریافت با موفقیت حذف شد"
 
@@ -70,7 +73,8 @@ class ReceiveDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return receive
 
 
-class ReceiveSearch(LoginRequiredMixin, ListView):
+class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'government_accounts.view_receive'
     template_name = 'government_accounts/receive_list.html'
     model = Receive
     context_object_name = "receives"
@@ -107,7 +111,8 @@ class ReceiveSearch(LoginRequiredMixin, ListView):
 
 # Organization - Start
 
-class OrganizationList(LoginRequiredMixin, ListView):
+class OrganizationList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'government_accounts.view_organization'
     template_name = 'government_accounts/organization_list.html'
     model = Organization
     context_object_name = "organizations"
@@ -118,7 +123,8 @@ class OrganizationList(LoginRequiredMixin, ListView):
         return context
 
 
-class OrganizationCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class OrganizationCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'government_accounts.add_organization'
     model = Organization
     template_name = 'government_accounts/organization_create_update.html'
     form_class = OrganizationForm
@@ -126,7 +132,8 @@ class OrganizationCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "ارگان با موفقیت افزوده شد"
     
 
-class OrganizationUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class OrganizationUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'government_accounts.change_organization'
     model = Organization
     template_name = 'government_accounts/organization_create_update.html'
     form_class = OrganizationForm
@@ -134,8 +141,8 @@ class OrganizationUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "ارگان با موفقیت ویرایش شد"
 
 
-class OrganizationDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    # model = Organization
+class OrganizationDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'government_accounts.delete_organization'
     success_url = reverse_lazy("government_accounts:organizations")
     success_message = "ارگان با موفقیت حذف شد"
 
@@ -153,7 +160,8 @@ class OrganizationDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 # Payment - Start
 
 
-class PaymentList(LoginRequiredMixin, ListView):
+class PaymentList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'government_accounts.view_payment'
     template_name = 'government_accounts/payment_list.html'
     model = Payment
     context_object_name = "payments"
@@ -167,7 +175,8 @@ class PaymentList(LoginRequiredMixin, ListView):
         return context
 
 
-class PaymentCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class PaymentCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'government_accounts.add_payment'
     model = Payment
     template_name = 'government_accounts/payment_create_update.html'
     form_class = PaymentForm
@@ -182,7 +191,8 @@ class PaymentCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
 
-class PaymentUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class PaymentUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'government_accounts.change_payment'
     model = Payment
     template_name = 'government_accounts/payment_create_update.html'
     form_class = PaymentForm
@@ -197,8 +207,8 @@ class PaymentUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return kwargs
 
 
-class PaymentDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    # model = Payment
+class PaymentDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'government_accounts.delete_payment'
     success_url = reverse_lazy("government_accounts:payments")
     success_message = "پرداخت با موفقیت حذف شد"
 
@@ -208,7 +218,8 @@ class PaymentDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return payment
 
 
-class PaymentSearch(LoginRequiredMixin, ListView):
+class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'government_accounts.view_payment'
     template_name = 'government_accounts/payment_list.html'
     model = Payment
     context_object_name = "payments"
@@ -244,7 +255,8 @@ class PaymentSearch(LoginRequiredMixin, ListView):
 
 # Activity - Start
 
-class ActivityList(LoginRequiredMixin, ListView):
+class ActivityList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'government_accounts.view_activity'
     template_name = 'government_accounts/activity_list.html'
     model = Activity
     context_object_name = "activities"
@@ -258,7 +270,8 @@ class ActivityList(LoginRequiredMixin, ListView):
         return context
 
 
-class ActivityCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ActivityCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'government_accounts.add_activity'
     model = Activity
     template_name = 'government_accounts/activity_create_update.html'
     form_class = ActivityForm
@@ -273,7 +286,8 @@ class ActivityCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
 
-class ActivityUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ActivityUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'government_accounts.change_activity'
     model = Activity
     template_name = 'government_accounts/activity_create_update.html'
     form_class = ActivityForm
@@ -288,7 +302,8 @@ class ActivityUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return kwargs
 
 
-class ActivityDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ActivityDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'government_accounts.delete_activity'
     success_url = reverse_lazy("government_accounts:activities")
     success_message = "فعالیت با موفقیت حذف شد"
 
@@ -298,7 +313,8 @@ class ActivityDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return activity
 
 
-class ActivitySearch(LoginRequiredMixin, ListView):
+class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'government_accounts.view_activity'
     template_name = 'government_accounts/activity_list.html'
     model = Activity
     context_object_name = "activities"

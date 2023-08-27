@@ -20,7 +20,8 @@ urlpatterns = [
     path('admin/', admin.site.urls, name="home"),
 ]
 
-
+handler404 = 'configs.views.custom_404'
+handler500 = 'configs.views.custom_500'
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

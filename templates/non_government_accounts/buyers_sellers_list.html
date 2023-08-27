@@ -15,164 +15,170 @@
         
         <div class="card-body">
     
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        
+                {% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='افزودن خریدار / فروشنده' create_perm=perms.non_government_accounts.add_buyerssellers %}
+        
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+        
+                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
+                                        ردیف
+                                    </th>
 
-            
-    
-{% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='افزودن خریدار / فروشنده' %}
-    
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
-                                    ردیف
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        خریدار / فروشنده
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    خریدار / فروشنده
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        نام  و نام خانوادگی
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    نام  و نام خانوادگی
-                                </th>
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        شماره تماس
+                                    </th>
 
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    شماره تماس
-                                </th>
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        آدرس
+                                    </th>
 
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    آدرس
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        تصویر قرارداد
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        ترتیب پرداخت
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    تصویر قرارداد
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    ترتیب پرداخت
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        سقف کنونی
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    سقف کنونی
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        تاریخ پرداخت
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    تاریخ پرداخت
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                        مبلغ پرداختی
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    مبلغ پرداختی
-                                </th>
-
-                                <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-    
-                            {% for buyer_seller in buyers_sellers %}
-                                <tr role="row" class="odd">
-                                    <td>{{ forloop.counter }}</td>
-
-                                    <td>
-                                        {% if buyer_seller.buyer_seller == 'buy' %}
-                                            خریدار
-                                        {% else %}
-                                            فروشنده
-                                        {% endif %}
-                                    </td>
-
-                                    <td>{{ buyer_seller.full_name }}</td>
-                                    <td>{{ buyer_seller.phone }}</td>
-                                    <td>{{ buyer_seller.address }}</td>
-                                   
-                                    <td class="text-center">
-                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                        data-target="#contract{{ forloop.counter }}">
-                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                        </a>
-                                    </td>
-
-                                    {% include 'partials/img_modal.html' with img_type='contract' id=forloop.counter img_src=buyer_seller.contract_image.url label='قرارداد' owner=buyer_seller.full_name %}
-
-                                    <td>
-                                        {% if buyer_seller.payment_order == 'csh' %}
-                                            نقدی              
-                                        {% elif buyer_seller.payment_order == 'chq' %}
-                                            چک
-                                        {% elif buyer_seller.payment_order == 'del' %}
-                                            حین تحویل
-                                        {% elif buyer_seller.payment_order == 'dtr' %}
-                                            انتقال سند
-                                        {% elif buyer_seller.payment_order == 'afh' %}
-                                            بعد از سفت کاری
-                                        {% elif buyer_seller.payment_order == 'aif' %}
-                                            بعد از اجرای تأسیسات
-                                        {% elif buyer_seller.payment_order == 'atc' %}
-                                            بعد از کاشی و سرامیک
-                                        {% elif buyer_seller.payment_order == 'afc' %}
-                                            بعد از سقف طبقه
-                                        {% elif buyer_seller.payment_order == 'aff' %}
-                                            بعد از فونداسیون
-                                        {% else %}
-                                            سایر
-                                        {% endif %}
-                                    </td>
-
-                                    {% if buyer_seller.current_roof == None %}
-                                        <td class="text-center">
-                                            <span style="font-size:1.5rem;">_</span>
-                                        </td>
-                                    {% else %}
-                                        <td>
-                                            {{ buyer_seller.current_roof }}
-                                        </td>
+                                    {% if perms.non_government_accounts.delete_buyerssellers or perms.non_government_accounts.change_buyerssellers %}
+                                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                                            اقدام
+                                        </th>
                                     {% endif %}
 
-                                    <td data-sort="{{ buyer_seller.payment_date|date:'Ymd' }}">
-                                        {{ buyer_seller.payment_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                                    </td>
-                                    <td data-sort="{{ buyer_seller.payment_amount }}">
-                                        {{ buyer_seller.formatted_payment_amount }}
-                                    </td>
-
-                                    <td class="action-td text-center">
-                                        <a href="{% url 'non_government_accounts:buyer_seller_update' buyer_seller.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'non_government_accounts:buyer_seller_delete' pk=buyer_seller.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف '{{ buyer_seller.full_name }}' اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-                                    </td>
                                 </tr>
-                            {% endfor %}
-    
-                            
-    
-                        </tbody>
-                    
-                    </table>
+                            </thead>
+                            <tbody>
+        
+                                {% for buyer_seller in buyers_sellers %}
+                                    <tr role="row" class="odd">
+                                        <td>{{ forloop.counter }}</td>
+
+                                        <td>
+                                            {% if buyer_seller.buyer_seller == 'buy' %}
+                                                خریدار
+                                            {% else %}
+                                                فروشنده
+                                            {% endif %}
+                                        </td>
+
+                                        <td>{{ buyer_seller.full_name }}</td>
+                                        <td>{{ buyer_seller.phone }}</td>
+                                        <td>{{ buyer_seller.address }}</td>
+                                    
+                                        <td class="text-center">
+                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                            data-target="#contract{{ forloop.counter }}">
+                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                            </a>
+                                        </td>
+
+                                        {% include 'partials/img_modal.html' with img_type='contract' id=forloop.counter img_src=buyer_seller.contract_image.url label='قرارداد' owner=buyer_seller.full_name %}
+
+                                        <td>
+                                            {% if buyer_seller.payment_order == 'csh' %}
+                                                نقدی              
+                                            {% elif buyer_seller.payment_order == 'chq' %}
+                                                چک
+                                            {% elif buyer_seller.payment_order == 'del' %}
+                                                حین تحویل
+                                            {% elif buyer_seller.payment_order == 'dtr' %}
+                                                انتقال سند
+                                            {% elif buyer_seller.payment_order == 'afh' %}
+                                                بعد از سفت کاری
+                                            {% elif buyer_seller.payment_order == 'aif' %}
+                                                بعد از اجرای تأسیسات
+                                            {% elif buyer_seller.payment_order == 'atc' %}
+                                                بعد از کاشی و سرامیک
+                                            {% elif buyer_seller.payment_order == 'afc' %}
+                                                بعد از سقف طبقه
+                                            {% elif buyer_seller.payment_order == 'aff' %}
+                                                بعد از فونداسیون
+                                            {% else %}
+                                                سایر
+                                            {% endif %}
+                                        </td>
+
+                                        {% if buyer_seller.current_roof == None %}
+                                            <td class="text-center">
+                                                <span style="font-size:1.5rem;">_</span>
+                                            </td>
+                                        {% else %}
+                                            <td>
+                                                {{ buyer_seller.current_roof }}
+                                            </td>
+                                        {% endif %}
+
+                                        <td data-sort="{{ buyer_seller.payment_date|date:'Ymd' }}">
+                                            {{ buyer_seller.payment_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                        </td>
+                                        <td data-sort="{{ buyer_seller.payment_amount }}">
+                                            {{ buyer_seller.formatted_payment_amount }}
+                                        </td>
+
+                                        {% if perms.non_government_accounts.delete_buyerssellers or perms.non_government_accounts.change_buyerssellers %}
+                                            <td class="action-td text-center">
+                                                {% if perms.non_government_accounts.change_buyerssellers %}
+                                                    <a href="{% url 'non_government_accounts:buyer_seller_update' buyer_seller.pk %}" 
+                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if perms.non_government_accounts.delete_buyerssellers %}
+                                                    <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'non_government_accounts:buyer_seller_delete' pk=buyer_seller.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف '{{ buyer_seller.full_name }}' اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        
+                        </table>
+                    </div>
                 </div>
+
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% include 'partials/pagination.html' with page_obj=page_obj %}
+        
             </div>
 
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
         </div>
     </div> 
-
 
 {% endblock %}
 

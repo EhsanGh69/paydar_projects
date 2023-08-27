@@ -2,7 +2,7 @@
 <a href="{% url list_url %}" class="btn btn-outline-danger btn-lg pb-0" title="پاک کردن نتایج جستجو">
     <i class="fa-solid fa-filter-circle-xmark" style="font-size: 1.5rem;"></i>
 </a>
-{% else %}
+{% elif create_perm %}
 <a href="{% url create_url %}" class="btn btn-outline-success btn-lg pb-0" title="{{ title }}">
     {% if request.resolver_match.url_name == 'users' or request.resolver_match.url_name == 'users_search' %}
         <i class="fa-solid fa-user-plus" style="font-size: 1.5rem;"></i>
@@ -285,18 +285,18 @@
         </div>
     </div>
 
-    {% if request.resolver_match.url_name != 'users' and request.resolver_match.url_name != 'users_search' %}
-        <div class="col-12 col-xl-3 mt-2" id="print-table">
+    {% if request.resolver_match.url_name != 'users' and request.resolver_match.url_name != 'users_search' and create_perm %}
+            <div class="col-12 col-xl-3 mt-2" id="print-table">
 
-            <button class="btn btn-success mr-2" id="excel-btn" onclick="ExportToExcel('.xls')" title="خروجی اکسل">
-                <i class="fa-solid fa-file-excel" style="font-size: 1.5rem;"></i>
-            </button>
+                <button class="btn btn-success mr-2" id="excel-btn" onclick="ExportToExcel('.xls')" title="خروجی اکسل">
+                    <i class="fa-solid fa-file-excel" style="font-size: 1.5rem;"></i>
+                </button>
 
-            <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
-                <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
-            </button>
+                <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
+                </button>
 
-        </div>
+            </div>
     {% endif %}
     
 </div>

@@ -30,9 +30,9 @@ LOGOUT_REDIRECT_URL = "login"
 SECRET_KEY = 'django-insecure-!qs#d-@he!5pj_wmj1r22ho(jan)n-$h)$1pj8n-8da%#=t%l)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -72,6 +72,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'configs.urls'
+CSRF_FAILURE_VIEW = 'configs.views.csrf_failure'
 
 TEMPLATES = [
     {

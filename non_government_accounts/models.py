@@ -237,7 +237,7 @@ class Orders(models.Model):
         return self.order_total_price
     get_order_total_price.short_description = 'قیمت کل سفارش'
 
-    def formatted_unit_price(self):
+    def formatted_unit_price(self): # type: ignore
         return "{:,}".format(self.unit_price)
     
     def formatted_order_amount(self):

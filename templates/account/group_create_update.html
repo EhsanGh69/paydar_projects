@@ -2,6 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% load base_tags %}
 
 
 {% block title %}
@@ -79,8 +80,8 @@
                             {% else %}
                                 <select name="permissions" class="selectmultiple form-control" id="id_permissions" multiple>
                                     {% for permission in valid_permissions %}
-                                        <option value="{{ permission.codename }}" {% if permission in group_permissions %}selected{% endif %}>
-                                            {{ permission.name }}
+                                        <option value="{{ permission|index:0 }}" {% if permission|index:0 in group_permissions %}selected{% endif %}>
+                                            {{ permission|index:1 }}
                                         </option>
                                     {% endfor %}
                                 </select>

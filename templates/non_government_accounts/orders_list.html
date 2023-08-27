@@ -15,202 +15,204 @@
         
         <div class="card-body">
     
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        
+                {% include 'partials/search_print.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن سفارش' create_perm=perms.non_government_accounts.add_orders %}
+        
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+        
+                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 40.797px;">
+                                        ردیف
+                                    </th>
 
-            
-    
-{% include 'partials/search_print.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن سفارش' %}
-    
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 40.797px;">
-                                    ردیف
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        پروژه
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    پروژه
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        تأمین کننده
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    تأمین کننده
-                                </th>
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        نوع سفارش
+                                    </th>
 
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    نوع سفارش
-                                </th>
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        مقدار سفارش
+                                    </th>
 
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    مقدار سفارش
-                                </th>
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        قیمت واحد (ریال)
+                                    </th>
 
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    قیمت واحد (ریال)
-                                </th>
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        قیمت کل سفارش (ریال)
+                                    </th>
 
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    قیمت کل سفارش (ریال)
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        تاریخ و زمان سفارش
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    تاریخ و زمان سفارش
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        مهلت سفارش
+                                    </th>
+        
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        نتیجه سفارش
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    مهلت سفارش
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    نتیجه سفارش
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        تاریخ و زمان ارسال
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    تاریخ و زمان ارسال
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        تصویر سفارش ارسال شده
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    تصویر سفارش ارسال شده
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        نوع تصویر سفارش ارسال شده
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    نوع تصویر سفارش ارسال شده
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        توضیح علت لغو سفارش 
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    توضیح علت لغو سفارش 
-                                </th>
-
-                                <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-    
-                            {% for order in orders %}
-                                <tr role="row" class="odd">
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ order.project }}</td>
-                                    <td>{{ order.supplier }}</td>
-                                    <td>{{ order.order_type }}</td>
-                                    <td data-sort="{{ order.order_amount }}">
-                                        {{ order.formatted_order_amount }} 
-                                        {% if order.measurement_unit == "sqm" %}
-                                            مترمربع
-                                        {% elif order.measurement_unit == "mel" %}
-                                            متر طول
-                                        {% elif order.measurement_unit == "kgm" %}
-                                            کیلوگرم
-                                        {% elif order.measurement_unit == "ton" %}
-                                            تن
-                                        {% else %}
-                                            عدد
-                                        {% endif %}
-                                    </td>
-                                    <td data-sort="{{ order.unit_price }}">
-                                        {{ order.formatted_unit_price }}
-                                    </td>
-                                    <td data-sort="{{ order.get_order_total_price }}">
-                                        {{ order.formatted_order_total_price }}
-                                    </td>
-                                    <td data-sort="{{ order.order_date|date:'Ymd' }}">
-                                        {{ order.order_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                                    </td>
-                                    <td>{{ order.order_respite }} روز</td>
-
-                                    <td>
-                                        {% if order.order_result == 'spd' %}
-                                            ارسال در تاریخ مشخص  
-                                        {% elif order.order_result == 'snd' %}
-                                            ارسال شده
-                                        {% else %}
-                                            لغو شده
-                                        {% endif %}
-                                    </td>
-
-                                    {% if order.sending_date %}
-                                        <td data-sort="{{ order.sending_date|date:'Ymd' }}">
-                                            {{ order.sending_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                                        </td>
-                                    {% else %}
-                                        <td class="text-center">
-                                            <span>_</span>
-                                        </td>
+                                    {% if perms.non_government_accounts.delete_orders or perms.non_government_accounts.change_orders %}
+                                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
+                                            اقدام
+                                        </th>
                                     {% endif %}
-                                    
-                                   
-                                    {% if order.sended_image %}
-                                    
-                                        <td class="text-center">
-                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                            data-target="#sended{{ forloop.counter }}">
-                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                            </a>
-                                        </td>
-
-                                        {% include 'partials/img_modal.html' with img_type='sended' id=forloop.counter img_src=order.sended_image.url label='' owner=order.sended_image_type_label %}
-
-                                    {% else %}
-                                        <td class="text-center">
-                                            <span>_</span>
-                                        </td>
-                                    {% endif %}
-
-                                    {% if order.sended_image_type %}
-                                        <td class="text-center">{{ order.sended_image_type_label }}</td>
-                                    {% else %}
-                                        <td class="text-center">
-                                            <span>_</span>
-                                        </td>
-                                    {% endif %}
-
-                                    {% if order.explan_order_cancel %}
-                                        <td>{{ order.explan_order_cancel }}</td>
-                                    {% else %}
-                                        <td class="text-center">
-                                            <span>_</span>
-                                        </td>
-                                    {% endif %}
-
-                                    <td class="action-td text-center d-flex">
-
-                                        <a href="{% url 'non_government_accounts:order_update' order.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'non_government_accounts:order_delete' pk=order.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف '{{ buyer_seller.full_name }}' اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-
-                                    </td>
                                 </tr>
-                            {% endfor %}
-    
-                            
-    
-                        </tbody>
-                    
-                    </table>
-                </div>
-            </div>
+                            </thead>
+                            <tbody>
+        
+                                {% for order in orders %}
+                                    <tr role="row" class="odd">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ order.project }}</td>
+                                        <td>{{ order.supplier }}</td>
+                                        <td>{{ order.order_type }}</td>
+                                        <td data-sort="{{ order.order_amount }}">
+                                            {{ order.formatted_order_amount }} 
+                                            {% if order.measurement_unit == "sqm" %}
+                                                مترمربع
+                                            {% elif order.measurement_unit == "mel" %}
+                                                متر طول
+                                            {% elif order.measurement_unit == "kgm" %}
+                                                کیلوگرم
+                                            {% elif order.measurement_unit == "ton" %}
+                                                تن
+                                            {% else %}
+                                                عدد
+                                            {% endif %}
+                                        </td>
+                                        <td data-sort="{{ order.unit_price }}">
+                                            {{ order.formatted_unit_price }}
+                                        </td>
+                                        <td data-sort="{{ order.get_order_total_price }}">
+                                            {{ order.formatted_order_total_price }}
+                                        </td>
+                                        <td data-sort="{{ order.order_date|date:'Ymd' }}">
+                                            {{ order.order_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                        </td>
+                                        <td>{{ order.order_respite }} روز</td>
 
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
+                                        <td>
+                                            {% if order.order_result == 'spd' %}
+                                                ارسال در تاریخ مشخص  
+                                            {% elif order.order_result == 'snd' %}
+                                                ارسال شده
+                                            {% else %}
+                                                لغو شده
+                                            {% endif %}
+                                        </td>
+
+                                        {% if order.sending_date %}
+                                            <td data-sort="{{ order.sending_date|date:'Ymd' }}">
+                                                {{ order.sending_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                            </td>
+                                        {% else %}
+                                            <td class="text-center">
+                                                <span>_</span>
+                                            </td>
+                                        {% endif %}
+                                        
+                                    
+                                        {% if order.sended_image %}
+                                        
+                                            <td class="text-center">
+                                                <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                                data-target="#sended{{ forloop.counter }}">
+                                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                                </a>
+                                            </td>
+
+                                            {% include 'partials/img_modal.html' with img_type='sended' id=forloop.counter img_src=order.sended_image.url label='' owner=order.sended_image_type_label %}
+
+                                        {% else %}
+                                            <td class="text-center">
+                                                <span>_</span>
+                                            </td>
+                                        {% endif %}
+
+                                        {% if order.sended_image_type %}
+                                            <td class="text-center">{{ order.sended_image_type_label }}</td>
+                                        {% else %}
+                                            <td class="text-center">
+                                                <span>_</span>
+                                            </td>
+                                        {% endif %}
+
+                                        {% if order.explan_order_cancel %}
+                                            <td>{{ order.explan_order_cancel }}</td>
+                                        {% else %}
+                                            <td class="text-center">
+                                                <span>_</span>
+                                            </td>
+                                        {% endif %}
+                                        
+                                        {% if perms.non_government_accounts.delete_orders or perms.non_government_accounts.change_orders %}
+                                            <td class="action-td text-center d-flex">
+                                                {% if perms.non_government_accounts.change_orders %}
+                                                    <a href="{% url 'non_government_accounts:order_update' order.pk %}" 
+                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                {% endif %}
+                                                
+                                                {% if perms.non_government_accounts.delete_orders %}
+                                                    <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'non_government_accounts:order_delete' pk=order.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف '{{ buyer_seller.full_name }}' اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        
+                        </table>
+                    </div>
+                </div>
+
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% include 'partials/pagination.html' with page_obj=page_obj %}
+        
+            </div> 
+
         </div>
     </div> 
-
 
 {% endblock %}
 
