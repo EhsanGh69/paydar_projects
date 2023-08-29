@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -13,7 +13,8 @@ from .forms import ChequesForm, FundForm, ReceivePayForm, CashBoxForm
 
 # Cheques - Start
 
-class ChequesList(LoginRequiredMixin, ListView):
+class ChequesList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'cheques_receive_pay.view_cheques'
     template_name = 'cheques_receive_pay/cheques_list.html'
     model = Cheques
     context_object_name = "cheques"
@@ -27,7 +28,8 @@ class ChequesList(LoginRequiredMixin, ListView):
         return context
 
 
-class ChequesCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ChequesCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'cheques_receive_pay.add_cheques'
     template_name = 'cheques_receive_pay/cheque_create_update.html'
     model = Cheques
     form_class = ChequesForm
@@ -42,7 +44,8 @@ class ChequesCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
 
-class ChequesUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ChequesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'cheques_receive_pay.change_cheques'
     template_name = 'cheques_receive_pay/cheque_create_update.html'
     model = Cheques
     form_class = ChequesForm
@@ -57,7 +60,8 @@ class ChequesUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return kwargs
 
 
-class ChequesDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ChequesDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'cheques_receive_pay.delete_cheques'
     success_url = reverse_lazy("cheques_receive_pay:cheques")
     success_message = "چک با موفقیت حذف شد"
 
@@ -67,7 +71,8 @@ class ChequesDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return cheque
     
 
-class ChequesSearch(LoginRequiredMixin, ListView):
+class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'cheques_receive_pay.view_cheques'
     template_name = 'cheques_receive_pay/cheques_list.html'
     model = Cheques
     context_object_name = "cheques"
@@ -112,7 +117,8 @@ class ChequesSearch(LoginRequiredMixin, ListView):
 
 # Fund - Start
 
-class FundList(LoginRequiredMixin, ListView):
+class FundList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'cheques_receive_pay.view_fund'
     template_name = 'cheques_receive_pay/funds_list.html'
     model = Fund
     context_object_name = "funds"
@@ -129,7 +135,8 @@ class FundList(LoginRequiredMixin, ListView):
         return context
 
 
-class FundCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class FundCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'cheques_receive_pay.add_fund'
     template_name = 'cheques_receive_pay/fund_create_update.html'
     model = Fund
     form_class = FundForm
@@ -151,7 +158,8 @@ class FundCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             return super().form_valid(form)
         
 
-class FundUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class FundUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'cheques_receive_pay.change_fund'
     template_name = 'cheques_receive_pay/fund_create_update.html'
     model = Fund
     form_class = FundForm
@@ -173,7 +181,8 @@ class FundUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return super().form_valid(form)
 
     
-class FundDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class FundDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'cheques_receive_pay.delete_fund'
     success_url = reverse_lazy("cheques_receive_pay:funds")
     success_message = "عملیات تنخواه با موفقیت حذف شد"
 
@@ -183,7 +192,8 @@ class FundDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return fund
     
 
-class FundSearch(LoginRequiredMixin, ListView):
+class FundSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'cheques_receive_pay.view_fund'
     template_name = 'cheques_receive_pay/funds_list.html'
     model = Cheques
     context_object_name = "funds"
@@ -229,7 +239,8 @@ class FundSearch(LoginRequiredMixin, ListView):
 
 # ReceivePay - Start
 
-class ReceivePayList(LoginRequiredMixin, ListView):
+class ReceivePayList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'cheques_receive_pay.view_receivepay'
     template_name = 'cheques_receive_pay/receive_pays_list.html'
     model = ReceivePay
     context_object_name = "receive_pays"
@@ -243,7 +254,8 @@ class ReceivePayList(LoginRequiredMixin, ListView):
         return context
 
 
-class ReceivePayCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ReceivePayCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'cheques_receive_pay.add_receivepay'
     template_name = 'cheques_receive_pay/receive_pay_create_update.html'
     model = Cheques
     form_class = ReceivePayForm
@@ -258,7 +270,8 @@ class ReceivePayCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
     
 
-class ReceivePayUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ReceivePayUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'cheques_receive_pay.change_receivepay'
     template_name = 'cheques_receive_pay/receive_pay_create_update.html'
     model = Cheques
     form_class = ReceivePayForm
@@ -273,7 +286,8 @@ class ReceivePayUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return kwargs
 
 
-class ReceivePayDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ReceivePayDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'cheques_receive_pay.delete_receivepay'
     success_url = reverse_lazy("cheques_receive_pay:receive_pays")
     success_message = "دریافت / پرداخت با موفقیت حذف شد"
 
@@ -283,7 +297,8 @@ class ReceivePayDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return receive_pay
     
 
-class ReceivePaySearch(LoginRequiredMixin, ListView):
+class ReceivePaySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'cheques_receive_pay.view_receivepay'
     template_name = 'cheques_receive_pay/receive_pays_list.html'
     model = Cheques
     context_object_name = "receive_pays"
@@ -323,7 +338,8 @@ class ReceivePaySearch(LoginRequiredMixin, ListView):
 # CashBox - Start
 
 
-class CashBoxList(LoginRequiredMixin, ListView):
+class CashBoxList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'cheques_receive_pay.view_cashbox'
     template_name = 'cheques_receive_pay/cash_boxes_list.html'
     model = CashBox
     context_object_name = "cash_boxes"
@@ -341,7 +357,8 @@ class CashBoxList(LoginRequiredMixin, ListView):
 
 
 
-class CashBoxCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class CashBoxCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'cheques_receive_pay.add_cashbox'
     template_name = 'cheques_receive_pay/cash_box_create_update.html'
     model = CashBox
     form_class = CashBoxForm
@@ -357,7 +374,8 @@ class CashBoxCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             return super().form_valid(form)
         
 
-class CashBoxUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class CashBoxUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'cheques_receive_pay.change_cashbox'
     template_name = 'cheques_receive_pay/cash_box_create_update.html'
     model = CashBox
     form_class = CashBoxForm
@@ -373,7 +391,8 @@ class CashBoxUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return super().form_valid(form)
 
 
-class CashBoxDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class CashBoxDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'cheques_receive_pay.delete_cashbox'
     success_url = reverse_lazy("cheques_receive_pay:cash_boxes")
     success_message = "عملیات صندوق با موفقیت حذف شد"
 
@@ -383,7 +402,8 @@ class CashBoxDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return cash_box
 
 
-class CashBoxSearch(LoginRequiredMixin, ListView):
+class CashBoxSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'cheques_receive_pay.view_cashbox'
     template_name = 'cheques_receive_pay/cash_boxes_list.html'
     model = CashBox
     context_object_name = "cash_boxes"

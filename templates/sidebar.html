@@ -111,6 +111,7 @@
                     </li>
                 {% endif %}
 
+                
                 <li class="nav-item has-treeview border-top border-light accordion
                     {% if request.resolver_match.app_name == 'projects' %}menu-open{% endif %}">
                     <a href="#" class="nav-link
@@ -177,28 +178,38 @@
 
                 </li>
 
-                <li class="nav-item has-treeview border-top border-light
-                {% if request.resolver_match.app_name == 'cheques_receive_pay' %}menu-open{% endif %}">
-                    <a href="#" class="nav-link
-                    {% if request.resolver_match.app_name == 'cheques_receive_pay' %}active{% endif %}">
-                        <p class="mr-2" style="font-size: 1.2rem;">
-                            حسابداری
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
+                {% if perms.cheques_receive_pay %}
+                    <li class="nav-item has-treeview border-top border-light
+                        {% if request.resolver_match.app_name == 'cheques_receive_pay' %}menu-open{% endif %}">
+                        <a href="#" class="nav-link
+                        {% if request.resolver_match.app_name == 'cheques_receive_pay' %}active{% endif %}">
+                            <p class="mr-2" style="font-size: 1.2rem;">
+                                حسابداری
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
 
-                        {% main_menu request 'cheques_receive_pay' 'cheques' 'cheque_create' 'cheque_update' 'cheques_search' 'fa-wallet' 'چک‌ها' %}
-                        
-                        {% main_menu request 'cheques_receive_pay' 'receive_pays' 'receive_pay_create' 'receive_pay_update' 'receive_pays_search' 'fa-money-bill-transfer' 'دریافت‌ها و پرداخت‌ها' %}
+                            {% if perms.cheques_receive_pay.view_cheques %}
+                                {% main_menu request 'cheques_receive_pay' 'cheques' 'cheque_create' 'cheque_update' 'cheques_search' 'fa-wallet' 'چک‌ها' %}
+                            {% endif %}
 
-                        {% main_menu request 'cheques_receive_pay' 'funds' 'fund_create' 'fund_update' 'funds_search' 'fa-user-tag' 'تنخواه' %}
-                        
-                        {% main_menu request 'cheques_receive_pay' 'cash_boxes' 'cash_box_create' 'cash_box_update' 'cash_boxes_search' 'fa-sack-dollar' 'صندوق' %}
-                        
-                    </ul>
+                            {% if perms.cheques_receive_pay.view_receive_pay %}
+                                {% main_menu request 'cheques_receive_pay' 'receive_pays' 'receive_pay_create' 'receive_pay_update' 'receive_pays_search' 'fa-money-bill-transfer' 'دریافت‌ها و پرداخت‌ها' %}
+                            {% endif %}
 
-                </li>
+                            {% if perms.cheques_receive_pay.view_fund %}
+                                {% main_menu request 'cheques_receive_pay' 'funds' 'fund_create' 'fund_update' 'funds_search' 'fa-user-tag' 'تنخواه' %}
+                            {% endif %}
+
+                            {% if perms.cheques_receive_pay.view_cashbox %}
+                                {% main_menu request 'cheques_receive_pay' 'cash_boxes' 'cash_box_create' 'cash_box_update' 'cash_boxes_search' 'fa-sack-dollar' 'صندوق' %}
+                            {% endif %}
+
+                        </ul>
+
+                    </li>
+                {% endif %}
 
                 <li class="nav-item has-treeview border-top border-light
                 {% if request.resolver_match.app_name == 'warehousing' %}menu-open{% endif %}">
