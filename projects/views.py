@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -21,7 +21,8 @@ def charts(request):
 
 # Owners - Start
 
-class OwnersList(LoginRequiredMixin, ListView):
+class OwnersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_owners'
     template_name = 'projects/owner_list.html'
     model = Owners
     context_object_name = "owners"
@@ -35,7 +36,8 @@ class OwnersList(LoginRequiredMixin, ListView):
         return context
 
 
-class OwnerCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class OwnerCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects.add_owners'
     template_name = 'projects/owner_create_update.html'
     model = Owners
     form_class = OwnerForm
@@ -43,7 +45,8 @@ class OwnerCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "مالک با موفقیت اضافه شد"
 
 
-class OwnerUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class OwnerUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects.change_owners'
     template_name = 'projects/owner_create_update.html'
     model = Owners
     form_class = OwnerForm
@@ -51,7 +54,8 @@ class OwnerUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "مالک با موفقیت ویرایش شد"
 
 
-class OwnerDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class OwnerDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects.delete_owners'
     success_url = reverse_lazy("projects:owners")
     success_message = "مالک با موفقیت حذف شد"
 
@@ -61,7 +65,8 @@ class OwnerDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return owner
 
 
-class OwnerSearch(LoginRequiredMixin, ListView):
+class OwnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_owners'
     template_name = 'projects/owner_list.html'
     model = Owners
     context_object_name = "owners"
@@ -92,7 +97,8 @@ class OwnerSearch(LoginRequiredMixin, ListView):
 
 # Project - Start
 
-class ProjectList(LoginRequiredMixin, ListView):
+class ProjectList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_project'
     template_name = 'projects/project_list.html'
     model = Project
     context_object_name = "projects"
@@ -106,7 +112,8 @@ class ProjectList(LoginRequiredMixin, ListView):
         return context
 
 
-class ProjectCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ProjectCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects.add_project'
     template_name = 'projects/project_create_update.html'
     model = Project
     form_class = ProjectForm
@@ -114,7 +121,8 @@ class ProjectCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "پروژه با موفقیت اضافه شد"
 
 
-class ProjectUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ProjectUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects.change_project'
     template_name = 'projects/project_create_update.html'
     model = Project
     form_class = ProjectForm
@@ -122,8 +130,8 @@ class ProjectUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "پروژه با موفقیت ویرایش شد"
 
 
-class ProjectDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    # model = Project
+class ProjectDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects.delete_project'
     success_url = reverse_lazy("projects:projects")
     success_message = "پروژه با موفقیت حذف شد"
 
@@ -133,7 +141,8 @@ class ProjectDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return project
     
 
-class ProjectSearch(LoginRequiredMixin, ListView):
+class ProjectSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_project'
     template_name = 'projects/project_list.html'
     model = Project
     context_object_name = "projects"
@@ -171,7 +180,8 @@ class ProjectSearch(LoginRequiredMixin, ListView):
 
 # WorkReference - Start
 
-class WorkReferenceList(LoginRequiredMixin, ListView):
+class WorkReferenceList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_workreference'
     template_name = 'projects/work_references_list.html'
     model = WorkReference
     context_object_name = "work_references"
@@ -186,7 +196,8 @@ class WorkReferenceList(LoginRequiredMixin, ListView):
     
 
 
-class WorkReferenceCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class WorkReferenceCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects.add_workreference'
     model = WorkReference
     template_name = 'projects/work_reference_create_update.html'
     form_class = WorkReferenceForm
@@ -201,7 +212,8 @@ class WorkReferenceCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return kwargs
 
 
-class WorkReferenceUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class WorkReferenceUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects.change_workreference'
     model = WorkReference
     template_name = 'projects/work_reference_create_update.html'
     form_class = WorkReferenceForm
@@ -216,7 +228,8 @@ class WorkReferenceUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return kwargs
     
 
-class WorkReferenceDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class WorkReferenceDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects.delete_workreference'
     success_url = reverse_lazy("projects:work_references")
     success_message = "ارجاع کار با موفقیت حذف شد"
 
@@ -226,7 +239,8 @@ class WorkReferenceDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return work_reference
     
 
-class WorkReferenceSearch(LoginRequiredMixin, ListView):
+class WorkReferenceSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_workreference'
     template_name = 'projects/work_references_list.html'
     model = WorkReference
     context_object_name = "work_references"
@@ -263,7 +277,8 @@ class WorkReferenceSearch(LoginRequiredMixin, ListView):
 
 # Costs - Start
 
-class CostsList(LoginRequiredMixin, ListView):
+class CostsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_costs'
     template_name = 'projects/costs_list.html'
     model = Costs
     context_object_name = "costs"
@@ -277,7 +292,8 @@ class CostsList(LoginRequiredMixin, ListView):
         return context
 
 
-class CostsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class CostsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects.add_costs'
     model = Costs
     template_name = 'projects/cost_create_update.html'
     form_class = CostsForm
@@ -285,7 +301,8 @@ class CostsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "هزینه با موفقیت ثبت گردید"
 
 
-class CostsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class CostsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects.change_costs'
     model = Costs
     template_name = 'projects/cost_create_update.html'
     form_class = CostsForm
@@ -293,7 +310,8 @@ class CostsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "هزینه با موفقیت ویرایش شد"
 
 
-class CostsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class CostsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects.delete_costs'
     success_url = reverse_lazy("projects:costs")
     success_message = "هزینه با موفقیت حذف شد"
 
@@ -303,7 +321,8 @@ class CostsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return cost
 
 
-class CostsSearch(LoginRequiredMixin, ListView):
+class CostsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_costs'
     template_name = 'projects/costs_list.html'
     model = Costs
     context_object_name = "costs"
@@ -334,7 +353,8 @@ class CostsSearch(LoginRequiredMixin, ListView):
 
 # PaymentsImages - Start
 
-class PaymentsImagesList(LoginRequiredMixin, ListView):
+class PaymentsImagesList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_paymentsimages'
     template_name = 'projects/payments_images_list.html'
     model = PaymentsImages
     context_object_name = "payments_images"
@@ -348,7 +368,8 @@ class PaymentsImagesList(LoginRequiredMixin, ListView):
         return context
     
 
-class PaymentsImagesCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class PaymentsImagesCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects.add_paymentsimages'
     model = PaymentsImages
     template_name = 'projects/payments_image_create_update.html'
     form_class = PaymentsImagesForm
@@ -356,7 +377,8 @@ class PaymentsImagesCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "تصاویر فیش‌های پرداختی با موفقیت ثبت گردید"
 
 
-class PaymentsImagesUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class PaymentsImagesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects.change_paymentsimages'
     model = PaymentsImages
     template_name = 'projects/payments_image_create_update.html'
     form_class = PaymentsImagesForm
@@ -364,7 +386,8 @@ class PaymentsImagesUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "تصاویر فیش‌های پرداختی با موفقیت ویرایش شد"
 
 
-class PaymentsImagesDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class PaymentsImagesDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects.delete_paymentsimages'
     success_url = reverse_lazy("projects:payments_images")
     success_message = "تصاویر فیش‌های پرداختی با موفقیت حذف شد"
 
@@ -374,7 +397,8 @@ class PaymentsImagesDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return payments_image
     
 
-class PaymentsImagesSearch(LoginRequiredMixin, ListView):
+class PaymentsImagesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects.view_paymentsimages'
     template_name = 'projects/payments_images_list.html'
     model = PaymentsImages
     context_object_name = "payments_images"
