@@ -1,7 +1,7 @@
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -14,7 +14,8 @@ from .forms import StuffForm, MainWarehouseImportForm, MainWarehouseExportForm, 
 
 # Stuff - Start
 
-class StuffList(LoginRequiredMixin, ListView):
+class StuffList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_stuff'
     template_name = 'warehousing/stuffs_list.html'
     model = Stuff
     context_object_name = "stuffs"
@@ -28,7 +29,8 @@ class StuffList(LoginRequiredMixin, ListView):
         return context
     
 
-class StuffCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class StuffCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'warehousing.add_stuff'
     template_name = 'warehousing/stuff_create_update.html'
     model = Stuff
     form_class = StuffForm
@@ -36,7 +38,8 @@ class StuffCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "کالا با موفقیت اضافه شد"
 
 
-class StuffUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class StuffUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'warehousing.change_stuff'
     template_name = 'warehousing/stuff_create_update.html'
     model = Stuff
     form_class = StuffForm
@@ -44,7 +47,8 @@ class StuffUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "کالا با موفقیت ویرایش شد"
 
 
-class StuffDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class StuffDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'warehousing.delete_stuff'
     success_url = reverse_lazy('warehousing:stuffs')
     success_message = "کالا با موفقیت حذف شد"
 
@@ -60,7 +64,8 @@ class StuffDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     
 # MainWarehouseImport - Start
 
-class WarehouseImportList(LoginRequiredMixin, ListView):
+class WarehouseImportList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_mainwarehouseimport'
     template_name = 'warehousing/warehouse_imports_list.html'
     model = MainWarehouseImport
     context_object_name = "warehouse_imports"
@@ -74,7 +79,8 @@ class WarehouseImportList(LoginRequiredMixin, ListView):
         return context
 
 
-class WarehouseImportCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class WarehouseImportCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'warehousing.add_mainwarehouseimport'
     model = MainWarehouseImport
     template_name = 'warehousing/warehouse_import_create_update.html'
     form_class = MainWarehouseImportForm
@@ -89,7 +95,8 @@ class WarehouseImportCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView)
         return kwargs
         
     
-class WarehouseImportUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class WarehouseImportUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'warehousing.change_mainwarehouseimport'
     model = MainWarehouseImport
     template_name = 'warehousing/warehouse_import_create_update.html'
     form_class = MainWarehouseImportForm
@@ -104,7 +111,8 @@ class WarehouseImportUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
         return kwargs
     
 
-class WarehouseImportDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class WarehouseImportDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'warehousing.delete_mainwarehouseimport'
     success_url = reverse_lazy('warehousing:warehouse_imports')
     success_message = "کالای انبار با موفقیت حذف شد"
 
@@ -114,7 +122,8 @@ class WarehouseImportDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView)
         return warehouse_import
     
 
-class WarehouseImportSearch(LoginRequiredMixin, ListView):
+class WarehouseImportSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_mainwarehouseimport'
     template_name = 'warehousing/warehouse_imports_list.html'
     model = MainWarehouseImport
     context_object_name = "warehouse_imports"
@@ -130,11 +139,11 @@ class WarehouseImportSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if is_returned_filter != "all" and date_filter == "all":
-            search_result = MainWarehouseImport.objects.search(query).filter(is_returned=bool(int(is_returned_filter))).all()
+            search_result = MainWarehouseImport.objects.search(query).filter(is_returned=bool(int(is_returned_filter))).all() # type: ignore
         elif is_returned_filter == "all" and date_filter != "all":
-            search_result = MainWarehouseImport.objects.search(query).filter(date_time__date__range=filter_date_values(date_filter)).all()
+            search_result = MainWarehouseImport.objects.search(query).filter(date_time__date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
-            search_result = MainWarehouseImport.objects.search(query)
+            search_result = MainWarehouseImport.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -155,7 +164,8 @@ class WarehouseImportSearch(LoginRequiredMixin, ListView):
 
 # MainWarehouseExport - Start
 
-class WarehouseExportList(LoginRequiredMixin, ListView):
+class WarehouseExportList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_mainwarehouseexport'
     template_name = 'warehousing/warehouse_exports_list.html'
     model = MainWarehouseExport
     context_object_name = "warehouse_exports"
@@ -169,7 +179,8 @@ class WarehouseExportList(LoginRequiredMixin, ListView):
         return context
     
 
-class WarehouseExportCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class WarehouseExportCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'warehousing.add_mainwarehouseexport'
     template_name = 'warehousing/warehouse_export_create_update.html'
     model = MainWarehouseExport
     form_class = MainWarehouseExportForm
@@ -184,12 +195,13 @@ class WarehouseExportCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView)
                                                         stuff_type=stuff_type, stuff_amount=stuff_amount, form=form)
             
         if not validation_result:
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
         
 
-class WarehouseExportUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class WarehouseExportUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'warehousing.change_mainwarehouseexport'
     template_name = 'warehousing/warehouse_export_create_update.html'
     model = MainWarehouseExport
     form_class = MainWarehouseExportForm
@@ -203,12 +215,13 @@ class WarehouseExportUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
                                                         stuff_type=stuff_type, stuff_amount=stuff_amount, form=form)
             
         if not validation_result:
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
 
 
-class WarehouseExportDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class WarehouseExportDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'warehousing.delete_mainwarehouseexport'
     success_url = reverse_lazy('warehousing:warehouse_exports')
     success_message = "کالای خارج‌ شده از انبار با موفقیت حذف شد"
 
@@ -218,7 +231,8 @@ class WarehouseExportDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView)
         return warehouse_export
 
 
-class WarehouseExportSearch(LoginRequiredMixin, ListView):
+class WarehouseExportSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_mainwarehouseexport'
     template_name = 'warehousing/warehouse_exports_list.html'
     model = MainWarehouseExport
     context_object_name = "warehouse_exports"
@@ -229,7 +243,7 @@ class WarehouseExportSearch(LoginRequiredMixin, ListView):
         global query
         query = self.request.GET.get('data_search')
 
-        search_result = MainWarehouseExport.objects.search(query)
+        search_result = MainWarehouseExport.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -249,7 +263,8 @@ class WarehouseExportSearch(LoginRequiredMixin, ListView):
 
 # UseCertificate - Start
 
-class UseCertificateList(LoginRequiredMixin, ListView):
+class UseCertificateList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_usecertificate'
     template_name = 'warehousing/use_certificates_list.html'
     model = UseCertificate
     context_object_name = "use_certificates"
@@ -263,7 +278,8 @@ class UseCertificateList(LoginRequiredMixin, ListView):
         return context
     
 
-class UseCertificateCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class UseCertificateCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'warehousing.add_usecertificate'
     template_name = 'warehousing/use_certificate_create_update.html'
     model = UseCertificate
     form_class = UseCertificateForm
@@ -271,7 +287,8 @@ class UseCertificateCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "گواهی مصرف کالا با موفقیت ثبت شد"
 
 
-class UseCertificateUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class UseCertificateUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'warehousing.change_usecertificate'
     template_name = 'warehousing/use_certificate_create_update.html'
     model = UseCertificate
     form_class = UseCertificateForm
@@ -279,7 +296,8 @@ class UseCertificateUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "گواهی مصرف کالا با موفقیت ویرایش شد"
 
 
-class UseCertificateDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class UseCertificateDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'warehousing.delete_usecertificate'
     success_url = reverse_lazy('warehousing:use_certificates')
     success_message = "گواهی مصرف کالا با موفقیت حذف شد"
 
@@ -289,7 +307,8 @@ class UseCertificateDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return use_certificate
     
 
-class UseCertificateSearch(LoginRequiredMixin, ListView):
+class UseCertificateSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_usecertificate'
     template_name = 'warehousing/use_certificates_list.html'
     model = UseCertificate
     context_object_name = "use_certificates"
@@ -304,11 +323,11 @@ class UseCertificateSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if stuff_state != "all" and stuff_state == "def":
-            search_result = UseCertificate.objects.search(query).filter(is_deficient=True).all()
+            search_result = UseCertificate.objects.search(query).filter(is_deficient=True).all() # type: ignore
         elif stuff_state != "all" and stuff_state == "exc":
-            search_result = UseCertificate.objects.search(query).filter(is_excess=True).all()
+            search_result = UseCertificate.objects.search(query).filter(is_excess=True).all() # type: ignore
         else:
-            search_result = UseCertificate.objects.search(query)
+            search_result = UseCertificate.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -329,7 +348,8 @@ class UseCertificateSearch(LoginRequiredMixin, ListView):
 
 # ProjectWarehouse - Start
 
-class ProjectWarehouseList(LoginRequiredMixin, ListView):
+class ProjectWarehouseList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_projectwarehouse'
     template_name = 'warehousing/project_warehouses_list.html'
     model = ProjectWarehouse
     context_object_name = "project_warehouses"
@@ -343,7 +363,8 @@ class ProjectWarehouseList(LoginRequiredMixin, ListView):
         return context
 
 
-class ProjectWarehouseCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ProjectWarehouseCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'warehousing.add_projectwarehouse'
     template_name = 'warehousing/project_warehouse_create_update.html'
     model = ProjectWarehouse
     form_class = ProjectWarehouseForm
@@ -351,7 +372,8 @@ class ProjectWarehouseCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView
     success_message = "عملیات انبار پروژه با موفقیت ثبت شد"
 
 
-class ProjectWarehouseUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ProjectWarehouseUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'warehousing.change_projectwarehouse'
     template_name = 'warehousing/project_warehouse_create_update.html'
     model = ProjectWarehouse
     form_class = ProjectWarehouseForm
@@ -359,7 +381,8 @@ class ProjectWarehouseUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView
     success_message = "عملیات انبار پروژه با موفقیت ویرایش شد"
 
 
-class ProjectWarehouseDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ProjectWarehouseDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'warehousing.delete_projectwarehouse'
     success_url = reverse_lazy('warehousing:project_warehouses')
     success_message = "عملیات انبار پروژه با موفقیت حذف شد"
 
@@ -369,7 +392,8 @@ class ProjectWarehouseDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView
         return project_warehouse
 
 
-class ProjectWarehouseSearch(LoginRequiredMixin, ListView):
+class ProjectWarehouseSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_projectwarehouse'
     template_name = 'warehousing/project_warehouses_list.html'
     model = ProjectWarehouse
     context_object_name = "project_warehouses"
@@ -384,11 +408,11 @@ class ProjectWarehouseSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if stuff_status != "all" and stuff_status == "exp":
-            search_result = ProjectWarehouse.objects.search(query).filter(status="exp").all()
+            search_result = ProjectWarehouse.objects.search(query).filter(status="exp").all() # type: ignore
         elif stuff_status != "all" and stuff_status == "imp":
-            search_result = ProjectWarehouse.objects.search(query).filter(status="imp").all()
+            search_result = ProjectWarehouse.objects.search(query).filter(status="imp").all() # type: ignore
         else:
-            search_result = ProjectWarehouse.objects.search(query)
+            search_result = ProjectWarehouse.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -403,4 +427,3 @@ class ProjectWarehouseSearch(LoginRequiredMixin, ListView):
         return context
 
 # ProjectWarehouse - End
-

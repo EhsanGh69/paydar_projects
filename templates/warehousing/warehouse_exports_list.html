@@ -14,135 +14,136 @@
     <div class="card">
         
         <div class="card-body">
-    
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        
+                {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='افزودن کالا به انبار' create_perm=perms.warehousing.add_mainwarehouseexport %}
+        
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+        
+                                    <th class="text-center rounded-0" rowspan="2" colspan="1" style="width: 40.797px;">
+                                        ردیف
+                                    </th>
 
-            
-    
-{% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='افزودن کالا به انبار' %}
-    
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="2" colspan="1" style="width: 40.797px;">
-                                    ردیف
-                                </th>
-
-                                <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
-                                    درخواست کننده
-                                </td>
-
-                                <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
-                                    کالا
-                                </td>
-
-                                <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                                    تحویل دهنده
-                                </th>
-
-                                <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                                    پروژه
-                                </th>
-
-                                <th class="text-center action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        
-                            <tr role="row">
-                                <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    پرسنل
-                                </th>
-
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    پیمانکار
-                                </th>
-
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    نوع کالا
-                                </th>
-
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    مقدار
-                                </th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-    
-                            {% for warehouse_export in warehouse_exports %}
-                                <tr role="row" class="odd">
-                                    <td>{{ forloop.counter }}</td>
-
-                                    {% if warehouse_export.personnel %}
-                                        <td>{{ warehouse_export.personnel }}</td>
-                                    {% else %}
-                                        <td class="text-center">_</td>
-                                    {% endif %}
-
-                                    {% if warehouse_export.contractor %}
-                                        <td>{{ warehouse_export.contractor }}</td>
-                                    {% else %}
-                                        <td class="text-center">_</td>
-                                    {% endif %}
-
-                                    <td>{{ warehouse_export.stuff_type }}</td>
-                                    
-                                    <td data-sort="{{ warehouse_export.stuff_amount }}">
-                                        {{ warehouse_export.stuff_amount }} 
-                                        {% if warehouse_export.measurement_unit == "sqm" %}
-                                            مترمربع
-                                        {% elif warehouse_export.measurement_unit == "mel" %}
-                                            متر طول
-                                        {% elif warehouse_export.measurement_unit == "kgm" %}
-                                            کیلوگرم
-                                        {% elif warehouse_export.measurement_unit == "ton" %}
-                                            تن
-                                        {% else %}
-                                            عدد
-                                        {% endif %}
+                                    <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
+                                        درخواست کننده
                                     </td>
-                                    
-                                    <td>{{ warehouse_export.deliverer }}</td>
-                                    
-                                    <td>{{ warehouse_export.project }}</td>
 
-                                    <td class="action-td d-flex justify-content-center">
-
-                                        <a href="{% url 'warehousing:warehouse_export_update' warehouse_export.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'warehousing:warehouse_export_delete' pk=warehouse_export.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف این کالا اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-
+                                    <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
+                                        کالا
                                     </td>
+
+                                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                                        تحویل دهنده
+                                    </th>
+
+                                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                                        پروژه
+                                    </th>
+
+                                    {% if perms.warehousing.delete_mainwarehouseexport or perms.warehousing.change_mainwarehouseexport %}
+                                        <th class="text-center action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
+                                            اقدام
+                                        </th>
+                                    {% endif %}
                                 </tr>
-                            {% endfor %}
-    
                             
-    
-                        </tbody>
-                    
-                    </table>
-                </div>
-            </div>
+                                <tr role="row">
+                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        پرسنل
+                                    </th>
 
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        پیمانکار
+                                    </th>
+
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        نوع کالا
+                                    </th>
+
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        مقدار
+                                    </th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+        
+                                {% for warehouse_export in warehouse_exports %}
+                                    <tr role="row" class="odd">
+                                        <td>{{ forloop.counter }}</td>
+
+                                        {% if warehouse_export.personnel %}
+                                            <td>{{ warehouse_export.personnel }}</td>
+                                        {% else %}
+                                            <td class="text-center">_</td>
+                                        {% endif %}
+
+                                        {% if warehouse_export.contractor %}
+                                            <td>{{ warehouse_export.contractor }}</td>
+                                        {% else %}
+                                            <td class="text-center">_</td>
+                                        {% endif %}
+
+                                        <td>{{ warehouse_export.stuff_type }}</td>
+                                        
+                                        <td data-sort="{{ warehouse_export.stuff_amount }}">
+                                            {{ warehouse_export.stuff_amount }} 
+                                            {% if warehouse_export.measurement_unit == "sqm" %}
+                                                مترمربع
+                                            {% elif warehouse_export.measurement_unit == "mel" %}
+                                                متر طول
+                                            {% elif warehouse_export.measurement_unit == "kgm" %}
+                                                کیلوگرم
+                                            {% elif warehouse_export.measurement_unit == "ton" %}
+                                                تن
+                                            {% else %}
+                                                عدد
+                                            {% endif %}
+                                        </td>
+                                        
+                                        <td>{{ warehouse_export.deliverer }}</td>
+                                        
+                                        <td>{{ warehouse_export.project }}</td>
+
+                                        {% if perms.warehousing.delete_mainwarehouseexport or perms.warehousing.change_mainwarehouseexport %}
+                                            <td class="action-td d-flex justify-content-center">
+                                                {% if perms.warehousing.change_mainwarehouseexport %}
+                                                    <a href="{% url 'warehousing:warehouse_export_update' warehouse_export.pk %}" 
+                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if perms.warehousing.delete_mainwarehouseexport %}
+                                                    <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'warehousing:warehouse_export_delete' pk=warehouse_export.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف این کالا اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        
+                        </table>
+                    </div>
+                </div>
+
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% include 'partials/pagination.html' with page_obj=page_obj %}
+        
+            </div>
         </div>
     </div> 
 

@@ -111,41 +111,55 @@
                     </li>
                 {% endif %}
 
-                
-                <li class="nav-item has-treeview border-top border-light accordion
-                    {% if request.resolver_match.app_name == 'projects' %}menu-open{% endif %}">
-                    <a href="#" class="nav-link
-                    {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">
-                        <p class="mr-2" style="font-size: 1.2rem;">
-                            پروژه‌ها
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
+                {% if perms.projects %}
+                    <li class="nav-item has-treeview border-top border-light accordion
+                        {% if request.resolver_match.app_name == 'projects' %}menu-open{% endif %}">
+                        <a href="#" class="nav-link
+                        {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">
+                            <p class="mr-2" style="font-size: 1.2rem;">
+                                پروژه‌ها
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
 
-                    <ul class="nav nav-treeview">
+                        <ul class="nav nav-treeview">
 
-                        {% main_menu request 'projects' 'projects' 'project_create' 'project_update' 'projects_search' 'fa-trowel-bricks' 'لیست پروژه‌ها' %}
-        
-                        {% main_menu request 'projects' 'owners' 'owner_create' 'owner_update' 'owners_search' 'fa-person-shelter' 'لیست مالکین' %}
-                        
-                        {% main_menu request 'projects' 'work_references' 'work_reference_create' 'work_reference_update' 'work_references_search' 'fa-person-arrow-up-from-line' 'ارجاع کارها' %}
-                        
-                        {% main_menu request 'projects' 'costs' 'cost_create' 'cost_update' 'costs_search' 'fa-cash-register' 'هزینه‌ها' %}
-                        
-                        {% main_menu request 'projects' 'payments_images' 'payments_image_create' 'payments_image_update' 'payments_images_search' 'fa-file-image' 'تصاویر فیش‌های پرداختی' %}
+                            {% if perms.projects.view_projects %}
+                                {% main_menu request 'projects' 'projects' 'project_create' 'project_update' 'projects_search' 'fa-trowel-bricks' 'لیست پروژه‌ها' %}
+                            {% endif %}
 
-                        <li class="nav-item">
-                            <a href="{% url 'projects:charts' %}" class="nav-link
-                            {% if request.resolver_match.url_name == 'charts' %}
-                                active
-                            {% endif %}">
-                                <i class="fa-solid fa-chart-line text-primary" style="font-size: 1.2rem;"></i>
-                                <span class="ml-2">نمودارها</span>
-                            </a>
-                        </li>
-                    </ul>
+                            {% if perms.projects.view_owners %}
+                                {% main_menu request 'projects' 'owners' 'owner_create' 'owner_update' 'owners_search' 'fa-person-shelter' 'لیست مالکین' %}
+                            {% endif %}
 
-                </li>
+                            {% if perms.projects.view_workreference %}
+                                {% main_menu request 'projects' 'work_references' 'work_reference_create' 'work_reference_update' 'work_references_search' 'fa-person-arrow-up-from-line' 'ارجاع کارها' %}
+                            {% endif %}
+
+                            {% if perms.projects.view_costs %}
+                                {% main_menu request 'projects' 'costs' 'cost_create' 'cost_update' 'costs_search' 'fa-cash-register' 'هزینه‌ها' %}
+                            {% endif %}
+
+                            {% if perms.projects.view_paymentsimages %}
+                                {% main_menu request 'projects' 'payments_images' 'payments_image_create' 'payments_image_update' 'payments_images_search' 'fa-file-image' 'تصاویر فیش‌های پرداختی' %}
+                            {% endif %}
+
+                            {% if request.user.is_superuser %}
+                                <li class="nav-item">
+                                    <a href="{% url 'projects:charts' %}" class="nav-link
+                                    {% if request.resolver_match.url_name == 'charts' %}
+                                        active
+                                    {% endif %}">
+                                        <i class="fa-solid fa-chart-line text-primary" style="font-size: 1.2rem;"></i>
+                                        <span class="ml-2">نمودارها</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+
+                    </li>
+                {% endif %}
 
                 <li class="nav-item has-treeview border-top border-light 
                 {% if request.resolver_match.app_name == 'projects_docs' %}menu-open{% endif %}">
@@ -211,32 +225,44 @@
                     </li>
                 {% endif %}
 
-                <li class="nav-item has-treeview border-top border-light
-                {% if request.resolver_match.app_name == 'warehousing' %}menu-open{% endif %}">
-                    <a href="#" class="nav-link
-                    {% if request.resolver_match.app_name == 'warehousing' %}active{% endif %}">
-                        <p class="mr-2" style="font-size: 1.2rem;">
-                            انبارداری
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
+                {% if perms.warehousing %}
+                    <li class="nav-item has-treeview border-top border-light
+                        {% if request.resolver_match.app_name == 'warehousing' %}menu-open{% endif %}">
+                        <a href="#" class="nav-link
+                        {% if request.resolver_match.app_name == 'warehousing' %}active{% endif %}">
+                            <p class="mr-2" style="font-size: 1.2rem;">
+                                انبارداری
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
 
 
-                    <ul class="nav nav-treeview">
+                        <ul class="nav nav-treeview">
+                        
+                        {% if perms.warehousing.view_mainwarehouseimport %}
+                            {% main_menu request 'warehousing' 'warehouse_imports' 'warehouse_import_create' 'warehouse_import_update' 'warehouse_imports_search' 'fa-arrow-right-to-bracket' 'ورود به انبار اصلی' %}
+                        {% endif %}
+                        
+                        {% if perms.warehousing.view_mainwarehouseexport %}
+                            {% main_menu request 'warehousing' 'warehouse_exports' 'warehouse_export_create' 'warehouse_export_update' 'warehouse_exports_search' 'fa-arrow-right-from-bracket' 'خروج از انبار اصلی' %}
+                        {% endif %}
+                        
+                        {% if perms.warehousing.view_projectwarehouse %}
+                            {% main_menu request 'warehousing' 'project_warehouses' 'project_warehouse_create' 'project_warehouse_update' 'project_warehouses_search' 'fa-tent' 'انبار پروژه' %}
+                        {% endif %}
+                        
+                        {% if perms.warehousing.view_usecertificate %}
+                            {% main_menu request 'warehousing' 'use_certificates' 'use_certificate_create' 'use_certificate_update' 'use_certificates_search' 'fa-file-import' 'گواهی‌های مصرف کالا' %}
+                        {% endif %}
+                        
+                        {% if perms.warehousing.view_stuff %}
+                            {% main_menu request 'warehousing' 'stuffs' 'stuff_create' 'stuff_update' '' 'fa-boxes-stacked' 'کالاها' %}
+                        {% endif %}
+                        </ul>
 
-                       {% main_menu request 'warehousing' 'warehouse_imports' 'warehouse_import_create' 'warehouse_import_update' 'warehouse_imports_search' 'fa-arrow-right-to-bracket' 'ورود به انبار اصلی' %}
-                       
-                       {% main_menu request 'warehousing' 'warehouse_exports' 'warehouse_export_create' 'warehouse_export_update' 'warehouse_exports_search' 'fa-arrow-right-from-bracket' 'خروج از انبار اصلی' %}
-                       
-                       {% main_menu request 'warehousing' 'project_warehouses' 'project_warehouse_create' 'project_warehouse_update' 'project_warehouses_search' 'fa-tent' 'انبار پروژه' %}
+                    </li>
+                {% endif %}
 
-                       {% main_menu request 'warehousing' 'use_certificates' 'use_certificate_create' 'use_certificate_update' 'use_certificates_search' 'fa-file-import' 'گواهی‌های مصرف کالا' %}
-
-                       {% main_menu request 'warehousing' 'stuffs' 'stuff_create' 'stuff_update' '' 'fa-boxes-stacked' 'کالاها' %}
-        
-                    </ul>
-
-                </li>
 
                 <li class="nav-item border-top border-light ">
                     <a href="#" class="nav-link">
@@ -255,21 +281,23 @@
                     </a>
                 </li>
                 
-                <p class="border-top border-light mb-0"></p>
+                {% if request.user.is_superuser %}
+                    <p class="border-top border-light mb-0"></p>
 
-                {% main_menu request 'account' 'users' 'user_create' 'user_update' 'users_search' 'fa-users' 'کاربران' %}
-                
-                <p class="border-top border-light mb-0"></p>
+                    {% main_menu request 'account' 'users' 'user_create' 'user_update' 'users_search' 'fa-users' 'کاربران' %}
+                    
+                    <p class="border-top border-light mb-0"></p>
 
-                {% main_menu request 'account' 'groups' 'group_create' 'group_update' '' 'fa-elevator' 'گروه‌های دسترسی‌' %}
+                    {% main_menu request 'account' 'groups' 'group_create' 'group_update' '' 'fa-elevator' 'گروه‌های دسترسی‌' %}
 
 
-                <li class="nav-item border-top border-light mb-3">
-                    <a href="#" class="nav-link d-block">
-                        <i class="fa-solid fa-database text-primary" style="font-size: 1.2rem;"></i>
-                        <span class="ml-2">پشتیبان گیری پایگاه داده</span>
-                    </a>
-                </li>
+                    <li class="nav-item border-top border-light mb-3">
+                        <a href="#" class="nav-link d-block">
+                            <i class="fa-solid fa-database text-primary" style="font-size: 1.2rem;"></i>
+                            <span class="ml-2">پشتیبان گیری پایگاه داده</span>
+                        </a>
+                    </li>
+                {% endif %}
                 
             </ul>
         </nav>
