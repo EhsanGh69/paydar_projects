@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -29,7 +29,8 @@ from .forms import (
 
 # Contracts - Start
 
-class ContractsList(LoginRequiredMixin, ListView):
+class ContractsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_contracts'
     template_name = 'projects_docs/contracts_list.html'
     model = Contracts
     context_object_name = "contracts"
@@ -43,7 +44,8 @@ class ContractsList(LoginRequiredMixin, ListView):
         return context
 
 
-class ContractsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ContractsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects_docs.add_contracts'
     model = Contracts
     template_name = 'projects_docs/contract_create_update.html'
     form_class = ContractsForm
@@ -55,12 +57,13 @@ class ContractsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         unrelated_to_project = form.cleaned_data.get('unrelated_to_project')
         if related_to_project is None and unrelated_to_project == '':
             form.errors['__all__'] = form.error_class(["لطفاً پروژه‌ایی را انتخاب کنید یا توضیح قرارداد غیرمرتبط با پروژه را وارد نمایید"])
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
 
 
-class ContractsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ContractsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects_docs.change_contracts'
     model = Contracts
     template_name = 'projects_docs/contract_create_update.html'
     form_class = ContractsForm
@@ -72,12 +75,13 @@ class ContractsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         unrelated_to_project = form.cleaned_data.get('unrelated_to_project')
         if related_to_project is None and unrelated_to_project == '':
             form.errors['__all__'] = form.error_class(["لطفاً پروژه‌ایی را انتخاب کنید یا توضیح قرارداد غیرمرتبط با پروژه را وارد نمایید"])
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
 
 
-class ContractsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ContractsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects_docs.delete_contracts'
     success_url = reverse_lazy("projects_docs:contracts")
     success_message = "قرارداد با موفقیت حذف شد"
 
@@ -87,7 +91,8 @@ class ContractsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return contract
 
 
-class ContractsSearch(LoginRequiredMixin, ListView):
+class ContractsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_contracts'
     template_name = 'projects_docs/contracts_list.html'
     model = Contracts
     context_object_name = "contracts"
@@ -103,16 +108,16 @@ class ContractsSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if contract_type_filter != "all" and date_filter == "all":
-            search_result = Contracts.objects.search(query).filter(contract_type=contract_type_filter).all()
+            search_result = Contracts.objects.search(query).filter(contract_type=contract_type_filter).all() # type: ignore
 
         elif contract_type_filter == "all" and date_filter != "all":
-            search_result = Contracts.objects.search(query).filter(contract_date__range=filter_date_values(date_filter)).all()
+            search_result = Contracts.objects.search(query).filter(contract_date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif contract_type_filter != "all" and date_filter != "all":
-            search_result = Contracts.objects.search(query).filter(contract_date__range=filter_date_values(date_filter),
+            search_result = Contracts.objects.search(query).filter(contract_date__range=filter_date_values(date_filter), # type: ignore
                                                                     contract_type=contract_type_filter).all()
         else:
-            search_result = Contracts.objects.search(query)
+            search_result = Contracts.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -134,7 +139,8 @@ class ContractsSearch(LoginRequiredMixin, ListView):
 # Proceedings - Start
 
 
-class ProceedingsList(LoginRequiredMixin, ListView):
+class ProceedingsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_proceedings'
     template_name = 'projects_docs/proceedings_list.html'
     model = Proceedings
     context_object_name = "proceedings"
@@ -148,7 +154,8 @@ class ProceedingsList(LoginRequiredMixin, ListView):
         return context
 
 
-class ProceedingsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ProceedingsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects_docs.add_proceedings'
     model = Proceedings
     template_name = 'projects_docs/proceeding_create_update.html'
     form_class = ProceedingsForm
@@ -156,7 +163,8 @@ class ProceedingsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "صورت جلسه با موفقیت ثبت شد"
 
 
-class ProceedingsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ProceedingsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects_docs.change_proceedings'
     model = Proceedings
     template_name = 'projects_docs/proceeding_create_update.html'
     form_class = ProceedingsForm
@@ -164,7 +172,8 @@ class ProceedingsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "صورت جلسه با موفقیت ویرایش شد"
 
 
-class ProceedingsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ProceedingsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects_docs.delete_proceedings'
     success_url = reverse_lazy("projects_docs:proceedings")
     success_message = "صورت جلسه با موفقیت حذف شد"
 
@@ -174,7 +183,8 @@ class ProceedingsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return proceeding
 
 
-class ProceedingsSearch(LoginRequiredMixin, ListView):
+class ProceedingsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_proceedings'
     template_name = 'projects_docs/proceedings_list.html'
     model = Proceedings
     context_object_name = "proceedings"
@@ -190,16 +200,16 @@ class ProceedingsSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if proceeding_type_filter != "all" and date_filter == "all":
-            search_result = Proceedings.objects.search(query).filter(proceeding_type=proceeding_type_filter).all()
+            search_result = Proceedings.objects.search(query).filter(proceeding_type=proceeding_type_filter).all() # type: ignore
 
         elif proceeding_type_filter == "all" and date_filter != "all":
-            search_result = Proceedings.objects.search(query).filter(proceeding_date__range=filter_date_values(date_filter)).all()
+            search_result = Proceedings.objects.search(query).filter(proceeding_date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif proceeding_type_filter != "all" and date_filter != "all":
-            search_result = Proceedings.objects.search(query).filter(proceeding_date__range=filter_date_values(date_filter),
+            search_result = Proceedings.objects.search(query).filter(proceeding_date__range=filter_date_values(date_filter), # type: ignore
                                                                     proceeding_type=proceeding_type_filter).all()
         else:
-            search_result = Proceedings.objects.search(query)
+            search_result = Proceedings.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -220,7 +230,8 @@ class ProceedingsSearch(LoginRequiredMixin, ListView):
 
 # Agreements - Start
 
-class AgreementsList(LoginRequiredMixin, ListView):
+class AgreementsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_agreements'
     template_name = 'projects_docs/agreements_list.html'
     model = Agreements
     context_object_name = "agreements"
@@ -234,7 +245,8 @@ class AgreementsList(LoginRequiredMixin, ListView):
         return context
 
 
-class AgreementsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class AgreementsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects_docs.add_agreements'
     model = Agreements
     template_name = 'projects_docs/agreement_create_update.html'
     form_class = AgreementsForm
@@ -242,7 +254,8 @@ class AgreementsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "توافق‌نامه با موفقیت ثبت شد"
 
 
-class AgreementsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class AgreementsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects_docs.change_agreements'
     model = Agreements
     template_name = 'projects_docs/agreement_create_update.html'
     form_class = AgreementsForm
@@ -250,7 +263,8 @@ class AgreementsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "توافق‌نامه با موفقیت ویرایش شد"
 
 
-class AgreementsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class AgreementsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects_docs.delete_agreements'
     success_url = reverse_lazy("projects_docs:agreements")
     success_message = "توافق‌نامه با موفقیت حذف شد"
 
@@ -260,7 +274,8 @@ class AgreementsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return agreement
 
 
-class AgreementsSearch(LoginRequiredMixin, ListView):
+class AgreementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_agreements'
     template_name = 'projects_docs/agreements_list.html'
     model = Agreements
     context_object_name = "agreements"
@@ -275,9 +290,9 @@ class AgreementsSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if date_filter != "all":
-            search_result = Agreements.objects.search(query).filter(agreement_date__range=filter_date_values(date_filter)).all()
+            search_result = Agreements.objects.search(query).filter(agreement_date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
-            search_result = Agreements.objects.search(query)
+            search_result = Agreements.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -298,7 +313,8 @@ class AgreementsSearch(LoginRequiredMixin, ListView):
 
 # BankReceipts - Start
 
-class BankReceiptsList(LoginRequiredMixin, ListView):
+class BankReceiptsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_bankreceipts'
     template_name = 'projects_docs/bank_receipts_list.html'
     model = BankReceipts
     context_object_name = "bank_receipts"
@@ -312,7 +328,8 @@ class BankReceiptsList(LoginRequiredMixin, ListView):
         return context
 
 
-class BankReceiptsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class BankReceiptsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects_docs.add_bankreceipts'
     model = BankReceipts
     template_name = 'projects_docs/bank_receipt_create_update.html'
     form_class = BankReceiptsForm
@@ -320,7 +337,8 @@ class BankReceiptsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "رسید بانکی با موفقیت ثبت شد"
 
 
-class BankReceiptsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class BankReceiptsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects_docs.change_bankreceipts'
     model = BankReceipts
     template_name = 'projects_docs/bank_receipt_create_update.html'
     form_class = BankReceiptsForm
@@ -328,7 +346,8 @@ class BankReceiptsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "رسید بانکی با موفقیت ویرایش شد"
 
 
-class BankReceiptsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class BankReceiptsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects_docs.delete_bankreceipts'
     success_url = reverse_lazy("projects_docs:bank_receipts")
     success_message = "رسید بانکی با موفقیت حذف شد"
 
@@ -338,7 +357,8 @@ class BankReceiptsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return bank_receipt
 
 
-class BankReceiptsSearch(LoginRequiredMixin, ListView):
+class BankReceiptsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_bankreceipts'
     template_name = 'projects_docs/bank_receipts_list.html'
     model = BankReceipts
     context_object_name = "bank_receipts"
@@ -354,16 +374,16 @@ class BankReceiptsSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if receipt_type_filter != "all" and date_filter == "all":
-            search_result = BankReceipts.objects.search(query).filter(receive_or_pay=receipt_type_filter).all()
+            search_result = BankReceipts.objects.search(query).filter(receive_or_pay=receipt_type_filter).all() # type: ignore
 
         elif receipt_type_filter == "all" and date_filter != "all":
-            search_result = BankReceipts.objects.search(query).filter(receipt_date__range=filter_date_values(date_filter)).all()
+            search_result = BankReceipts.objects.search(query).filter(receipt_date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif receipt_type_filter != "all" and date_filter != "all":
-            search_result = BankReceipts.objects.search(query).filter(receipt_date__range=filter_date_values(date_filter),
+            search_result = BankReceipts.objects.search(query).filter(receipt_date__range=filter_date_values(date_filter), # type: ignore
                                                                     receive_or_pay=receipt_type_filter).all()
         else:
-            search_result = BankReceipts.objects.search(query)
+            search_result = BankReceipts.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -384,7 +404,8 @@ class BankReceiptsSearch(LoginRequiredMixin, ListView):
 
 # ConditionStatements - Start
 
-class ConditionStatementsList(LoginRequiredMixin, ListView):
+class ConditionStatementsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_conditionstatements'
     template_name = 'projects_docs/condition_statements_list.html'
     model = ConditionStatements
     context_object_name = "condition_statements"
@@ -398,7 +419,8 @@ class ConditionStatementsList(LoginRequiredMixin, ListView):
         return context
 
 
-class ConditionStatementsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class ConditionStatementsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects_docs.add_conditionstatements'
     model = ConditionStatements
     template_name = 'projects_docs/condition_statement_create_update.html'
     form_class = ConditionStatementsForm
@@ -406,7 +428,8 @@ class ConditionStatementsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateV
     success_message = "صورت وضعیت با موفقیت ثبت شد"
 
 
-class ConditionStatementsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ConditionStatementsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects_docs.change_conditionstatements'
     model = ConditionStatements
     template_name = 'projects_docs/condition_statement_create_update.html'
     form_class = ConditionStatementsForm
@@ -414,7 +437,8 @@ class ConditionStatementsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateV
     success_message = "صورت وضعیت با موفقیت ویرایش شد"
 
 
-class ConditionStatementsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ConditionStatementsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects_docs.delete_conditionstatements'
     success_url = reverse_lazy("projects_docs:condition_statements")
     success_message = "صورت وضعیت با موفقیت حذف شد"
 
@@ -424,7 +448,8 @@ class ConditionStatementsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteV
         return condition_statement
 
 
-class ConditionStatementsSearch(LoginRequiredMixin, ListView):
+class ConditionStatementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_conditionstatements'
     template_name = 'projects_docs/condition_statements_list.html'
     model = ConditionStatements
     context_object_name = "condition_statements"
@@ -440,16 +465,16 @@ class ConditionStatementsSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if accounting_confirm_filter != "all" and management_confirm_filter == "all":
-            search_result = ConditionStatements.objects.search(query).filter(accounting_confirm=accounting_confirm_filter).all()
+            search_result = ConditionStatements.objects.search(query).filter(accounting_confirm=accounting_confirm_filter).all() # type: ignore
 
         elif accounting_confirm_filter == "all" and management_confirm_filter != "all":
-            search_result = ConditionStatements.objects.search(query).filter(management_confirm=management_confirm_filter).all()
+            search_result = ConditionStatements.objects.search(query).filter(management_confirm=management_confirm_filter).all() # type: ignore
 
         elif accounting_confirm_filter != "all" and management_confirm_filter != "all":
-            search_result = ConditionStatements.objects.search(query).filter(accounting_confirm=accounting_confirm_filter,
+            search_result = ConditionStatements.objects.search(query).filter(accounting_confirm=accounting_confirm_filter, # type: ignore
                                                                     management_confirm=management_confirm_filter).all()
         else:
-            search_result = ConditionStatements.objects.search(query)
+            search_result = ConditionStatements.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -471,7 +496,8 @@ class ConditionStatementsSearch(LoginRequiredMixin, ListView):
 
 # RegisteredDocs - Start
 
-class RegisteredDocsList(LoginRequiredMixin, ListView):
+class RegisteredDocsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_registereddocs'
     template_name = 'projects_docs/registered_docs_list.html'
     model = RegisteredDocs
     context_object_name = "registered_docs"
@@ -485,7 +511,8 @@ class RegisteredDocsList(LoginRequiredMixin, ListView):
         return context
 
 
-class RegisteredDocsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class RegisteredDocsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects_docs.add_registereddocs'
     model = RegisteredDocs
     template_name = 'projects_docs/registered_doc_create_update.html'
     form_class = RegisteredDocsForm
@@ -493,7 +520,8 @@ class RegisteredDocsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "سند ثبتی با موفقیت ثبت شد"
 
 
-class RegisteredDocsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class RegisteredDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects_docs.change_registereddocs'
     model = RegisteredDocs
     template_name = 'projects_docs/registered_doc_create_update.html'
     form_class = RegisteredDocsForm
@@ -501,7 +529,8 @@ class RegisteredDocsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "سند ثبتی با موفقیت ویرایش شد"
 
 
-class RegisteredDocsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class RegisteredDocsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects_docs.delete_registereddocs'
     success_url = reverse_lazy("projects_docs:registered_docs")
     success_message = "سند ثبتی با موفقیت حذف شد"
 
@@ -511,7 +540,8 @@ class RegisteredDocsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return registered_doc
 
 
-class RegisteredDocsSearch(LoginRequiredMixin, ListView):
+class RegisteredDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_registereddocs'
     template_name = 'projects_docs/registered_docs_list.html'
     model = RegisteredDocs
     context_object_name = "registered_docs"
@@ -526,9 +556,9 @@ class RegisteredDocsSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if doc_type_filter != "all":
-            search_result = RegisteredDocs.objects.search(query).filter(doc_type=doc_type_filter).all()
+            search_result = RegisteredDocs.objects.search(query).filter(doc_type=doc_type_filter).all() # type: ignore
         else:
-            search_result = RegisteredDocs.objects.search(query)
+            search_result = RegisteredDocs.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -550,7 +580,8 @@ class RegisteredDocsSearch(LoginRequiredMixin, ListView):
 
 # OfficialDocs - Start
 
-class OfficialDocsList(LoginRequiredMixin, ListView):
+class OfficialDocsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_officialdocs'
     template_name = 'projects_docs/official_docs_list.html'
     model = OfficialDocs
     context_object_name = "official_docs"
@@ -564,7 +595,8 @@ class OfficialDocsList(LoginRequiredMixin, ListView):
         return context
 
 
-class OfficialDocsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class OfficialDocsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'projects_docs.add_officialdocs'
     model = OfficialDocs
     template_name = 'projects_docs/official_doc_create_update.html'
     form_class = OfficialDocsForm
@@ -577,15 +609,16 @@ class OfficialDocsCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         license_type = form.cleaned_data.get('license_type')
         if doc_type == "let" and letter_type is None:
             form.add_error('letter_type', 'لطفا نوع نامه را انتخاب کنید')
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         elif doc_type == "lic" and license_type is None:
             form.add_error('license_type', 'لطفا نوع پروانه را انتخاب کنید')
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
 
 
-class OfficialDocsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class OfficialDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'projects_docs.change_officialdocs'
     model = OfficialDocs
     template_name = 'projects_docs/official_doc_create_update.html'
     form_class = OfficialDocsForm
@@ -598,15 +631,16 @@ class OfficialDocsUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         license_type = form.cleaned_data.get('license_type')
         if doc_type == "let" and letter_type is None:
             form.add_error('letter_type', 'لطفا نوع نامه را انتخاب کنید')
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         elif doc_type == "lic" and license_type is None:
             form.add_error('license_type', 'لطفا نوع پروانه را انتخاب کنید')
-            return super().form_invalid(form)
+            return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
 
 
-class OfficialDocsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class OfficialDocsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'projects_docs.delete_officialdocs'
     success_url = reverse_lazy("projects_docs:official_docs")
     success_message = "سند اداری با موفقیت حذف شد"
 
@@ -616,7 +650,8 @@ class OfficialDocsDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return official_doc
 
 
-class OfficialDocsSearch(LoginRequiredMixin, ListView):
+class OfficialDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'projects_docs.view_officialdocs'
     template_name = 'projects_docs/official_docs_list.html'
     model = OfficialDocs
     context_object_name = "official_docs"
@@ -632,30 +667,30 @@ class OfficialDocsSearch(LoginRequiredMixin, ListView):
         global search_result
 
         if doc_type_filter != "all" and doc_type_filter in ['let', 'lic', 'crt'] and date_filter == "all":
-            search_result = OfficialDocs.objects.search(query).filter(doc_type=doc_type_filter).all()
+            search_result = OfficialDocs.objects.search(query).filter(doc_type=doc_type_filter).all() # type: ignore
 
         elif doc_type_filter != "all" and doc_type_filter in ['snd', 'rec'] and date_filter == "all":
-            search_result = OfficialDocs.objects.search(query).filter(letter_type=doc_type_filter).all()
+            search_result = OfficialDocs.objects.search(query).filter(letter_type=doc_type_filter).all() # type: ignore
 
         elif doc_type_filter != "all" and doc_type_filter in ['des', 'con', 'dac', 'tci'] and date_filter == "all":
-            search_result = OfficialDocs.objects.search(query).filter(license_type=doc_type_filter).all()
+            search_result = OfficialDocs.objects.search(query).filter(license_type=doc_type_filter).all() # type: ignore
 
         elif doc_type_filter == "all" and date_filter != "all":
-            search_result = OfficialDocs.objects.search(query).filter(send_receive_date__range=filter_date_values(date_filter)).all()
+            search_result = OfficialDocs.objects.search(query).filter(send_receive_date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif doc_type_filter != "all" and doc_type_filter in ['let', 'lic', 'crt'] and date_filter != "all":
-            search_result = OfficialDocs.objects.search(query).filter(send_receive_date__range=filter_date_values(date_filter),
+            search_result = OfficialDocs.objects.search(query).filter(send_receive_date__range=filter_date_values(date_filter), # type: ignore
                                                                     doc_type=doc_type_filter).all()
             
         elif doc_type_filter != "all" and doc_type_filter in ['snd', 'rec'] and date_filter != "all":
-            search_result = OfficialDocs.objects.search(query).filter(send_receive_date__range=filter_date_values(date_filter),
+            search_result = OfficialDocs.objects.search(query).filter(send_receive_date__range=filter_date_values(date_filter), # type: ignore
                                                                     letter_type=doc_type_filter).all()
             
         elif doc_type_filter != "all" and doc_type_filter in ['des', 'con', 'dac', 'tci'] and date_filter != "all":
-            search_result = OfficialDocs.objects.search(query).filter(send_receive_date__range=filter_date_values(date_filter),
+            search_result = OfficialDocs.objects.search(query).filter(send_receive_date__range=filter_date_values(date_filter), # type: ignore
                                                                     license_type=doc_type_filter).all()
         else:
-            search_result = OfficialDocs.objects.search(query)
+            search_result = OfficialDocs.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True

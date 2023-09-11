@@ -161,36 +161,51 @@
                     </li>
                 {% endif %}
 
-                <li class="nav-item has-treeview border-top border-light 
-                {% if request.resolver_match.app_name == 'projects_docs' %}menu-open{% endif %}">
-                    <a href="#" class="nav-link
-                    {% if request.resolver_match.app_name == 'projects_docs' %}active{% endif %}">
-                        <p class="mr-2" style="font-size: 1.2rem;">
-                            اسناد مرتبط با پروژه‌ها
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
+                {% if perms.projects_docs %}
+                    <li class="nav-item has-treeview border-top border-light 
+                        {% if request.resolver_match.app_name == 'projects_docs' %}menu-open{% endif %}">
+                        <a href="#" class="nav-link
+                        {% if request.resolver_match.app_name == 'projects_docs' %}active{% endif %}">
+                            <p class="mr-2" style="font-size: 1.2rem;">
+                                اسناد مرتبط با پروژه‌ها
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
 
-                    
-                    <ul class="nav nav-treeview">
                         
-                        {% main_menu request 'projects_docs' 'contracts' 'contract_create' 'contract_update' 'contracts_search' 'fa-handshake' 'قراردادها' %}
-                        
-                        {% main_menu request 'projects_docs' 'proceedings' 'proceeding_create' 'proceeding_update' 'proceedings_search' 'fa-users-between-lines' 'صورت جلسه‌ها' %}
-                        
-                        {% main_menu request 'projects_docs' 'agreements' 'agreement_create' 'agreement_update' 'agreements_search' 'fa-people-arrows' 'توافق‌نامه‌ها' %}
-                        
-                        {% main_menu request 'projects_docs' 'bank_receipts' 'bank_receipt_create' 'bank_receipt_update' 'bank_receipts_search' 'fa-file-invoice' 'رسیدهای بانکی' %}
-                        
-                        {% main_menu request 'projects_docs' 'condition_statements' 'condition_statement_create' 'condition_statement_update' 'condition_statements_search' 'fa-file-signature' 'صورت وضعیت‌ها' %}
-                        
-                        {% main_menu request 'projects_docs' 'registered_docs' 'registered_doc_create' 'registered_doc_update' 'registered_docs_search' 'fa-file-contract' 'اسناد ثبتی' %}
-                        
-                        {% main_menu request 'projects_docs' 'official_docs' 'official_doc_create' 'official_doc_update' 'official_docs_search' 'fa-id-card' 'اسناد اداری' %}
+                        <ul class="nav nav-treeview">
+                            
+                            {% if perms.projects_docs.view_contracts %}
+                                {% main_menu request 'projects_docs' 'contracts' 'contract_create' 'contract_update' 'contracts_search' 'fa-handshake' 'قراردادها' %}
+                            {% endif %}
 
-                    </ul>
+                            {% if perms.projects_docs.view_proceedings %}
+                                {% main_menu request 'projects_docs' 'proceedings' 'proceeding_create' 'proceeding_update' 'proceedings_search' 'fa-users-between-lines' 'صورت جلسه‌ها' %}
+                            {% endif %}
 
-                </li>
+                            {% if perms.projects_docs.view_agreements %}
+                                {% main_menu request 'projects_docs' 'agreements' 'agreement_create' 'agreement_update' 'agreements_search' 'fa-people-arrows' 'توافق‌نامه‌ها' %}
+                            {% endif %}
+
+                            {% if perms.projects_docs.view_bankreceipts %}
+                                {% main_menu request 'projects_docs' 'bank_receipts' 'bank_receipt_create' 'bank_receipt_update' 'bank_receipts_search' 'fa-file-invoice' 'رسیدهای بانکی' %}
+                            {% endif %}
+
+                            {% if perms.projects_docs.view_conditionstatements %}
+                                {% main_menu request 'projects_docs' 'condition_statements' 'condition_statement_create' 'condition_statement_update' 'condition_statements_search' 'fa-file-signature' 'صورت وضعیت‌ها' %}
+                            {% endif %}
+
+                            {% if perms.projects_docs.view_registereddocs %}
+                                {% main_menu request 'projects_docs' 'registered_docs' 'registered_doc_create' 'registered_doc_update' 'registered_docs_search' 'fa-file-contract' 'اسناد ثبتی' %}
+                            {% endif %}
+
+                            {% if perms.projects_docs.view_officialdocs %}
+                                {% main_menu request 'projects_docs' 'official_docs' 'official_doc_create' 'official_doc_update' 'official_docs_search' 'fa-id-card' 'اسناد اداری' %}
+                            {% endif %}
+                        </ul>
+
+                    </li>
+                {% endif %}
 
                 {% if perms.cheques_receive_pay %}
                     <li class="nav-item has-treeview border-top border-light

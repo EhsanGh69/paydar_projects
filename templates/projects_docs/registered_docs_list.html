@@ -14,103 +14,103 @@
     <div class="card">
         
         <div class="card-body">
-    
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-            
+                {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت سند ثبتی جدید' create_perm=perms.projects_docs.add_registereddocs %}
+        
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+        
+                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 40.797px;">
+                                        ردیف
+                                    </th>
 
-{% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت سند ثبتی جدید' %}
-    
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 40.797px;">
-                                    ردیف
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        پروژه‌
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    پروژه‌
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        نوع سند
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    نوع سند
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        تصویر سند
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    تصویر سند
-                                </th>
-
-                                <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-    
-                            {% for registered_doc in registered_docs %}
-                                <tr role="row" class="odd">
-                                    <td>{{ forloop.counter }}</td>
-
-                                    <td>{{ registered_doc.project }}</td>
-
-                                    <td class="text-center">
-                                        {% if registered_doc.doc_type == 'owd' %}
-                                            سند مالکیت      
-                                        {% elif registered_doc.doc_type == 'atd' %}
-                                            سند وکالت      
-                                        {% elif registered_doc.doc_type == 'sic' %}
-                                            گواهی امضاء      
-                                        {% else %}
-                                            تعهدنامه
-                                        {% endif %}
-                                    </td>
-
-                                    <td class="text-center">
-                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                        data-target="#doc_image{{ forloop.counter }}">
-                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                        </a>
-                                    </td>
-
-                                    {% include 'partials/img_modal.html' with img_type='doc_image' id=forloop.counter img_src=registered_doc.doc_image.url label='' owner=registered_doc.doc_type %}
-
-
-                                    <td class="action-td d-flex justify-content-center">
-
-                                        <a href="{% url 'projects_docs:registered_doc_update' registered_doc.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'projects_docs:registered_doc_delete' pk=registered_doc.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف این سند ثبتی اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-
-                                    </td>
+                                    {% if perms.projects_docs.delete_registereddocs or perms.projects_docs.change_registereddocs %}
+                                        <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
+                                            اقدام
+                                        </th>
+                                    {% endif %}
                                 </tr>
-                            {% endfor %}
-    
-                            
-    
-                        </tbody>
-                    
-                    </table>
-                </div>
-            </div>
+                            </thead>
+                            <tbody>
+        
+                                {% for registered_doc in registered_docs %}
+                                    <tr role="row" class="odd">
+                                        <td>{{ forloop.counter }}</td>
 
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
+                                        <td>{{ registered_doc.project }}</td>
+
+                                        <td class="text-center">
+                                            {% if registered_doc.doc_type == 'owd' %}
+                                                سند مالکیت      
+                                            {% elif registered_doc.doc_type == 'atd' %}
+                                                سند وکالت      
+                                            {% elif registered_doc.doc_type == 'sic' %}
+                                                گواهی امضاء      
+                                            {% else %}
+                                                تعهدنامه
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="text-center">
+                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                            data-target="#doc_image{{ forloop.counter }}">
+                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                            </a>
+                                        </td>
+
+                                        {% include 'partials/img_modal.html' with img_type='doc_image' id=forloop.counter img_src=registered_doc.doc_image.url label='' owner=registered_doc.doc_type %}
+
+                                        {% if perms.projects_docs.delete_registereddocs or perms.projects_docs.change_registereddocs %}
+                                            <td class="action-td d-flex justify-content-center">
+                                                {% if perms.projects_docs.change_registereddocs %}
+                                                    <a href="{% url 'projects_docs:registered_doc_update' registered_doc.pk %}" 
+                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if perms.projects_docs.delete_registereddocs %}
+                                                    <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'projects_docs:registered_doc_delete' pk=registered_doc.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف این سند ثبتی اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        
+                        </table>
+                    </div>
+                </div>
+
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% include 'partials/pagination.html' with page_obj=page_obj %}
+        
+            </div>
         </div>
     </div> 
 

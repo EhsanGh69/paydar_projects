@@ -14,157 +14,158 @@
     <div class="card">
         
         <div class="card-body">
-    
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-            
+                {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت صورت وضعیت جدید' create_perm=perms.projects_docs.add_conditionstatements %}
+        
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+        
+                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 40.797px;">
+                                        ردیف
+                                    </th>
 
-{% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت صورت وضعیت جدید' %}
-    
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 40.797px;">
-                                    ردیف
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        پروژه‌
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    پروژه‌
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        پیمانکار
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    پیمانکار
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        واحد کار
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    واحد کار
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        مبلغ درخواستی پیمانکار
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    مبلغ درخواستی پیمانکار
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        مبلغ تأییدشده سرپرست کارگاه
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    مبلغ تأییدشده سرپرست کارگاه
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        وضعیت تأیید حسابداری
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    وضعیت تأیید حسابداری
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        وضعیت تأیید مدیریت
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    وضعیت تأیید مدیریت
-                                </th>
+                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                        مبلغ واریزی نهایی
+                                    </th>
 
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    مبلغ واریزی نهایی
-                                </th>
-
-                                <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-    
-                            {% for condition_statement in condition_statements %}
-                                <tr role="row" class="odd">
-                                    <td>{{ forloop.counter }}</td>
-
-                                    <td>{{ condition_statement.project }}</td>
-                                    <td>{{ condition_statement.contractor }}</td>
-                                    <td>
-                                        {% if condition_statement.work_unit == 'sqm' %}
-                                            مترمربع
-                                        {% elif condition_statement.work_unit == 'mel' %}
-                                            مترطول
-                                        {% elif condition_statement.work_unit == 'kgm' %}
-                                            کیلوگرم
-                                        {% else %}
-                                            تن
-                                        {% endif %}
-                                    </td>
-
-                                    {% if condition_statement.requested_amount %}
-                                        <td data-sort="{{ condition_statement.requested_amount }}">
-                                            {{ condition_statement.formatted_requested_amount }}
-                                        </td>
-                                    {% else %}
-                                        <td class="text-center">_</td>
+                                    {% if perms.projects_docs.delete_conditionstatements or perms.projects_docs.change_conditionstatements %}
+                                        <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
+                                            اقدام
+                                        </th>
                                     {% endif %}
-
-                                    {% if condition_statement.confirmed_amount %}
-                                        <td data-sort="{{ condition_statement.confirmed_amount }}">
-                                            {{ condition_statement.formatted_confirmed_amount }}
-                                        </td>
-                                    {% else %}
-                                        <td class="text-center">_</td>
-                                    {% endif %}
-
-                                    <td>
-                                        {% if condition_statement.accounting_confirm == 'con' %}
-                                            تأییدشده
-                                        {% elif condition_statement.accounting_confirm == 'nco' %}
-                                            تأییدنشده
-                                        {% else %}
-                                            در انتظار تأیید
-                                        {% endif %}
-                                    </td>
-
-                                    <td>
-                                        {% if condition_statement.management_confirm == 'con' %}
-                                            تأییدشده
-                                        {% elif condition_statement.management_confirm == 'nco' %}
-                                            تأییدنشده
-                                        {% else %}
-                                            در انتظار تأیید
-                                        {% endif %}
-                                    </td>
-
-                                    {% if condition_statement.final_deposit_amount %}
-                                        <td data-sort="{{ condition_statement.final_deposit_amount }}">
-                                            {{ condition_statement.formatted_final_deposit_amount }}
-                                        </td>
-                                    {% else %}
-                                        <td class="text-center">_</td>
-                                    {% endif %}
-
-                                    <td class="action-td d-flex justify-content-center">
-
-                                        <a href="{% url 'projects_docs:condition_statement_update' condition_statement.pk %}" 
-                                        class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-
-                                        <a href="javascript:void(0)"  
-                                        data-toggle="modal"
-                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                        data-url="{% url 'projects_docs:condition_statement_delete' pk=condition_statement.pk %}"
-                                        data-target="#deleteItemModal" title="حذف"
-                                        data-message="آیا از حذف این صورت وضعیت اطمینان دارید؟">
-                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                        </a>
-
-                                    </td>
                                 </tr>
-                            {% endfor %}
-    
-                            
-    
-                        </tbody>
-                    
-                    </table>
-                </div>
-            </div>
+                            </thead>
+                            <tbody>
+        
+                                {% for condition_statement in condition_statements %}
+                                    <tr role="row" class="odd">
+                                        <td>{{ forloop.counter }}</td>
 
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
+                                        <td>{{ condition_statement.project }}</td>
+                                        <td>{{ condition_statement.contractor }}</td>
+                                        <td>
+                                            {% if condition_statement.work_unit == 'sqm' %}
+                                                مترمربع
+                                            {% elif condition_statement.work_unit == 'mel' %}
+                                                مترطول
+                                            {% elif condition_statement.work_unit == 'kgm' %}
+                                                کیلوگرم
+                                            {% else %}
+                                                تن
+                                            {% endif %}
+                                        </td>
+
+                                        {% if condition_statement.requested_amount %}
+                                            <td data-sort="{{ condition_statement.requested_amount }}">
+                                                {{ condition_statement.formatted_requested_amount }}
+                                            </td>
+                                        {% else %}
+                                            <td class="text-center">_</td>
+                                        {% endif %}
+
+                                        {% if condition_statement.confirmed_amount %}
+                                            <td data-sort="{{ condition_statement.confirmed_amount }}">
+                                                {{ condition_statement.formatted_confirmed_amount }}
+                                            </td>
+                                        {% else %}
+                                            <td class="text-center">_</td>
+                                        {% endif %}
+
+                                        <td>
+                                            {% if condition_statement.accounting_confirm == 'con' %}
+                                                تأییدشده
+                                            {% elif condition_statement.accounting_confirm == 'nco' %}
+                                                تأییدنشده
+                                            {% else %}
+                                                در انتظار تأیید
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if condition_statement.management_confirm == 'con' %}
+                                                تأییدشده
+                                            {% elif condition_statement.management_confirm == 'nco' %}
+                                                تأییدنشده
+                                            {% else %}
+                                                در انتظار تأیید
+                                            {% endif %}
+                                        </td>
+
+                                        {% if condition_statement.final_deposit_amount %}
+                                            <td data-sort="{{ condition_statement.final_deposit_amount }}">
+                                                {{ condition_statement.formatted_final_deposit_amount }}
+                                            </td>
+                                        {% else %}
+                                            <td class="text-center">_</td>
+                                        {% endif %}
+                                        
+                                        {% if perms.projects_docs.delete_conditionstatements or perms.projects_docs.change_conditionstatements %}
+                                            <td class="action-td d-flex justify-content-center">
+                                                {% if perms.projects_docs.change_conditionstatements %}
+                                                    <a href="{% url 'projects_docs:condition_statement_update' condition_statement.pk %}" 
+                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                {% endif %}
+                                                
+                                                {% if perms.projects_docs.delete_conditionstatements %}
+                                                    <a href="javascript:void(0)"  
+                                                    data-toggle="modal"
+                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                                    data-url="{% url 'projects_docs:condition_statement_delete' pk=condition_statement.pk %}"
+                                                    data-target="#deleteItemModal" title="حذف"
+                                                    data-message="آیا از حذف این صورت وضعیت اطمینان دارید؟">
+                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+        
+                            </tbody>
+                        
+                        </table>
+                    </div>
+                </div>
+
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% include 'partials/pagination.html' with page_obj=page_obj %}
+        
+            </div>
         </div>
     </div> 
 
