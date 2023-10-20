@@ -16,7 +16,7 @@
         <div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
         
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='ثبت قرارداد جدید' create_perm=perms.projects_docs.add_contracts %}
+                {% include 'projects_docs/contracts_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='ثبت قرارداد جدید' create_perm=perms.projects_docs.add_contracts %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -48,7 +48,7 @@
                                         طرف قرارداد
                                     </th>
 
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         تصویر قرارداد
                                     </th>
 
@@ -98,7 +98,7 @@
 
                                         <td>{{ contract.contract_party }}</td>
 
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                             data-target="#contract_image{{ forloop.counter }}">
                                                 <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -113,7 +113,7 @@
                                         </td>
 
                                         {% if perms.projects_docs.delete_contracts or perms.projects_docs.change_contracts %}
-                                            <td class="action-td d-flex justify-content-center">
+                                            <td class="action-td d-flex justify-content-center pb-4 rounded-0">
                                                 {% if perms.projects_docs.change_contracts %}
                                                     <a href="{% url 'projects_docs:contract_update' contract.pk %}" 
                                                     class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
@@ -144,7 +144,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'projects_docs/contracts_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>

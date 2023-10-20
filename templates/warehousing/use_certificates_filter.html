@@ -1,0 +1,18 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-12 col-xl-3">
+        <select name="stuff_state" class="form-control" id="stuff-state">
+            <option value="all" selected>فیلتر کالاها</option>
+            <option value="def" {% if request.GET.stuff_state == 'def' %}selected{% endif %}>کالاهای دارای کسری</option>
+            <option value="exc" {% if request.GET.stuff_state == 'exc' %}selected{% endif %}>کالاهای دارای مازاد</option>
+        </select>
+    </div>
+    <div class="form-group col-11 col-xl-3">
+        <select name="return_to" class="form-control" id="return-to">
+            <option value="all" selected>فیلتر مرجوعی</option>
+            <option value="prw" {% if request.GET.return_to == 'prw' %}selected{% endif %}>انبار پروژه</option>
+            <option value="maw" {% if request.GET.return_to == 'maw' %}selected{% endif %}>انبار اصلی</option>
+        </select>
+    </div>
+{% endblock %}

@@ -30,9 +30,9 @@ LOGOUT_REDIRECT_URL = "login"
 SECRET_KEY = 'django-insecure-!qs#d-@he!5pj_wmj1r22ho(jan)n-$h)$1pj8n-8da%#=t%l)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -47,18 +47,18 @@ INSTALLED_APPS = [
     'jalali_date',
     'django_jalali',
     'widget_tweaks',
-    'utils',
     'crispy_forms',
     'crispy_bootstrap4',
     'django_table_sort',
     'django_render_partial',
-    'account.apps.AccountConfig',
+    'utils',
     'projects.apps.ProjectsConfig',
     'government_accounts.apps.GovernmentAccountsConfig',
     'non_government_accounts.apps.NonGovernmentAccountsConfig',
     'cheques_receive_pay.apps.ChequesReceivePayConfig',
     'warehousing.apps.WarehousingConfig',
     'projects_docs.apps.ProjectsDocsConfig',
+    'account.apps.AccountConfig',
 ]
 
 MIDDLEWARE = [
@@ -84,7 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },

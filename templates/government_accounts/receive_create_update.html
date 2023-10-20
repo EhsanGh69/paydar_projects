@@ -106,7 +106,7 @@
         $('#id_receive_date').on('input', function (e) { 
             e.preventDefault();
             var date_value = $('#id_receive_date').val();
-            console.log(date_value.replaceAll('/', '-'));
+            console.log(date_value.replaceAll('/', '-').split(" ")[0]);
 
             $('#id_receive_date').val(date_value.replaceAll('/', '-'));
         });

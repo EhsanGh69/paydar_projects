@@ -1,0 +1,18 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="doc_type" class="form-control" id="doc-type">
+            <option value="all" selected>فیلتر نوع سند</option>
+            <option value="let" {% if request.GET.cheque_type == 'let' %}selected{% endif %}>همه‌ی نامه‌ها</option>
+            <option value="snd" {% if request.GET.cheque_type == 'snd' %}selected{% endif %}>نامه‌های ارسالی</option>
+            <option value="rec" {% if request.GET.cheque_type == 'rec' %}selected{% endif %}>نامه‌های دریافتی</option>
+            <option value="lic" {% if request.GET.cheque_type == 'lic' %}selected{% endif %}>همه‌ی پروانه‌ها</option>
+            <option value="des" {% if request.GET.cheque_type == 'des' %}selected{% endif %}>پروانه‌های تخریب</option>
+            <option value="con" {% if request.GET.cheque_type == 'con' %}selected{% endif %}>پروانه‌های ساخت</option>
+            <option value="dac" {% if request.GET.cheque_type == 'dac' %}selected{% endif %}>پروانه‌های تخریب و ساخت</option>
+            <option value="tci" {% if request.GET.cheque_type == 'tci' %}selected{% endif %}>پروانه‌های شناسنامه‌ی فنی</option>
+            <option value="crt" {% if request.GET.cheque_type == 'crt' %}selected{% endif %}>گواهی‌ها</option>
+        </select>
+    </div>
+{% endblock %}

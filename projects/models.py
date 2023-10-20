@@ -52,7 +52,7 @@ class Project(models.Model):
     contract_type = models.CharField(max_length=2, choices=CONTRACT_CHOICES, verbose_name="نوع قرارداد")
     owners = models.ManyToManyField(Owners, related_name="projects", verbose_name="مالکین")
     contractual_salary = models.PositiveBigIntegerField(default=0, blank=True, null=True, verbose_name="دستمزد قرارداد پیمانی")
-    contractual_percentage = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=00.00, verbose_name="درصد قرارداد پیمانی")
+    contractual_percentage = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=00.00, verbose_name="درصد قرارداد پیمانی") # type: ignore
 
     objects = ProjectManager()
 

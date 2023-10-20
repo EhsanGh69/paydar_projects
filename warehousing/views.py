@@ -1,4 +1,3 @@
-from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -56,6 +55,37 @@ class StuffDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
         _id = int(self.kwargs.get('pk'))
         stuff = get_object_or_404(Stuff, pk=_id)
         return stuff
+    
+
+class StuffSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'warehousing.view_stuff'
+    template_name = 'warehousing/stuffs_list.html'
+    model = Stuff
+    context_object_name = "stuffs"
+    paginate_by = 9
+
+    def get_queryset(self):
+        global not_found
+        global query
+        not_found = False
+        query = self.request.GET.get('data_search')
+
+        global search_result
+
+        search_result = Stuff.objects.search(query) # type: ignore
+
+        if not search_result:
+            not_found = True
+
+        return search_result
+  
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'warehousing:stuffs_search'
+        context['list_url'] = 'warehousing:stuffs'
+        context['query'] = query
+        return context
 
 
 # Stuff - End
@@ -127,11 +157,14 @@ class WarehouseImportSearch(LoginRequiredMixin, PermissionRequiredMixin, ListVie
     template_name = 'warehousing/warehouse_imports_list.html'
     model = MainWarehouseImport
     context_object_name = "warehouse_imports"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        global is_returned_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         is_returned_filter = self.request.GET.get('is_returned')
@@ -155,6 +188,9 @@ class WarehouseImportSearch(LoginRequiredMixin, PermissionRequiredMixin, ListVie
         context['not_found'] = not_found
         context['search_url'] = 'warehousing:warehouse_imports_search'
         context['list_url'] = 'warehousing:warehouse_imports'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['is_returned_filter'] = is_returned_filter
         return context
 
 
@@ -236,11 +272,12 @@ class WarehouseExportSearch(LoginRequiredMixin, PermissionRequiredMixin, ListVie
     template_name = 'warehousing/warehouse_exports_list.html'
     model = MainWarehouseExport
     context_object_name = "warehouse_exports"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        not_found = False
         query = self.request.GET.get('data_search')
 
         search_result = MainWarehouseExport.objects.search(query) # type: ignore
@@ -255,6 +292,7 @@ class WarehouseExportSearch(LoginRequiredMixin, PermissionRequiredMixin, ListVie
         context['not_found'] = not_found
         context['search_url'] = 'warehousing:warehouse_exports_search'
         context['list_url'] = 'warehousing:warehouse_exports'
+        context['query'] = query
         return context
 
 # MainWarehouseExport - End
@@ -312,20 +350,28 @@ class UseCertificateSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
     template_name = 'warehousing/use_certificates_list.html'
     model = UseCertificate
     context_object_name = "use_certificates"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global stuff_state
+        global return_to
+        not_found = False
         query = self.request.GET.get('data_search')
         stuff_state = self.request.GET.get('stuff_state')
+        return_to = self.request.GET.get('return_to')
 
         global search_result
 
-        if stuff_state != "all" and stuff_state == "def":
+        if return_to is None and stuff_state == "def":
             search_result = UseCertificate.objects.search(query).filter(is_deficient=True).all() # type: ignore
-        elif stuff_state != "all" and stuff_state == "exc":
+        elif return_to is None and stuff_state == "exc":
             search_result = UseCertificate.objects.search(query).filter(is_excess=True).all() # type: ignore
+        elif return_to == "prw" and stuff_state is None:
+            search_result = UseCertificate.objects.search(query).filter(returned_to='prw').all() # type: ignore
+        elif return_to == "maw" and stuff_state is None:
+            search_result = UseCertificate.objects.search(query).filter(returned_to='maw').all() # type: ignore
         else:
             search_result = UseCertificate.objects.search(query) # type: ignore
 
@@ -339,6 +385,9 @@ class UseCertificateSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         context['not_found'] = not_found
         context['search_url'] = 'warehousing:use_certificates_search'
         context['list_url'] = 'warehousing:use_certificates'
+        context['query'] = query
+        context['stuff_state'] = stuff_state
+        context['return_to'] = return_to
         return context
 
 
@@ -397,11 +446,13 @@ class ProjectWarehouseSearch(LoginRequiredMixin, PermissionRequiredMixin, ListVi
     template_name = 'warehousing/project_warehouses_list.html'
     model = ProjectWarehouse
     context_object_name = "project_warehouses"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global stuff_status
+        not_found = False
         query = self.request.GET.get('data_search')
         stuff_status = self.request.GET.get('stuff_status')
 
@@ -424,6 +475,8 @@ class ProjectWarehouseSearch(LoginRequiredMixin, PermissionRequiredMixin, ListVi
         context['not_found'] = not_found
         context['search_url'] = 'warehousing:project_warehouses_search'
         context['list_url'] = 'warehousing:project_warehouses'
+        context['query'] = query
+        context['stuff_status'] = stuff_status
         return context
 
 # ProjectWarehouse - End

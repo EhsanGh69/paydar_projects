@@ -17,7 +17,7 @@
     
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
         
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت عملیات انبار پروژه' create_perm=perms.warehousing.add_projectwarehouse %}
+                {% include 'warehousing/project_warehouses_filter.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت عملیات انبار پروژه' create_perm=perms.warehousing.add_projectwarehouse %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -177,7 +177,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'warehousing/project_warehouses_pagination.html' with page_obj=page_obj %}
         
             </div>
 

@@ -16,7 +16,7 @@ z{% extends 'base.html' %}
         <div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
         
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن کالا به انبار' create_perm=perms.warehousing.add_mainwarehouseimport %}
+                {% include 'warehousing/warehouse_imports_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن کالا به انبار' create_perm=perms.warehousing.add_mainwarehouseimport %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -138,10 +138,10 @@ z{% extends 'base.html' %}
                                         {% endif %}
 
                                         {% if perms.warehousing.delete_mainwarehouseimport or perms.warehousing.change_mainwarehouseimport %}
-                                            <td class="action-td text-center d-flex">
+                                            <td class="action-td d-flex justify-content-center rounded-0 pb-4">
                                                 {% if perms.warehousing.change_mainwarehouseimport %}
                                                     <a href="{% url 'warehousing:warehouse_import_update' warehouse_import.pk %}" 
-                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                                    class="btn btn-outline-info mb-2 pb-2" title="ویرایش">
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                     </a>
                                                 {% endif %}
@@ -169,7 +169,7 @@ z{% extends 'base.html' %}
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'warehousing/warehouse_imports_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>

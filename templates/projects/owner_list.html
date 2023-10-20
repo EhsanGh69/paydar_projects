@@ -36,15 +36,15 @@
                                         شماره تماس
                                     </th>
         
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 172.797px;">
                                         تصویر کارت ملی
                                     </th>
         
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 172.797px;">
                                         تصویر شناسنامه
                                     </th>
         
-                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    <th class="text-center border-left col-img" rowspan="1" colspan="1" style="width: 172.797px;">
                                         تصویر سند مالکیت
                                     </th>
                                     
@@ -63,7 +63,7 @@
                                         <td>{{ owner.full_name }}</td>
                                         <td>{{ owner.phone }}</td>
 
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                             data-target="#national_card{{ forloop.counter }}">
                                                 <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -72,7 +72,7 @@
 
                                         {% include 'partials/img_modal.html' with img_type='national_card' id=forloop.counter img_src=owner.national_card_image.url label='کارت ملی' owner=owner.full_name %}
 
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
                                             data-target="#birth_certificate{{ forloop.counter }}">
                                             <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -81,7 +81,7 @@
 
                                         {% include 'partials/img_modal.html' with img_type='birth_certificate' id=forloop.counter img_src=owner.birth_certificate_image.url label='شناسنامه' owner=owner.full_name %}
 
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
                                             data-target="#ownership_document{{ forloop.counter }}">
                                             <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -125,7 +125,7 @@
             
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'projects/owners_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>

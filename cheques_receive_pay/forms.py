@@ -109,7 +109,7 @@ class ReceivePayForm(forms.ModelForm):
 
     class Meta:
         model = ReceivePay
-        fields = ['organ', 'contractor', 'supplier', 'personnel', 'receive_pay',
+        fields = ['organ', 'project', 'contractor', 'supplier', 'personnel', 'receive_pay',
                    'amount', 'regard_to', 'date', 'receipt_image']
     
     def __init__(self, *args, **kwargs):

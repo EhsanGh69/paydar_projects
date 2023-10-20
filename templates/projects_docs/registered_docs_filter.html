@@ -1,0 +1,13 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="doc_type" class="form-control" id="doc-type">
+            <option value="all" selected>فیلتر نوع سند</option>
+            <option value="owd" {% if request.GET.cheque_type == 'owd' %}selected{% endif %}>سند مالکیت</option>
+            <option value="atd" {% if request.GET.cheque_type == 'atd' %}selected{% endif %}>سند وکالت</option>
+            <option value="sic" {% if request.GET.cheque_type == 'sic' %}selected{% endif %}>گواهی امضاء</option>
+            <option value="unl" {% if request.GET.cheque_type == 'unl' %}selected{% endif %}>تعهدنامه</option>
+        </select>
+    </div>
+{% endblock %}

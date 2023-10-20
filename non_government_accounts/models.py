@@ -14,7 +14,8 @@ class ContractorsManager(models.Manager):
         lookup = (
             Q(full_name__icontains=query) |
             Q(job__icontains=query) |
-            Q(project__title__icontains=query) 
+            Q(project__title__icontains=query) |
+            Q(address__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -41,7 +42,8 @@ class SuppliersManager(models.Manager):
         lookup = (
             Q(full_name__icontains=query) |
             Q(job__icontains=query) |
-            Q(project__title__icontains=query) 
+            Q(project__title__icontains=query) |
+            Q(address__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -69,7 +71,8 @@ class PersonnelManager(models.Manager):
     def search(self, query):
         lookup = (
             Q(full_name__icontains=query) |
-            Q(job__icontains=query)
+            Q(job__icontains=query) |
+            Q(address__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -96,7 +99,8 @@ class PartnersManager(models.Manager):
     def search(self, query):
         lookup = (
             Q(full_name__icontains=query) |
-            Q(project__title__icontains=query)
+            Q(project__title__icontains=query) |
+            Q(address__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
     
@@ -266,7 +270,8 @@ class Orders(models.Model):
 class ConflictOrdersManager(models.Manager):
     def search(self, query):
         lookup = (
-            Q(order__order_type__icontains=query)
+            Q(order__order_type__icontains=query) |
+            Q(order__supplier__full_name__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 

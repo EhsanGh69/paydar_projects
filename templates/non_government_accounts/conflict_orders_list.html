@@ -17,9 +17,10 @@
     
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='ثبت مغایرت سفارش' create_perm=perms.non_government_accounts.add_conflictorders %}
+                {% include 'non_government_accounts/conflict_orders_filter.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='ثبت مغایرت سفارش' create_perm=perms.non_government_accounts.add_conflictorders %}
         
                 <div class="row">
+
                     <div class="col-sm-12 table-responsive">
                         <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
                             <thead>
@@ -96,11 +97,12 @@
                         
                         </table>
                     </div>
+                    
                 </div>
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'non_government_accounts/conflict_orders_pagination.html' with page_obj=page_obj %}
         
             </div>
 

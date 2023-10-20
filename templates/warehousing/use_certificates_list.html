@@ -16,7 +16,7 @@
         <div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت عملیات تنخواه' create_perm=perms.warehousing.add_usecertificate %}
+                {% include 'warehousing/use_certificates_filter.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت عملیات تنخواه' create_perm=perms.warehousing.add_usecertificate %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -118,7 +118,15 @@
                                         </td>
 
                                         {% if use_certificate.is_excess %}
-                                            <td>{{ use_certificate.returned_to }}</td>
+
+                                            <td>
+                                                {% if use_certificate.returned_to == 'prw' %}
+                                                    انبار پروژه
+                                                {% else %}
+                                                    انبار اصلی
+                                                {% endif %}
+                                            </td>
+
                                             <td data-sort="{{ use_certificate.return_date|date:'Ymd' }}">
                                                 {{ use_certificate.return_date|jformat:'%d / %m / %Y' }}
                                             </td>
@@ -159,7 +167,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'warehousing/use_certificates_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>
@@ -179,11 +187,42 @@
 
     <script>
         $(document).ready(function() {
+
             $("#search-btn").click(function() {
-                if($('#search-input').val() != '' || $('#stuff-state').val() != 'all'){
+                if($('#search-input').val() != '' || $('#stuff-state').val() != 'all' || $('#return-to').val() != 'all'){
                     $("#search-form").submit();
-               }
+                }
             });
+
+            if($('#stuff-state').val() != 'all'){
+                $('#return-to').attr("disabled","disabled");
+            }else {
+                $('#return-to').removeAttr("disabled");;
+            }
+
+            if($('#return-to').val() != 'all'){
+                $('#stuff-state').attr("disabled","disabled");
+            }else {
+                $('#stuff-state').removeAttr("disabled");;
+            }
+
+            $('#stuff-state').change(function (e) {
+                if($(this).val() != 'all'){
+                    $('#return-to').attr("disabled","disabled");
+                }else {
+                    $('#return-to').removeAttr("disabled");;
+                }
+            });
+
+            $('#return-to').change(function (e) {
+                if($(this).val() != 'all'){
+                $('#stuff-state').attr("disabled","disabled");
+                }else {
+                    $('#stuff-state').removeAttr("disabled");;
+                }
+            });
+
+            
         });
     </script>
 

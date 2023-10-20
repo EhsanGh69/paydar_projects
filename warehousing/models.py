@@ -4,13 +4,18 @@ from django.db.models.query import Q
 
 from django_jalali.db import models as jmodels
 
-
 from projects.models import Project
 from non_government_accounts.models import Suppliers, Personnel, Contractors
 
 
 
 
+class StuffManager(models.Manager):
+    def search(self, query):
+        lookup = (
+            Q(stuff_type__icontains=query)
+        )
+        return self.get_queryset().filter(lookup).distinct()
 
 
 class Stuff(models.Model):
@@ -25,6 +30,8 @@ class Stuff(models.Model):
     measurement_unit = models.CharField(max_length=3, 
                                         choices=MEASUREMENT_UNIT_CHOICES, 
                                         verbose_name='واحد اندازه گیری')
+    
+    objects = StuffManager()
     
 
     class Meta:

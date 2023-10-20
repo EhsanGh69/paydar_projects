@@ -4,6 +4,8 @@ $(document).ready(function () {
 
         $('.action-th').remove();
         $('.action-td').remove();
+        $('.col-img').remove();
+        $('.col-td').attr("colspan", "2");
 
         $('#data-table').printThis();
 

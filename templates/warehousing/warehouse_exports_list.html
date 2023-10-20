@@ -141,7 +141,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'warehousing/warehouse_exports_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>
@@ -162,7 +162,7 @@
     <script>
         $(document).ready(function() {
             $("#search-btn").click(function() {
-                if($('#search-input').val() != '' || $('#date-filter').val() != 'all' || $('#is-returned').val() != 'all'){
+                if($('#search-input').val() != ''){
                     $("#search-form").submit();
                }
             });

@@ -1,0 +1,26 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-12 col-xl-3">
+        <select name="payment_order" class="form-control" id="payment-order">
+            <option value="all" selected>فیلتر ترتیب پرداخت</option>
+            <option value="csh" {% if request.GET.payment_order == 'csh' %}selected{% endif %}>نقدی</option>
+            <option value="chq" {% if request.GET.payment_order == 'chq' %}selected{% endif %}>چک</option>
+            <option value="del" {% if request.GET.payment_order == 'del' %}selected{% endif %}>حین تحویل</option>
+            <option value="dtr" {% if request.GET.payment_order == 'dtr' %}selected{% endif %}>انتقال سند</option>
+            <option value="afh" {% if request.GET.payment_order == 'afh' %}selected{% endif %}>بعد از سفت کاری</option>
+            <option value="aif" {% if request.GET.payment_order == 'aif' %}selected{% endif %}>بعد از اجرای تأسیسات</option>
+            <option value="atc" {% if request.GET.payment_order == 'atc' %}selected{% endif %}>بعد از کاشی و سرامیک</option>
+            <option value="afc" {% if request.GET.payment_order == 'afc' %}selected{% endif %}>بعد از سقف طبقه</option>
+            <option value="aff" {% if request.GET.payment_order == 'aff' %}selected{% endif %}>بعد از فونداسیون</option>
+            <option value="oth" {% if request.GET.payment_order == 'oth' %}selected{% endif %}>سایر</option>
+        </select>
+    </div>
+    <div class="form-group col-11 col-xl-3">
+        <select name="buyer_seller" class="form-control" id="buyer-seller">
+            <option value="all" selected>فیلتر خریدار/فروشنده</option>
+            <option value="buy" {% if request.GET.buyer_seller == 'buy' %}selected{% endif %}>خریدار</option>
+            <option value="sel" {% if request.GET.buyer_seller == 'sel' %}selected{% endif %}>فروشنده</option>
+        </select>
+    </div>
+{% endblock %}

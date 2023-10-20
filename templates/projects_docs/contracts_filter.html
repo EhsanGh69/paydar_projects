@@ -1,0 +1,13 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="contract_type" class="form-control" id="contract-type">
+            <option value="all" selected>فیلتر نوع قرارداد</option>
+            <option value="buy" {% if request.GET.cheque_type == 'buy' %}selected{% endif %}>خرید</option>
+            <option value="sal" {% if request.GET.cheque_type == 'sal' %}selected{% endif %}>فروش</option>
+            <option value="rnt" {% if request.GET.cheque_type == 'rnt' %}selected{% endif %}>اجاره</option>
+            <option value="exc" {% if request.GET.cheque_type == 'exc' %}selected{% endif %}>معاوضه</option>
+        </select>
+    </div>
+{% endblock %}

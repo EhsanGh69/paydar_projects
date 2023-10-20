@@ -16,7 +16,7 @@
         <div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت سند ثبتی جدید' create_perm=perms.projects_docs.add_registereddocs %}
+                {% include 'projects_docs/registered_docs_filter.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت سند ثبتی جدید' create_perm=perms.projects_docs.add_registereddocs %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -36,7 +36,7 @@
                                         نوع سند
                                     </th>
 
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         تصویر سند
                                     </th>
 
@@ -67,7 +67,7 @@
                                             {% endif %}
                                         </td>
 
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                             data-target="#doc_image{{ forloop.counter }}">
                                                 <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -77,7 +77,7 @@
                                         {% include 'partials/img_modal.html' with img_type='doc_image' id=forloop.counter img_src=registered_doc.doc_image.url label='' owner=registered_doc.doc_type %}
 
                                         {% if perms.projects_docs.delete_registereddocs or perms.projects_docs.change_registereddocs %}
-                                            <td class="action-td d-flex justify-content-center">
+                                            <td class="action-td d-flex justify-content-center p-3 rounded-0">
                                                 {% if perms.projects_docs.change_registereddocs %}
                                                     <a href="{% url 'projects_docs:registered_doc_update' registered_doc.pk %}" 
                                                     class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
@@ -108,7 +108,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'projects_docs/registered_docs_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>

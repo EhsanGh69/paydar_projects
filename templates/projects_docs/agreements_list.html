@@ -36,7 +36,7 @@
                                         طرف حساب
                                     </th>
 
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         تصویر توافق‌نامه
                                     </th>
 
@@ -61,7 +61,7 @@
 
                                         <td>{{ agreement.account_party }}</td>
 
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                             data-target="#agreement_image{{ forloop.counter }}">
                                                 <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -76,7 +76,7 @@
                                         </td>
 
                                         {% if perms.projects.delete_agreements or perms.projects.change_agreements %}
-                                        <td class="action-td d-flex justify-content-center">
+                                            <td class="action-td d-flex justify-content-center p-3 rounded-0">
                                                 {% if perms.projects.change_agreements %}
                                                     <a href="{% url 'projects_docs:agreement_update' agreement.pk %}" 
                                                     class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
@@ -109,7 +109,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'projects_docs/agreements_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>

@@ -18,7 +18,7 @@
     
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
         
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='ثبت عملیات تنخواه' create_perm=perms.cheques_receive_pay.add_fund %}
+                {% include 'cheques_receive_pay/operation_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='ثبت عملیات تنخواه' create_perm=perms.cheques_receive_pay.add_fund %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -38,11 +38,11 @@
                                         موجودی
                                     </th>
 
-                                    <td class="text-center text-light border-left" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
                                         هزینه (برداشت از تنخواه)
                                     </td>
 
-                                    <td class="text-center text-light border-left" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
                                         شارژ (واریز به تنخواه)
                                     </td>
 
@@ -64,7 +64,7 @@
                                         شرح
                                     </th>
     
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         تصویر فیش پرداختی
                                     </th>
     
@@ -76,7 +76,7 @@
                                         تاریخ 
                                     </th>
     
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         تصویر 
                                     </th>
 
@@ -99,7 +99,7 @@
                                             <td>{{ fund.cost_description }}</td>
 
                                             {% if fund.receipt_image %}
-                                                <td class="text-center">
+                                                <td class="text-center col-img">
                                                     <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                                     data-target="#receipt_image{{ forloop.counter }}">
                                                         <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -108,7 +108,7 @@
 
                                                 {% include 'partials/img_modal.html' with img_type='receipt_image' id=forloop.counter img_src=fund.receipt_image.url label='فیش پرداختی بابت' owner=fund.cost_description %}
                                             {% else %}
-                                                <td class="text-center">
+                                                <td class="text-center col-img">
                                                     <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
                                                     <span class="text-danger">بدون تصویر</span>
                                                 </td>
@@ -116,7 +116,7 @@
                                         {% else %}
                                             <td class="text-center">_</td>
                                             <td class="text-center">_</td>
-                                            <td class="text-center">_</td>
+                                            <td class="text-center col-img">_</td>
                                         {% endif %}
 
                                         {% if fund.operation_type == 'set' %}
@@ -128,7 +128,7 @@
                                             </td>
 
                                             {% if fund.charge_image %}
-                                                <td class="text-center">
+                                                <td class="text-center col-img">
                                                     <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                                     data-target="#charge_image{{ forloop.counter }}">
                                                         <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -137,7 +137,7 @@
             
                                                 {% include 'partials/img_modal.html' with img_type='charge_image' id=forloop.counter img_src=fund.charge_image.url label='شارژ تنخواه' owner=fund.full_name %}
                                             {% else %}
-                                                <td class="text-center">
+                                                <td class="text-center col-img">
                                                     <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
                                                     <span class="text-danger">بدون تصویر</span>
                                                 </td>
@@ -147,7 +147,7 @@
                                         {% else %}
                                             <td class="text-center">_</td>
                                             <td class="text-center">_</td>
-                                            <td class="text-center">_</td>
+                                            <td class="text-center col-img">_</td>
                                         {% endif %}
                                         
                                         {% if perms.cheques_receive_pay.delete_fund or perms.cheques_receive_pay.change_fund %}
@@ -182,7 +182,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'cheques_receive_pay/fund_pagination.html' with page_obj=page_obj %}
         
             </div>
 

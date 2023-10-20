@@ -70,14 +70,16 @@ class OwnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'projects/owner_list.html'
     model = Owners
     context_object_name = "owners"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
+        global query
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
         
-        search = Owners.objects.search(query)
+        search = Owners.objects.search(query) # type: ignore
         if not search:
             not_found = True
 
@@ -88,6 +90,7 @@ class OwnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'projects:owners_search'
         context['list_url'] = 'projects:owners'
+        context['query'] = query
         return context
 
 
@@ -146,9 +149,12 @@ class ProjectSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'projects/project_list.html'
     model = Project
     context_object_name = "projects"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
+        global query
+        global contract_filter
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
@@ -156,9 +162,9 @@ class ProjectSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         global search_result
         if filter != "all":
-            search_result = Project.objects.search(query).filter(contract_type=contract_filter).all()
+            search_result = Project.objects.search(query).filter(contract_type=contract_filter).all() # type: ignore
         else:
-            search_result = Project.objects.search(query)
+            search_result = Project.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -170,6 +176,8 @@ class ProjectSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'projects:projects_search'
         context['list_url'] = 'projects:projects'
+        context['query'] = query
+        context['contract_filter'] = contract_filter
         return context
 
 
@@ -244,19 +252,21 @@ class WorkReferenceSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
     template_name = 'projects/work_references_list.html'
     model = WorkReference
     context_object_name = "work_references"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
 
         global search_result
         if date_filter != "all":
-            search_result = WorkReference.objects.search(query).filter(follow_date__date__range=filter_date_values(date_filter)).all()
+            search_result = WorkReference.objects.search(query).filter(follow_date__date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
-            search_result = WorkReference.objects.search(query).all()
+            search_result = WorkReference.objects.search(query).all() # type: ignore
 
         if not search_result:
             not_found = True
@@ -268,6 +278,8 @@ class WorkReferenceSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         context['not_found'] = not_found
         context['search_url'] = 'projects:work_references_search'
         context['list_url'] = 'projects:work_references'
+        context['query'] = query
+        context['date_filter'] = date_filter
         return context
 
 
@@ -326,13 +338,15 @@ class CostsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'projects/costs_list.html'
     model = Costs
     context_object_name = "costs"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
+        global query
         not_found = False
         query = self.request.GET.get('data_search')
         
-        search_result = Costs.objects.search(query).all()
+        search_result = Costs.objects.search(query).all() # type: ignore
 
         if not search_result:
             not_found = True
@@ -344,6 +358,7 @@ class CostsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'projects:costs_search'
         context['list_url'] = 'projects:costs'
+        context['query'] = query
         return context
 
 
@@ -402,13 +417,15 @@ class PaymentsImagesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
     template_name = 'projects/payments_images_list.html'
     model = PaymentsImages
     context_object_name = "payments_images"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
+        global query
         not_found = False
         query = self.request.GET.get('data_search')
         
-        search_result = PaymentsImages.objects.search(query).all()
+        search_result = PaymentsImages.objects.search(query).all() # type: ignore
 
         if not search_result:
             not_found = True
@@ -420,6 +437,7 @@ class PaymentsImagesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         context['not_found'] = not_found
         context['search_url'] = 'projects:payments_images_search'
         context['list_url'] = 'projects:payments_images'
+        context['query'] = query
         return context
 
-
+# PaymentsImages - End

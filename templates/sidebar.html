@@ -125,11 +125,11 @@
                         <ul class="nav nav-treeview">
 
                             {% if perms.projects.view_projects %}
-                                {% main_menu request 'projects' 'projects' 'project_create' 'project_update' 'projects_search' 'fa-trowel-bricks' 'لیست پروژه‌ها' %}
+                                {% main_menu request 'projects' 'projects' 'project_create' 'project_update' 'projects_search' 'fa-trowel-bricks' 'پروژه‌ها' %}
                             {% endif %}
 
                             {% if perms.projects.view_owners %}
-                                {% main_menu request 'projects' 'owners' 'owner_create' 'owner_update' 'owners_search' 'fa-person-shelter' 'لیست مالکین' %}
+                                {% main_menu request 'projects' 'owners' 'owner_create' 'owner_update' 'owners_search' 'fa-person-shelter' 'مالکین' %}
                             {% endif %}
 
                             {% if perms.projects.view_workreference %}
@@ -277,14 +277,11 @@
 
                     </li>
                 {% endif %}
+                
+                <p class="border-top border-light mb-0"></p>
 
+                {% main_menu request 'account' 'reports' 'report_create' 'report_result' 'reports_search' 'fa-paste' 'گزارشات' %}
 
-                <li class="nav-item border-top border-light ">
-                    <a href="#" class="nav-link">
-                        <i class="fa-regular fa-paste text-primary" style="font-size: 1.2rem;"></i>
-                        <span class="ml-2">گزارشات</span>
-                    </a>
-                </li>
 
                 <li class="nav-item border-top border-light ">
                     <a href="#" class="nav-link">

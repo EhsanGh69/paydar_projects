@@ -46,7 +46,7 @@
                                         آدرس
                                     </th>
 
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 172.797px;">
                                         تصویر قرارداد
                                     </th>
                                     
@@ -67,7 +67,7 @@
                                         <td>{{ person.phone }}</td>
                                         <td>{{ person.address }}</td>
 
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                             data-target="#contract{{ forloop.counter }}">
                                                 <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -108,7 +108,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'non_government_accounts/personnel_pagination.html' with page_obj=page_obj %}
         
             </div>
 

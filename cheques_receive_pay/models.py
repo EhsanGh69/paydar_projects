@@ -64,7 +64,8 @@ class ReceivePayManager(models.Manager):
             Q(contractor__full_name__icontains=query) |
             Q(supplier__full_name__icontains=query) |
             Q(personnel__full_name__icontains=query) |
-            Q(regard_to__icontains=query)
+            Q(regard_to__icontains=query) |
+            Q(project__title__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -74,6 +75,10 @@ class ReceivePay(models.Model):
         ('rec', 'دریافت'),
         ('pay', 'پرداخت')
     )
+    project = models.ForeignKey(Project, 
+                                on_delete=models.CASCADE, 
+                                related_name='project_receive_pays',
+                                verbose_name='پروژه')
     organ = models.ForeignKey(Organization,
                               on_delete=models.CASCADE, 
                               related_name='organ_receive_pays',

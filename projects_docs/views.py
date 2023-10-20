@@ -96,11 +96,14 @@ class ContractsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'projects_docs/contracts_list.html'
     model = Contracts
     context_object_name = "contracts"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        global contract_type_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         contract_type_filter = self.request.GET.get('contract_type')
@@ -129,6 +132,9 @@ class ContractsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:contracts_search'
         context['list_url'] = 'projects_docs:contracts'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['contract_type_filter'] = contract_type_filter
         return context
 
 
@@ -188,11 +194,14 @@ class ProceedingsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'projects_docs/proceedings_list.html'
     model = Proceedings
     context_object_name = "proceedings"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        global proceeding_type_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         proceeding_type_filter = self.request.GET.get('proceeding_type')
@@ -221,6 +230,9 @@ class ProceedingsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:proceedings_search'
         context['list_url'] = 'projects_docs:proceedings'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['proceeding_type_filter'] = proceeding_type_filter
         return context
 
 
@@ -279,11 +291,13 @@ class AgreementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'projects_docs/agreements_list.html'
     model = Agreements
     context_object_name = "agreements"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
 
@@ -304,6 +318,8 @@ class AgreementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:agreements_search'
         context['list_url'] = 'projects_docs:agreements'
+        context['query'] = query
+        context['date_filter'] = date_filter
         return context
 
 
@@ -362,11 +378,14 @@ class BankReceiptsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'projects_docs/bank_receipts_list.html'
     model = BankReceipts
     context_object_name = "bank_receipts"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        global receipt_type_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         receipt_type_filter = self.request.GET.get('receipt_type')
@@ -395,6 +414,9 @@ class BankReceiptsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:bank_receipts_search'
         context['list_url'] = 'projects_docs:bank_receipts'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['receipt_type_filter'] = receipt_type_filter
         return context
 
 
@@ -453,11 +475,14 @@ class ConditionStatementsSearch(LoginRequiredMixin, PermissionRequiredMixin, Lis
     template_name = 'projects_docs/condition_statements_list.html'
     model = ConditionStatements
     context_object_name = "condition_statements"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global accounting_confirm_filter
+        global management_confirm_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         accounting_confirm_filter = self.request.GET.get('accounting_confirm')
         management_confirm_filter = self.request.GET.get('management_confirm')
@@ -486,6 +511,9 @@ class ConditionStatementsSearch(LoginRequiredMixin, PermissionRequiredMixin, Lis
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:condition_statements_search'
         context['list_url'] = 'projects_docs:condition_statements'
+        context['query'] = query
+        context['accounting_confirm_filter'] = accounting_confirm_filter
+        context['management_confirm_filter'] = management_confirm_filter
         return context
 
 
@@ -545,11 +573,13 @@ class RegisteredDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
     template_name = 'projects_docs/registered_docs_list.html'
     model = RegisteredDocs
     context_object_name = "registered_docs"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global doc_type_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         doc_type_filter = self.request.GET.get('doc_type')
 
@@ -570,6 +600,8 @@ class RegisteredDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:registered_docs_search'
         context['list_url'] = 'projects_docs:registered_docs'
+        context['query'] = query
+        context['doc_type_filter'] = doc_type_filter
         return context
 
 
@@ -655,11 +687,14 @@ class OfficialDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'projects_docs/official_docs_list.html'
     model = OfficialDocs
     context_object_name = "official_docs"
+    paginate_by = 1
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        global doc_type_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         doc_type_filter = self.request.GET.get('doc_type')
@@ -702,6 +737,9 @@ class OfficialDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:official_docs_search'
         context['list_url'] = 'projects_docs:official_docs'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['doc_type_filter'] = doc_type_filter
         return context
 
 

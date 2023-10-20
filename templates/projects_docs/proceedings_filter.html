@@ -1,0 +1,11 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="proceeding_type" class="form-control" id="proceeding-type">
+            <option value="all" selected>فیلتر نوع صورت جلسه</option>
+            <option value="del" {% if request.GET.cheque_type == 'del' %}selected{% endif %}>تحویل</option>
+            <option value="oth" {% if request.GET.cheque_type == 'oth' %}selected{% endif %}>متفرقه</option>
+        </select>
+    </div>
+{% endblock %}

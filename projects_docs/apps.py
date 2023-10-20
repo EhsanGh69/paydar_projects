@@ -5,3 +5,6 @@ class ProjectsDocsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'projects_docs'
     verbose_name = 'اسناد مرتبط با پروژه‌ها'
+
+    def ready(self):
+        return self.import_models()

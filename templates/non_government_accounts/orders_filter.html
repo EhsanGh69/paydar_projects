@@ -1,0 +1,21 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-12 col-xl-3">
+        <select name="order_result" class="form-control" id="order-result">
+            <option value="all" selected>فیلتر نتیجه سفارش</option>
+            <option value="spd" {% if request.GET.order_result == 'spd' %}selected{% endif %}>ارسال در تاریخ مشخص</option>
+            <option value="snd" {% if request.GET.order_result == 'snd' %}selected{% endif %}>ارسال شده</option>
+            <option value="cld" {% if request.GET.order_result == 'cld' %}selected{% endif %}>لغو شده</option>
+        </select>
+    </div>
+    <div class="form-group col-11 col-xl-3">
+        <select name="order_image_type" class="form-control" id="order-image-type">
+            <option value="all" selected>فیلتر نوع تصویر سفارش</option>
+            <option value="blg" {% if request.GET.order_image_type == 'blg' %}selected{% endif %}>بارنامه</option>
+            <option value="fac" {% if request.GET.order_image_type == 'fac' %}selected{% endif %}>فاکتور</option>
+            <option value="enf" {% if request.GET.order_image_type == 'enf' %}selected{% endif %}>برگه ورود</option>
+            <option value="exf" {% if request.GET.order_image_type == 'exf' %}selected{% endif %}>برگه خروج</option>
+        </select>
+    </div>
+{% endblock %}

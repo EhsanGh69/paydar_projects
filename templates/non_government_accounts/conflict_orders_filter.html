@@ -1,0 +1,11 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="conflict_type" class="form-control" id="conflict-type">
+            <option value="all" selected>فیلتر نوع مغایرت</option>
+            <option value="pos" {% if request.GET.conflict_type == 'pos' %}selected{% endif %}>بیشتر از سفارش</option>
+            <option value="neg" {% if request.GET.conflict_type == 'neg' %}selected{% endif %}>کمتر از سفارش</option>
+        </select>
+    </div>
+{% endblock %}

@@ -21,7 +21,7 @@ class ContractorsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:contractors_search'
-        context['create_url'] = 'non_government_accounts:supplier_create'
+        context['create_url'] = 'non_government_accounts:contractor_create'
         context['persian_object_name'] = 'پیمانکار'
         return context
 
@@ -60,15 +60,15 @@ class ContractorSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'non_government_accounts/contractors_list.html'
     model = Contractors
     context_object_name = "contractors"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
-        request = self.request
-        query = request.GET.get('data_search')
+        not_found = False
+        query = self.request.GET.get('data_search')
 
-        search_result = Contractors.objects.search(query)
+        search_result = Contractors.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -79,7 +79,8 @@ class ContractorSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:contractors_search'
-        context['list_url'] = 'non_government_accounts:suppliers'
+        context['list_url'] = 'non_government_accounts:contractors'
+        context['query'] = query
         return context
 
 # Contractors - End
@@ -137,15 +138,15 @@ class SupplierSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'non_government_accounts/suppliers_list.html'
     model = Suppliers
     context_object_name = "suppliers"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
-        request = self.request
-        query = request.GET.get('data_search')
+        not_found = False
+        query = self.request.GET.get('data_search')
 
-        search_result = Suppliers.objects.search(query)
+        search_result = Suppliers.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -157,6 +158,7 @@ class SupplierSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:suppliers_search'
         context['list_url'] = 'non_government_accounts:suppliers'
+        context['query'] = query
         return context
     
 # Suppliers - End
@@ -214,15 +216,15 @@ class PersonnelSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'non_government_accounts/personnel_list.html'
     model = Personnel
     context_object_name = "personnel"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
-        request = self.request
-        query = request.GET.get('data_search')
+        not_found = False
+        query = self.request.GET.get('data_search')
 
-        search_result = Personnel.objects.search(query)
+        search_result = Personnel.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -234,6 +236,7 @@ class PersonnelSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:personnel_search'
         context['list_url'] = 'non_government_accounts:personnel'
+        context['query'] = query
         return context
 
 # Personnel - End
@@ -291,14 +294,15 @@ class PartnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'non_government_accounts/partners_list.html'
     model = Partners
     context_object_name = "partners"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        not_found = False
         query = self.request.GET.get('data_search')
         
-        search_result = Partners.objects.search(query)
+        search_result = Partners.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -311,6 +315,7 @@ class PartnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:partners_search'
         context['list_url'] = 'non_government_accounts:partners'
+        context['query'] = query
         return context
     
 # Partners - End
@@ -382,11 +387,15 @@ class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
     template_name = 'non_government_accounts/buyers_sellers_list.html'
     model = Partners
     context_object_name = "buyers_sellers"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global buyer_seller_filter
+        global payment_order_filter
+        global date_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         buyer_seller_filter = self.request.GET.get('buyer_seller')
         payment_order_filter = self.request.GET.get('payment_order')
@@ -395,28 +404,28 @@ class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         global search_result
         
         if buyer_seller_filter != "all" and payment_order_filter == "all" and date_filter == "all":
-            search_result = BuyersSellers.objects.search(query).filter(buyer_seller=buyer_seller_filter).all()
+            search_result = BuyersSellers.objects.search(query).filter(buyer_seller=buyer_seller_filter).all() # type: ignore
 
         elif buyer_seller_filter == "all" and payment_order_filter != "all" and date_filter == "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_order=payment_order_filter).all()
+            search_result = BuyersSellers.objects.search(query).filter(payment_order=payment_order_filter).all() # type: ignore
 
         elif buyer_seller_filter != "all" and payment_order_filter != "all" and date_filter == "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_order=payment_order_filter, buyer_seller=buyer_seller_filter).all()
+            search_result = BuyersSellers.objects.search(query).filter(payment_order=payment_order_filter, buyer_seller=buyer_seller_filter).all() # type: ignore
 
         elif buyer_seller_filter == "all" and payment_order_filter == "all" and date_filter != "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter)).all()
+            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif buyer_seller_filter != "all" and payment_order_filter == "all" and date_filter != "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), buyer_seller=buyer_seller_filter).all()
+            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), buyer_seller=buyer_seller_filter).all() # type: ignore
 
         elif buyer_seller_filter == "all" and payment_order_filter != "all" and date_filter != "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), payment_order=payment_order_filter).all()
+            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), payment_order=payment_order_filter).all() # type: ignore
         
         elif buyer_seller_filter != "all" and payment_order_filter != "all" and date_filter != "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), payment_order=payment_order_filter, buyer_seller=buyer_seller_filter).all()
+            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), payment_order=payment_order_filter, buyer_seller=buyer_seller_filter).all() # type: ignore
         
         else:
-            search_result = BuyersSellers.objects.search(query)
+            search_result = BuyersSellers.objects.search(query) # type: ignore
 
         
         if not search_result:
@@ -429,6 +438,10 @@ class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:buyers_sellers_search'
         context['list_url'] = 'non_government_accounts:buyers_sellers'
+        context['query'] = query
+        context['buyer_seller_filter'] = buyer_seller_filter
+        context['payment_order_filter'] = payment_order_filter
+        context['date_filter'] = date_filter
         return context
 
 
@@ -501,11 +514,15 @@ class OrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'non_government_accounts/orders_list.html'
     model = Orders
     context_object_name = "orders"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        global order_result_filter
+        global order_image_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         order_result_filter = self.request.GET.get('order_result')
@@ -514,27 +531,27 @@ class OrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global search_result
         
         if order_result_filter != "all" and order_image_filter == "all" and date_filter == "all":
-            search_result = Orders.objects.search(query).filter(order_result=order_result_filter).all()
+            search_result = Orders.objects.search(query).filter(order_result=order_result_filter).all() # type: ignore
 
         elif order_result_filter == "all" and order_image_filter != "all" and date_filter == "all":
-            search_result = Orders.objects.search(query).filter(sended_image_type=order_image_filter).all()
+            search_result = Orders.objects.search(query).filter(sended_image_type=order_image_filter).all() # type: ignore
 
         elif order_result_filter != "all" and order_image_filter != "all" and date_filter == "all":
-            search_result = Orders.objects.search(query).filter(sended_image_type=order_image_filter, order_result=order_result_filter).all()
+            search_result = Orders.objects.search(query).filter(sended_image_type=order_image_filter, order_result=order_result_filter).all() # type: ignore
 
         elif order_result_filter == "all" and order_image_filter == "all" and date_filter != "all":
-            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter)).all()
+            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif order_result_filter != "all" and order_image_filter == "all" and date_filter != "all":
-            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), order_result=order_result_filter).all()
+            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), order_result=order_result_filter).all() # type: ignore
 
         elif order_result_filter == "all" and order_image_filter != "all" and date_filter != "all":
-            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), sended_image_type=order_image_filter).all()
+            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), sended_image_type=order_image_filter).all() # type: ignore
         
         elif order_result_filter != "all" and order_image_filter != "all" and date_filter != "all":
-            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), sended_image_type=order_image_filter, order_result=order_result_filter).all()
+            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), sended_image_type=order_image_filter, order_result=order_result_filter).all() # type: ignore
         else:
-            search_result = Orders.objects.search(query)
+            search_result = Orders.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -546,6 +563,10 @@ class OrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:orders_search'
         context['list_url'] = 'non_government_accounts:orders'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['order_result_filter'] = order_result_filter
+        context['order_image_filter'] = order_image_filter
         return context
 
 
@@ -604,20 +625,22 @@ class ConflictOrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
     template_name = 'non_government_accounts/conflict_orders_list.html'
     model = ConflictOrders
     context_object_name = "conflict_orders"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global conflict_type_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         conflict_type_filter = self.request.GET.get('conflict_type')
 
         global search_result
         
         if conflict_type_filter != "all":
-            search_result = ConflictOrders.objects.search(query).filter(conflict_type=conflict_type_filter).all()
+            search_result = ConflictOrders.objects.search(query).filter(conflict_type=conflict_type_filter).all() # type: ignore
         else:
-            search_result = ConflictOrders.objects.search(query)
+            search_result = ConflictOrders.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -629,6 +652,8 @@ class ConflictOrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:conflict_orders_search'
         context['list_url'] = 'non_government_accounts:conflict_orders'
+        context['query'] = query
+        context['conflict_type_filter'] = conflict_type_filter
         return context
 
 

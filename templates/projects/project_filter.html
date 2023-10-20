@@ -1,0 +1,13 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="contract_type" class="form-control" id="contract-type">
+            <option value="all" selected>فیلتر نوع قرارداد</option>
+            <option value="pc" {% if request.GET.contract_type == 'pc' %}selected{% endif %}>مشارکت در ساخت</option>
+            <option value="ow" {% if request.GET.contract_type == 'ow' %}selected{% endif %}>مالکیت</option>
+            <option value="pa" {% if request.GET.contract_type == 'pa' %}selected{% endif %}>شراکتی</option>
+            <option value="co" {% if request.GET.contract_type == 'co' %}selected{% endif %}>پیمانی</option>
+        </select>
+    </div>
+{% endblock %}

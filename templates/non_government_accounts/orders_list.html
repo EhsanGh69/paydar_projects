@@ -17,7 +17,7 @@
     
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
         
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن سفارش' create_perm=perms.non_government_accounts.add_orders %}
+                {% include 'non_government_accounts/orders_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن سفارش' create_perm=perms.non_government_accounts.add_orders %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -69,11 +69,11 @@
                                         تاریخ و زمان ارسال
                                     </th>
 
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         تصویر سفارش ارسال شده
                                     </th>
 
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         نوع تصویر سفارش ارسال شده
                                     </th>
 
@@ -144,7 +144,7 @@
                                     
                                         {% if order.sended_image %}
                                         
-                                            <td class="text-center">
+                                            <td class="text-center col-img">
                                                 <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                                 data-target="#sended{{ forloop.counter }}">
                                                     <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -154,15 +154,15 @@
                                             {% include 'partials/img_modal.html' with img_type='sended' id=forloop.counter img_src=order.sended_image.url label='' owner=order.sended_image_type_label %}
 
                                         {% else %}
-                                            <td class="text-center">
+                                            <td class="text-center col-img">
                                                 <span>_</span>
                                             </td>
                                         {% endif %}
 
                                         {% if order.sended_image_type %}
-                                            <td class="text-center">{{ order.sended_image_type_label }}</td>
+                                            <td class="text-center col-img">{{ order.sended_image_type_label }}</td>
                                         {% else %}
-                                            <td class="text-center">
+                                            <td class="text-center col-img">
                                                 <span>_</span>
                                             </td>
                                         {% endif %}
@@ -207,7 +207,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'non_government_accounts/orders_pagination.html' with page_obj=page_obj %}
         
             </div> 
 

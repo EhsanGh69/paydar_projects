@@ -29,6 +29,10 @@
                                         ردیف
                                     </th>
 
+                                    <th class="text-center rounded-0" rowspan="2" colspan="1" style="width: 40.797px;">
+                                        پروژه
+                                    </th>
+
                                     <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
                                         طرف حساب دولتی
                                     </th>
@@ -53,12 +57,12 @@
                                         تاریخ
                                     </th>
 
-                                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center col-img" rowspan="2" colspan="1" style="width: 100.797px;">
                                         تصویر فیش
                                     </th>
 
                                     {% if perms.cheques_receive_pay.delete_receivepay or perms.cheques_receive_pay.change_receivepay %}
-                                        <th class="text-center rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
+                                        <th class="text-center rounded-0 action-th" rowspan="2" colspan="1" style="width: 100.797px;">
                                             اقدام
                                         </th>
                                     {% endif %}
@@ -86,6 +90,8 @@
                                 {% for receive_pay in receive_pays %}
                                     <tr role="row" class="odd">
                                         <td>{{ forloop.counter }}</td>
+
+                                        <td>{{ receive_pay.project }}</td>
 
                                         {% if receive_pay.organ %}
                                             <td>{{ receive_pay.organ }}</td>
@@ -129,7 +135,7 @@
                                             {{ receive_pay.date|jformat:'%d / %m / %Y - %H:%M:%S' }}
                                         </td>
                                     
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                             data-target="#receipt_image{{ forloop.counter }}">
                                                 <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -139,7 +145,7 @@
                                         {% include 'partials/img_modal.html' with img_type='receipt_image' id=forloop.counter img_src=receive_pay.receipt_image.url label='تصویر فیش' owner=receive_pay.regard_to %}
                                         
                                         {% if perms.cheques_receive_pay.delete_receivepay or perms.cheques_receive_pay.change_receivepay %}
-                                            <td class="action-td text-center d-flex">
+                                            <td class="action-td text-center d-flex p-3 rounded-0">
                                                 {% if perms.cheques_receive_pay.change_receivepay %}
                                                     <a href="{% url 'cheques_receive_pay:receive_pay_update' receive_pay.pk %}" 
                                                     class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
@@ -171,7 +177,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'cheques_receive_pay/receive_pays_pagination.html' with page_obj=page_obj %}
         
             </div>
 

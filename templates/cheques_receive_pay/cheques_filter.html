@@ -1,0 +1,11 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="cheque_type" class="form-control" id="cheque-type">
+            <option value="all" selected>فیلتر نوع چک</option>
+            <option value="exp" {% if request.GET.cheque_type == 'exp' %}selected{% endif %}>صدور</option>
+            <option value="rec" {% if request.GET.cheque_type == 'rec' %}selected{% endif %}>دریافت</option>
+        </select>
+    </div>
+{% endblock %}

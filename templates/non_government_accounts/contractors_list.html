@@ -37,7 +37,6 @@
                                         نام  و نام خانوادگی
                                     </th>
         
-        
                                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
                                         رشته شغلی
                                     </th>
@@ -100,7 +99,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'non_government_accounts/contractors_pagination.html' with page_obj=page_obj %}
         
             </div>
 

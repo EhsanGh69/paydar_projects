@@ -78,19 +78,21 @@ class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'government_accounts/receive_list.html'
     model = Receive
     context_object_name = "receives"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
 
         global search_result
         if date_filter != "all":
-            search_result = Receive.objects.search(query).filter(receive_date__date__range=filter_date_values(date_filter)).all()
+            search_result = Receive.objects.search(query).filter(receive_date__date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
-            search_result = Receive.objects.search(query).all()
+            search_result = Receive.objects.search(query).all() # type: ignore
 
         if not search_result:
             not_found = True
@@ -102,6 +104,8 @@ class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'government_accounts:receives_search'
         context['list_url'] = 'government_accounts:receives'
+        context['query'] = query
+        context['date_filter'] = date_filter
         return context
 
 
@@ -223,19 +227,21 @@ class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'government_accounts/payment_list.html'
     model = Payment
     context_object_name = "payments"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
 
         global search_result
         if date_filter != "all":
-            search_result = Payment.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter)).all()
+            search_result = Payment.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
-            search_result = Payment.objects.search(query)
+            search_result = Payment.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -247,6 +253,8 @@ class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'government_accounts:payments_search'
         context['list_url'] = 'government_accounts:payments'
+        context['query'] = query
+        context['date_filter'] = date_filter
         return context
 
 # Payment - End
@@ -318,24 +326,27 @@ class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'government_accounts/activity_list.html'
     model = Activity
     context_object_name = "activities"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        global date_filter
+        global activity_filter
+        not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         activity_filter = self.request.GET.get('activity_result')
 
         global search_result
         if activity_filter != "all" and date_filter == 'all':
-            search_result = Activity.objects.search(query).filter(activity_result=activity_filter).all()
+            search_result = Activity.objects.search(query).filter(activity_result=activity_filter).all() # type: ignore
         elif activity_filter == "all" and date_filter != 'all':
-            search_result = Activity.objects.search(query).filter(activity_date__date__range=filter_date_values(date_filter)).all()
+            search_result = Activity.objects.search(query).filter(activity_date__date__range=filter_date_values(date_filter)).all() # type: ignore
         elif activity_filter != "all" and date_filter != 'all':
-            search_result = Activity.objects.search(query).filter(activity_date__date__range=filter_date_values(date_filter), activity_result=activity_filter).all()
+            search_result = Activity.objects.search(query).filter(activity_date__date__range=filter_date_values(date_filter), activity_result=activity_filter).all() # type: ignore
         else:
-            search_result = Activity.objects.search(query)
+            search_result = Activity.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -347,6 +358,9 @@ class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'government_accounts:activities_search'
         context['list_url'] = 'government_accounts:activities'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['activity_filter'] = activity_filter
         return context
     
 # Activity - End

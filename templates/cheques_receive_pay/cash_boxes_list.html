@@ -18,7 +18,7 @@
     
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
         
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت عملیات صندوق' create_perm=perms.cheques_receive_pay.add_cashbox %}
+                {% include 'cheques_receive_pay/operation_filter.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت عملیات صندوق' create_perm=perms.cheques_receive_pay.add_cashbox %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -34,11 +34,11 @@
                                         موجودی صندوق
                                     </th>
 
-                                    <td class="text-center text-light border-left" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
                                         واریز به صندوق
                                     </td>
 
-                                    <td class="text-center text-light border-left" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
                                         برداشت از صندوق
                                     </td>
 
@@ -54,11 +54,11 @@
                                         مبلغ
                                     </th>
 
-                                    <th class="text-center text-light border-left" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center text-light border-left col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         تصویر فیش
                                     </th>
 
-                                    <th class=" text-center border-bottom-0 action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center border-bottom-0 rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
                                         شرح
                                     </th>
 
@@ -66,11 +66,11 @@
                                         مبلغ
                                     </th>
 
-                                    <th class="text-center text-light border-left" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center text-light border-left col-img" rowspan="1" colspan="1" style="width: 100.797px;">
                                         تصویر فیش
                                     </th>
 
-                                    <th class=" text-center border-bottom-0 action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
+                                    <th class="text-center border-bottom-0 rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
                                         شرح
                                     </th>
                                 </tr>
@@ -89,7 +89,7 @@
                                             </td>
                     
                                             {% if cash_box.settle_image %}
-                                                <td class="text-center">
+                                                <td class="text-center col-img">
                                                     <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                                     data-target="#settle_image{{ forloop.counter }}">
                                                         <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -98,7 +98,7 @@
 
                                                 {% include 'partials/img_modal.html' with img_type='settle_image' id=forloop.counter img_src=cash_box.settle_image.url label='فیش واریز به مبلغ' owner=cash_box.formatted_settle_amount %}
                                             {% else %}
-                                                <td class="text-center">
+                                                <td class="text-center col-img">
                                                     <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
                                                     <span class="text-danger">بدون تصویر</span>
                                                 </td>
@@ -108,7 +108,7 @@
                                         
                                         {% else %}
                                             <td class="text-center">_</td>
-                                            <td class="text-center">_</td>
+                                            <td class="text-center col-img">_</td>
                                             <td class="text-center">_</td>
                                         {% endif %}
 
@@ -118,7 +118,7 @@
                                             </td>
 
                                             {% if cash_box.removal_image %}
-                                                <td class="text-center">
+                                                <td class="text-center col-img">
                                                     <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                                     data-target="#removal_image{{ forloop.counter }}">
                                                         <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -127,7 +127,7 @@
             
                                                 {% include 'partials/img_modal.html' with img_type='removal_image' id=forloop.counter img_src=cash_box.removal_image.url label='فیش برداشت به مبلغ' owner=cash_box.formatted_removal_amount %}
                                             {% else %}
-                                                <td class="text-center">
+                                                <td class="text-center col-img">
                                                     <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
                                                     <span class="text-danger">بدون تصویر</span>
                                                 </td>
@@ -137,7 +137,7 @@
 
                                         {% else %}
                                             <td class="text-center">_</td>
-                                            <td class="text-center">_</td>
+                                            <td class="text-center col-img">_</td>
                                             <td class="text-center">_</td>
                                         {% endif %}
                                         
@@ -173,7 +173,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'cheques_receive_pay/cash_boxes_pagination.html' with page_obj=page_obj %}
         
             </div>
 
@@ -195,7 +195,7 @@
     <script>
         $(document).ready(function() {
             $("#search-btn").click(function() {
-                if($('#search-input').val() != '' || $('#operation-type').val() != 'all'){
+                if($('#operation-type').val() != 'all'){
                     $("#search-form").submit();
                }
             });

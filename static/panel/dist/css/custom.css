@@ -125,7 +125,7 @@ background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
     font-size: 20px;
     letter-spacing: 7px;
     width: 40%;
-   }
+}
 
 @media (min-width: 992px){
     .sidebar-mini.sidebar-collapse .content-wrapper, .sidebar-mini.sidebar-collapse .main-footer, .sidebar-mini.sidebar-collapse .main-header {

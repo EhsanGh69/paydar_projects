@@ -76,9 +76,13 @@ class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'cheques_receive_pay/cheques_list.html'
     model = Cheques
     context_object_name = "cheques"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
+        global query
+        global date_filter
+        global cheque_type_filter
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
@@ -88,15 +92,15 @@ class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global search_result
 
         if cheque_type_filter != "all" and date_filter == "all":
-            search_result = Cheques.objects.search(query).filter(cheque_type=cheque_type_filter).all()
+            search_result = Cheques.objects.search(query).filter(cheque_type=cheque_type_filter).all() # type: ignore
 
         elif cheque_type_filter == "all" and date_filter != "all":
-            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all()
+            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif cheque_type_filter != "all" and date_filter != "all":
-            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter), cheque_type=cheque_type_filter).all()
+            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter), cheque_type=cheque_type_filter).all() # type: ignore
         else:
-            search_result = Cheques.objects.search(query)
+            search_result = Cheques.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -108,6 +112,9 @@ class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:cheques_search'
         context['list_url'] = 'cheques_receive_pay:cheques'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['cheque_type_filter'] = cheque_type_filter
         return context
 
 
@@ -197,9 +204,13 @@ class FundSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'cheques_receive_pay/funds_list.html'
     model = Cheques
     context_object_name = "funds"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
+        global query
+        global date_filter
+        global operation_type_filter
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
@@ -209,15 +220,15 @@ class FundSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global search_result
 
         if operation_type_filter != "all" and date_filter == "all":
-            search_result = Fund.objects.search(query).filter(operation_type=operation_type_filter).all()
+            search_result = Fund.objects.search(query).filter(operation_type=operation_type_filter).all() # type: ignore
 
         elif operation_type_filter == "all" and date_filter != "all":
-            search_result = Fund.objects.search(query).filter(charge_date__date__range=filter_date_values(date_filter)).all()
+            search_result = Fund.objects.search(query).filter(charge_date__date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif operation_type_filter != "all" and date_filter != "all":
-            search_result = Fund.objects.search(query).filter(charge_date__date__range=filter_date_values(date_filter), operation_type=operation_type_filter).all()
+            search_result = Fund.objects.search(query).filter(charge_date__date__range=filter_date_values(date_filter), operation_type=operation_type_filter).all() # type: ignore
         else:
-            search_result = Fund.objects.search(query)
+            search_result = Fund.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -229,6 +240,9 @@ class FundSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:funds_search'
         context['list_url'] = 'cheques_receive_pay:funds'
+        context['query'] = query
+        context['date_filter'] = date_filter
+        context['operation_type_filter'] = operation_type_filter
         return context
 
 
@@ -302,9 +316,12 @@ class ReceivePaySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'cheques_receive_pay/receive_pays_list.html'
     model = Cheques
     context_object_name = "receive_pays"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
+        global query
+        global date_filter
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
@@ -313,9 +330,9 @@ class ReceivePaySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global search_result
 
         if date_filter != "all":
-            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all()
+            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
-            search_result = Cheques.objects.search(query)
+            search_result = Cheques.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
@@ -327,6 +344,8 @@ class ReceivePaySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:receive_pays_search'
         context['list_url'] = 'cheques_receive_pay:receive_pays'
+        context['query'] = query
+        context['date_filter'] = date_filter
         return context
 
 
@@ -407,22 +426,18 @@ class CashBoxSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'cheques_receive_pay/cash_boxes_list.html'
     model = CashBox
     context_object_name = "cash_boxes"
+    paginate_by = 1
 
     def get_queryset(self):
         global not_found
+        global operation_type_filter
         not_found = False
-        request = self.request
-        query = request.GET.get('data_search')
         operation_type_filter = self.request.GET.get('operation_type')
 
         global search_result
 
         if operation_type_filter != "all":
-            search_result = CashBox.objects.search(query).filter(operation_type=operation_type_filter).all()
-
-        else:
-            search_result = CashBox.objects.search(query)
-        
+            search_result = CashBox.objects.filter(operation_type=operation_type_filter).all() # type: ignore
 
         if not search_result:
             not_found = True
@@ -434,6 +449,7 @@ class CashBoxSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:cash_boxes_search'
         context['list_url'] = 'cheques_receive_pay:cash_boxes'
+        context['operation_type_filter'] = operation_type_filter
         return context
 
 # CashBox - End

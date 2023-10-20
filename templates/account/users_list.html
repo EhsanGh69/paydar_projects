@@ -17,7 +17,7 @@
     
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
     
-        {% include 'partials/search_print.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='افزودن کاربر جدید' %}
+        {% include 'partials/search_print.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='افزودن کاربر جدید' create_perm=perms.account.add_user %}
     
             <div class="row">
                 <div class="col-sm-12 table-responsive">

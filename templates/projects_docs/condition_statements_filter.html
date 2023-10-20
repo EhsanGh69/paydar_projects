@@ -1,0 +1,20 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="accounting_confirm" class="form-control" id="accounting-confirm">
+            <option value="all" selected>فیلتر وضعیت تأیید حسابداری</option>
+            <option value="con" {% if request.GET.accounting_confirm == 'con' %}selected{% endif %}>تأیید شده</option>
+            <option value="nco" {% if request.GET.accounting_confirm == 'nco' %}selected{% endif %}>تأیید نشده</option>
+            <option value="awc" {% if request.GET.accounting_confirm == 'awc' %}selected{% endif %}>در انتظار تأیید</option>
+        </select>
+    </div>
+    <div class="form-group col-11 col-xl-3">
+        <select name="management_confirm" class="form-control" id="management-confirm">
+            <option value="all" selected>فیلتر وضعیت تأیید مدیریت</option>
+            <option value="con" {% if request.GET.management_confirm == 'con' %}selected{% endif %}>تأیید شده</option>
+            <option value="nco" {% if request.GET.management_confirm == 'nco' %}selected{% endif %}>تأیید نشده</option>
+            <option value="awc" {% if request.GET.management_confirm == 'awc' %}selected{% endif %}>در انتظار تأیید</option>
+        </select>
+    </div>
+{% endblock %}

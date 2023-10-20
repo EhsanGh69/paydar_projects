@@ -9,22 +9,18 @@
 
 {% block main %}
 
-    {% include 'partials/messages.html' %}
+    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
 
 <div class="card">
     
     <div class="card-body">
       <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-        {% if perms.warehousing.add_stuff %}
-            <a href="{% url 'warehousing:stuff_create' %}" class="btn btn-outline-success btn-lg pb-0" title="افزودن کالا">
-                <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
-            </a>
-        {% endif %}
+        {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='افزودن کالا' create_perm=perms.warehousing.add_stuff %}
         
         <div class="row">
             <div class="col-sm-6 offset-sm-3">
-                <table id="example1" class="table table-bordered table-striped dataTable sortable" role="grid" aria-describedby="example1_info">
+                <table id="data-table" class="table table-bordered table-striped dataTable sortable" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr role="row">
 
@@ -41,7 +37,7 @@
                             </th>
 
                             {% if perms.warehousing.delete_stuff or perms.warehousing.change_stuff %}
-                                <th class="text-center border-left rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
+                                <th class="text-center border-left rounded-0 action-th" rowspan="1" colspan="1" style="width: 236.094px;">
                                     اقدام
                                 </th>
                             {% endif %}
@@ -57,7 +53,7 @@
                                 {% total_stock stuff.stuff_type stuff.measurement_unit %}
 
                                 {% if perms.warehousing.delete_stuff or perms.warehousing.change_stuff %}
-                                    <td class="border-left text-center">
+                                    <td class="border-left text-center action-td">
                                         {% if perms.warehousing.change_stuff %}
                                             <a href="{% url 'warehousing:stuff_update' stuff.pk %}" 
                                             class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
@@ -89,6 +85,8 @@
         </div>
 
         {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+
+        {% include 'warehousing/stuffs_pagination.html' with page_obj=page_obj %}
         
       </div>
     </div>
@@ -100,6 +98,20 @@
 
 {% block scripts %}
 
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <script src="{% static 'panel/dist/js/custom.js' %}"></script>
     <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+    <script src="{% static 'panel/dist/js/export_excel.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#search-btn").click(function() {
+                if($('#search-input').val() != ''){
+                    $("#search-form").submit();
+            }
+            });
+        });
+    </script>
 
 {% endblock %}

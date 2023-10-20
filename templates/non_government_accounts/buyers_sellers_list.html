@@ -17,7 +17,7 @@
     
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
         
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='افزودن خریدار / فروشنده' create_perm=perms.non_government_accounts.add_buyerssellers %}
+                {% include 'non_government_accounts/buyers_sellers_filter.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='افزودن خریدار / فروشنده' create_perm=perms.non_government_accounts.add_buyerssellers %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -45,7 +45,7 @@
                                         آدرس
                                     </th>
 
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 172.797px;">
                                         تصویر قرارداد
                                     </th>
         
@@ -91,7 +91,7 @@
                                         <td>{{ buyer_seller.phone }}</td>
                                         <td>{{ buyer_seller.address }}</td>
                                     
-                                        <td class="text-center">
+                                        <td class="text-center col-img">
                                             <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
                                             data-target="#contract{{ forloop.counter }}">
                                                 <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
@@ -173,7 +173,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'non_government_accounts/buyers_sellers_pagination.html' with page_obj=page_obj %}
         
             </div>
 

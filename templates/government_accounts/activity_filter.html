@@ -1,0 +1,12 @@
+{% extends "partials/search_print.html" %}
+
+{% block filter %}
+    <div class="form-group col-11 col-xl-3">
+        <select name="activity_result" class="form-control" id="activity-result">
+            <option value="all" selected>فیلتر نتیجه فعالیت</option>
+            <option value="fn" {% if request.GET.activity_result == 'fn' %}selected{% endif %}>پایان یافته</option>
+            <option value="do" {% if request.GET.activity_result == 'do' %}selected{% endif %}>در حال انجام</option>
+            <option value="ns" {% if request.GET.activity_result == 'ns' %}selected{% endif %}>شروع نشده</option>
+        </select>
+    </div>
+{% endblock %}

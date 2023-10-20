@@ -1,11 +1,12 @@
+from datetime import datetime
+
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
 
-import jdatetime
-
+from jdatetime import JalaliToGregorian, datetime
 
 
 
@@ -27,7 +28,6 @@ valid_select_permissions = [(permission.codename, translate_permissions_names(pe
 
 
 
-
 def none_numeric_value(value):
     try:
         is_numeric = type(int(value)) is int
@@ -37,7 +37,6 @@ def none_numeric_value(value):
     if is_numeric :
             raise ValidationError("مقدار این فیلد نمی‌تواند عددی می‌باشد", params={"value": value})
     
-
 
 def fund_validation(**kwargs):
     full_name = kwargs['form'].cleaned_data.get('full_name')
@@ -169,7 +168,6 @@ def warehouse_export_validation(**kwargs):
         return False
 
 
-
 def filter_date_values(filter_value):
     now_day = timezone.now().day
     now_month = timezone.now().month
@@ -194,10 +192,8 @@ def filter_date_values(filter_value):
         else:
             return [f'{last_year}-{12}-{now_day}', now_date_str]
     elif filter_value == "current_year":
-        greg_tuple = jdatetime.JalaliToGregorian(jdatetime.datetime.now().year, 1, 1).getGregorianList()
+        greg_tuple = JalaliToGregorian(datetime.now().year, 1, 1).getGregorianList()
         return [f'{greg_tuple[0]}-{greg_tuple[1]}-{greg_tuple[2]}', now_date_str]
     else:
         return [now_date_str, now_date_str]
-    
-
-     
+ 

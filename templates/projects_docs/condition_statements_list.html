@@ -16,7 +16,7 @@
         <div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-                {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت صورت وضعیت جدید' create_perm=perms.projects_docs.add_conditionstatements %}
+                {% include 'projects_docs/condition_statements_filter.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت صورت وضعیت جدید' create_perm=perms.projects_docs.add_conditionstatements %}
         
                 <div class="row">
                     <div class="col-sm-12 table-responsive">
@@ -132,7 +132,7 @@
                                         {% endif %}
                                         
                                         {% if perms.projects_docs.delete_conditionstatements or perms.projects_docs.change_conditionstatements %}
-                                            <td class="action-td d-flex justify-content-center">
+                                            <td class="action-td d-flex justify-content-center p-3 rounded-0">
                                                 {% if perms.projects_docs.change_conditionstatements %}
                                                     <a href="{% url 'projects_docs:condition_statement_update' condition_statement.pk %}" 
                                                     class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
@@ -163,7 +163,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'projects_docs/condition_statements_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>

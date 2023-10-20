@@ -48,8 +48,13 @@
             </div>
           {% endif %}
           <div class="row">
+
               <div class="col-12 col-xl-6 mb-3">
-                  {{ form.organ|as_crispy_field }}
+                  {{ form.project|as_crispy_field }}
+              </div>
+
+              <div class="col-12 col-xl-6 mb-3">
+                {{ form.organ|as_crispy_field }}
               </div>
 
             <fieldset class="input-group border-bottom mb-3">

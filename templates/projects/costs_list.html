@@ -64,19 +64,27 @@
                                     </td>
         
                                     <th class="text-center" rowspan="1" colspan="1" style="width: 70.094px;">
-                                        هزینه انشعاب آب
+                                        <span>هزینه</span><br>
+                                        <span>انشعاب</span><br>
+                                        <span>آب</span>
                                     </th>
         
                                     <th class="text-center" rowspan="1" colspan="1" style="width: 70.797px;">
-                                        هزینه انشعاب برق
+                                        <span>هزینه</span><br>
+                                        <span>انشعاب</span><br>
+                                        <span>برق</span> 
                                     </th>
         
                                     <th class="text-center" rowspan="1" colspan="1" style="width: 70.797px;">
-                                        هزینه انشعاب گاز
+                                        <span>هزینه</span><br>
+                                        <span>انشعاب</span><br>
+                                        <span>گاز</span> 
                                     </th>
         
                                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 70.797px;">
-                                        هزینه اشتراک تلفن
+                                        <span>هزینه</span><br>
+                                        <span>اشتراک</span><br>
+                                        <span>تلفن</span>  
                                     </th>
 
                                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
@@ -182,7 +190,7 @@
 
                 {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
         
-                {% include 'partials/pagination.html' with page_obj=page_obj %}
+                {% include 'projects/costs_pagination.html' with page_obj=page_obj %}
         
             </div>
         </div>
