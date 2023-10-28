@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-sm-6 offset-sm-3">
+        <table id="example1" class="table table-bordered table-striped dataTable sortable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr role="row">
+
+                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 358.797px;;">
+                        نام ارگان
+                    </th>
+
+                    {% if perms.government_accounts.delete_organization or perms.government_accounts.change_organization %}
+                        <th class="text-center border-left rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
+                            اقدام
+                        </th>
+                    {% endif %}
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for organization in organizations %}
+                    <tr role="row" class="odd">
+                        <td>{{ organization.organization_name }}</td>
+
+                        {% if perms.government_accounts.delete_organization or perms.government_accounts.change_organization %}
+                            <td class="border-left text-center">
+                                {% if perms.government_accounts.change_organization %}
+                                    <a href="{% url 'government_accounts:organization_update' organization.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if perms.government_accounts.delete_organization %}
+                                    <a href="javascript:void(0)"  
+                                        data-toggle="modal"
+                                        class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                        data-url="{% url 'government_accounts:organization_delete' pk=organization.pk %}"
+                                        data-target="#deleteItemModal" title="حذف"
+                                        data-message="آیا از حذف ارگان '{{ organization.organization_name }}' اطمینان دارید؟">
+                                        <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+</div>

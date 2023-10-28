@@ -1,158 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'base_list.html' %}
 {% load static %}
-
 
 {% block title %}لیست پروژه‌ها{% endblock %}
 
 {% block page_title %}لیست پروژه‌ها{% endblock %}
 
-
-{% block main %}
-
-    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
-
-    <div class="card">
-        
-        <div class="card-body">
-    
-            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-        
-                {% include 'projects/project_filter.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='افزودن پروژه' create_perm=perms.projects.add_project %}
-        
-                <div class="row">
-                    <div class="col-sm-12 table-responsive">
-                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                            <thead>
-                                <tr role="row">
-        
-                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
-                                        ردیف
-                                    </th>
-
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                        عنوان پروژه                                
-                                    </th>
-        
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                        نوع قرارداد
-                                    </th>
-        
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                        مالکین
-                                    </th>
-        
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                        دستمزد قرارداد پیمانی
-                                    </th>
-        
-                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                                        درصد قرارداد پیمانی
-                                    </th>
-                                    
-                                    {% if perms.projects.delete_project or perms.projects.change_project %}
-                                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                                            اقدام
-                                        </th>
-                                    {% endif %}
-                                </tr>
-                            </thead>
-                            <tbody>
-        
-                                {% for project in projects %}
-                                    <tr role="row" class="odd">
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ project.title }}</td>
-                                        <td>
-                                            {% if project.contract_type == 'pc' %}
-                                                <span>مشارکت در ساخت</span>
-                                            {% elif project.contract_type == 'ow' %}
-                                                <span>مالکیت</span>
-                                            {% elif project.contract_type == 'pa' %}
-                                                <span>شراکتی</span>
-                                            {% else %}
-                                                <span>پیمانی</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {{ project.owners_to_str }}
-                                        </td>
-                                        {% if project.contractual_salary == 0 %}
-                                            <td class="text-center">
-                                                <span style="font-size:1.5rem;">_</span>
-                                            </td>
-                                        {% else %}
-                                            <td data-sort="{{ project.contractual_salary }}">
-                                                {{ project.formatted_contractual_salary }}
-                                            </td>
-                                        {% endif %}
-
-                                        {% if project.contractual_salary == 0.00 %}
-                                            <td class="text-center">
-                                                <span style="font-size:1.5rem;">_</span>
-                                            </td>
-                                        {% else %}
-                                            <td>
-                                                {{ project.contractual_percentage }}
-                                            </td>
-                                        {% endif %}
-                                        
-                                        {% if perms.projects.delete_project or perms.projects.change_project %}
-                                            <td class="action-td text-center">
-                                                {% if perms.projects.change_project %}
-                                                    <a href="{% url 'projects:project_update' project.pk %}" 
-                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                    </a>
-                                                {% endif %}
-
-                                                {% if perms.projects.delete_project %}
-                                                    <a href="javascript:void(0)"  
-                                                    data-toggle="modal"
-                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                                    data-url="{% url 'projects:project_delete' pk=project.pk %}"
-                                                    data-target="#deleteItemModal" title="حذف"
-                                                    data-message="آیا از حذف پروژه '{{ project.title }}' اطمینان دارید؟">
-                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                                    </a>
-                                                {% endif %}
-                                            </td>
-                                        {% endif %}
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        
-                        </table>
-                    </div>
-                </div>
-
-                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-        
-                {% include 'projects/project_pagination.html' with page_obj=page_obj %}
-        
-            </div>
-        </div>
-    </div> 
-
-
+{% block filter %}
+    {% include 'projects/filters/projects_filter.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='افزودن پروژه' create_perm=perms.projects.add_project %}
 {% endblock %}
 
+{% block table %}
+    {% include 'projects/tables/projects_table.html' %}
+{% endblock %}
 
-{% block scripts %}
-
-    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
-    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
-    <script src="{% static 'panel/dist/js/custom.js' %}"></script>
-    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
-    <script src="{% static 'panel/dist/js/export_excel.js' %}"></script>
-
-    <script>
-        $(document).ready(function() {
-            $("#search-btn").click(function() {
-                if($('#search-input').val() != '' || $('#contract-type').val() != 'all'){
-                    $("#search-form").submit();
-               }
-            });
-        });
-    </script>
-
+{% block pagination %}
+    {% include 'projects/paginations/projects_pagination.html' with page_obj=page_obj %}
+{% endblock %}
+    
+{% block filter_control %}
+    <script src="{% static 'scripts/projects/projects_list.js' %}"></script>
 {% endblock %}

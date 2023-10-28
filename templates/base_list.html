@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block main %}
+
+    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
+
+    <div class="card">
+        
+        <div class="card-body">
+    
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+
+                {% block filter %}{% endblock %}
+
+                {% block table %}{% endblock %}
+
+                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
+        
+                {% block pagination %}{% endblock %}
+
+            </div>
+            
+        </div>
+    </div> 
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <script src="{% static 'panel/dist/js/custom.js' %}"></script>
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+    <script src="{% static 'panel/dist/js/export_excel.js' %}"></script>
+
+    {% block filter_control %}{% endblock %}
+
+{% endblock %}

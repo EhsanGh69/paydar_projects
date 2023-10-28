@@ -1,9 +1,5 @@
-{% extends 'base.html' %}
+{% extends 'base_create_update.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
-{% load widget_tweaks %}
-{% load base_tags %}
-
 
 {% block title %}
     {% if request.resolver_match.url_name == 'group_create' %}
@@ -13,7 +9,6 @@
     {% endif %} 
 {% endblock %}
 
-
 {% block page_title %}
     {% if request.resolver_match.url_name == 'group_create' %}
         <span>افزودن گروه دسترسی جدید</span>
@@ -22,146 +17,10 @@
     {% endif %}
 {% endblock %}
 
-{% block link %}
-
-    <style>
-        #id_permissions, #selected_permissions{
-            height: 300px;
-        }
-    </style>
-
+{% block form %}
+	{% include "account/forms/group_form.html" %}
 {% endblock %}
 
-{% block main %}
-
-<div class="card card-primary p-5">
-
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
-
-      <form method="post" id="group-form">
-          {% csrf_token %}
-          <p>
-            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-          </p>
-          {% if form.non_field_errors %}
-            <div class="errors">
-                {% for error in form.non_field_errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-          {% endif %}
-          <div class="row">
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.group_name|as_crispy_field }}
-                </div>
-          </div>
-                
-          <label>دسترسی‌ها*</label>
-
-          <div class="row">
-
-                <div class="col-12 col-xl-6 mb-3">
-                    <div class="card">
-                        <div class="card-header">
-                          دسترسی‌های موجود
-                        </div>
-                        <div class="card-body">
-                            {% if request.resolver_match.url_name == 'group_create' %}
-                                {% if form.permissions.errors %}
-                                    {{ form.permissions|add_class:"form-control border border-danger" }}
-                                    {% for error in form.permissions.errors %}
-                                        <p class="text-danger">
-                                            <strong>{{ error }}</strong>
-                                        </p>
-                                    {% endfor %}
-                                {% else %}
-                                    {{ form.permissions|add_class:"form-control" }}
-                                {% endif %}
-                            {% else %}
-                                <select name="permissions" class="selectmultiple form-control" id="id_permissions" multiple>
-                                    {% for permission in valid_permissions %}
-                                        <option value="{{ permission|index:0 }}" {% if permission|index:0 in group_permissions %}selected{% endif %}>
-                                            {{ permission|index:1 }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            {% endif %}
-                            <small id="hint_id_permissions" class="form-text text-muted">برای انتخاب یا حذف بیش از یک مورد:
-                                <br>
-                                در ویندوز دکمه 'Ctrl' را نگه دارید
-                                <br>
-                                در اندروید انگشت خود را برروی گزینه مورد نظر نگه دارید
-                            </small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-xl-6 mb-3">
-                    <div class="card">
-                        <div class="card-header">
-                        دسترسی‌های انتخاب شده
-                        </div>
-                        <div class="card-body">
-                            <select class="form-control" id="selected_permissions" multiple></select>
-                        </div>
-                    </div>
-                </div>
-          </div>
-
-          <div class="row">
-            <div class="col-8 col-sm-6 col-xl-4 my-4">
-                <button class="btn btn-success btn-block" type="submit" id="submit-btn">
-                    {% if request.resolver_match.url_name == 'group_create' %}
-                        <span>افزودن گروه دسترسی جدید</span>
-                    {% else %}
-                        <span>ویرایش گروه دسترسی</span>
-                    {% endif %}
-                </button>
-              </div>
-          </div>
-      </form>
-
-    </div>
-
-  </div>
-
-{% endblock  %}
-
-{% block scripts %}
-
-<script type="text/javascript">
-
-    $(document).ready(function () {
-
-        $("#delete-btn").attr("disabled", "disabled");
-
-        $("#id_permissions option").each(function(){
-            if($(this).is(':selected')){
-                $('#selected_permissions').append($('<option>', {
-                    value: $(this).val(),
-                    text: $(this).text()
-               }));
-            }
-        });
-
-        $('#id_permissions').change(function (e) { 
-           e.preventDefault();
-
-           $('#selected_permissions').children().remove();
-
-           $("#id_permissions option").each(function(){
-                if($(this).is(':selected')){
-                    $('#selected_permissions').append($('<option>', {
-                        value: $(this).val(),
-                        text: $(this).text()
-                   }));
-                }
-            });
-       });
-
-   });
-
-</script>
-
+{% block form_control %}
+    <script src="{% static 'scripts/account/group_form.js' %}"></script>
 {% endblock %}
-

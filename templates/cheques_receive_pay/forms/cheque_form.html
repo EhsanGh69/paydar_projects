@@ -1,0 +1,71 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.account_owner|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.account_party|as_crispy_field }}
+    </div>
+   
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.cheque_type|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.cheque_for|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.cheque_number|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.bank_branch|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.cheque_amount|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.cheque_image|as_crispy_field }}
+    </div>
+    
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.export_receive_date.label }}*</label>
+        {{ form.export_receive_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {% if form.export_receive_date.errors %}
+              {% for error in form.export_receive_date.errors %}
+                  <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+        {% endif %}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.due_date.label }}*</label>
+        {{ form.due_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {% if form.due_date.errors %}
+              {% for error in form.due_date.errors %}
+                  <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+        {% endif %}
+    </div>
+    
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.registered|as_crispy_field }}
+    </div>
+    
+
+</div>
+
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-4">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'cheque_create' %}
+              <span>ثبت چک</span>
+          {% else %}
+              <span>ویرایش چک</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

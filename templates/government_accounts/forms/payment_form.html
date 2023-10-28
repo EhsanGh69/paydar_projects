@@ -1,0 +1,39 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.organization|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.payment_for|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.payment_amount|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.payment_date.label }}*</label>
+        {{ form.payment_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+
+        {% if form.payment_date.errors %}
+              {% for error in form.payment_date.errors %}
+                  <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 mb-3">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'payment_create' %}
+              <span>ثبت پرداخت‌</span>
+          {% else %}
+              <span>ویرایش پرداخت‌</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

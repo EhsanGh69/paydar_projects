@@ -1,0 +1,95 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <fieldset class="input-group border-bottom mb-3">
+        <legend class="mb-3">
+            <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">کالا</i>
+        </legend>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.stuff_type|as_crispy_field }}
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.measurement_unit|as_crispy_field }}
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.is_deficient|as_crispy_field }}
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.deficient_amount|as_crispy_field }}
+            <span class="text-danger d-none" id="deficient_alert">لطفا مقدار کسری را وارد نمایید</span>
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.is_excess|as_crispy_field }}
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.excess_amount|as_crispy_field }}
+            <span class="text-danger d-none" id="excess_alert">لطفا مقدار مازاد را وارد نمایید</span>
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            <label>{{ form.start_using_date.label }}*</label>
+            {% if form.start_using_date.errors %}
+            {{ form.start_using_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+                {% for error in form.start_using_date.errors %}
+                    <p class="text-danger">
+                        <strong>{{ error }}</strong>
+                    </p>
+                {% endfor %}
+            {% else %}
+                {{ form.start_using_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% endif %}
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            <label>{{ form.finish_using_date.label }}*</label>
+            {% if form.finish_using_date.errors %}
+            {{ form.finish_using_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+                {% for error in form.finish_using_date.errors %}
+                    <p class="text-danger">
+                        <strong>{{ error }}</strong>
+                    </p>
+                {% endfor %}
+            {% else %}
+                {{ form.finish_using_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% endif %}
+        </div>
+        
+    </fieldset>
+
+    <fieldset class="input-group border-bottom mb-3">
+        <legend class="mb-3">
+            <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">مرجوعی</i>
+        </legend>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.returned_to|as_crispy_field }}
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            <label>{{ form.return_date.label }}</label>
+
+            {% if form.return_date.errors %}
+            {{ form.return_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+                {% for error in form.return_date.errors %}
+                    <p class="text-danger">
+                        <strong>{{ error }}</strong>
+                    </p>
+                {% endfor %}
+            {% else %}
+                {{ form.return_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% endif %}
+        </div>
+        <span class="text-danger d-none" id="return_alert">لطفا انبار و تاریخ ارجاع کالا را انتخاب نمایید</span>
+        
+    </fieldset>
+    
+</div>
+
+<div class="row">
+    <div class="col-8 col-sm-6 col-xl-4 my-4">
+        <button class="btn btn-success btn-block" type="submit" id="submit-btn">
+            {% if request.resolver_match.url_name == 'use_certificate_create' %}
+                <span>ثبت گواهی مصرف</span>
+            {% else %}
+                <span>ویرایش گواهی مصرف</span>
+            {% endif %}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3 mb-3">
+        {{ form.organization|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3 mb-3">
+        {{ form.activity_type|as_crispy_field }}
+        {{ form.activity_result|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3 mb-3">
+      <label for="">{{ form.activity_descriptions.label }}</label>
+      {{ form.activity_descriptions|add_class:"form-control"|attr:"rows:5"|attr:"disabled:disabled" }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3 mb-3">
+        <label>{{ form.activity_date.label }}*</label>
+        {{ form.activity_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+
+        {% if form.activity_date.errors %}
+              {% for error in form.activity_date.errors %}
+                  <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-4">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'activity_create' %}
+              <span>ثبت فعالیت</span>
+          {% else %}
+              <span>ویرایش فعالیت</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'jalali_date_picker/jalalidatepicker.min.css' %}">
+{% endblock %}
+
+{% block main %}
+<div class="card card-primary p-5">
+    <div class="card-body col-12 col-lg-8 offset-lg-2">
+      <form method="post">
+          {% csrf_token %}
+          <p>
+            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+          </p>
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <h5>
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            <span>{{ error }}</span>
+                        </h5>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block form %}{% endblock %}
+      </form>
+    </div>
+  </div>
+{% endblock  %}
+
+{% block scripts %}
+    <script src="{% static 'jalali_date_picker/jalalidatepicker.min.js' %}"></script>
+    {% block form_control %}{% endblock %}
+{% endblock %}

@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-
+{% extends 'base_create_update.html' %}
 
 {% block title %}
     {% if request.resolver_match.url_name == 'cost_create' %}
@@ -18,103 +16,6 @@
     {% endif %}
 {% endblock %}
 
-
-
-{% block main %}
-
-<div class="card card-primary p-5">
-
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
-
-      <form method="post">
-          {% csrf_token %}
-          <p>
-            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-          </p>
-          {% if form.non_field_errors %}
-            <div class="errors">
-                {% for error in form.non_field_errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-          {% endif %}
-          <div class="row">
-            
-            <div class="col-12 col-xl-6 mb-3">
-                {{ form.project|as_crispy_field }}
-            </div>
-
-            {# branches costs #}
-            <fieldset class="input-group border-bottom mb-3">
-                <legend class="mb-3">
-                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">هزینه انشعابات</i>
-                </legend>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.water_branch|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.electricity_branch|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.gas_branch|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.phone_subscription|as_crispy_field }}
-                </div>
-            </fieldset>
-            
-            
-            {# engineer costs #}
-            <fieldset class="input-group border-bottom mb-3">
-                <legend class="mb-3">
-                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">هزینه‌های نظام مهندسی</i>
-                </legend>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.designer_office|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.supervisors|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.engineer_system|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.sketch_map|as_crispy_field }}
-                </div>
-            </fieldset>
-            
-            {# mayoralty costs #}
-            <fieldset class="input-group">
-                <legend class="mb-3">
-                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">هزینه‌های شهرداری</i>
-                </legend>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.export_permit|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.export_end_work|as_crispy_field }}
-                </div>
-            </fieldset>
-            
-
-          </div>
-
-          <div class="row">
-            <div class="col-8 col-sm-6 col-xl-4 my-5">
-                <button class="btn btn-success btn-block" type="submit">
-                    {% if request.resolver_match.url_name == 'cost_create' %}
-                        <span>ثبت هزینه‌ها</span>
-                    {% else %}
-                        <span>ویرایش هزینه‌ها</span>
-                    {% endif %}
-                </button>
-              </div>
-          </div>
-      </form>
-
-    </div>
-
-  </div>
-
-{% endblock  %}
-
+{% block form %}
+	{% include "projects/forms/cost_form.html" %}
+{% endblock %}

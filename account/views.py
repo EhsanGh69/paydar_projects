@@ -7,10 +7,9 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import Group, Permission
 
 from utils.tools import valid_select_permissions
-from utils.report_tools import date_query
 
-from .models import User, Report
-from .forms import AuthenticateForm, AddUserForm, UpdateUserForm, AddGroupForm, UpdateGroupForm, GetReportForm
+from .models import User
+from .forms import AuthenticateForm, AddUserForm, UpdateUserForm, AddGroupForm, UpdateGroupForm
 
 
 
@@ -141,11 +140,12 @@ class SearchUsers(LoginRequiredMixin, ListView):
     template_name = 'account/users_list.html'
     model = User
     context_object_name = "users"
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
-        not_found = False
         global query
+        not_found = False
         query = self.request.GET.get('data_search')
         
         search_result = User.objects.search(query).all() # type: ignore
@@ -160,6 +160,7 @@ class SearchUsers(LoginRequiredMixin, ListView):
         context['not_found'] = not_found
         context['search_url'] = 'account:users_search'
         context['list_url'] = 'account:users'
+        context['query'] = query
         return context
 
 
@@ -167,9 +168,7 @@ class SearchUsers(LoginRequiredMixin, ListView):
 
 # ----------------------------------------------
 
-
 # Group - Start
-
 
 class GroupList(LoginRequiredMixin, ListView):
     template_name = 'account/groups_list.html'
@@ -260,88 +259,4 @@ class DeleteGroup(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 
 # Group - End
 
-# -----------------------------------------
-
-# Report - Start
-
-class ReportsHistory(LoginRequiredMixin, ListView):
-    template_name = 'account/report_list.html'
-    model = Report
-    context_object_name = 'reports'
-    paginate_by = 9
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['persian_object_name'] = 'گزارش'
-        return context
-
-
-class CreateReport(LoginRequiredMixin, CreateView):
-    template_name = 'account/create_report.html'
-    form_class = GetReportForm
-    success_url = reverse_lazy('account:report_create')
-
-    def form_valid(self, form, **kwargs):
-        date_from = form.cleaned_data.get('date_from')
-        date_to = form.cleaned_data.get('date_to')
-        report_type = form.cleaned_data.get('report_type')
-        form_valid = date_query(date_from, date_to, True)
-        is_exists_query = date_query(date_from, date_to, False, False, report_type).exists() # type: ignore
-        if form_valid:
-            if is_exists_query:
-                # context['new_report'] = date_query(date_from, date_to, False, False, report_type)
-                # context['record_count'] = date_query(date_from, date_to, False, False, report_type).count() # type: ignore
-                return super().form_valid(form)
-            else:
-                form.errors['__all__'] = form.error_class(["برای بازه‌ی زمانی وارد شده هیچ اطلاعاتی ثبت نشده است."])
-                return super().form_invalid(form)
-        else:
-            form.errors['__all__'] = form.error_class(["برای بازه‌ی زمانی وارد شده گزارشی از قبل موجود می‌باشد."])
-            return super().form_invalid(form)
-
-
-class ReportResult(LoginRequiredMixin, DetailView):
-    template_name = 'account/report_result.html'
-    def get_object(self):
-        pk = self.kwargs.get('pk')
-        report = get_object_or_404(Report, pk=pk)
-        return report
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-    
-
-class ReportDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    success_url = reverse_lazy("account:reports")
-    success_message = "گزارش با موفقیت حذف شد"
-
-    def get_object(self, queryset=None):
-        _id = int(self.kwargs.get('pk'))
-        report = get_object_or_404(Report, pk=_id)
-        return report
-    
-
-class SearchReports(LoginRequiredMixin, ListView):
-    template_name = 'account/report_list.html'
-    model = Report
-    context_object_name = "reports"
-
-    def get_queryset(self):
-        global not_found
-        not_found = False
-        global query
-        query = self.request.GET.get('data_search')
-        
-        search_result = User.objects.search(query).all() # type: ignore
-        
-        if not search_result:
-            not_found = True
-
-        return search_result
-        
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['not_found'] = not_found
-        return context
-      
+# -----------------------------------------     

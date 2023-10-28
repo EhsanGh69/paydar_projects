@@ -1,0 +1,115 @@
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr role="row">
+
+                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
+                        ردیف
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                        نام کاربری
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                        نام
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                        نام خانوادگی
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                        شماره همراه
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                        کاربر فعال
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                        گروه‌های دسترسی
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                        تاریخ ثبت کاربر
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                        تاریخ آخرین ورود
+                    </th>
+
+                    <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                        اقدام
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                        <tr role="row" class="odd">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.first_name }}</td>
+                            <td>{{ user.last_name }}</td>
+                            <td>{{ user.mobile_number }}</td>
+
+                            <td class="text-center">
+                                {% if user.is_active %}
+                                    <i class="fa fa-check-circle" style="color: green;"></i>
+                                {% else %}
+                                    <i class="fa fa-minus-circle" style="color: red;"></i>
+                                {% endif %}
+                            </td>
+
+                            {% if not user.is_superuser %}
+                                <td class="text-center">
+                                    {% for group in user.groups.all %}
+                                        {{ group }} <br>
+                                    {% endfor %}
+                                </td>
+                            {% else %}
+                                <td class="text-center">_</td>
+                            {% endif %}
+
+                            <td data-sort="{{ user.date_joined|date:'Ymd' }}">
+                                {{ user.jalali_date_joined }}
+                            </td>
+
+                            {% if user.last_login %}
+                                <td data-sort="{{ user.last_login|date:'Ymd' }}">
+                                    {{ user.jalali_last_login }}
+                                </td>
+                            {% else %}
+                                <td class="text-center">_</td>
+                            {% endif %}
+                            {% if not user.is_superuser %}
+                                <td class="action-td text-center">
+                                    <a href="{% url 'account:user_update' user.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                    <i class="fa-solid fa-user-pen"></i>
+                                    </a>
+                                    <a href="javascript:void(0)"  
+                                    data-toggle="modal"
+                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                    data-url="{% url 'account:user_delete' pk=user.pk %}"
+                                    data-target="#deleteItemModal" title="حذف"
+                                    data-message="آیا از حذف این کاربر اطمینان دارید؟">
+                                    <i class="fa-solid fa-user-xmark"></i>
+                                    </a>
+                                </td> 
+                            {% else %}
+                                <td class="text-center">
+                                    <a href="#" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="حساب کاربری">
+                                    <i class="fa-solid fa-house-user"></i>
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+{% extends "partials/base_pagination.html" %}
+
+{% block previous_page_url %}
+    {% url "account:users" page_obj.previous_page_number %}
+{% endblock  %}
+
+{% block page_item_url %}
+    {% url "account:users" page_item %}
+{% endblock  %}
+
+{% block next_page_url %}
+    {% url "account:users" page_obj.next_page_number %}
+{% endblock  %}

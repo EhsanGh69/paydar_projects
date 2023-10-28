@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from utils.tools import none_numeric_value, valid_select_permissions
 
-from .models import User, Report
+from .models import User
 
 
 
@@ -259,12 +259,3 @@ class UpdateGroupForm(forms.Form):
         required=True,
         label='‌دسترسی‌ها'
     )
-
-
-class GetReportForm(forms.ModelForm):
-    use_required_attribute = False
-
-    class Meta:
-        model = Report
-        fields = ['report_type', 'date_from', 'date_to']
-

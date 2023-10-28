@@ -1,0 +1,74 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.supplier|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.order_type|as_crispy_field }}
+    </div>
+   
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.measurement_unit|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.unit_price|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.order_amount|as_crispy_field }}
+    </div>
+    
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.order_date.label }}*</label>
+        {{ form.order_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {% if form.order_date.errors %}
+              {% for error in form.order_date.errors %}
+                  <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+        {% endif %}
+    </div>
+    
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.order_respite|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.order_result|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      <label>{{ form.sending_date.label }}</label>
+      {{ form.sending_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+      <small class="form-text text-muted">{{ form.sending_date.help_text }}</small>
+      {% if form.sending_date.errors %}
+            {% for error in form.sending_date.errors %}
+                <p class="text-danger">{{ error }}</p>
+            {% endfor %}
+      {% endif %}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.sended_image|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.sended_image_type|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3 mb-3">
+      <label for="">{{ form.explan_order_cancel.label }}</label>
+      {{ form.explan_order_cancel|add_class:"form-control"|attr:"rows:5"|attr:"disabled:disabled" }}
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-4">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'order_create' %}
+              <span>ثبت سفارش</span>
+          {% else %}
+              <span>ویرایش سفارش</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

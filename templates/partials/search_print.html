@@ -12,15 +12,10 @@
 </a>
 {% endif %}
 
-
 <div class="row my-2">
-    
     <div class="col-12 col-xl-9 mt-2">
-
         <div id="example1_filter" class="dataTables_filter">
-            
             <form action="{% url search_url %}" method="get" id="search-form">
-
                 <div class="row pr-3">
                     {% if request.resolver_match.url_name == 'users' or request.resolver_match.url_name == 'users_search' %}
                         <div class="form-group col-12 col-sm-9 col-md-7 col-lg-5 col-xl-3 p-0">
@@ -37,7 +32,6 @@
                             id="search-input">
                         </div>
                     {% endif %}
-
                     {% if date_filter %}
                         <div class="form-group col-12 col-xl-2">
                             <select name="date_filter" class="form-control" id="date-filter">
@@ -59,26 +53,16 @@
                             </select>
                         </div>
                     {% endif %}
-
                     {% block filter %}{% endblock %}
-                
                     <div class="col-1 col-xl-1 p-0 {% if not date_filter %}mr-2{% endif %}">
-                        <button type="button" class="btn btn-success"
-                        {% if 'warehouse_imports' in request.resolver_match.url_name %}
-                            style="padding: 0.65rem;"
-                        {% endif %}
-                        title="بگرد" id="search-btn">
+                        <button type="button" class="btn btn-success" title="بگرد" id="search-btn">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
-
                 </div>
-
             </form>
-
         </div>
     </div>
-
     {% if request.resolver_match.url_name != 'users' and request.resolver_match.url_name != 'users_search' and create_perm %}
             <div class="col-12 col-xl-3 mt-2" id="print-table">
 
@@ -92,5 +76,4 @@
 
             </div>
     {% endif %}
-    
 </div>

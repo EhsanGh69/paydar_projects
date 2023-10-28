@@ -1,99 +1,20 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load base_tags %}
-
+{% extends 'base_list.html' %}
 
 {% block title %}لیست گروه‌های دسترسی سامانه{% endblock %}
 
 {% block page_title %}لیست گروه‌های دسترسی سامانه{% endblock %}
 
-
-{% block main %}
-
-    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
-
-    <div class="card">
-        
-        <div class="card-body">
-    
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-    
-            <a href="{% url 'account:group_create' %}" class="btn btn-outline-success btn-lg pb-0 mb-3" title="ایجاد گروه دسترسی جدید">
-                <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
-                <i class="fa-solid fa-users-rectangle" style="font-size: 2rem;"></i>
-            </a>
-            
-            <div class="row">
-                <div class="col-sm-12 table-responsive">
-                    <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                        <thead>
-                            <tr role="row">
-    
-                                <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
-                                    ردیف
-                                </th>
-
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    نام گروه دسترسی
-                                </th>
-    
-                                <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
-                                    دسترسی‌ها
-                                </th>
-    
-                                <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                                    اقدام
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for group in groups %}
-                                
-                                    <tr role="row" class="odd">
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ group.name }}</td>
-                                        <td>
-                                            {% for permission in group.permissions.all %}
-                                                {{ permission.name|translate_names }} <br>
-                                            {% endfor %}
-                                        </td>
-                                        
-                                        <td class="action-td text-center">
-                                            <a href="{% url 'account:group_update' group.pk %}" 
-                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش گروه">
-                                            <i class="fa-solid fa-users-gear" style="font-size: 2rem;"></i>
-                                            </a>
-                                            <a href="javascript:void(0)"  
-                                            data-toggle="modal"
-                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                            data-url="{% url 'account:group_delete' pk=group.pk %}"
-                                            data-target="#deleteItemModal" title="حذف گروه"
-                                            data-message="آیا از حذف این گروه دسترسی اطمینان دارید؟">
-                                            <i class="fa-solid fa-users-slash" style="font-size: 2rem;"></i>
-                                            </a>
-                                        </td> 
-                                    </tr>
-                            {% endfor %}
-                        </tbody>
-                    
-                    </table>
-                </div>
-            </div>
-
-            {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-    
-            {% include 'partials/pagination.html' with page_obj=page_obj %}
-    
-        </div>
-        </div>
-    </div> 
-
-
+{% block filter %}
+    <a href="{% url 'account:group_create' %}" class="btn btn-outline-success btn-lg pb-0 mb-3" title="ایجاد گروه دسترسی جدید">
+        <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+        <i class="fa-solid fa-users-rectangle" style="font-size: 2rem;"></i>
+    </a>
 {% endblock %}
 
-
-{% block scripts %}
-
-    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
-
+{% block table %}
+    {% include 'account/tables/groups_table.html' %}
+{% endblock %}
+    
+{% block pagination %}
+    {% include 'account/paginations/groups_pagination.html' with page_obj=page_obj %}
 {% endblock %}

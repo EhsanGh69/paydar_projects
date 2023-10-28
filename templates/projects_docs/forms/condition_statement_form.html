@@ -1,0 +1,49 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.contractor|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.work_unit|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.requested_amount|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.confirmed_amount|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.accounting_confirm|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.management_confirm|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.final_deposit_amount|as_crispy_field }}
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-8 col-sm-6 col-xl-4 my-4">
+        <button class="btn btn-success btn-block" type="submit">
+            {% if request.resolver_match.url_name == 'condition_statement_create' %}
+                <span>ثبت صورت وضعیت جدید</span>
+            {% else %}
+                <span>ویرایش صورت وضعیت</span>
+            {% endif %}
+        </button>
+    </div>
+</div>

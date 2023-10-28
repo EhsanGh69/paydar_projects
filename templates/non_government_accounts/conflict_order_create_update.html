@@ -1,10 +1,7 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% load widget_tweaks %}
-
+{% extends 'base_create_update.html' %}
 
 {% block title %}
-    {% if request.resolver_match.url_name == 'contractor_create' %}
+    {% if request.resolver_match.url_name == 'conflict_order_create' %}
         ثبت مغایرت سفارش
     {% else %}
         ویرایش مغایرت سفارش
@@ -12,65 +9,13 @@
 {% endblock %}
 
 {% block page_title %}
-    {% if request.resolver_match.url_name == 'contractor_create' %}
+    {% if request.resolver_match.url_name == 'conflict_order_create' %}
         <span>ثبت مغایرت سفارش</span>
     {% else %}
         <span>ویرایش مغایرت سفارش</span>
     {% endif %}
 {% endblock %}
 
-
-
-{% block main %}
-
-<div class="card card-primary p-5">
-
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
-
-      <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <p>
-            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-          </p>
-          {% if form.non_field_errors %}
-            <div class="errors">
-                {% for error in form.non_field_errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-          {% endif %}
-          <div class="row">
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.order|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.conflict_type|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                {{ form.conflict_amount|as_crispy_field }}
-              </div>
-          </div>
-
-          <div class="row">
-            <div class="col-8 col-sm-6 col-xl-4 my-5">
-                <button class="btn btn-success btn-block" type="submit">
-                    {% if request.resolver_match.url_name == 'conflict_order_create' %}
-                        <span>ثبت مغایرت سفارش</span>
-                    {% else %}
-                        <span>ویرایش مغایرت سفارش</span>
-                    {% endif %}
-                </button>
-              </div>
-          </div>
-      </form>
-
-    </div>
-
-  </div>
-
-{% endblock  %}
-
-
-
-
-
+{% block form %}
+	{% include "non_government_accounts/forms/conflict_order_form.html" %}
+{% endblock %}

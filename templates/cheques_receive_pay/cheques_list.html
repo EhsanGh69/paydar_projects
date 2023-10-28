@@ -1,198 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'base_list.html' %}
 {% load static %}
-{% load jformat %}
 
 {% block title %}لیست چک‌ها{% endblock %}
 
 {% block page_title %}لیست چک‌ها{% endblock %}
 
-
-{% block main %}
-
-    {% include 'partials/messages.html' with messages=messages not_found=not_found %}
-
-    <div class="card">
-        
-        <div class="card-body">
-    
-            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-        
-                {% include 'cheques_receive_pay/cheques_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='ثبت چک' create_perm=perms.cheques_receive_pay.add_cheques %}
-        
-                <div class="row">
-                    <div class="col-sm-12 table-responsive">
-                        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-                            <thead>
-                                <tr role="row">
-        
-                                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 40.797px;">
-                                        ردیف
-                                    </th>
-
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        پروژه
-                                    </th>
-
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        صاحب حساب
-                                    </th>
-
-                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        طرف حساب
-                                    </th>
-
-                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        نوع چک
-                                    </th>
-
-                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        بابت
-                                    </th>
-
-                                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        شماره چک 
-                                    </th>
-
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        بانک و شعبه
-                                    </th>
-
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        مبلغ
-                                    </th>
-        
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        ثبت شده یا نشده
-                                    </th>
-
-                                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        تصویر چک
-                                    </th>
-
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        تاریخ صدور / دریافت
-                                    </th>
-
-                                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                                        تاریخ سررسید
-                                    </th>
-
-                                    {% if perms.cheques_receive_pay.delete_cheques or perms.cheques_receive_pay.change_cheques %}
-                                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                                            اقدام
-                                        </th>
-                                    {% endif %}
-                                </tr>
-                            </thead>
-                            <tbody>
-        
-                                {% for cheque in cheques %}
-                                    <tr role="row" class="odd">
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ cheque.project }}</td>
-                                        <td>{{ cheque.account_owner }}</td>
-                                        <td>{{ cheque.account_party }}</td>
-                                        
-                                        <td>
-                                            {% if cheque.cheque_type == 'exp' %}
-                                                صدور
-                                            {% else %}
-                                                دریافت
-                                            {% endif %}
-                                        </td>
-                                        
-                                        <td>{{ cheque.cheque_for }}</td>
-                                        <td>{{ cheque.cheque_number }}</td>
-                                        <td>{{ cheque.bank_branch }}</td>
-                                        
-                                        <td data-sort="{{ cheque.cheque_amount }}">
-                                            {{ cheque.formatted_cheque_amount }}
-                                        </td>
-
-                                        <td class="text-center" data-sort="{{ cheque.registered }}">
-                                            {% if cheque.registered %}
-                                                <i class="fa fa-check-circle" style="color: green;"></i>
-                                            {% else %}
-                                                <i class="fa fa-minus-circle" style="color: red;"></i>
-                                            {% endif %}
-                                        </td>
-                                        
-                                    
-                                        <td class="text-center col-img">
-                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                            data-target="#cheque_image{{ forloop.counter }}">
-                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                            </a>
-                                        </td>
-
-                                        {% include 'partials/img_modal.html' with img_type='cheque_image' id=forloop.counter img_src=cheque.cheque_image.url label='چک بابت' owner=cheque.cheque_for %}
-
-                                        <td data-sort="{{ cheque.export_receive_date|date:'Ymd' }}">
-                                            {{ cheque.export_receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                                        </td>
-                                        <td data-sort="{{ cheque.due_date|date:'Ymd' }}">
-                                            {{ cheque.due_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                                        </td>
-
-                                        {% if perms.cheques_receive_pay.delete_cheques or perms.cheques_receive_pay.change_cheques %}
-                                            <td class="action-td text-center d-flex p-3 rounded-0">
-                                                {% if perms.cheques_receive_pay.change_cheques %}
-                                                    <a href="{% url 'cheques_receive_pay:cheque_update' cheque.pk %}" 
-                                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                    </a>
-                                                {% endif %}
-
-                                                {% if perms.cheques_receive_pay.delete_cheques %}
-                                                    <a href="javascript:void(0)"  
-                                                    data-toggle="modal"
-                                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                                    data-url="{% url 'cheques_receive_pay:cheque_delete' pk=cheque.pk %}"
-                                                    data-target="#deleteItemModal" title="حذف"
-                                                    data-message="آیا از حذف چک '{{ cheque.cheque_for }}' اطمینان دارید؟">
-                                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                                    </a>
-                                                {% endif %}
-                                            </td>
-                                        {% endif %}
-                                    </tr>
-                                {% endfor %}
-
-                            </tbody>
-                        
-                        </table>
-                    </div>
-                </div>
-
-                {% include 'partials/confirm_delete.html' with obj_name=persian_object_name %}
-        
-                {% include 'cheques_receive_pay/cheques_pagination.html' with page_obj=page_obj %}
-        
-            </div>
-
-        </div>
-    </div> 
-
-
+{% block filter %}
+    {% include 'cheques_receive_pay/filters/cheques_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='ثبت چک' create_perm=perms.cheques_receive_pay.add_cheques %}
 {% endblock %}
-
-
-{% block scripts %}
-
-    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
-    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
-    <script src="{% static 'panel/dist/js/custom.js' %}"></script>
-    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
-    <script src="{% static 'panel/dist/js/export_excel.js' %}"></script>
-
-    <script>
-        $(document).ready(function() {
-            $("#search-btn").click(function() {
-                if($('#search-input').val() != '' || $('#date-filter').val() != 'all' || $('#cheque-type').val() != 'all'){
-                    $("#search-form").submit();
-               }
-            });
-        });
-    </script>
-
+    
+{% block table %}
+    {% include 'cheques_receive_pay/tables/cheques_table.html' with obj_name=persian_object_name %}
+{% endblock %}
+    
+{% block pagination %}
+    {% include 'cheques_receive_pay/paginations/cheques_pagination.html' with page_obj=page_obj %}
+{% endblock %}
+    
+{% block filter_control %}
+    <script src="{% static 'scripts/cheques_receive_pay/cheques_list.js' %}"></script>
 {% endblock %}

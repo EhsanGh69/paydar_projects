@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-
+{% extends 'base_create_update.html' %}
 
 {% block title %}
     {% if request.resolver_match.url_name == 'payments_image_create' %}
@@ -18,92 +16,6 @@
     {% endif %}
 {% endblock %}
 
-
-
-{% block main %}
-
-<div class="card card-primary p-5">
-
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
-
-      <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <p>
-            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-          </p>
-          {% if form.non_field_errors %}
-            <div class="errors">
-                {% for error in form.non_field_errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-          {% endif %}
-          <div class="row">
-            
-            <div class="col-12 col-xl-6 mb-3">
-                {{ form.project|as_crispy_field }}
-            </div>
-            
-            {# engineer costs #}
-            <fieldset class="input-group border-bottom mb-3">
-                <legend class="mb-3">
-                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">هزینه‌های نظام مهندسی</i>
-                </legend>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.designer_office|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.supervisors|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.engineer_system|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.sketch_map|as_crispy_field }}
-                </div>
-            </fieldset>
-            
-            {# mayoralty costs #}
-            <fieldset class="input-group">
-                <legend class="mb-3">
-                    <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">هزینه‌های شهرداری</i>
-                </legend>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.export_permit|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.visit_toll|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.education_share|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.fire_stations_share|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.social_security_share|as_crispy_field }}
-                </div>
-            </fieldset>
-            
-
-          </div>
-
-          <div class="row">
-            <div class="col-8 col-sm-6 col-xl-4 my-5">
-                <button class="btn btn-success btn-block" type="submit">
-                    {% if request.resolver_match.url_name == 'payments_image_create' %}
-                        <span>ثبت تصاویر فیش‌های پرداختی</span>
-                    {% else %}
-                        <span>ویرایش تصاویر فیش‌های پرداختی</span>
-                    {% endif %}
-                </button>
-              </div>
-          </div>
-      </form>
-
-    </div>
-
-  </div>
-
-{% endblock  %}
-
+{% block form %}
+	{% include "projects/forms/payments_image_form.html" %}
+{% endblock %}

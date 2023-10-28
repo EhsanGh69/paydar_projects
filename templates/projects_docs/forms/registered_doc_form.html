@@ -1,0 +1,29 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.doc_type|as_crispy_field }}
+    </div>
+   
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.doc_image|as_crispy_field }}
+    </div>
+    
+</div>
+
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-4">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'registered_doc_create' %}
+              <span>ثبت سند ثبتی جدید</span>
+          {% else %}
+              <span>ویرایش سند ثبتی</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

@@ -1,0 +1,144 @@
+{% load jformat %}
+
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr role="row">
+
+                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 40.797px;">
+                        ردیف
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        پروژه‌
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        نوع سند
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        نوع نامه
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        نوع پروانه
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        عنوان سند
+                    </th>
+
+                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تصویر سند
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تاریخ ارسال / دریافت
+                    </th>
+
+                    {% if perms.projects_docs.delete_officialdocs or perms.projects_docs.change_officialdocs %}
+                        <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
+                            اقدام
+                        </th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for official_doc in official_docs %}
+                    <tr role="row" class="odd">
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>{{ official_doc.project }}</td>
+
+                        <td class="text-center">
+                            {% if official_doc.doc_type == 'let' %}
+                                نامه      
+                            {% elif official_doc.doc_type == 'lic' %}
+                                پروانه       
+                            {% else %}
+                                گواهی
+                            {% endif %}
+                        </td>
+
+                        {% if official_doc.letter_type %}
+                            <td class="text-center">
+                                {% if official_doc.letter_type == 'snd' %}
+                                    ارسالی        
+                                {% else %}
+                                    دریافتی
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="text-center">_</td>
+                        {% endif %}
+
+                        {% if official_doc.license_type %}
+                            <td class="text-center">
+                                {% if official_doc.license_type == 'des' %}
+                                    تخریب        
+                                {% elif official_doc.license_type == 'con' %}
+                                    ساخت        
+                                {% elif official_doc.license_type == 'dac' %}
+                                    تخریب و ساخت        
+                                {% else %}
+                                    شناسنامه‌ی فنی
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="text-center">_</td>
+                        {% endif %}
+
+                        <td>{{ official_doc.doc_title }}</td>
+
+                        <td class="text-center col-img">
+                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                            data-target="#doc_image{{ forloop.counter }}">
+                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% if official_doc.letter_type %}
+                            {% include 'partials/img_modal.html' with img_type='doc_image' id=forloop.counter img_src=official_doc.doc_image.url label='‌نامه‌ی مربوط به پروژه‌' owner=registered_doc.project %}
+                        {% elif official_doc.license_type %}
+                            {% include 'partials/img_modal.html' with img_type='doc_image' id=forloop.counter img_src=official_doc.doc_image.url label='‌پروانه‌ی مربوط به پروژه‌' owner=registered_doc.project %}
+                        {% else %}
+                            {% include 'partials/img_modal.html' with img_type='doc_image' id=forloop.counter img_src=official_doc.doc_image.url label='گواهی مربوط به پروژه‌' owner=registered_doc.doc_type %}
+                        {% endif %}
+
+                        
+                        <td data-sort="{{ official_doc.send_receive_date|date:'Ymd' }}">
+                            {{ official_doc.send_receive_date|jformat:'%d / %m / %Y' }}
+                        </td>
+
+                        {% if perms.projects_docs.delete_officialdocs or perms.projects_docs.change_officialdocs %}
+                            <td class="action-td d-flex justify-content-center p-3 rounded-0">
+                                {% if perms.projects_docs.change_officialdocs %}
+                                    <a href="{% url 'projects_docs:official_doc_update' official_doc.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if perms.projects_docs.delete_officialdocs %}
+                                    <a href="javascript:void(0)"  
+                                    data-toggle="modal"
+                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                    data-url="{% url 'projects_docs:official_doc_delete' pk=official_doc.pk %}"
+                                    data-target="#deleteItemModal" title="حذف"
+                                    data-message="آیا از حذف این سند اداری اطمینان دارید؟">
+                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        
+        </table>
+    </div>
+</div>

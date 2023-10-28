@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-
+{% extends 'base_create_update.html' %}
 
 {% block title %}
     {% if request.resolver_match.url_name == 'owner_create' %}
@@ -18,62 +16,6 @@
     {% endif %}
 {% endblock %}
 
-
-
-{% block main %}
-
-<div class="card card-primary p-5">
-
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
-
-      <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <p>
-            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-          </p>
-          {% if form.non_field_errors %}
-            <div class="errors">
-                {% for error in form.non_field_errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-          {% endif %}
-          <div class="row">
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.full_name|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.phone|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                {{ form.national_card_image|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.birth_certificate_image|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.ownership_document_image|as_crispy_field }}
-              </div>
-          </div>
-
-          <div class="row">
-            <div class="col-8 col-sm-6 col-xl-4 my-5">
-                <button class="btn btn-success btn-block" type="submit">
-                    {% if request.resolver_match.url_name == 'owner_create' %}
-                        <span>افزودن مالک</span>
-                    {% else %}
-                        <span>ویرایش مالک</span>
-                    {% endif %}
-                </button>
-              </div>
-          </div>
-      </form>
-
-    </div>
-
-  </div>
-
-{% endblock  %}
-
-
-
+{% block form %}
+	{% include "projects/forms/owner_form.html" %}
+{% endblock %}

@@ -1,8 +1,4 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
-{% load widget_tweaks %}
-
+{% extends 'base_create_update.html' %}
 
 {% block title %}
     {% if request.resolver_match.url_name == 'user_create' %}
@@ -12,7 +8,6 @@
     {% endif %} 
 {% endblock %}
 
-
 {% block page_title %}
     {% if request.resolver_match.url_name == 'user_create' %}
         <span>افزودن کاربر جدید</span>
@@ -21,92 +16,6 @@
     {% endif %}
 {% endblock %}
 
-
-
-{% block main %}
-
-<div class="card card-primary p-5">
-
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
-
-      <form method="post" id="receive-form">
-          {% csrf_token %}
-          <p>
-            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-          </p>
-          {% if form.non_field_errors %}
-            <div class="errors">
-                {% for error in form.non_field_errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-          {% endif %}
-          <div class="row">
-               
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.username|as_crispy_field }}
-                </div>
-
-              {% if request.resolver_match.url_name == 'user_create' %}
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.password|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.confirm_password|as_crispy_field }}
-                </div>
-              {% endif %}
-            
-              {% if request.resolver_match.url_name == 'user_create' %}
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.access_groups|as_crispy_field }}
-                </div>
-              {% else %}
-                <div class="col-12 col-xl-6 mb-3">
-                    <label>{{ form.access_groups.label }}*</label>
-                    <select name="access_groups" class="selectmultiple form-control" id="id_access_groups" multiple>
-                        {% for group in all_groups %}
-                            <option value="{{ group.name }}" {% if group in user_groups %}selected{% endif %}>
-                                {{ group.name }}
-                            </option>
-                        {% endfor %}
-                      </select>
-                </div>
-              {% endif %}
-
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.mobile_number|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.first_name|as_crispy_field }}
-                </div>
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.last_name|as_crispy_field }}
-                </div>
-
-              {% if request.resolver_match.url_name == 'user_update' %}
-                <div class="col-12 col-xl-6 mb-3">
-                    {{ form.is_active|as_crispy_field }}
-                </div>
-              {% endif %}
-              
-          </div>
-
-          <div class="row">
-            <div class="col-8 col-sm-6 col-xl-4 my-4">
-                <button class="btn btn-success btn-block" type="submit" id="submit-btn">
-                    {% if request.resolver_match.url_name == 'user_create' %}
-                        <span>ثبت مشخصات کاربر</span>
-                    {% else %}
-                        <span>ویرایش کاربر</span>
-                    {% endif %}
-                </button>
-              </div>
-          </div>
-      </form>
-
-    </div>
-
-  </div>
-
-{% endblock  %}
-
+{% block form %}
+	{% include "account/forms/user_form.html" %}
+{% endblock %}

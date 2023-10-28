@@ -1,0 +1,162 @@
+{% load jformat %}
+{% load base_tags %}
+
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr role="row">
+
+                    <th class="text-center border-bottom-0 rounded-0" rowspan="2" colspan="1" style="width: 40.797px;">
+                        ردیف
+                    </th>
+
+                    <th class="text-center border-bottom-0" rowspan="2" colspan="1" style="width: 100.797px;">
+                        نام تنخواه
+                    </th>
+
+                    <th class="text-center border-bottom-0" rowspan="2" colspan="1" style="width: 100.797px;">
+                        موجودی
+                    </th>
+
+                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                        هزینه (برداشت از تنخواه)
+                    </td>
+
+                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                        شارژ (واریز به تنخواه)
+                    </td>
+
+                    {% if perms.cheques_receive_pay.delete_fund or perms.cheques_receive_pay.change_fund %}
+                        <th class=" text-center border-bottom-0 action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
+                            اقدام
+                        </th>
+                    {% endif %}
+
+                </tr>
+
+                <tr role="row">
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        مبلغ
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        شرح
+                    </th>
+
+                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تصویر فیش پرداختی
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        مبلغ
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تاریخ 
+                    </th>
+
+                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تصویر 
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for fund in funds %}
+                    <tr role="row" class="odd">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ fund.full_name }}</td>
+                        
+                        {% fund_cash fund.full_name %}
+                        
+
+                        {% if fund.operation_type == 'rem' %}
+                            <td data-sort="{{ fund.cost_amount }}">
+                                {{ fund.formatted_cost_amount }}
+                            </td>
+                            <td>{{ fund.cost_description }}</td>
+
+                            {% if fund.receipt_image %}
+                                <td class="text-center col-img">
+                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                    data-target="#receipt_image{{ forloop.counter }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                    </a>
+                                </td>
+
+                                {% include 'partials/img_modal.html' with img_type='receipt_image' id=forloop.counter img_src=fund.receipt_image.url label='فیش پرداختی بابت' owner=fund.cost_description %}
+                            {% else %}
+                                <td class="text-center col-img">
+                                    <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
+                                    <span class="text-danger">بدون تصویر</span>
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            <td class="text-center">_</td>
+                            <td class="text-center">_</td>
+                            <td class="text-center col-img">_</td>
+                        {% endif %}
+
+                        {% if fund.operation_type == 'set' %}
+                            <td data-sort="{{ fund.charge_amount }}">
+                                {{ fund.formatted_charge_amount }}
+                            </td>
+                            <td data-sort="{{ fund.charge_date|date:'Ymd' }}">
+                                {{ fund.charge_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                            </td>
+
+                            {% if fund.charge_image %}
+                                <td class="text-center col-img">
+                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                    data-target="#charge_image{{ forloop.counter }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                    </a>
+                                </td>
+
+                                {% include 'partials/img_modal.html' with img_type='charge_image' id=forloop.counter img_src=fund.charge_image.url label='شارژ تنخواه' owner=fund.full_name %}
+                            {% else %}
+                                <td class="text-center col-img">
+                                    <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
+                                    <span class="text-danger">بدون تصویر</span>
+                                </td>
+                            {% endif %}
+
+                            
+                        {% else %}
+                            <td class="text-center">_</td>
+                            <td class="text-center">_</td>
+                            <td class="text-center col-img">_</td>
+                        {% endif %}
+                        
+                        {% if perms.cheques_receive_pay.delete_fund or perms.cheques_receive_pay.change_fund %}
+                            <td class="action-td d-flex justify-content-center rounded-0 pb-4">
+                                {% if perms.cheques_receive_pay.change_fund %}
+                                    <a href="{% url 'cheques_receive_pay:fund_update' fund.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                {% endif %}
+                                
+                                {% if perms.cheques_receive_pay.delete_fund %}
+                                    <a href="javascript:void(0)"  
+                                    data-toggle="modal"
+                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                    data-url="{% url 'cheques_receive_pay:fund_delete' pk=fund.pk %}"
+                                    data-target="#deleteItemModal" title="حذف"
+                                    data-message="آیا از حذف عملیات تنخواه '{{ fund.full_name }}' اطمینان دارید؟">
+                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        
+        </table>
+    </div>
+</div>

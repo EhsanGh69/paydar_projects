@@ -1,0 +1,166 @@
+{% load base_tags %}
+
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr role="row">
+
+                    <th class="text-center rounded-0" rowspan="2" colspan="1" style="width: 60.797px;">
+                        ردیف
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 150.797px;">
+                        پروژه                                
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 150.797px;">
+                        <span>مجموع دستمزد</span><br>
+                        <span>پیمانکاران پروژه</span><br>                                                            
+                        <span>(ریال)</span>                                                            
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 150.797px;">
+                        <span>مجموع طلب</span><br>
+                        <span>تأمین‌کنندگان پروژه</span><br>                           
+                        <span>(ریال)</span>                           
+                    </th>
+
+                    <td class="text-center text-light" rowspan="1" colspan="4" style="width: 172.094px; background-color: #808080;">
+                        هزینه انشعابات (ریال)
+                    </td>
+
+                    <td class="text-center text-light" rowspan="1" colspan="4" style="width: 172.797px; background-color: #808080;">
+                        هزینه‌های نظام مهندسی (ریال)
+                    </td>
+
+                    <td class="text-center text-light" rowspan="1" colspan="2" style="width: 172.797px; background-color: #808080;">
+                        هزینه‌های شهرداری (ریال)
+                    </td>
+                    
+                    {% if perms.projects.delete_costs or perms.projects.change_costs %}
+                        <th class="text-center rounded-0 action-th" rowspan="2" colspan="1" style="width: 190.797px;">
+                            اقدام
+                        </th>
+                    {% endif %}
+                </tr>
+                <tr role="row">
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 70.094px;">
+                        آب
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 70.797px;">
+                        برق
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 70.797px;">
+                        گاز
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 70.797px;">
+                        تلفن 
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        دفتر طراح
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        ناظرین
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        نظام مهندسی
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        نقشه کروکی
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        صدور پروانه
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        صدور پایان کار
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for cost in costs %}
+                    <tr role="row" class="odd">
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>{{ cost.project }}</td>
+
+                        {% total_project_salaries cost.project.title %}
+                        
+                        {% total_project_requests cost.project.title %}
+
+                        {# branches costs #}
+                        <td data-sort="{{ cost.water_branch }}">
+                            {{ cost.formatted_water_branch }}
+                        </td>
+                        <td data-sort="{{ cost.electricity_branch }}">
+                            {{ cost.formatted_electricity_branch }}
+                        </td>
+                        <td data-sort="{{ cost.gas_branch }}">
+                            {{ cost.formatted_gas_branch }}
+                        </td>
+                        <td data-sort="{{ cost.phone_subscription }}">
+                            {{ cost.formatted_phone_subscription }}
+                        </td>
+                        
+                        {# engineer costs #}
+                        <td data-sort="{{ cost.designer_office }}">
+                            {{ cost.formatted_designer_office }}
+                        </td>
+                        <td data-sort="{{ cost.supervisors }}">
+                            {{ cost.formatted_supervisors }}
+                        </td>
+                        <td data-sort="{{ cost.engineer_system }}">
+                            {{ cost.formatted_engineer_system }}
+                        </td>
+                        <td data-sort="{{ cost.sketch_map }}">
+                            {{ cost.formatted_sketch_map }}
+                        </td>
+                        
+                        {# mayoralty costs #}
+                        <td data-sort="{{ cost.export_permit }}">
+                            {{ cost.formatted_export_permit }}
+                        </td>
+                        <td data-sort="{{ cost.export_end_work }}">
+                            {{ cost.formatted_export_end_work }}
+                        </td>
+                        
+                        {% if perms.projects.delete_costs or perms.projects.change_costs %}
+                            <td class="action-td d-flex justify-content-center">
+                                {% if perms.projects.change_costs %}
+                                    <a href="{% url 'projects:cost_update' cost.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if perms.projects.delete_costs %}
+                                    <a href="javascript:void(0)"  
+                                    data-toggle="modal"
+                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                    data-url="{% url 'projects:cost_delete' pk=cost.pk %}"
+                                    data-target="#deleteItemModal" title="حذف"
+                                    data-message="آیا از حذف هزینه‌های پروژه '{{ cost.project }}' اطمینان دارید؟">
+                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        
+        </table>
+    </div>
+</div>

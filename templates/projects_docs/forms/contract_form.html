@@ -1,0 +1,44 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.related_to_project|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      <label for="">{{ form.unrelated_to_project.label }}</label>
+      {{ form.unrelated_to_project|add_class:"form-control"|attr:"rows:5" }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.contract_type|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.contract_title|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.contract_party|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.contract_image|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.contract_date.label }}*</label>
+        {{ form.contract_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+        {% if form.contract_date.errors %}
+              {% for error in form.contract_date.errors %}
+                  <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-4">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'contract_create' %}
+              <span>ثبت قرارداد جدید</span>
+          {% else %}
+              <span>ویرایش قرارداد</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

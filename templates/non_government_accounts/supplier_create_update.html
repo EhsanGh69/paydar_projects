@@ -1,7 +1,4 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% load widget_tweaks %}
-
+{% extends 'base_create_update.html' %}
 
 {% block title %}
     {% if request.resolver_match.url_name == 'supplier_create' %}
@@ -19,65 +16,6 @@
     {% endif %}
 {% endblock %}
 
-
-
-{% block main %}
-
-<div class="card card-primary p-5">
-
-    <div class="card-body col-12 col-lg-8 offset-lg-2">
-
-      <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <p>
-            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-          </p>
-          {% if form.non_field_errors %}
-            <div class="errors">
-                {% for error in form.non_field_errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-          {% endif %}
-          <div class="row">
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.project|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.full_name|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                {{ form.job|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3">
-                  {{ form.phone|as_crispy_field }}
-              </div>
-              <div class="col-12 col-xl-6 mb-3 mb-3">
-                <label for="">{{ form.address.label }}</label>
-                {{ form.address|add_class:"form-control"|attr:"rows:5" }}
-              </div>
-          </div>
-
-          <div class="row">
-            <div class="col-8 col-sm-6 col-xl-4 my-5">
-                <button class="btn btn-success btn-block" type="submit">
-                    {% if request.resolver_match.url_name == 'supplier_create' %}
-                        <span>افزودن تأمین کننده</span>
-                    {% else %}
-                        <span>ویرایش تأمین کننده</span>
-                    {% endif %}
-                </button>
-              </div>
-          </div>
-      </form>
-
-    </div>
-
-  </div>
-
-{% endblock  %}
-
-
-
-
-
+{% block form %}
+	{% include "non_government_accounts/forms/supplier_form.html" %}
+{% endblock %}

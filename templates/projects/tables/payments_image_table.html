@@ -1,0 +1,200 @@
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr role="row">
+
+                    <th class="text-center border-bottom-0 rounded-0" rowspan="1" colspan="1" style="width: 60.797px;">
+                        ردیف
+                    </th>
+
+                    <th class="text-center border-bottom-0" rowspan="1" colspan="1" style="width: 180.797px;">
+                        پروژه                                
+                    </th>
+
+                    <td class="text-center text-light" rowspan="1" colspan="4" style="width: 172.797px; background-color: #808080;">
+                        هزینه‌های نظام مهندسی
+                    </td>
+
+                    <td class="text-center text-light" rowspan="1" colspan="5" style="width: 172.797px; background-color: #808080;">
+                        هزینه‌های شهرداری
+                    </td>
+                    
+                    {% if perms.projects.delete_paymentsimages or perms.projects.change_paymentsimages %}
+                        <th class="text-center border-bottom-0 rounded-0 action-th" rowspan="1" colspan="1" style="width: 190.797px;">
+                            اقدام
+                        </th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <thead>
+                <tr role="row">
+
+                    <td class="border-top-0 rounded-0" rowspan="1" colspan="1" style="width: 60.797px; background-color: #808080;">
+                        
+                    </td>
+
+                    <td class="border-top-0" rowspan="1" colspan="1" style="width: 180.797px; background-color: #808080;">
+                                                        
+                    </td>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        دفتر طراح
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        ناظرین
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        نظام مهندسی
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        نقشه کروکی
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        عوارض صدور پروانه
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        عوارض بازدید
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        سهم آموزش و پرورش
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        سهم آتشنشانی
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
+                        سهم تأمین اجتماعی
+                    </th>
+
+                    <td class="border-top-0 rounded-0 action-th" rowspan="1" colspan="1" style="width: 300.797px; background-color: #808080;">
+                        
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for payments_image in payments_images %}
+                    <tr role="row" class="odd">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ payments_image.project }}</td>
+
+                        <td class="text-center">
+                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                            data-target="#designer_office{{ forloop.counter }}">
+                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='designer_office' id=forloop.counter img_src=payments_image.designer_office.url label='فیش پرداختی دفتر طراح' owner=payments_image.project %}
+
+                        <td class="text-center">
+                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                            data-target="#supervisors{{ forloop.counter }}">
+                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='supervisors' id=forloop.counter img_src=payments_image.supervisors.url label='فیش پرداختی ناظرین' owner=payments_image.project %}
+
+                        <td class="text-center">
+                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                            data-target="#engineer_system{{ forloop.counter }}">
+                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='engineer_system' id=forloop.counter img_src=payments_image.engineer_system.url label='فیش پرداختی نظام مهندسی' owner=payments_image.project %}
+                        
+                        <td class="text-center">
+                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                            data-target="#sketch_map{{ forloop.counter }}">
+                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='sketch_map' id=forloop.counter img_src=payments_image.sketch_map.url label='فیش پرداختی تهیه نقشه کروکی' owner=payments_image.project %}
+                        
+                        <td class="text-center">
+                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                            data-target="#export_permit{{ forloop.counter }}">
+                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='export_permit' id=forloop.counter img_src=payments_image.export_permit.url label='فیش پرداختی عوارض صدور پروانه' owner=payments_image.project %}
+                        
+                        <td class="text-center">
+                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                            data-target="#visit_toll{{ forloop.counter }}">
+                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='visit_toll' id=forloop.counter img_src=payments_image.visit_toll.url label='فیش پرداختی عوارض بازدید' owner=payments_image.project %}
+                        
+                        <td class="text-center">
+                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                            data-target="#education_share{{ forloop.counter }}">
+                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='education_share' id=forloop.counter img_src=payments_image.education_share.url label='فیش پرداختی سهم آموزش و پرورش' owner=payments_image.project %}
+                        
+                        <td class="text-center">
+                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                            data-target="#fire_stations_share{{ forloop.counter }}">
+                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='fire_stations_share' id=forloop.counter img_src=payments_image.fire_stations_share.url label='فیش پرداختی سهم آتشنشانی' owner=payments_image.project %}
+                        
+                        <td class="text-center">
+                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                            data-target="#social_security_share{{ forloop.counter }}">
+                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='social_security_share' id=forloop.counter img_src=payments_image.social_security_share.url label='فیش پرداختی سهم تأمین اجتماعی' owner=payments_image.project %}
+
+                        {% if perms.projects.delete_paymentsimages or perms.projects.change_paymentsimages %}
+                            <td class="action-td text-center">
+                                {% if perms.projects.change_paymentsimages %}
+                                    <a href="{% url 'projects:payments_image_update' payments_image.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if perms.projects.delete_paymentsimages %}
+                                    <a href="javascript:void(0)"  
+                                    data-toggle="modal"
+                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                    data-url="{% url 'projects:payments_image_delete' pk=payments_image.pk %}"
+                                    data-target="#deleteItemModal" title="حذف"
+                                    data-message="آیا از حذف تصاویر فیش‌های پرداختی پروژه '{{ payments_image.project }}' اطمینان دارید؟">
+                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+                
+
+            </tbody>
+        
+        </table>
+    </div>
+</div>

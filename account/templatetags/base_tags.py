@@ -4,6 +4,9 @@ from django.utils.translation import gettext_lazy as _
 
 from cheques_receive_pay.models import Fund, CashBox
 from warehousing.models import MainWarehouseImport, MainWarehouseExport
+from projects_docs.models import ConditionStatements
+from non_government_accounts.models import Orders
+from projects.models import Costs
 
 
 register = template.Library()
@@ -35,7 +38,7 @@ def fund_cash(full_name):
 
 
 
-@register.inclusion_tag("partials/total_cash.html")
+@register.inclusion_tag("partials/total_amount.html")
 def total_cash():
     rem_operate = CashBox.objects.filter(operation_type='rem')
     set_operate = CashBox.objects.filter(operation_type='set')
@@ -50,8 +53,8 @@ def total_cash():
         if cash_box < 0:
             cash_box = 0
     return {
-        "cash_box": cash_box,
-        "formatted_cash_box": "{:,}".format(cash_box)
+        "total_amount": cash_box,
+        "formatted_total_amount": "{:,}".format(cash_box)
     }
 
 
@@ -75,6 +78,56 @@ def total_stock(stuff_type, measurement_unit):
     }
 
 
+@register.inclusion_tag("partials/total_amount.html")
+def total_project_salaries(project_title):
+    calc_salaries = ConditionStatements.objects.filter(project__title=project_title, management_confirm='con').aggregate(Sum('final_deposit_amount'))['final_deposit_amount__sum']
+    total_salaries = 0
+
+    if calc_salaries:
+        total_salaries = calc_salaries
+    
+    return {
+        "total_amount": total_salaries,
+        "formatted_total_amount": "{:,}".format(total_salaries),
+    }
+
+
+@register.inclusion_tag("partials/total_amount.html")
+def total_project_requests(project_title):
+    orders = Orders.objects.filter(project__title=project_title, order_result='snd')
+    total_requests = 0
+    order_amounts = []
+
+    if orders:
+        for order in orders:
+            total_price = order.order_amount * order.unit_price
+            order_amounts.append(total_price)
+        total_requests = sum(order_amounts)
+    
+    return {
+        "total_amount": total_requests,
+        "formatted_total_amount": "{:,}".format(total_requests),
+    }
+
+
+@register.inclusion_tag("partials/total_amount.html")
+def total_project_costs(project_title):
+    cost_obj = Costs.objects.filter(project__title=project_title).first()
+    total_costs = 0
+    if cost_obj:
+        costs = [cost_obj.water_branch, cost_obj.electricity_branch, cost_obj.gas_branch,cost_obj.phone_subscription,
+                cost_obj.designer_office, cost_obj.supervisors, cost_obj.engineer_system, cost_obj.sketch_map,
+                cost_obj.export_permit, cost_obj.export_end_work, total_project_requests(project_title)['total_amount'],
+                total_project_salaries(project_title)['total_amount']
+            ]
+        total_costs = sum(costs)
+    
+    return {
+        "total_amount": total_costs,
+        "formatted_total_amount": "{:,}".format(total_costs),
+    }
+
+
 @register.filter
 def index(iterable, index):
     return iterable[index]
@@ -84,5 +137,3 @@ def index(iterable, index):
 def translate_names(name):
     permission_translate = [_(w).replace('Can', '').replace('add', 'افزودن').replace('change', 'ویرایش').replace('delete', 'حذف').replace('view', 'مشاهده') for w in (name).split()] # type: ignore
     return ' '.join(permission_translate)
-
-

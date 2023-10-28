@@ -1,0 +1,57 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.organ|as_crispy_field }}
+    </div>
+  <fieldset class="input-group border-bottom mb-3">
+      <legend class="mb-3">
+          <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">طرف حساب غیردولتی</i>
+      </legend>
+      <div class="col-12 col-xl-6 mb-3">
+          {{ form.contractor|as_crispy_field }}
+      </div>
+      <div class="col-12 col-xl-6 mb-3">
+          {{ form.supplier|as_crispy_field }}
+      </div>
+      <div class="col-12 col-xl-6 mb-3">
+          {{ form.personnel|as_crispy_field }}
+      </div>
+  </fieldset>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.receive_pay|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.amount|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.regard_to|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.date.label }}*</label>
+        {{ form.date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {% if form.date.errors %}
+              {% for error in form.date.errors %}
+                  <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+        {% endif %}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.receipt_image|as_crispy_field }}
+    </div>
+</div>
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-4">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'receive_pay_create' %}
+              <span>ثبت دریافت / پرداخت</span>
+          {% else %}
+              <span>ویرایش دریافت / پرداخت</span>
+          {% endif %}
+      </button>
+ </div>
+</div>

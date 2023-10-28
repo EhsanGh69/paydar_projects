@@ -1,0 +1,33 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.full_name|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.job|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.phone|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3 mb-3">
+      <label for="">{{ form.address.label }}</label>
+      {{ form.address|add_class:"form-control"|attr:"rows:5" }}
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-5">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'supplier_create' %}
+              <span>افزودن تأمین کننده</span>
+          {% else %}
+              <span>ویرایش تأمین کننده</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.project|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.doc_type|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <label>{{ form.letter_type.label }}<span class="d-none" id="letter-star">*</span></label>
+        {{ form.letter_type|add_class:"form-control" }}
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <label>{{ form.license_type.label }}<span class="d-none" id="license-star">*</span></label>
+        {{ form.license_type|add_class:"form-control" }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.doc_title|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.doc_image|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.send_receive_date.label }}*</label>
+        {{ form.send_receive_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+        {% if form.send_receive_date.errors %}
+              {% for error in form.send_receive_date.errors %}
+                  <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-4">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'official_doc_create' %}
+              <span>ثبت سند اداری جدید</span>
+          {% else %}
+              <span>ویرایش سند اداری</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

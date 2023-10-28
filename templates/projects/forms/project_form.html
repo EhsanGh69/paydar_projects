@@ -1,0 +1,31 @@
+{% load crispy_forms_tags %}
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.title|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.contract_type|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.owners|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.contractual_salary|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        {{ form.contractual_percentage|as_crispy_field }}
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-8 col-sm-6 col-xl-4 my-5">
+      <button class="btn btn-success btn-block" type="submit">
+          {% if request.resolver_match.url_name == 'project_create' %}
+              <span>افزودن پروژه</span>
+          {% else %}
+              <span>ویرایش پروژه</span>
+          {% endif %}
+      </button>
+    </div>
+</div>

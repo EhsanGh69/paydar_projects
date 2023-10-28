@@ -1,0 +1,157 @@
+{% load jformat %}
+
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr role="row">
+
+                    <th class="text-center rounded-0" rowspan="2" colspan="1" style="width: 40.797px;">
+                        ردیف
+                    </th>
+
+                    <th class="text-center rounded-0" rowspan="2" colspan="1" style="width: 40.797px;">
+                        پروژه
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                        طرف حساب دولتی
+                    </th>
+
+                    <td class="text-center text-light" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                        طرف حساب غیردولتی
+                    </td>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 100.797px;">
+                        دریافت / پرداخت
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                        مبلغ
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 100.797px;">
+                        بابت
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                        تاریخ
+                    </th>
+
+                    <th class="text-center col-img" rowspan="2" colspan="1" style="width: 100.797px;">
+                        تصویر فیش
+                    </th>
+
+                    {% if perms.cheques_receive_pay.delete_receivepay or perms.cheques_receive_pay.change_receivepay %}
+                        <th class="text-center rounded-0 action-th" rowspan="2" colspan="1" style="width: 100.797px;">
+                            اقدام
+                        </th>
+                    {% endif %}
+                    
+                </tr>
+                <tr role="row">
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        پیمانکار
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تأمین کننده
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        پرسنل
+                    </th>
+                    
+                </tr>
+            </thead>
+            
+            <tbody>
+
+                {% for receive_pay in receive_pays %}
+                    <tr role="row" class="odd">
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>{{ receive_pay.project }}</td>
+
+                        {% if receive_pay.organ %}
+                            <td>{{ receive_pay.organ }}</td>
+                        {% else %}
+                            <td class="text-center">_</td>
+                        {% endif %}
+
+                        {% if receive_pay.contractor %}
+                            <td>{{ receive_pay.contractor }}</td>
+                        {% else %}
+                            <td class="text-center">_</td>
+                        {% endif %}
+
+                        {% if receive_pay.supplier %}
+                            <td>{{ receive_pay.supplier }}</td>
+                        {% else %}
+                            <td class="text-center">_</td>
+                        {% endif %}
+
+                        {% if receive_pay.personnel %}
+                            <td>{{ receive_pay.personnel }}</td>
+                        {% else %}
+                            <td class="text-center">_</td>
+                        {% endif %}
+                        
+                        <td>
+                            {% if receive_pay.receive_pay == 'rec' %}
+                                دریافت    
+                            {% else %}
+                                پرداخت
+                            {% endif %}
+                        </td>
+                        
+                        <td data-sort="{{ receive_pay.amount }}">
+                            {{ receive_pay.formatted_amount }}
+                        </td>
+                        
+                        <td>{{ receive_pay.regard_to }}</td>
+
+                        <td data-sort="{{ receive_pay.date|date:'Ymd' }}">
+                            {{ receive_pay.date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                        </td>
+                    
+                        <td class="text-center col-img">
+                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                            data-target="#receipt_image{{ forloop.counter }}">
+                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                            </a>
+                        </td>
+
+                        {% include 'partials/img_modal.html' with img_type='receipt_image' id=forloop.counter img_src=receive_pay.receipt_image.url label='تصویر فیش' owner=receive_pay.regard_to %}
+                        
+                        {% if perms.cheques_receive_pay.delete_receivepay or perms.cheques_receive_pay.change_receivepay %}
+                            <td class="action-td text-center d-flex p-3 rounded-0">
+                                {% if perms.cheques_receive_pay.change_receivepay %}
+                                    <a href="{% url 'cheques_receive_pay:receive_pay_update' receive_pay.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                {% endif %}
+                                
+                                {% if perms.cheques_receive_pay.delete_receivepay %}
+                                    <a href="javascript:void(0)"  
+                                    data-toggle="modal"
+                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                    data-url="{% url 'cheques_receive_pay:receive_pay_delete' pk=receive_pay.pk %}"
+                                    data-target="#deleteItemModal" title="حذف"
+                                    data-message="آیا از حذف دریافت / پرداخت بابت '{{ receive_pay.regard_to }}' اطمینان دارید؟">
+                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        
+        </table>
+    </div>
+</div>
