@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'warehousing.apps.WarehousingConfig',
     'projects_docs.apps.ProjectsDocsConfig',
     'account.apps.AccountConfig',
+    'reports.apps.ReportsConfig',
 ]
 
 MIDDLEWARE = [

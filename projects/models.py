@@ -69,6 +69,16 @@ class Project(models.Model):
 
     def formatted_contractual_salary(self):
         return "{:,}".format(self.contractual_salary)
+    
+    def persian_contract_type(self):
+        if self.contract_type == 'pc':
+            return 'مشارکت در ساخت'
+        elif self.contract_type == 'ow':
+            return 'مالکیت'
+        elif self.contract_type == 'pa':
+            return 'شراکتی'
+        else:
+            return 'پیمانی'
 
 
 class WorkReferenceManager(models.Manager):

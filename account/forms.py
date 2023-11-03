@@ -140,6 +140,8 @@ class AddUserForm(forms.Form):
 
         if is_exits_mobile_number:
             raise forms.ValidationError('شماره همراه وارد شده از قبل وجود دارد، لطفا شماره همراه دیگری وارد کنید')
+        
+        return mobile_number
 
 
 class UpdateUserForm(forms.Form):

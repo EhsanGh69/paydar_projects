@@ -17,6 +17,7 @@ urlpatterns = [
     path('projects_docs/', include('projects_docs.urls')),
     path('login/', CustomLogin.as_view(), name='login'),
     path('account/', include('account.urls')),
+    path('reports/', include('reports.urls')),
     path('admin/', admin.site.urls, name="home"),
 ]
 

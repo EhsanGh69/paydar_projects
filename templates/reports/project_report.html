@@ -1,0 +1,146 @@
+{% load static %}
+{% load non_gov_tags %}
+{% load projects_docs_tags %}
+{% load gov_tags %}
+{% load projects_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'panel/dist/css/bootstrap_rtl.min.css' %}">
+    <title>گزارش پروژه‌</title>
+    <style>
+        @font-face {
+            font-family: 'Tanha';
+            src: url('{% static "farsi_fonts/Farsi-Digits/Tanha-FD.eot" %}');
+            /* IE9 Compat Modes */
+            src: url('{% static "farsi_fonts/Farsi-Digits/Tanha-FD.eot?#iefix" %}') format('embedded-opentype'),
+                /* IE6-IE8 */
+                url('{% static "farsi_fonts/Farsi-Digits/Tanha-FD.woff2" %}') format('woff2'),
+                /* Modern Browsers */
+                url('{% static "farsi_fonts/Farsi-Digits/Tanha-FD.woff" %}') format('woff'),
+                /* Modern Browsers */
+                url('{% static "farsi_fonts/Farsi-Digits/Tanha-FD.ttf" %}') format('truetype');
+            /* Safari, Android, iOS */
+            font-weight: normal;
+            font-style: normal;
+            text-rendering: optimizeLegibility;
+            font-display: auto;
+        }
+
+        *{
+            direction: rtl !important;
+        }
+        
+        body{
+            font-family: 'Tanha';
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container p-5">
+
+        <a href="{% url 'projects:projects' %}" class="btn btn-info mb-4">بازگشت به لیست پروژه‌ها</a>
+
+        <button type="submit" class="btn btn-warning mb-4" id="print-btn" title="چاپ گزارش">
+            <i class="fa-solid fa-print" style="font-size: 1.5rem;"></i>
+        </button>
+
+        <div class="row p-5 border" id="printable">
+
+            <div class="text-center w-100 border pb-3">
+                <div class="my-2">
+                    <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="logo" width="100">
+                </div>
+                <h4>شرکت املاک پایدار</h4>
+                <h5>گزارش پروژه‌</h5>
+            </div>
+
+            <table class="table table-bordered" id="report-table">
+                <tbody>
+                  <tr>
+                    <th style="width: 60.797px;">عنوان پروژه‌</td>
+                    <td style="width: 150.797px;">{{ project.title }}</td>
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">مالکین پروژه‌</td>
+                    <td style="width: 150.797px;">{{ project.owners_to_str }}</td>
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">نوع قرارداد پروژه‌</td>
+                    <td style="width: 150.797px;">{{ project.persian_contract_type }}</td>
+                  </tr>
+                  {% if project.contract_type == 'co' %}
+                    <tr>
+                        <th style="width: 60.797px;">دستمزد قرارداد پیمانی</td>
+                        <td style="width: 150.797px;">{{ project.formatted_contractual_salary }}</td>
+                    </tr>
+                    <tr>
+                        <th style="width: 60.797px;">درصد قرارداد پیمانی</td>
+                        <td style="width: 150.797px;">{{ project.contractual_percentage }}</td>
+                    </tr>
+                  {% endif %}
+                  <tr>
+                    <th style="width: 60.797px;">شرکای پروژه‌</td>
+                    {% all_partners project.title %}
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">مجموع مبلغ سرمایه‌گذاری شرکای پروژه</td>
+                    {% total_project_investments project.title %}
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">پیمانکاران پروژه‌</td>
+                    {% all_contractors project.title %}
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">مجموع دستمزد پیمانکاران پروژه</td>
+                    {% total_project_salaries project.title %}
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">تأمین‌کنندگان پروژه‌</td>
+                    {% all_suppliers project.title %}
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">مجموع طلب تأمین‌کنندگان پروژه</td>
+                    {% total_project_requests project.title %}
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">مجموع دریافت‌های پروژه</td>
+                    {% total_project_receives project.title %}
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">مجموع پرداخت‌های پروژه</td>
+                    {% total_project_payments project.title %}
+                  </tr>
+                  <tr>
+                    <th style="width: 60.797px;">برآورد ریالی کل هزینه‌های پروژه</td>
+                    {% total_project_payments project.title %}
+                  </tr>
+                  
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <script src="{% static 'panel/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#print-btn').click(function (e) { 
+                e.preventDefault();
+                $('#report-table').attr('dir', "rtl");
+                $('#printable').printThis();
+            });
+        });
+    </script>
+</body>
+</html>
+
