@@ -8,7 +8,7 @@
 {% block main %}
 <div class="card card-primary p-5">
     <div class="card-body col-12 col-lg-8 offset-lg-2">
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <p>
             <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
