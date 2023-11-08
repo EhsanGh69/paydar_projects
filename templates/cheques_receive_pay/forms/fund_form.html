@@ -11,6 +11,10 @@
     <fieldset class="input-group border-bottom mb-3 d-none" id="rem-field">
         <div class="col-12 col-xl-6 mb-3">
             {{ form.cost_amount|as_crispy_field }}
+            <small class="form-text text-muted">
+                <span id="cost_counter">0</span>
+                <span>ریال</span>
+            </small>
         </div>
         <div class="col-12 col-xl-6 mb-3 mb-3">
             <label for="">{{ form.cost_description.label }}</label>
@@ -34,6 +38,10 @@
     <fieldset class="input-group border-bottom mb-3 d-none" id="set-field">
         <div class="col-12 col-xl-6 mb-3">
             {{ form.charge_amount|as_crispy_field }}
+            <small class="form-text text-muted">
+                <span id="charge_counter">0</span>
+                <span>ریال</span>
+            </small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
             <label>{{ form.charge_date.label }}</label>

@@ -34,4 +34,11 @@ $(document).ready(function () {
             $("#id_explan_order_cancel").attr("disabled","disabled");
         }
     });
+    $('#id_unit_price').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_unit_price').val();
+        $('#id_unit_price').val(String(amount_value).replace('-', ''))
+        const numFormat = new Intl.NumberFormat();
+        $('#counter').text(numFormat.format(amount_value));
+    });
 });

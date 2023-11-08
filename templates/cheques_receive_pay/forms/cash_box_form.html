@@ -8,6 +8,10 @@
     <fieldset class="input-group border-bottom mb-3 d-none" id="rem-field">
         <div class="col-12 col-xl-6 mb-3">
             {{ form.removal_amount|as_crispy_field }}
+            <small class="form-text text-muted">
+                <span id="removal_counter">0</span>
+                <span>ریال</span>
+            </small>
         </div>
         <div class="col-12 col-xl-6 mb-3 mb-3">
             <label for="">{{ form.removal_description.label }}</label>
@@ -32,6 +36,10 @@
     <fieldset class="input-group border-bottom mb-3 d-none" id="set-field">
         <div class="col-12 col-xl-6 mb-3">
             {{ form.settle_amount|as_crispy_field }}
+            <small class="form-text text-muted">
+                <span id="settle_counter">0</span>
+                <span>ریال</span>
+            </small>
         </div>
         <div class="col-12 col-xl-6 mb-3 mb-3">
             <label for="">{{ form.settle_description.label }}</label>

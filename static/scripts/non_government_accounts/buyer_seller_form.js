@@ -13,4 +13,11 @@ $(document).ready(function () {
             $("#id_current_roof").attr("disabled","disabled");
         }
     });
+    $('#id_payment_amount').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_payment_amount').val();
+        $('#id_payment_amount').val(String(amount_value).replace('-', ''))
+        const numFormat = new Intl.NumberFormat();
+        $('#counter').text(numFormat.format(amount_value));
+    });
 });

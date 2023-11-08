@@ -13,4 +13,23 @@ $(document).ready(function () {
     } else {
         $("#id_final_deposit_amount").attr("disabled", "disabled");
     }
+    const numFormat = new Intl.NumberFormat();
+    $('#id_requested_amount').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_requested_amount').val();
+        $('#id_requested_amount').val(String(amount_value).replace('-', ''));
+        $('#request_counter').text(numFormat.format(amount_value));
+    });
+    $('#id_confirmed_amount').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_confirmed_amount').val();
+        $('#id_confirmed_amount').val(String(amount_value).replace('-', ''));
+        $('#confirm_counter').text(numFormat.format(amount_value));
+    });
+    $('#id_final_deposit_amount').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_final_deposit_amount').val();
+        $('#id_final_deposit_amount').val(String(amount_value).replace('-', ''));
+        $('#final_counter').text(numFormat.format(amount_value));
+    });
 });

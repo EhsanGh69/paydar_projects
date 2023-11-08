@@ -68,4 +68,17 @@ $(document).ready(function () {
 
         $('#id_charge_date').val(date_value.replaceAll('/', '-'));
     });
+    const numFormat = new Intl.NumberFormat();
+    $('#id_cost_amount').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_cost_amount').val();
+        $('#id_cost_amount').val(String(amount_value).replace('-', ''))
+        $('#cost_counter').text(numFormat.format(amount_value));
+    });
+    $('#id_charge_amount').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_charge_amount').val();
+        $('#id_charge_amount').val(String(amount_value).replace('-', ''))
+        $('#charge_counter').text(numFormat.format(amount_value));
+    });
 });

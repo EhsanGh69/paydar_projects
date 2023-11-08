@@ -27,6 +27,10 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
       {{ form.amount|as_crispy_field }}
+        <small class="form-text text-muted">
+            <span id="counter">0</span>
+            <span>ریال</span>
+        </small>
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.regard_to|as_crispy_field }}

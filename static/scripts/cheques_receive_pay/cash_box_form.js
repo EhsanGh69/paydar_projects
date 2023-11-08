@@ -62,4 +62,17 @@ $(document).ready(function () {
         $("#submit-btn").attr("type", "submit");
         $("#settle_image-clear_id").prop("checked", false);
     });
+    const numFormat = new Intl.NumberFormat();
+    $('#id_removal_amount').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_removal_amount').val();
+        $('#id_removal_amount').val(String(amount_value).replace('-', ''))
+        $('#removal_counter').text(numFormat.format(amount_value));
+    });
+    $('#id_settle_amount').on('input', function(e) {
+        e.preventDefault();
+        var amount_value = $('#id_settle_amount').val();
+        $('#id_settle_amount').val(String(amount_value).replace('-', ''))
+        $('#settle_counter').text(numFormat.format(amount_value));
+    });
 });

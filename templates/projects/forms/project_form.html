@@ -12,6 +12,10 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.contractual_salary|as_crispy_field }}
+        <small class="form-text text-muted">
+            <span id="counter">0</span>
+            <span>ریال</span>
+        </small>
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.contractual_percentage|as_crispy_field }}

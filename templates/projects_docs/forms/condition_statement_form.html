@@ -16,10 +16,18 @@
 
     <div class="col-12 col-xl-6 mb-3">
         {{ form.requested_amount|as_crispy_field }}
+        <small class="form-text text-muted">
+            <span id="request_counter">0</span>
+            <span>ریال</span>
+        </small>
     </div>
 
     <div class="col-12 col-xl-6 mb-3">
         {{ form.confirmed_amount|as_crispy_field }}
+        <small class="form-text text-muted">
+            <span id="confirm_counter">0</span>
+            <span>ریال</span>
+        </small>
     </div>
 
     <div class="col-12 col-xl-6 mb-3">
@@ -32,6 +40,10 @@
 
     <div class="col-12 col-xl-6 mb-3">
         {{ form.final_deposit_amount|as_crispy_field }}
+        <small class="form-text text-muted">
+            <span id="final_counter">0</span>
+            <span>ریال</span>
+        </small>
     </div>
 
 </div>
