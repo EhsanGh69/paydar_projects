@@ -155,6 +155,7 @@ class BuyersSellers(models.Model):
         ('oth', 'سایر'),
     )
     
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_buyers_sellers', verbose_name='پروژه') # type: ignore
     buyer_seller = models.CharField(max_length=3, choices=BUYER_SELLER_CHOICES, verbose_name='خریدار / فروشنده')
     full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")

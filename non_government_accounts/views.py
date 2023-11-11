@@ -385,7 +385,7 @@ class BuyersSellersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
 class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = 'non_government_accounts.view_buyerssellers'
     template_name = 'non_government_accounts/buyers_sellers_list.html'
-    model = Partners
+    model = BuyersSellers
     context_object_name = "buyers_sellers"
     paginate_by = 9
 

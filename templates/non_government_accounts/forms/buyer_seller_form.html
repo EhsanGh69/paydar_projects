@@ -3,19 +3,23 @@
 
 <div class="row">
     <div class="col-12 col-xl-6 mb-3">
+      {{ form.project|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
         {{ form.buyer_seller|as_crispy_field }}
-        {{ form.full_name|as_crispy_field }}
+    </div>
+
+    <div class="col-12 col-xl-6 mb-3">
+      {{ form.full_name|as_crispy_field }}
+      {{ form.phone|as_crispy_field }}
     </div>
     
     <div class="col-12 col-xl-6 mb-3 mb-3">
       <label for="">{{ form.address.label }}*</label>
       {{ form.address|add_class:"form-control"|attr:"rows:5" }}
     </div>
-
-    <div class="col-12 col-xl-6 mb-3">
-      {{ form.phone|as_crispy_field }}
-    </div>
-
+    
     <div class="col-12 col-xl-6 mb-3">
       {{ form.payment_amount|as_crispy_field }}
       <small class="form-text text-muted">

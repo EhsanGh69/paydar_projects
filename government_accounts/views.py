@@ -37,13 +37,6 @@ class ReceiveCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     form_class = ReceiveForm
     success_url = reverse_lazy("government_accounts:receives")
     success_message = "دریافت با موفقیت ثبت گردید"
-
-    def get_form_kwargs(self):
-        kwargs = super(ReceiveCreate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
     
 
 class ReceiveUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -54,12 +47,6 @@ class ReceiveUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     success_url = reverse_lazy("government_accounts:receives")
     success_message = "دریافت با موفقیت ویرایش شد"
 
-    def get_form_kwargs(self):
-        kwargs = super(ReceiveUpdate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
 
 
 class ReceiveDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):

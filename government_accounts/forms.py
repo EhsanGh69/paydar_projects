@@ -16,7 +16,6 @@ class ReceiveForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(ReceiveForm, self).__init__(*args, **kwargs)
 
         self.fields['receive_amount'] = forms.IntegerField(
@@ -33,16 +32,6 @@ class ReceiveForm(forms.ModelForm):
             label="دریافت بابت",
             validators=[none_numeric_value]
         )
-
-        if url_name == 'receive_create':
-            self.fields['receive_date'] = forms.DateTimeField(
-                label="تاریخ و ساعت دریافت",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
 
 
 class OrganizationForm(forms.ModelForm):

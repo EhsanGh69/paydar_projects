@@ -142,7 +142,7 @@ class BuyersSellersForm(forms.ModelForm):
 
     class Meta:
         model = BuyersSellers
-        fields = ['buyer_seller', 'full_name', 'phone', 'address',
+        fields = ['project', 'buyer_seller', 'full_name', 'phone', 'address',
                   'contract_image', 'payment_order', 'current_roof', 'payment_date', 'payment_amount']
 
     def __init__(self, *args, **kwargs):

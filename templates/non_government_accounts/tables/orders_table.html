@@ -1,4 +1,5 @@
 {% load jformat %}
+{% load non_gov_tags %}
 
 <div class="row">
     <div class="col-sm-12 table-responsive">
@@ -16,6 +17,10 @@
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
                         تأمین کننده
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        طلب تأمین کننده
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -76,6 +81,7 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ order.project }}</td>
                         <td>{{ order.supplier }}</td>
+                        {% total_supplier_requests order.supplier.full_name order.project.title %}
                         <td>{{ order.order_type }}</td>
                         <td data-sort="{{ order.order_amount }}">
                             {{ order.formatted_order_amount }} 

@@ -37,7 +37,9 @@ class Receive(models.Model):
     receive_for = models.CharField(max_length=250, verbose_name="دریافت بابت")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_receives', verbose_name="پروژه")
     receive_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ دریافتی")
-    receive_date = jmodels.jDateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت دریافت")
+    receive_date = jmodels.jDateField(verbose_name="تاریخ دریافت")
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = ReceiveManager()
 

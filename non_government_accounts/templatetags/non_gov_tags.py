@@ -25,6 +25,24 @@ def total_project_requests(project_title):
 
 
 @register.inclusion_tag("partials/total_amount.html")
+def total_supplier_requests(supplier_name, project_title):
+    orders = Orders.objects.filter(supplier__full_name=supplier_name, project__title=project_title, order_result='snd').all()
+    total_requests = 0
+    order_amounts = []
+
+    if orders:
+        for order in orders:
+            total_price = order.order_amount * order.unit_price
+            order_amounts.append(total_price)
+        total_requests = sum(order_amounts)
+    
+    return {
+        "total_amount": total_requests,
+        "formatted_total_amount": "{:,}".format(total_requests),
+    }
+
+
+@register.inclusion_tag("partials/total_amount.html")
 def total_project_investments(project_title):
     calc_investments = Partners.objects.filter(project__title=project_title).aggregate(Sum('investment_amount'))['investment_amount__sum']
     total_investments = 0
