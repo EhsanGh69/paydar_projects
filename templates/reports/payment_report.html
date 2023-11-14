@@ -1,0 +1,36 @@
+{% extends "reports/base_report.html" %}
+{% load static %}
+{% load jformat %}
+
+{% block title %}پرداخت{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'government_accounts:payments' %}" class="btn btn-info mb-4">بازگشت به لیست پرداخت‌ها</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش پرداخت</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">ارگان طرف حساب</td>
+        <td style="width: 150.797px;">{{ payment.organization }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">پرداخت بابت</td>
+        <td style="width: 150.797px;">{{ payment.payment_for }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">پروژه</td>
+        <td style="width: 150.797px;">{{ payment.project }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">مبلغ پرداختی</td>
+        <td style="width: 150.797px;">{{ payment.formatted_payment_amount }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">تاریخ پرداخت</td>
+        <td style="width: 150.797px;">{{ payment.payment_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+{% endblock %}

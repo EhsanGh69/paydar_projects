@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from jalali_date import datetime2jalali
 
-from government_accounts.models import Receive
+from government_accounts.models import Receive, Payment, Activity
 from projects.models import Project
 
 
@@ -17,6 +17,36 @@ class ReceiveReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     def get_object(self):
         pk = self.kwargs.get('pk')
         return get_object_or_404(Receive, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+    
+
+class ActivityReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'government_accounts.view_activity'
+    context_object_name = "activity"
+    template_name = 'reports/activity_report.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Activity, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+    
+
+class PaymentReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'government_accounts.view_payment'
+    context_object_name = "payment"
+    template_name = 'reports/payment_report.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Payment, pk=pk)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

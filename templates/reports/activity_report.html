@@ -1,0 +1,42 @@
+{% extends "reports/base_report.html" %}
+{% load static %}
+{% load jformat %}
+
+{% block title %}فعالیت{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'government_accounts:activities' %}" class="btn btn-info mb-4">بازگشت به لیست فعالیت‌ها</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش فعالیت</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">ارگان طرف حساب</td>
+        <td style="width: 150.797px;">{{ activity.organization }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">نوع فعالیت</td>
+        <td style="width: 150.797px;">{{ activity.activity_type }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">پروژه</td>
+        <td style="width: 150.797px;">{{ activity.project }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">نتیجه فعالیت</td>
+        <td style="width: 150.797px;">{{ activity.persian_activity_result }}</td>
+    </tr>
+    {% if activity.activity_result == 'do' %}
+        <tr>
+            <th style="width: 60.797px;">شرح فعالیت در حال انجام</td>
+            <td style="width: 150.797px;">{{ activity.activity_descriptions }}</td>
+        </tr>
+    {% endif %}
+    <tr>
+        <th style="width: 60.797px;">تاریخ فعالیت</td>
+        <td style="width: 150.797px;">{{ activity.activity_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+{% endblock %}

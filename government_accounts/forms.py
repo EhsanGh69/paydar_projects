@@ -65,7 +65,6 @@ class PaymentForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(PaymentForm, self).__init__(*args, **kwargs)
 
         self.fields['payment_amount'] = forms.IntegerField(
@@ -83,16 +82,6 @@ class PaymentForm(forms.ModelForm):
             validators=[none_numeric_value]
         )
 
-        if url_name == "payment_create":
-            self.fields['payment_date'] = forms.DateTimeField(
-                label="تاریخ و ساعت دریافت",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
-
 
 class ActivityForm(forms.ModelForm):
     use_required_attribute = False
@@ -104,23 +93,9 @@ class ActivityForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(ActivityForm, self).__init__(*args, **kwargs)
-
 
         self.fields['activity_type'] = forms.CharField(
             label="نوع فعالیت",
             validators=[none_numeric_value]
         )
-
-        if url_name == 'activity_create':
-            self.fields['activity_date'] = forms.DateTimeField(
-                label="تاریخ و ساعت دریافت",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
-
-

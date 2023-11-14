@@ -18,7 +18,7 @@
                         دریافت بابت
                     </th>
 
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
                         پروژه
                     </th>
 
@@ -31,16 +31,16 @@
                         تاریخ دریافت
                     </th>
 
-                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
                         زمان ثبت
                     </th>
 
-                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
                         زمان آخرین ویرایش
                     </th>
 
                     {% if perms.government_accounts.delete_receive or perms.government_accounts.change_receive %}
-                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
                             اقدام
                         </th>
                     {% endif %}
@@ -60,12 +60,19 @@
                         <td data-sort="{{ receive.receive_date|date:'Ymd' }}" class="border-left">
                             {{ receive.receive_date|jformat:'%d / %m / %Y' }}
                         </td>
-                        <td data-sort="{{ receive.create_record|date:'Ymd' }}" class="border-left">
+                        <td data-sort="{{ receive.create_record|date:'Ymd-HMS' }}" class="border-left">
                             {{ receive.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
                         </td>
-                        <td data-sort="{{ receive.update_record|date:'Ymd' }}" class="border-left">
-                            {{ receive.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                        </td>
+                        {% if receive.update_record|date:'Ymd-HMS' == receive.create_record|date:'Ymd-HMS' %}
+                            <td class="text-center">
+                                <span style="font-size:1.5rem;">_</span>
+                            </td>
+                        {% else %}
+                            <td data-sort="{{ receive.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                {{ receive.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                            </td>
+                        {% endif %}
+                        
                         {% if perms.government_accounts.delete_receive or perms.government_accounts.change_receive %}
                             <td class="action-td text-center">
                                 {% if perms.government_accounts.change_receive %}

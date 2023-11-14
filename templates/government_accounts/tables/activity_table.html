@@ -24,7 +24,7 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                        تاریخ و ساعت
+                        تاریخ فعالیت
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
@@ -35,8 +35,16 @@
                         توضیحات فعالیت در حال انجام
                     </th>
 
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان ثبت
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
+
                     {% if perms.government_accounts.delete_activity or perms.government_accounts.change_activity %}
-                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 250.094px;">
                             اقدام
                         </th>
                     {% endif %}
@@ -52,17 +60,9 @@
                         <td>{{ activity.activity_type }}</td>
                         <td>{{ activity.project }}</td>
                         <td data-sort="{{ activity.activity_date|date:'Ymd' }}">
-                            {{ activity.activity_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                            {{ activity.activity_date|jformat:'%d / %m / %Y' }}
                         </td>
-                        <td>
-                            {% if activity.activity_result == 'fn' %}
-                                <span>پایان یافته</span>
-                            {% elif activity.activity_result == 'do' %}
-                                <span>در حال انجام</span>
-                            {% else %}
-                                <span>شروع نشده</span>
-                            {% endif %}
-                        </td>
+                        <td>{{ activity.persian_activity_result }}</td>
                         
                         {% if activity.activity_descriptions %}
                             <td>
@@ -71,6 +71,19 @@
                         {% else %}
                             <td class="text-center">
                                 <span style="font-size:1.5rem;">_</span>
+                            </td>
+                        {% endif %}
+
+                        <td data-sort="{{ activity.create_record|date:'Ymd' }}" class="border-left">
+                            {{ activity.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                        </td>
+                        {% if activity.update_record|date:'Ymd-HMS' == activity.create_record|date:'Ymd-HMS' %}
+                            <td class="text-center">
+                                <span style="font-size:1.5rem;">_</span>
+                            </td>
+                        {% else %}
+                            <td data-sort="{{ activity.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                {{ activity.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
                             </td>
                         {% endif %}
                         
@@ -91,6 +104,13 @@
                                     data-target="#deleteItemModal" title="حذف"
                                     data-message="آیا از حذف فعالیت '{{ activity.activity_type }}' اطمینان دارید؟">
                                     <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if perms.government_accounts.view_activity %}
+                                    <a href="{% url 'reports:activity_report' activity.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                    <i class="fa-solid fa-paste"></i>
                                     </a>
                                 {% endif %}
                             </td>

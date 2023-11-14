@@ -22,6 +22,9 @@ class ReceiveList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "receives"
     paginate_by = 9
 
+    def get_queryset(self):
+        return Receive.objects.order_by('-receive_date', '-create_record').all()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:receives_search'
@@ -46,7 +49,6 @@ class ReceiveUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     form_class = ReceiveForm
     success_url = reverse_lazy("government_accounts:receives")
     success_message = "دریافت با موفقیت ویرایش شد"
-
 
 
 class ReceiveDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -158,6 +160,9 @@ class PaymentList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "payments"
     paginate_by = 9
 
+    def get_queryset(self):
+        return Payment.objects.order_by('-payment_date', '-create_record').all()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:payments_search'
@@ -174,13 +179,6 @@ class PaymentCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     success_url = reverse_lazy("government_accounts:payments")
     success_message = "پرداخت با موفقیت ثبت گردید"
 
-    def get_form_kwargs(self):
-        kwargs = super(PaymentCreate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
-
 
 class PaymentUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'government_accounts.change_payment'
@@ -189,13 +187,6 @@ class PaymentUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     form_class = PaymentForm
     success_url = reverse_lazy("government_accounts:payments")
     success_message = "پرداخت با موفقیت ویرایش شد"
-
-    def get_form_kwargs(self):
-        kwargs = super(PaymentUpdate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
 
 
 class PaymentDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -257,6 +248,9 @@ class ActivityList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "activities"
     paginate_by = 9
 
+    def get_queryset(self):
+        return Activity.objects.order_by('-activity_date', '-create_record').all()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:activities_search'
@@ -273,13 +267,6 @@ class ActivityCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     success_url = reverse_lazy("government_accounts:activities")
     success_message = "فعالیت با موفقیت ثبت گردید"
 
-    def get_form_kwargs(self):
-        kwargs = super(ActivityCreate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
-
 
 class ActivityUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'government_accounts.change_activity'
@@ -288,13 +275,6 @@ class ActivityUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     form_class = ActivityForm
     success_url = reverse_lazy("government_accounts:activities")
     success_message = "فعالیت با موفقیت ویرایش شد"
-
-    def get_form_kwargs(self):
-        kwargs = super(ActivityUpdate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
 
 
 class ActivityDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):

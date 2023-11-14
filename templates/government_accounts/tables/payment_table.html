@@ -29,11 +29,19 @@
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
-                        تاریخ و ساعت
+                        تاریخ پرداخت
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان ثبت
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
                     </th>
                     
                     {% if perms.government_accounts.delete_payment or perms.government_accounts.change_payment %}
-                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
                             اقدام
                         </th>
                     {% endif %}
@@ -51,8 +59,20 @@
                             {{ payment.formatted_payment_amount }}
                         </td>
                         <td data-sort="{{ payment.payment_date|date:'Ymd' }}" class="border-left">
-                            {{ payment.payment_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                            {{ payment.payment_date|jformat:'%d / %m / %Y' }}
                         </td>
+                        <td data-sort="{{ payment.create_record|date:'Ymd' }}" class="border-left">
+                            {{ payment.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                        </td>
+                        {% if payment.update_record|date:'Ymd-HMS' == payment.create_record|date:'Ymd-HMS' %}
+                            <td class="text-center">
+                                <span style="font-size:1.5rem;">_</span>
+                            </td>
+                        {% else %}
+                            <td data-sort="{{ payment.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                {{ payment.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                            </td>
+                        {% endif %}
 
                         {% if perms.government_accounts.delete_payment or perms.government_accounts.change_payment %}
                             <td class="border-left action-td text-center">
@@ -71,6 +91,13 @@
                                     data-target="#deleteItemModal" title="حذف"
                                     data-message="آیا از حذف پرداخت‌ '{{ payment.payment_for }}' اطمینان دارید؟">
                                     <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if perms.government_accounts.view_payment %}
+                                    <a href="{% url 'reports:payment_report' payment.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                    <i class="fa-solid fa-paste"></i>
                                     </a>
                                 {% endif %}
                             </td>

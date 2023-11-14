@@ -70,7 +70,9 @@ class Payment(models.Model):
     payment_for = models.CharField(max_length=250, verbose_name="پرداخت بابت")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_payments', verbose_name="پروژه")
     payment_amount = models.PositiveBigIntegerField(default=0, verbose_name="مبلغ پرداختی")
-    payment_date = jmodels.jDateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت پرداخت")
+    payment_date = jmodels.jDateField(verbose_name="تاریخ پرداخت")
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = PaymentManager()
 
@@ -107,9 +109,11 @@ class Activity(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name="ارگان")
     activity_type = models.CharField(max_length=150, verbose_name="نوع فعالیت")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='government_activities', verbose_name="پروژه")
-    activity_date = jmodels.jDateTimeField(default=timezone.now, verbose_name="تاریخ و ساعت فعالیت")
     activity_result = models.CharField(max_length=2, choices=RESULT_CHOICES, verbose_name="نتیجه فعالیت")
     activity_descriptions = models.TextField(verbose_name="توضیحات فعالیت در حال انجام", blank=True)
+    activity_date = jmodels.jDateField(verbose_name="تاریخ فعالیت")
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = ActivityManager()
 
@@ -120,4 +124,11 @@ class Activity(models.Model):
 
     def __str__(self):
         return self.activity_type
-
+    
+    def persian_activity_result(self):
+        if self.activity_result == 'fn':
+            return 'پایان یافته'
+        elif self.activity_result == 'do':
+            return 'در حال انجام'
+        else:
+            return 'شروع نشده'

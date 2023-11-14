@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'panel/dist/css/bootstrap_rtl.min.css' %}">
+    <link rel="stylesheet" href="{% static 'farsi_fonts/farsi_font.css' %}" />
+    <title>گزارش {% block title %}{% endblock %}</title>
+</head>
+<body>
+    <div class="container p-5">
+        {% block back_link %}{% endblock %}
+        <button type="submit" class="btn btn-warning mb-4" id="print-btn" title="چاپ گزارش">
+            <i class="fa-solid fa-print" style="font-size: 1.5rem;"></i>
+        </button>
+        <div class="row p-5 border" id="printable">
+            <div class="text-center w-100 border pb-3">
+                <div class="my-2">
+                    <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="logo" width="100">
+                </div>
+                <h4>شرکت املاک پایدار</h4>
+                {% block report_title %}{% endblock %}
+            </div>
+            <table class="table table-bordered" id="report-table">
+                <tbody>
+                  {% block report_body %}{% endblock %}
+                </tbody>
+            </table>
+            <div class="mt-5">
+                <span>زمان ‌أخذ گزارش :</span>
+                <span>{{ report_date }}</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'panel/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#print-btn').click(function (e) { 
+                e.preventDefault();
+                $('#report-table').attr('dir', "rtl");
+                $('#printable').printThis();
+            });
+        });
+    </script>
+</body>
+</html>
