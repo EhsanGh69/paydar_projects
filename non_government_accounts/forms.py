@@ -146,7 +146,6 @@ class BuyersSellersForm(forms.ModelForm):
                   'contract_image', 'payment_order', 'current_roof', 'payment_date', 'payment_amount']
 
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(BuyersSellersForm, self).__init__(*args, **kwargs)
 
         self.fields['payment_amount'] = forms.IntegerField(
@@ -173,18 +172,7 @@ class BuyersSellersForm(forms.ModelForm):
                 )
             ]
         )
-
-        if url_name == 'buyer_seller_create':
-            self.fields['payment_date'] = forms.DateTimeField(
-                label="تاریخ و ساعت پرداخت",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
         
-
         self.fields['current_roof'] = forms.CharField(
             label="سقف کنونی",
             widget=forms.DateTimeInput(
@@ -207,7 +195,6 @@ class OrdersForm(forms.ModelForm):
                   'sended_image', 'sended_image_type', 'explan_order_cancel', 'project']
         
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(OrdersForm, self).__init__(*args, **kwargs)
 
     
@@ -235,26 +222,6 @@ class OrdersForm(forms.ModelForm):
                 )
             ]
         )
-
-        if url_name == 'order_create':
-            self.fields['order_date'] = forms.DateTimeField(
-                label="تاریخ و ساعت سفارش",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        "value": ""
-                    }
-                )
-            )
-
-            self.fields['sending_date'] = forms.DateTimeField(
-                label="تاریخ و ساعت ارسال سفارش",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        "value": ""
-                    }
-                )
-            )
-
 
         self.fields['order_respite'] = forms.IntegerField(
             label="مهلت سفارش",
@@ -294,6 +261,3 @@ class ConflictOrdersForm(forms.ModelForm):
                 )
             ]
         )
-
-
-

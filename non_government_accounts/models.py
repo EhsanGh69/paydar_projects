@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.db.models.query import Q
 
 from django_jalali.db import models as jmodels
-
+from jalali_date import datetime2jalali
 
 from projects.models import Project
 
@@ -64,7 +64,6 @@ class Suppliers(models.Model):
 
     def __str__(self):
         return self.full_name
-
 
 
 class PersonnelManager(models.Manager):
@@ -163,8 +162,10 @@ class BuyersSellers(models.Model):
     contract_image = models.ImageField(upload_to='images/buyers_sellers', verbose_name="تصویر قرارداد")
     payment_order = models.CharField(max_length=3, choices=PAYMENT_ORDER_CHOICES, verbose_name='ترتیب پرداخت')
     current_roof = models.CharField(max_length=50, blank=True, null=True, verbose_name="سقف کنونی")
-    payment_date = jmodels.jDateTimeField(default=timezone.now, verbose_name='تاریخ پرداخت')
     payment_amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ پرداختی')
+    payment_date = jmodels.jDateField(verbose_name='تاریخ پرداخت')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = BuyersSellersManager()
     
@@ -179,6 +180,28 @@ class BuyersSellers(models.Model):
     
     def formatted_payment_amount(self):
         return "{:,}".format(self.payment_amount)
+    
+    def persian_payment_order(self):
+        if self.payment_order == 'csh':
+            return 'نقدی'              
+        elif self.payment_order == 'chq':
+            return 'چک'
+        elif self.payment_order == 'del':
+            return 'حین تحویل'
+        elif self.payment_order == 'dtr':
+            return 'انتقال سند'
+        elif self.payment_order == 'afh':
+            return 'بعد از سفت کاری'
+        elif self.payment_order == 'aif':
+            return 'بعد از اجرای تأسیسات'
+        elif self.payment_order == 'atc':
+            return 'بعد از کاشی و سرامیک'
+        elif self.payment_order == 'afc':
+            return 'بعد از سقف طبقه'
+        elif self.payment_order == 'aff':
+            return 'بعد از فونداسیون'
+        else:
+            return 'سایر'
     
 
 
@@ -218,13 +241,15 @@ class Orders(models.Model):
     unit_price = models.PositiveBigIntegerField(default=0, verbose_name='قیمت واحد')
     order_amount = models.PositiveIntegerField(default=0, verbose_name='مقدار سفارش')
     order_total_price = models.PositiveBigIntegerField(default=0, editable=False)
-    order_date = jmodels.jDateTimeField(default=timezone.now, verbose_name='تاریخ و زمان سفارش')
     order_respite = models.PositiveSmallIntegerField(default=0, verbose_name='مهلت سفارش')
     order_result = models.CharField(max_length=3, choices=ORDER_RESULT_CHOICES, verbose_name='نتیجه سفارش')
-    sending_date = jmodels.jDateTimeField(default=timezone.now, null=True, blank=True, verbose_name='تاریخ ارسال')
     sended_image = models.ImageField(upload_to='images/sended_images', null=True, blank=True, verbose_name='تصویر سفارش ارسال شده')
     sended_image_type = models.CharField(max_length=3, choices=SENDED_IMAGE_TYPE_CHOICES, null=True, blank=True, verbose_name='نوع تصویر سفارش ارسال شده')
     explan_order_cancel = models.TextField(null=True, blank=True, verbose_name='توضیح علت لغو سفارش')
+    order_date = jmodels.jDateField(verbose_name='تاریخ و زمان سفارش')
+    sending_date = jmodels.jDateField(null=True, blank=True, verbose_name='تاریخ ارسال')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = OrdersManager()
 
@@ -234,7 +259,7 @@ class Orders(models.Model):
 
 
     def __str__(self):
-        return f"{self.order_type} - {self.supplier} - {self.order_date.year}/{self.order_date.month}/{self.order_date.day}"
+        return f"{self.order_type} - {self.supplier} - {datetime2jalali(self.order_date).strftime('%Y/%m/%d')}" # type: ignore
 
 
     def get_order_total_price(self):
@@ -298,4 +323,3 @@ class ConflictOrders(models.Model):
     
     def formatted_conflict_amount(self):
         return "{:,}".format(self.conflict_amount)
-

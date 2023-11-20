@@ -79,7 +79,7 @@ class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         global search_result
         if date_filter != "all":
-            search_result = Receive.objects.search(query).filter(receive_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = Receive.objects.search(query).filter(receive_date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
             search_result = Receive.objects.search(query).all() # type: ignore
 
@@ -217,7 +217,7 @@ class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         global search_result
         if date_filter != "all":
-            search_result = Payment.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = Payment.objects.search(query).filter(payment_date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
             search_result = Payment.objects.search(query) # type: ignore
 
@@ -309,9 +309,9 @@ class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         if activity_filter != "all" and date_filter == 'all':
             search_result = Activity.objects.search(query).filter(activity_result=activity_filter).all() # type: ignore
         elif activity_filter == "all" and date_filter != 'all':
-            search_result = Activity.objects.search(query).filter(activity_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = Activity.objects.search(query).filter(activity_date__range=filter_date_values(date_filter)).all() # type: ignore
         elif activity_filter != "all" and date_filter != 'all':
-            search_result = Activity.objects.search(query).filter(activity_date__date__range=filter_date_values(date_filter), activity_result=activity_filter).all() # type: ignore
+            search_result = Activity.objects.search(query).filter(activity_date__range=filter_date_values(date_filter), activity_result=activity_filter).all() # type: ignore
         else:
             search_result = Activity.objects.search(query) # type: ignore
 

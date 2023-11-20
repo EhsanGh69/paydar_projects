@@ -6,6 +6,7 @@ from django.utils import timezone
 from jalali_date import datetime2jalali
 
 from government_accounts.models import Receive, Payment, Activity
+from non_government_accounts.models import BuyersSellers
 from projects.models import Project
 
 
@@ -68,4 +69,19 @@ class ProjectReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
         return context
 
+
+class BuyerSellerReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'non_government_accounts.view_buyerssellers'
+    context_object_name = "buyer_seller"
+    template_name = "reports/buyer_seller_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(BuyersSellers, pk=pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+    
 

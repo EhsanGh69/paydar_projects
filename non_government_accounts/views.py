@@ -347,13 +347,6 @@ class BuyersSellersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     success_url = reverse_lazy("non_government_accounts:buyers_sellers")
     success_message = "خریدار / فروشنده با موفقیت اضافه شد"
 
-    def get_form_kwargs(self):
-        kwargs = super(BuyersSellersCreate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
-
 
 class BuyersSellersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_buyerssellers'
@@ -362,13 +355,6 @@ class BuyersSellersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     form_class = BuyersSellersForm
     success_url = reverse_lazy("non_government_accounts:buyers_sellers")
     success_message = "خریدار / فروشنده با موفقیت ویرایش شد"
-
-    def get_form_kwargs(self):
-        kwargs = super(BuyersSellersUpdate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
 
 
 class BuyersSellersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -413,16 +399,16 @@ class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
             search_result = BuyersSellers.objects.search(query).filter(payment_order=payment_order_filter, buyer_seller=buyer_seller_filter).all() # type: ignore
 
         elif buyer_seller_filter == "all" and payment_order_filter == "all" and date_filter != "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = BuyersSellers.objects.search(query).filter(payment_date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif buyer_seller_filter != "all" and payment_order_filter == "all" and date_filter != "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), buyer_seller=buyer_seller_filter).all() # type: ignore
+            search_result = BuyersSellers.objects.search(query).filter(payment_date__range=filter_date_values(date_filter), buyer_seller=buyer_seller_filter).all() # type: ignore
 
         elif buyer_seller_filter == "all" and payment_order_filter != "all" and date_filter != "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), payment_order=payment_order_filter).all() # type: ignore
+            search_result = BuyersSellers.objects.search(query).filter(payment_date__range=filter_date_values(date_filter), payment_order=payment_order_filter).all() # type: ignore
         
         elif buyer_seller_filter != "all" and payment_order_filter != "all" and date_filter != "all":
-            search_result = BuyersSellers.objects.search(query).filter(payment_date__date__range=filter_date_values(date_filter), payment_order=payment_order_filter, buyer_seller=buyer_seller_filter).all() # type: ignore
+            search_result = BuyersSellers.objects.search(query).filter(payment_date__range=filter_date_values(date_filter), payment_order=payment_order_filter, buyer_seller=buyer_seller_filter).all() # type: ignore
         
         else:
             search_result = BuyersSellers.objects.search(query) # type: ignore
@@ -474,13 +460,6 @@ class OrdersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMi
     success_url = reverse_lazy("non_government_accounts:orders")
     success_message = "سفارش با موفقیت ثبت شد"
 
-    def get_form_kwargs(self):
-        kwargs = super(OrdersCreate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
-
 
 class OrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_orders'
@@ -489,13 +468,6 @@ class OrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMi
     form_class = OrdersForm
     success_url = reverse_lazy("non_government_accounts:orders")
     success_message = "سفارش با موفقیت ویرایش شد"
-
-    def get_form_kwargs(self):
-        kwargs = super(OrdersUpdate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
 
 
 class OrdersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -540,16 +512,16 @@ class OrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             search_result = Orders.objects.search(query).filter(sended_image_type=order_image_filter, order_result=order_result_filter).all() # type: ignore
 
         elif order_result_filter == "all" and order_image_filter == "all" and date_filter != "all":
-            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = Orders.objects.search(query).filter(order_date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif order_result_filter != "all" and order_image_filter == "all" and date_filter != "all":
-            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), order_result=order_result_filter).all() # type: ignore
+            search_result = Orders.objects.search(query).filter(order_date__range=filter_date_values(date_filter), order_result=order_result_filter).all() # type: ignore
 
         elif order_result_filter == "all" and order_image_filter != "all" and date_filter != "all":
-            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), sended_image_type=order_image_filter).all() # type: ignore
+            search_result = Orders.objects.search(query).filter(order_date__range=filter_date_values(date_filter), sended_image_type=order_image_filter).all() # type: ignore
         
         elif order_result_filter != "all" and order_image_filter != "all" and date_filter != "all":
-            search_result = Orders.objects.search(query).filter(order_date__date__range=filter_date_values(date_filter), sended_image_type=order_image_filter, order_result=order_result_filter).all() # type: ignore
+            search_result = Orders.objects.search(query).filter(order_date__range=filter_date_values(date_filter), sended_image_type=order_image_filter, order_result=order_result_filter).all() # type: ignore
         else:
             search_result = Orders.objects.search(query) # type: ignore
 

@@ -11,6 +11,10 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                        پروژه
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
                         خریدار / فروشنده
                     </th>
 
@@ -39,16 +43,24 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                        تاریخ پرداخت
-                    </th>
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
                         <span>مبلغ پرداختی</span>
                         <span>(ریال)</span>
                     </th>
+                    
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                        تاریخ پرداخت
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان ثبت
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
 
                     {% if perms.non_government_accounts.delete_buyerssellers or perms.non_government_accounts.change_buyerssellers %}
-                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
+                        <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 236.094px;">
                             اقدام
                         </th>
                     {% endif %}
@@ -61,6 +73,7 @@
                     <tr role="row" class="odd">
                         <td>{{ forloop.counter }}</td>
 
+                        <td>{{ buyer_seller.project }}</td>
                         <td>
                             {% if buyer_seller.buyer_seller == 'buy' %}
                                 خریدار
@@ -82,46 +95,35 @@
 
                         {% include 'partials/img_modal.html' with img_type='contract' id=forloop.counter img_src=buyer_seller.contract_image.url label='قرارداد' owner=buyer_seller.full_name %}
 
-                        <td>
-                            {% if buyer_seller.payment_order == 'csh' %}
-                                نقدی              
-                            {% elif buyer_seller.payment_order == 'chq' %}
-                                چک
-                            {% elif buyer_seller.payment_order == 'del' %}
-                                حین تحویل
-                            {% elif buyer_seller.payment_order == 'dtr' %}
-                                انتقال سند
-                            {% elif buyer_seller.payment_order == 'afh' %}
-                                بعد از سفت کاری
-                            {% elif buyer_seller.payment_order == 'aif' %}
-                                بعد از اجرای تأسیسات
-                            {% elif buyer_seller.payment_order == 'atc' %}
-                                بعد از کاشی و سرامیک
-                            {% elif buyer_seller.payment_order == 'afc' %}
-                                بعد از سقف طبقه
-                            {% elif buyer_seller.payment_order == 'aff' %}
-                                بعد از فونداسیون
-                            {% else %}
-                                سایر
-                            {% endif %}
-                        </td>
+                        <td>{{ buyer_seller.persian_payment_order }}</td>
 
-                        {% if buyer_seller.current_roof == None %}
+                        {% if buyer_seller.payment_order == 'afc' %}
+                            <td>{{ buyer_seller.current_roof }}</td>
+                        {% else %}
+                            <td class="text-center">
+                                <span style="font-size:1.5rem;">_</span>
+                            </td>
+                        {% endif %}
+
+                        <td data-sort="{{ buyer_seller.payment_amount }}">
+                            {{ buyer_seller.formatted_payment_amount }}
+                        </td>
+                        
+                        <td data-sort="{{ buyer_seller.payment_date|date:'Ymd' }}">
+                            {{ buyer_seller.payment_date|jformat:'%d / %m / %Y' }}
+                        </td>
+                        <td data-sort="{{ buyer_seller.create_record|date:'Ymd-HMS' }}" class="border-left">
+                            {{ buyer_seller.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                        </td>
+                        {% if buyer_seller.update_record|date:'Ymd-HMS' == buyer_seller.create_record|date:'Ymd-HMS' %}
                             <td class="text-center">
                                 <span style="font-size:1.5rem;">_</span>
                             </td>
                         {% else %}
-                            <td>
-                                {{ buyer_seller.current_roof }}
+                            <td data-sort="{{ buyer_seller.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                {{ buyer_seller.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
                             </td>
                         {% endif %}
-
-                        <td data-sort="{{ buyer_seller.payment_date|date:'Ymd' }}">
-                            {{ buyer_seller.payment_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                        </td>
-                        <td data-sort="{{ buyer_seller.payment_amount }}">
-                            {{ buyer_seller.formatted_payment_amount }}
-                        </td>
 
                         {% if perms.non_government_accounts.delete_buyerssellers or perms.non_government_accounts.change_buyerssellers %}
                             <td class="action-td text-center">
@@ -140,6 +142,13 @@
                                     data-target="#deleteItemModal" title="حذف"
                                     data-message="آیا از حذف '{{ buyer_seller.full_name }}' اطمینان دارید؟">
                                     <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if perms.non_government_accounts.view_buyerssellers %}
+                                    <a href="{% url 'reports:buyer_seller_report' buyer_seller.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                    <i class="fa-solid fa-paste"></i>
                                     </a>
                                 {% endif %}
                             </td>

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    jalaliDatepicker.startWatch({ time: true });
+    jalaliDatepicker.startWatch({ time: false });
     $("#id_sended_image").attr("disabled","disabled");
     $("#id_sending_date").attr("disabled","disabled");
     $("#id_sended_image_type").attr("disabled","disabled");
