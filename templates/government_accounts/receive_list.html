@@ -9,6 +9,10 @@
     {% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت دریافت' create_perm=perms.government_accounts.add_receive %}
 {% endblock %}
 
+{% block record_conrtol %}
+    {% include "government_accounts/paginations/receive_records.html" with query=query date_filter=date_filter record_number=record_number list_url=list_url search_url=search_url records_count=records_count %}
+{% endblock %}
+
 {% block table %}
     {% include "government_accounts/tables/recieve_table.html" %}
 {% endblock %}
@@ -16,7 +20,6 @@
 {% block pagination %}
     {% include 'government_accounts/paginations/receive_pagination.html' with page_obj=page_obj %}
 {% endblock %}
-
 
 {% block filter_control %}
     <script src="{% static 'scripts/government_accounts/receive_list.js' %}"></script>

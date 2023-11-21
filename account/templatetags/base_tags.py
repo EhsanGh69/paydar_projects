@@ -12,3 +12,8 @@ def main_menu(request, app_name, list_path_name, create_path_name, update_path_n
         "icon_type": icon_type,
         "list_content": list_content,
     }
+
+
+@register.filter
+def min(value, arg):
+    return value - arg

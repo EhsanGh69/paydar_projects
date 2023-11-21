@@ -3,7 +3,6 @@
 <div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
-            
             <thead>
                 <tr role="row">
 
@@ -36,7 +35,9 @@
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
-                        زمان ثبت
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
@@ -45,81 +46,83 @@
 
                     {% if perms.government_accounts.delete_activity or perms.government_accounts.change_activity %}
                         <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 250.094px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
             </thead>
-
             <tbody>
-
                 {% for activity in activities %}
-                    <tr role="row" class="odd border-bottom">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ activity.organization }}</td>
-                        <td>{{ activity.activity_type }}</td>
-                        <td>{{ activity.project }}</td>
-                        <td data-sort="{{ activity.activity_date|date:'Ymd' }}">
-                            {{ activity.activity_date|jformat:'%d / %m / %Y' }}
-                        </td>
-                        <td>{{ activity.persian_activity_result }}</td>
-                        
-                        {% if activity.activity_descriptions %}
-                            <td>
-                                {{ activity.activity_descriptions }}
-                            </td>
-                        {% else %}
-                            <td class="text-center">
-                                <span style="font-size:1.5rem;">_</span>
-                            </td>
-                        {% endif %}
-
-                        <td data-sort="{{ activity.create_record|date:'Ymd' }}" class="border-left">
-                            {{ activity.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                        </td>
-                        {% if activity.update_record|date:'Ymd-HMS' == activity.create_record|date:'Ymd-HMS' %}
-                            <td class="text-center">
-                                <span style="font-size:1.5rem;">_</span>
-                            </td>
-                        {% else %}
-                            <td data-sort="{{ activity.update_record|date:'Ymd-HMS' }}" class="border-left">
-                                {{ activity.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                            </td>
-                        {% endif %}
-                        
-                        {% if perms.government_accounts.delete_activity or perms.government_accounts.change_activity %}
-                            <td class="action-td border-left text-center">
-                                {% if perms.government_accounts.change_activity %}
-                                    <a href="{% url 'government_accounts:activity_update' activity.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
+                    {% for row, object in records_dict.items %}
+                        {% if activity.pk == object.pk %}
+                            <tr role="row" class="odd border-bottom">
+                                <td>{{ row }}</td>
+                                <td>{{ activity.organization }}</td>
+                                <td>{{ activity.activity_type }}</td>
+                                <td>{{ activity.project }}</td>
+                                <td data-sort="{{ activity.activity_date|date:'Ymd' }}">
+                                    {{ activity.activity_date|jformat:'%d / %m / %Y' }}
+                                </td>
+                                <td>{{ activity.persian_activity_result }}</td>
+                                
+                                {% if activity.activity_descriptions %}
+                                    <td>
+                                        {{ activity.activity_descriptions }}
+                                    </td>
+                                {% else %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
                                 {% endif %}
 
-                                {% if perms.government_accounts.delete_activity %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'government_accounts:activity_delete' pk=activity.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف فعالیت '{{ activity.activity_type }}' اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                <td data-sort="{{ activity.create_record|date:'Ymd' }}" class="border-left">
+                                    {{ activity.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if activity.update_record|date:'Ymd-HMS' == activity.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ activity.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ activity.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
                                 {% endif %}
+                                
+                                {% if perms.government_accounts.delete_activity or perms.government_accounts.change_activity %}
+                                    <td class="action-td border-left text-center">
+                                        {% if perms.government_accounts.change_activity %}
+                                            <a href="{% url 'government_accounts:activity_update' activity.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
 
-                                {% if perms.government_accounts.view_activity %}
-                                    <a href="{% url 'reports:activity_report' activity.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
-                                    <i class="fa-solid fa-paste"></i>
-                                    </a>
+                                        {% if perms.government_accounts.delete_activity %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'government_accounts:activity_delete' pk=activity.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف فعالیت '{{ activity.activity_type }}' اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.government_accounts.view_activity %}
+                                            <a href="{% url 'reports:activity_report' activity.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-
         </table>
     </div>
 </div>

@@ -57,7 +57,7 @@
                         
                         {% if perms.non_government_accounts.delete_personnel or perms.non_government_accounts.change_personnel %}
                             <td class="action-td text-center">
-                                {% if erms.non_government_accounts.change_personnel %}
+                                {% if perms.non_government_accounts.change_personnel %}
                                     <a href="{% url 'non_government_accounts:personnel_update' person.pk %}" 
                                     class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
                                     <i class="fa-solid fa-pen-to-square"></i>

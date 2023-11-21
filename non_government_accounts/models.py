@@ -246,7 +246,7 @@ class Orders(models.Model):
     sended_image = models.ImageField(upload_to='images/sended_images', null=True, blank=True, verbose_name='تصویر سفارش ارسال شده')
     sended_image_type = models.CharField(max_length=3, choices=SENDED_IMAGE_TYPE_CHOICES, null=True, blank=True, verbose_name='نوع تصویر سفارش ارسال شده')
     explan_order_cancel = models.TextField(null=True, blank=True, verbose_name='توضیح علت لغو سفارش')
-    order_date = jmodels.jDateField(verbose_name='تاریخ و زمان سفارش')
+    order_date = jmodels.jDateField(verbose_name='تاریخ سفارش')
     sending_date = jmodels.jDateField(null=True, blank=True, verbose_name='تاریخ ارسال')
     create_record = jmodels.jDateTimeField(auto_now_add=True)
     update_record = jmodels.jDateTimeField(auto_now=True)
@@ -259,7 +259,7 @@ class Orders(models.Model):
 
 
     def __str__(self):
-        return f"{self.order_type} - {self.supplier} - {datetime2jalali(self.order_date).strftime('%Y/%m/%d')}" # type: ignore
+        return f"{self.order_type} - {self.supplier} - {self.order_date.year}/{self.order_date.month}/{self.order_date.day}" # type: ignore
 
 
     def get_order_total_price(self):
@@ -290,6 +290,18 @@ class Orders(models.Model):
         else:
             label = 'برگه خروج'
         return label
+    
+    def persian_measurement_unit(self):
+        if self.measurement_unit == "sqm":
+            return 'مترمربع'
+        elif self.measurement_unit == "mel":
+            return 'متر طول'
+        elif self.measurement_unit == "kgm":
+            return 'کیلوگرم'
+        elif self.measurement_unit == "ton":
+            return 'تن'
+        else:
+            return 'عدد'
         
 
 

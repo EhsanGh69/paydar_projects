@@ -9,6 +9,10 @@
     {% include 'government_accounts/filters/activity_filter.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت فعالیت' create_perm=perms.government_accounts.add_activity %}
 {% endblock %}
 
+{% block record_conrtol %}
+    {% include "government_accounts/paginations/activity_records.html" with query=query date_filter=date_filter activity_filter=activity_filter record_number=record_number list_url=list_url search_url=search_url records_count=records_count %}
+{% endblock %}
+
 {% block table %}
     {% include "government_accounts/tables/activity_table.html" %}
 {% endblock %}

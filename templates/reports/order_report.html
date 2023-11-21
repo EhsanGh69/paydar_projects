@@ -1,0 +1,98 @@
+{% extends "reports/base_report.html" %}
+{% load static %}
+{% load jformat %}
+
+{% block title %}
+    سفارش
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'non_government_accounts:orders' %}" class="btn btn-info mb-4">بازگشت به لیست سفارشات</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش سفارش</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">پروژه مربوطه</td>
+        <td style="width: 150.797px;">{{ order.project }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">تأمین کننده</td>
+        <td style="width: 150.797px;">{{ order.supplier }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">نوع سفارش</td>
+        <td style="width: 150.797px;">{{ order.order_type }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">مقدار سفارش</td>
+        <td style="width: 150.797px;">
+            {{ order.formatted_order_amount }}
+            {{ order.persian_measurement_unit }}
+        </td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">قیمت واحد</td>
+        <td style="width: 150.797px;">
+            <span>{{ order.formatted_unit_price }}</span>
+            <span>ریال به ازای هر</span>
+            <span>{{ order.persian_measurement_unit }}</span>
+        </td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">قیمت کل سفارش</td>
+        <td style="width: 150.797px;">
+            <span>{{ order.formatted_order_total_price }}</span>
+            <span>ریال</span>
+        </td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">مهلت سفارش</td>
+        <td style="width: 150.797px;">
+            <span>{{ order.order_respite }}</span>
+            <span>روز</span>
+        </td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">نتیجه سفارش</td>
+        <td style="width: 150.797px;">
+            {% if order.order_result == 'spd' %}
+                ارسال در تاریخ مشخص  
+            {% elif order.order_result == 'snd' %}
+                ارسال شده
+            {% else %}
+                لغو شده
+            {% endif %}
+        </td>
+    </tr>
+
+    {% if order.payment_order == 'cld' %}
+        <tr>
+            <th style="width: 60.797px;">توضیح علت لغو سفارش</td>
+            <td style="width: 150.797px;">{{ order.explan_order_cancel }}</td>
+        </tr>
+    {% endif %}
+
+    <tr>
+        <th style="width: 60.797px;">تاریخ سفارش</td>
+        <td style="width: 150.797px;">{{ order.order_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+
+    {% if order.payment_order == 'spd' %}
+        <tr>
+            <th style="width: 60.797px;">تاریخ ارسال</td>
+            <td style="width: 150.797px;">{{ order.sending_date|jformat:'%d / %m / %Y' }}</td>
+        </tr>
+    {% endif %}
+
+{% endblock %}

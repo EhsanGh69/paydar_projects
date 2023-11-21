@@ -40,11 +40,11 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        تاریخ و زمان سفارش
+                        تاریخ سفارش
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        مهلت سفارش
+                        مهلت سفارش (روز)
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -52,7 +52,7 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        تاریخ و زمان ارسال
+                        تاریخ ارسال
                     </th>
 
                     <th class="text-center col-img" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -67,9 +67,21 @@
                         توضیح علت لغو سفارش 
                     </th>
 
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
+
                     {% if perms.non_government_accounts.delete_orders or perms.non_government_accounts.change_orders %}
                         <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
@@ -85,17 +97,7 @@
                         <td>{{ order.order_type }}</td>
                         <td data-sort="{{ order.order_amount }}">
                             {{ order.formatted_order_amount }} 
-                            {% if order.measurement_unit == "sqm" %}
-                                مترمربع
-                            {% elif order.measurement_unit == "mel" %}
-                                متر طول
-                            {% elif order.measurement_unit == "kgm" %}
-                                کیلوگرم
-                            {% elif order.measurement_unit == "ton" %}
-                                تن
-                            {% else %}
-                                عدد
-                            {% endif %}
+                            {{ order.persian_measurement_unit }} 
                         </td>
                         <td data-sort="{{ order.unit_price }}">
                             {{ order.formatted_unit_price }}
@@ -104,7 +106,7 @@
                             {{ order.formatted_order_total_price }}
                         </td>
                         <td data-sort="{{ order.order_date|date:'Ymd' }}">
-                            {{ order.order_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                            {{ order.order_date|jformat:'%d / %m / %Y' }}
                         </td>
                         <td>{{ order.order_respite }} روز</td>
 
@@ -120,7 +122,7 @@
 
                         {% if order.sending_date %}
                             <td data-sort="{{ order.sending_date|date:'Ymd' }}">
-                                {{ order.sending_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                {{ order.sending_date|jformat:'%d / %m / %Y' }}
                             </td>
                         {% else %}
                             <td class="text-center">
@@ -161,9 +163,22 @@
                                 <span>_</span>
                             </td>
                         {% endif %}
+
+                        <td data-sort="{{ order.create_record|date:'Ymd-HMS' }}" class="border-left">
+                            {{ order.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                        </td>
+                        {% if order.update_record|date:'Ymd-HMS' == order.create_record|date:'Ymd-HMS' %}
+                            <td class="text-center">
+                                <span style="font-size:1.5rem;">_</span>
+                            </td>
+                        {% else %}
+                            <td data-sort="{{ order.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                {{ order.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                            </td>
+                        {% endif %}
                         
                         {% if perms.non_government_accounts.delete_orders or perms.non_government_accounts.change_orders %}
-                            <td class="action-td text-center d-flex">
+                            <td class="action-td text-center">
                                 {% if perms.non_government_accounts.change_orders %}
                                     <a href="{% url 'non_government_accounts:order_update' order.pk %}" 
                                     class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
@@ -177,8 +192,15 @@
                                     class="btn btn-outline-danger mb-2 ml-2 pb-0"
                                     data-url="{% url 'non_government_accounts:order_delete' pk=order.pk %}"
                                     data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف '{{ buyer_seller.full_name }}' اطمینان دارید؟">
+                                    data-message="آیا از حذف '{{ order.full_name }}' اطمینان دارید؟">
                                     <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if perms.non_government_accounts.view_orders %}
+                                    <a href="{% url 'reports:order_report' order.pk %}" 
+                                    class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                    <i class="fa-solid fa-paste"></i>
                                     </a>
                                 {% endif %}
                             </td>

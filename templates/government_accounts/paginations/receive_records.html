@@ -1,0 +1,23 @@
+<div class="row mb-2">
+    <div class="col">
+        {% if 'search' in request.resolver_match.url_name %}
+            <form action="{% url search_url %}" method="get" class="d-flex">
+                <input type="hidden" name="data_search" value="{{ query }}" /> 
+                <input type="hidden" name="date_filter" value="{{ date_filter }}" /> 
+                <label>تعداد موارد قابل نمایش :</label>
+                <input type="number" name="record_number" min="1" max="{{ records_count }}" value="{% if records_count > 9 %}{{ record_number }}{% else %}{{ records_count }}{% endif %}" style="width: 4.5rem;" class="form-control mr-2">
+                <button type="submit" class="btn btn-primary mr-2">
+                    <i class="fa-solid fa-filter"></i>
+                </button>
+            </form>
+        {% else %}
+            <form action="{% url list_url %}" method="get" class="d-flex">
+                <label>تعداد موارد قابل نمایش :</label>
+                <input type="number" name="record_number" min="1" max="{{ records_count }}" value="{% if records_count > 9 %}{{ record_number }}{% else %}{{ records_count }}{% endif %}" style="width: 4.5rem;" class="form-control mr-2">
+                <button type="submit" class="btn btn-primary mr-2">
+                    <i class="fa-solid fa-filter"></i>
+                </button>
+            </form>
+        {% endif %}
+    </div>
+</div>
