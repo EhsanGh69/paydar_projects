@@ -1,5 +1,6 @@
 {% extends 'base_list.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست خریداران / فروشندگان{% endblock %}
 
@@ -9,12 +10,20 @@
     {% include 'non_government_accounts/filters/buyers_sellers_filter.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='افزودن خریدار / فروشنده' create_perm=perms.non_government_accounts.add_buyerssellers %} 
 {% endblock %}
 
+{% block record_control %}
+    {% if 'search' in request.resolver_match.url_name %}
+        {% objects_records None search_url record_number records_count list_filters %}
+    {% else %}
+        {% objects_records list_url None record_number records_count %}
+    {% endif %}
+{% endblock %}
+
 {% block table %}
     {% include "non_government_accounts/tables/buyers_sellers_table.html" %}
 {% endblock %}
 
 {% block pagination %}
-    {% include 'non_government_accounts/paginations/buyers_sellers_pagination.html' with page_obj=page_obj %}
+    {% include 'partials/objects_pagination.html' %}
 {% endblock %}
 
 {% block filter_control %}

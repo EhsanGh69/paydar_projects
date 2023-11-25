@@ -1,6 +1,7 @@
 {% extends "reports/base_report.html" %}
 {% load static %}
 {% load jformat %}
+{% load non_gov_tags %}
 
 {% block title %}
     سفارش
@@ -94,5 +95,10 @@
             <td style="width: 150.797px;">{{ order.sending_date|jformat:'%d / %m / %Y' }}</td>
         </tr>
     {% endif %}
+
+    <tr>
+        <th style="width: 60.797px;">مجموع طلب تأمین کننده</td>
+        {% total_supplier_requests order.supplier.full_name order.project.title %}
+    </tr>
 
 {% endblock %}

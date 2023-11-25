@@ -1,5 +1,6 @@
 {% extends 'base_list.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست دریافت‌ها{% endblock %}
 
@@ -9,8 +10,12 @@
     {% include 'partials/search_print.html' with search_url=search_url date_filter=True list_url=list_url create_url=create_url title='ثبت دریافت' create_perm=perms.government_accounts.add_receive %}
 {% endblock %}
 
-{% block record_conrtol %}
-    {% include "government_accounts/paginations/receive_records.html" with query=query date_filter=date_filter record_number=record_number list_url=list_url search_url=search_url records_count=records_count %}
+{% block record_control %}
+    {% if 'search' in request.resolver_match.url_name %}
+        {% objects_records None search_url record_number records_count list_filters %}
+    {% else %}
+        {% objects_records list_url None record_number records_count %}
+    {% endif %}
 {% endblock %}
 
 {% block table %}
@@ -18,7 +23,7 @@
 {% endblock %}
 
 {% block pagination %}
-    {% include 'government_accounts/paginations/receive_pagination.html' with page_obj=page_obj %}
+    {% include 'partials/objects_pagination.html' %}
 {% endblock %}
 
 {% block filter_control %}

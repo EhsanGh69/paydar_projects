@@ -1,5 +1,4 @@
 {% load jformat %}
-{% load non_gov_tags %}
 
 <div class="row">
     <div class="col-sm-12 table-responsive">
@@ -17,10 +16,6 @@
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
                         تأمین کننده
-                    </th>
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        طلب تأمین کننده
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -87,129 +82,130 @@
                 </tr>
             </thead>
             <tbody>
-
                 {% for order in orders %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ order.project }}</td>
-                        <td>{{ order.supplier }}</td>
-                        {% total_supplier_requests order.supplier.full_name order.project.title %}
-                        <td>{{ order.order_type }}</td>
-                        <td data-sort="{{ order.order_amount }}">
-                            {{ order.formatted_order_amount }} 
-                            {{ order.persian_measurement_unit }} 
-                        </td>
-                        <td data-sort="{{ order.unit_price }}">
-                            {{ order.formatted_unit_price }}
-                        </td>
-                        <td data-sort="{{ order.get_order_total_price }}">
-                            {{ order.formatted_order_total_price }}
-                        </td>
-                        <td data-sort="{{ order.order_date|date:'Ymd' }}">
-                            {{ order.order_date|jformat:'%d / %m / %Y' }}
-                        </td>
-                        <td>{{ order.order_respite }} روز</td>
+                    {% for row, object in records_dict.items %}
+                        {% if order.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ order.project }}</td>
+                                <td>{{ order.supplier }}</td>
+                                
+                                <td>{{ order.order_type }}</td>
+                                <td data-sort="{{ order.order_amount }}">
+                                    {{ order.formatted_order_amount }} 
+                                    {{ order.persian_measurement_unit }} 
+                                </td>
+                                <td data-sort="{{ order.unit_price }}">
+                                    {{ order.formatted_unit_price }}
+                                </td>
+                                <td data-sort="{{ order.get_order_total_price }}">
+                                    {{ order.formatted_order_total_price }}
+                                </td>
+                                <td data-sort="{{ order.order_date|date:'Ymd' }}">
+                                    {{ order.order_date|jformat:'%d / %m / %Y' }}
+                                </td>
+                                <td>{{ order.order_respite }} روز</td>
 
-                        <td>
-                            {% if order.order_result == 'spd' %}
-                                ارسال در تاریخ مشخص  
-                            {% elif order.order_result == 'snd' %}
-                                ارسال شده
-                            {% else %}
-                                لغو شده
-                            {% endif %}
-                        </td>
+                                <td>
+                                    {% if order.order_result == 'spd' %}
+                                        ارسال در تاریخ مشخص  
+                                    {% elif order.order_result == 'snd' %}
+                                        ارسال شده
+                                    {% else %}
+                                        لغو شده
+                                    {% endif %}
+                                </td>
 
-                        {% if order.sending_date %}
-                            <td data-sort="{{ order.sending_date|date:'Ymd' }}">
-                                {{ order.sending_date|jformat:'%d / %m / %Y' }}
-                            </td>
-                        {% else %}
-                            <td class="text-center">
-                                <span>_</span>
-                            </td>
-                        {% endif %}
-                        
-                    
-                        {% if order.sended_image %}
-                        
-                            <td class="text-center col-img">
-                                <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                data-target="#sended{{ forloop.counter }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                </a>
-                            </td>
-
-                            {% include 'partials/img_modal.html' with img_type='sended' id=forloop.counter img_src=order.sended_image.url label='' owner=order.sended_image_type_label %}
-
-                        {% else %}
-                            <td class="text-center col-img">
-                                <span>_</span>
-                            </td>
-                        {% endif %}
-
-                        {% if order.sended_image_type %}
-                            <td class="text-center col-img">{{ order.sended_image_type_label }}</td>
-                        {% else %}
-                            <td class="text-center col-img">
-                                <span>_</span>
-                            </td>
-                        {% endif %}
-
-                        {% if order.explan_order_cancel %}
-                            <td>{{ order.explan_order_cancel }}</td>
-                        {% else %}
-                            <td class="text-center">
-                                <span>_</span>
-                            </td>
-                        {% endif %}
-
-                        <td data-sort="{{ order.create_record|date:'Ymd-HMS' }}" class="border-left">
-                            {{ order.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                        </td>
-                        {% if order.update_record|date:'Ymd-HMS' == order.create_record|date:'Ymd-HMS' %}
-                            <td class="text-center">
-                                <span style="font-size:1.5rem;">_</span>
-                            </td>
-                        {% else %}
-                            <td data-sort="{{ order.update_record|date:'Ymd-HMS' }}" class="border-left">
-                                {{ order.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                            </td>
-                        {% endif %}
-                        
-                        {% if perms.non_government_accounts.delete_orders or perms.non_government_accounts.change_orders %}
-                            <td class="action-td text-center">
-                                {% if perms.non_government_accounts.change_orders %}
-                                    <a href="{% url 'non_government_accounts:order_update' order.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
+                                {% if order.sending_date %}
+                                    <td data-sort="{{ order.sending_date|date:'Ymd' }}">
+                                        {{ order.sending_date|jformat:'%d / %m / %Y' }}
+                                    </td>
+                                {% else %}
+                                    <td class="text-center">
+                                        <span>_</span>
+                                    </td>
                                 {% endif %}
                                 
-                                {% if perms.non_government_accounts.delete_orders %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'non_government_accounts:order_delete' pk=order.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف '{{ order.full_name }}' اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                            
+                                {% if order.sended_image %}
+                                
+                                    <td class="text-center col-img">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#sended{{ forloop.counter }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+
+                                    {% include 'partials/img_modal.html' with img_type='sended' id=forloop.counter img_src=order.sended_image.url label='' owner=order.sended_image_type_label %}
+
+                                {% else %}
+                                    <td class="text-center col-img">
+                                        <span>_</span>
+                                    </td>
                                 {% endif %}
 
-                                {% if perms.non_government_accounts.view_orders %}
-                                    <a href="{% url 'reports:order_report' order.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
-                                    <i class="fa-solid fa-paste"></i>
-                                    </a>
+                                {% if order.sended_image_type %}
+                                    <td class="text-center col-img">{{ order.sended_image_type_label }}</td>
+                                {% else %}
+                                    <td class="text-center col-img">
+                                        <span>_</span>
+                                    </td>
                                 {% endif %}
-                            </td>
+
+                                {% if order.explan_order_cancel %}
+                                    <td>{{ order.explan_order_cancel }}</td>
+                                {% else %}
+                                    <td class="text-center">
+                                        <span>_</span>
+                                    </td>
+                                {% endif %}
+
+                                <td data-sort="{{ order.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ order.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if order.update_record|date:'Ymd-HMS' == order.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ order.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ order.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
+                                
+                                {% if perms.non_government_accounts.delete_orders or perms.non_government_accounts.change_orders %}
+                                    <td class="action-td text-center">
+                                        {% if perms.non_government_accounts.change_orders %}
+                                            <a href="{% url 'non_government_accounts:order_update' order.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+                                        
+                                        {% if perms.non_government_accounts.delete_orders %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'non_government_accounts:order_delete' pk=order.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف '{{ order.full_name }}' اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.non_government_accounts.view_orders %}
+                                            <a href="{% url 'reports:order_report' order.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-        
         </table>
     </div>
 </div>

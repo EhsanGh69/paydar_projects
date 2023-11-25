@@ -18,11 +18,29 @@ class ContractorsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "contractors"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        queryset = Contractors.objects.order_by('project__title', 'full_name').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = Contractors.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:contractors_search'
         context['create_url'] = 'non_government_accounts:contractor_create'
+        context['list_url'] = 'non_government_accounts:contractors'
         context['persian_object_name'] = 'پیمانکار'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
 
 
@@ -76,11 +94,23 @@ class ContractorSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:contractors_search'
         context['list_url'] = 'non_government_accounts:contractors'
-        context['query'] = query
+        context['list_filters'] = { 'data_search': query }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
         return context
 
 # Contractors - End
@@ -96,11 +126,29 @@ class SuppliersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "suppliers"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        queryset = Suppliers.objects.order_by('project__title', 'full_name').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = Suppliers.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:suppliers_search'
         context['create_url'] = 'non_government_accounts:supplier_create'
+        context['list_url'] = 'non_government_accounts:suppliers'
         context['persian_object_name'] = 'تأمین کننده'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
     
 
@@ -154,11 +202,23 @@ class SupplierSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:suppliers_search'
         context['list_url'] = 'non_government_accounts:suppliers'
-        context['query'] = query
+        context['list_filters'] = { 'data_search': query }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
         return context
     
 # Suppliers - End
@@ -174,11 +234,29 @@ class PersonnelList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "personnel"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        queryset = Personnel.objects.order_by('job', 'full_name').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = Personnel.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:personnel_search'
         context['create_url'] = 'non_government_accounts:personnel_create'
+        context['list_url'] = 'non_government_accounts:personnel'
         context['persian_object_name'] = 'شخص پرسنل'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
 
 
@@ -232,11 +310,23 @@ class PersonnelSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:personnel_search'
         context['list_url'] = 'non_government_accounts:personnel'
-        context['query'] = query
+        context['list_filters'] = { 'data_search': query }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
         return context
 
 # Personnel - End
@@ -252,11 +342,29 @@ class PartnersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "partners"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        queryset = Partners.objects.order_by('project__title', 'full_name').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = Partners.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:partners_search'
         context['create_url'] = 'non_government_accounts:partner_create'
+        context['list_url'] = 'non_government_accounts:partners'
         context['persian_object_name'] = 'شریک'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
     
 
@@ -309,13 +417,24 @@ class PartnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         return search_result
         
-        
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:partners_search'
         context['list_url'] = 'non_government_accounts:partners'
-        context['query'] = query
+        context['list_filters'] = { 'data_search': query }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
         return context
     
 # Partners - End
@@ -331,11 +450,29 @@ class BuyersSellersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "buyers_sellers"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        queryset = BuyersSellers.objects.order_by('project__title', 'buyer_seller', 'full_name').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = BuyersSellers.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:buyers_sellers_search'
         context['create_url'] = 'non_government_accounts:buyer_seller_create'
+        context['list_url'] = 'non_government_accounts:buyers_sellers'
         context['persian_object_name'] = 'خریدار / فروشنده'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
 
 
@@ -420,14 +557,24 @@ class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:buyers_sellers_search'
         context['list_url'] = 'non_government_accounts:buyers_sellers'
-        context['query'] = query
-        context['buyer_seller_filter'] = buyer_seller_filter
-        context['payment_order_filter'] = payment_order_filter
-        context['date_filter'] = date_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter, 
+        'payment_order': payment_order_filter, 'buyer_seller': buyer_seller_filter}
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
 
 
@@ -443,12 +590,30 @@ class OrdersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Orders
     context_object_name = "orders"
     paginate_by = 9
+
+    def get_queryset(self):
+        global queryset
+        queryset = Orders.objects.order_by('project__title', 'supplier__full_name', 'order_type').all()
+        return queryset
     
     def get_context_data(self, **kwargs):
+        records_count = Orders.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:orders_search'
         context['create_url'] = 'non_government_accounts:order_create'
+        context['list_url'] = 'non_government_accounts:orders'
         context['persian_object_name'] = 'سفارش'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
     
 
@@ -531,14 +696,24 @@ class OrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return search_result
   
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:orders_search'
         context['list_url'] = 'non_government_accounts:orders'
-        context['query'] = query
-        context['date_filter'] = date_filter
-        context['order_result_filter'] = order_result_filter
-        context['order_image_filter'] = order_image_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter, 
+        'order_result': order_result_filter, 'order_image_type': order_image_filter}
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
 
 
@@ -554,12 +729,30 @@ class ConflictOrdersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = ConflictOrders
     context_object_name = "conflict_orders"
     paginate_by = 9
+
+    def get_queryset(self):
+        global queryset
+        queryset = ConflictOrders.objects.order_by('order__order_type', 'order__supplier__full_name', '-order__order_date').all()
+        return queryset
     
     def get_context_data(self, **kwargs):
+        records_count = ConflictOrders.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:conflict_orders_search'
         context['create_url'] = 'non_government_accounts:conflict_order_create'
+        context['list_url'] = 'non_government_accounts:conflict_orders'
         context['persian_object_name'] = 'مغایرت سفارش'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
 
 
@@ -620,12 +813,23 @@ class ConflictOrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         return search_result
 
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'non_government_accounts:conflict_orders_search'
         context['list_url'] = 'non_government_accounts:conflict_orders'
-        context['query'] = query
-        context['conflict_type_filter'] = conflict_type_filter
+        context['list_filters'] = { 'data_search': query, 'conflict_type': conflict_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
         return context
 
 

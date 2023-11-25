@@ -9,19 +9,19 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                        مبلغ سرمایه‌گذاری
-                    </th>
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
                         پروژه
-                    </th>
-
-                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 172.797px;">
-                        تصویر قرارداد
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 236.094px;">
                         نام  و نام خانوادگی
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
+                        مبلغ سرمایه‌گذاری
+                    </th>
+
+                    <th class="text-center col-img" rowspan="1" colspan="1" style="width: 172.797px;">
+                        تصویر قرارداد
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 172.797px;">
@@ -42,56 +42,55 @@
                 </tr>
             </thead>
             <tbody>
-
                 {% for partner in partners %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
-                        <td data-sort="{{ partner.investment_amount }}">
-                            {{ partner.formatted_investment_amount }}
-                        </td>
-                        <td>{{ partner.project }}</td>
+                    {% for row, object in records_dict.items %}
+                        {% if partner.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ partner.project }}</td>
+                                <td>{{ partner.full_name }}</td>
+                                <td data-sort="{{ partner.investment_amount }}">
+                                    {{ partner.formatted_investment_amount }}
+                                </td>
 
-                        <td class="text-center col-img">
-                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                            data-target="#contract{{ forloop.counter }}">
-                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                            </a>
-                        </td>
-
-                        {% include 'partials/img_modal.html' with img_type='contract' id=forloop.counter img_src=partner.contract_image.url label='قرارداد' owner=partner.full_name %}
-
-                        <td>{{ partner.full_name }}</td>
-                        <td>{{ partner.phone }}</td>
-                        <td>{{ partner.address }}</td>
-
-                        {% if perms.non_government_accounts.delete_partners or perms.non_government_accounts.change_partners %}
-                            <td class="action-td text-center">
-                                {% if perms.non_government_accounts.change_partners %}
-                                    <a href="{% url 'non_government_accounts:partner_update' partner.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                                <td class="text-center col-img">
+                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                    data-target="#contract{{ forloop.counter }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
                                     </a>
-                                {% endif %}
+                                </td>
 
-                                {% if perms.non_government_accounts.delete_partners %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'non_government_accounts:partner_delete' pk=partner.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف '{{ partner.full_name }}' اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                {% include 'partials/img_modal.html' with img_type='contract' id=forloop.counter img_src=partner.contract_image.url label='قرارداد' owner=partner.full_name %}
+
+                                <td>{{ partner.phone }}</td>
+                                <td>{{ partner.address }}</td>
+
+                                {% if perms.non_government_accounts.delete_partners or perms.non_government_accounts.change_partners %}
+                                    <td class="action-td text-center">
+                                        {% if perms.non_government_accounts.change_partners %}
+                                            <a href="{% url 'non_government_accounts:partner_update' partner.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.non_government_accounts.delete_partners %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'non_government_accounts:partner_delete' pk=partner.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف '{{ partner.full_name }}' اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
-                
-
             </tbody>
-        
         </table>
     </div>
 </div>

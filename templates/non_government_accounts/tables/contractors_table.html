@@ -38,42 +38,43 @@
                 </tr>
             </thead>
             <tbody>
-
                 {% for contractor in contractors %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ contractor.project }}</td>
-                        <td>{{ contractor.full_name }}</td>
-                        <td>{{ contractor.job }}</td>
-                        <td>{{ contractor.phone }}</td>
-                        <td>{{ contractor.address }}</td>
-                        
-                        {% if perms.non_government_accounts.delete_contractors or perms.non_government_accounts.change_contractors %}
-                            <td class="action-td text-center">
-                                {% if perms.non_government_accounts.change_contractors %}
-                                    <a href="{% url 'non_government_accounts:contractor_update' contractor.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                {% endif %}
+                    {% for row, object in records_dict.items %}
+                        {% if contractor.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ contractor.project }}</td>
+                                <td>{{ contractor.full_name }}</td>
+                                <td>{{ contractor.job }}</td>
+                                <td>{{ contractor.phone }}</td>
+                                <td>{{ contractor.address }}</td>
+                                
+                                {% if perms.non_government_accounts.delete_contractors or perms.non_government_accounts.change_contractors %}
+                                    <td class="action-td text-center">
+                                        {% if perms.non_government_accounts.change_contractors %}
+                                            <a href="{% url 'non_government_accounts:contractor_update' contractor.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
 
-                                {% if perms.non_government_accounts.delete_contractors %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'non_government_accounts:contractor_delete' pk=contractor.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف '{{ contractor.full_name }}' اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                        {% if perms.non_government_accounts.delete_contractors %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'non_government_accounts:contractor_delete' pk=contractor.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف '{{ contractor.full_name }}' اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-        
         </table>
     </div>
 </div>

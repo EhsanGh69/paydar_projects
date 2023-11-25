@@ -1,0 +1,23 @@
+{% if previous_url %}
+    {% if list_filters %}
+        {% url search_url page_obj.previous_page_number %}?{% for name, value in list_filters.items %}{% if not forloop.first %}&{% endif %}{{ name }}={{ value }}{% endfor %}&record_number={{ record_number }}
+    {% else %}
+        {% url list_url page_obj.previous_page_number %}?record_number={{ record_number }}
+    {% endif %}
+{% endif %}
+
+{% if item_url %}
+    {% if list_filters %}
+        {% url search_url page_item %}?{% for name, value in list_filters.items %}{% if not forloop.first %}&{% endif %}{{ name }}={{ value }}{% endfor %}&record_number={{ record_number }}
+    {% else %}
+        {% url list_url page_item %}?record_number={{ record_number }}
+    {% endif %}
+{% endif %}
+
+{% if next_url %}
+    {% if list_filters %}
+        {% url search_url page_obj.next_page_number %}?{% for name, value in list_filters.items %}{% if not forloop.first %}&{% endif %}{{ name }}={{ value }}{% endfor %}&record_number={{ record_number }}
+    {% else %}
+        {% url list_url page_obj.next_page_number %}?record_number={{ record_number }}
+    {% endif %}
+{% endif %}

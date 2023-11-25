@@ -23,6 +23,9 @@ class OrganizationList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Organization
     context_object_name = "organizations"
 
+    def get_queryset(self):
+        return Organization.objects.order_by('organization_name').all()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['persian_object_name'] = 'ارگان'
@@ -81,8 +84,10 @@ class ReceiveList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         record_number = self.request.GET.get('record_number')
         if record_number:
             self.paginate_by = int(record_number) # type: ignore
-        else:
+        elif records_count > 9:
             record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:receives_search'
         context['create_url'] = 'government_accounts:receive_create'
@@ -155,14 +160,15 @@ class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         record_number = self.request.GET.get('record_number')
         if record_number:
             self.paginate_by = int(record_number) # type: ignore
-        else:
+        elif records_count > 9:
             record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'government_accounts:receives_search'
         context['list_url'] = 'government_accounts:receives'
-        context['query'] = query
-        context['date_filter'] = date_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
@@ -193,8 +199,10 @@ class PaymentList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         record_number = self.request.GET.get('record_number')
         if record_number:
             self.paginate_by = int(record_number) # type: ignore
-        else:
+        elif records_count > 9:
             record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:payments_search'
         context['create_url'] = 'government_accounts:payment_create'
@@ -267,14 +275,15 @@ class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         record_number = self.request.GET.get('record_number')
         if record_number:
             self.paginate_by = int(record_number) # type: ignore
-        else:
+        elif records_count > 9:
             record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'government_accounts:payments_search'
         context['list_url'] = 'government_accounts:payments'
-        context['query'] = query
-        context['date_filter'] = date_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
@@ -304,8 +313,10 @@ class ActivityList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         record_number = self.request.GET.get('record_number')
         if record_number:
             self.paginate_by = int(record_number) # type: ignore
-        else:
+        elif records_count > 9:
             record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:activities_search'
         context['create_url'] = 'government_accounts:activity_create'
@@ -384,15 +395,16 @@ class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         record_number = self.request.GET.get('record_number')
         if record_number:
             self.paginate_by = int(record_number) # type: ignore
-        else:
+        elif records_count > 9:
             record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'government_accounts:activities_search'
         context['list_url'] = 'government_accounts:activities'
-        context['query'] = query
-        context['date_filter'] = date_filter
-        context['activity_filter'] = activity_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter,
+        'activity_result':activity_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))

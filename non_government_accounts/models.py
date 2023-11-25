@@ -1,9 +1,7 @@
 from django.db import models
-from django.utils import timezone
 from django.db.models.query import Q
 
 from django_jalali.db import models as jmodels
-from jalali_date import datetime2jalali
 
 from projects.models import Project
 
@@ -18,6 +16,7 @@ class ContractorsManager(models.Manager):
             Q(address__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
+
 
 class Contractors(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_contractors', verbose_name="پروژه")
@@ -126,7 +125,6 @@ class Partners(models.Model):
         return "{:,}".format(self.investment_amount)
 
 
-
 class BuyersSellersManager(models.Manager):
     def search(self, query):
         lookup = (
@@ -203,7 +201,6 @@ class BuyersSellers(models.Model):
         else:
             return 'سایر'
     
-
 
 class OrdersManager(models.Manager):
     def search(self, query):
@@ -303,7 +300,6 @@ class Orders(models.Model):
         else:
             return 'عدد'
         
-
 
 class ConflictOrdersManager(models.Manager):
     def search(self, query):

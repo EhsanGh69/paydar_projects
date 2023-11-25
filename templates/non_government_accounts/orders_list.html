@@ -1,5 +1,6 @@
 {% extends 'base_list.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست سفارشات{% endblock %}
 
@@ -9,12 +10,20 @@
     {% include 'non_government_accounts/filters/orders_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن سفارش' create_perm=perms.non_government_accounts.add_orders %}
 {% endblock %}
 
+{% block record_control %}
+    {% if 'search' in request.resolver_match.url_name %}
+        {% objects_records None search_url record_number records_count list_filters %}
+    {% else %}
+        {% objects_records list_url None record_number records_count %}
+    {% endif %}
+{% endblock %}
+
 {% block table %}
     {% include "non_government_accounts/tables/orders_table.html" %}
 {% endblock %}
 
 {% block pagination %}
-    {% include 'non_government_accounts/paginations/orders_pagination.html' with page_obj=page_obj %}
+    {% include 'partials/objects_pagination.html' %}
 {% endblock %}
 
 {% block filter_control %}
