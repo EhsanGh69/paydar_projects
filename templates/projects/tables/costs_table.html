@@ -26,7 +26,9 @@
                     
                     {% if perms.projects.delete_costs or perms.projects.change_costs %}
                         <th class="text-center rounded-0 action-th" rowspan="2" colspan="1" style="width: 190.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
@@ -76,73 +78,82 @@
             </thead>
             <tbody>
                 {% for cost in costs %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
+                    {% for row, object in records_dict.items %}
+                        {% if cost.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
 
-                        <td>{{ cost.project }}</td>
+                                <td>{{ cost.project }}</td>
 
-                        {# branches costs #}
-                        <td data-sort="{{ cost.water_branch }}">
-                            {{ cost.formatted_water_branch }}
-                        </td>
-                        <td data-sort="{{ cost.electricity_branch }}">
-                            {{ cost.formatted_electricity_branch }}
-                        </td>
-                        <td data-sort="{{ cost.gas_branch }}">
-                            {{ cost.formatted_gas_branch }}
-                        </td>
-                        <td data-sort="{{ cost.phone_subscription }}">
-                            {{ cost.formatted_phone_subscription }}
-                        </td>
-                        
-                        {# engineer costs #}
-                        <td data-sort="{{ cost.designer_office }}">
-                            {{ cost.formatted_designer_office }}
-                        </td>
-                        <td data-sort="{{ cost.supervisors }}">
-                            {{ cost.formatted_supervisors }}
-                        </td>
-                        <td data-sort="{{ cost.engineer_system }}">
-                            {{ cost.formatted_engineer_system }}
-                        </td>
-                        <td data-sort="{{ cost.sketch_map }}">
-                            {{ cost.formatted_sketch_map }}
-                        </td>
-                        
-                        {# mayoralty costs #}
-                        <td data-sort="{{ cost.export_permit }}">
-                            {{ cost.formatted_export_permit }}
-                        </td>
-                        <td data-sort="{{ cost.export_end_work }}">
-                            {{ cost.formatted_export_end_work }}
-                        </td>
-                        
-                        {% if perms.projects.delete_costs or perms.projects.change_costs %}
-                            <td class="action-td d-flex justify-content-center">
-                                {% if perms.projects.change_costs %}
-                                    <a href="{% url 'projects:cost_update' cost.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
+                                {# branches costs #}
+                                <td data-sort="{{ cost.water_branch }}">
+                                    {{ cost.formatted_water_branch }}
+                                </td>
+                                <td data-sort="{{ cost.electricity_branch }}">
+                                    {{ cost.formatted_electricity_branch }}
+                                </td>
+                                <td data-sort="{{ cost.gas_branch }}">
+                                    {{ cost.formatted_gas_branch }}
+                                </td>
+                                <td data-sort="{{ cost.phone_subscription }}">
+                                    {{ cost.formatted_phone_subscription }}
+                                </td>
+                                
+                                {# engineer costs #}
+                                <td data-sort="{{ cost.designer_office }}">
+                                    {{ cost.formatted_designer_office }}
+                                </td>
+                                <td data-sort="{{ cost.supervisors }}">
+                                    {{ cost.formatted_supervisors }}
+                                </td>
+                                <td data-sort="{{ cost.engineer_system }}">
+                                    {{ cost.formatted_engineer_system }}
+                                </td>
+                                <td data-sort="{{ cost.sketch_map }}">
+                                    {{ cost.formatted_sketch_map }}
+                                </td>
+                                
+                                {# mayoralty costs #}
+                                <td data-sort="{{ cost.export_permit }}">
+                                    {{ cost.formatted_export_permit }}
+                                </td>
+                                <td data-sort="{{ cost.export_end_work }}">
+                                    {{ cost.formatted_export_end_work }}
+                                </td>
+                                
+                                {% if perms.projects.delete_costs or perms.projects.change_costs %}
+                                    <td class="action-td d-flex justify-content-center">
+                                        {% if perms.projects.change_costs %}
+                                            <a href="{% url 'projects:cost_update' cost.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.projects.delete_costs %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'projects:cost_delete' pk=cost.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف هزینه‌های پروژه '{{ cost.project }}' اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.projects.view_costs %}
+                                            <a href="{% url 'reports:cost_report' cost.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-
-                                {% if perms.projects.delete_costs %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'projects:cost_delete' pk=cost.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف هزینه‌های پروژه '{{ cost.project }}' اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
-                                {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-        
         </table>
     </div>
 </div>

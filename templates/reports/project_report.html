@@ -16,61 +16,61 @@
 
 {% block report_body %}
   <tr>
-    <th style="width: 60.797px;">عنوان پروژه‌</td>
+    <th style="width: 60.797px;">عنوان پروژه‌</th>
     <td style="width: 150.797px;">{{ project.title }}</td>
   </tr>
   <tr>
-    <th style="width: 60.797px;">مالکین پروژه‌</td>
+    <th style="width: 60.797px;">مالکین پروژه‌</th>
     <td style="width: 150.797px;">{{ project.owners_to_str }}</td>
   </tr>
   <tr>
-    <th style="width: 60.797px;">نوع قرارداد پروژه‌</td>
+    <th style="width: 60.797px;">نوع قرارداد پروژه‌</th>
     <td style="width: 150.797px;">{{ project.persian_contract_type }}</td>
   </tr>
   {% if project.contract_type == 'co' %}
     <tr>
-        <th style="width: 60.797px;">دستمزد قرارداد پیمانی</td>
+        <th style="width: 60.797px;">دستمزد قرارداد پیمانی</th>
         <td style="width: 150.797px;">{{ project.formatted_contractual_salary }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">درصد قرارداد پیمانی</td>
+        <th style="width: 60.797px;">درصد قرارداد پیمانی</th>
         <td style="width: 150.797px;">{{ project.contractual_percentage }}</td>
     </tr>
   {% endif %}
   <tr>
-    <th style="width: 60.797px;">شرکای پروژه‌</td>
+    <th style="width: 60.797px;">شرکای پروژه‌</th>
     {% all_partners project.title %}
   </tr>
   <tr>
-    <th style="width: 60.797px;">مجموع مبلغ سرمایه‌گذاری شرکای پروژه</td>
+    <th style="width: 60.797px;">مجموع مبلغ سرمایه‌گذاری شرکای پروژه</th>
     {% total_project_investments project.title %}
   </tr>
   <tr>
-    <th style="width: 60.797px;">پیمانکاران پروژه‌</td>
+    <th style="width: 60.797px;">پیمانکاران پروژه‌</th>
     {% all_contractors project.title %}
   </tr>
   <tr>
-    <th style="width: 60.797px;">مجموع دستمزد پیمانکاران پروژه</td>
+    <th style="width: 60.797px;">مجموع دستمزد پیمانکاران پروژه</th>
     {% total_project_salaries project.title %}
   </tr>
   <tr>
-    <th style="width: 60.797px;">تأمین‌کنندگان پروژه‌</td>
+    <th style="width: 60.797px;">تأمین‌کنندگان پروژه‌</th>
     {% all_suppliers project.title %}
   </tr>
   <tr>
-    <th style="width: 60.797px;">مجموع طلب تأمین‌کنندگان پروژه</td>
+    <th style="width: 60.797px;">مجموع طلب تأمین‌کنندگان پروژه</th>
     {% total_project_requests project.title %}
   </tr>
   <tr>
-    <th style="width: 60.797px;">مجموع دریافت‌های پروژه</td>
+    <th style="width: 60.797px;">مجموع دریافت‌های پروژه</th>
     {% total_project_receives project.title %}
   </tr>
   <tr>
-    <th style="width: 60.797px;">مجموع پرداخت‌های پروژه</td>
+    <th style="width: 60.797px;">مجموع پرداخت‌های پروژه</th>
     {% total_project_payments project.title %}
   </tr>
   <tr>
-    <th style="width: 60.797px;">برآورد ریالی کل هزینه‌های پروژه</td>
-    {% total_project_payments project.title %}
+    <th style="width: 60.797px;">برآورد ریالی کل هزینه‌های پروژه</th>
+    {% total_project_costs project.title %}
   </tr>
 {% endblock %}

@@ -91,7 +91,6 @@ class ReceiveList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:receives_search'
         context['create_url'] = 'government_accounts:receive_create'
-        context['list_url'] = 'government_accounts:receives'
         context['persian_object_name'] = 'دریافت'
         context['record_number'] = record_number
         context['records_count'] = records_count
@@ -206,7 +205,6 @@ class PaymentList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:payments_search'
         context['create_url'] = 'government_accounts:payment_create'
-        context['list_url'] = 'government_accounts:payments'
         context['persian_object_name'] = 'پرداخت'
         context['record_number'] = record_number
         context['records_count'] = records_count
@@ -320,7 +318,6 @@ class ActivityList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:activities_search'
         context['create_url'] = 'government_accounts:activity_create'
-        context['list_url'] = 'government_accounts:activities'
         context['persian_object_name'] = 'فعالیت'
         context['record_number'] = record_number
         context['records_count'] = records_count

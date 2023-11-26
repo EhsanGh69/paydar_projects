@@ -93,12 +93,12 @@
                             
                                 <td class="text-center col-img">
                                     <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#contract{{ forloop.counter }}">
+                                    data-target="#contract{{ row }}">
                                         <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
                                     </a>
                                 </td>
 
-                                {% include 'partials/img_modal.html' with img_type='contract' id=forloop.counter img_src=buyer_seller.contract_image.url label='قرارداد' owner=buyer_seller.full_name %}
+                                {% include 'partials/img_modal.html' with img_type='contract' id=row img_src=buyer_seller.contract_image.url label='قرارداد' owner=buyer_seller.full_name %}
 
                                 <td>{{ buyer_seller.persian_payment_order }}</td>
 

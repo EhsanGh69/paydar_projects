@@ -7,7 +7,7 @@ from jalali_date import datetime2jalali
 
 from government_accounts.models import Receive, Payment, Activity
 from non_government_accounts.models import BuyersSellers, Orders
-from projects.models import Project
+from projects.models import Project, Costs, WorkReference
 
 
 class ReceiveReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -99,3 +99,32 @@ class OrderReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
         return context
 
+
+class CostReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'projects.view_costs'
+    context_object_name = "cost"
+    template_name = "reports/cost_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Costs, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context 
+
+
+class WorkReferenceReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'projects.view_workreference'
+    context_object_name = "work_reference"
+    template_name = "reports/work_reference_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(WorkReference, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context

@@ -1,5 +1,4 @@
 {% extends "reports/base_report.html" %}
-{% load static %}
 {% load jformat %}
 
 {% block title %}
@@ -19,7 +18,7 @@
 
 {% block report_body %}
     <tr>
-        <th style="width: 60.797px;">پروژه مربوطه</td>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
         <td style="width: 150.797px;">{{ buyer_seller.project }}</td>
     </tr>
 
@@ -27,7 +26,7 @@
         <th style="width: 60.797px;">
             <span>نام</span>
             {% if buyer_seller.buyer_seller == 'buy' %}خریدار{% else %}فروشنده{% endif %}
-        </td>
+        </th>
         <td style="width: 150.797px;">{{ buyer_seller.full_name }}</td>
     </tr>
 
@@ -35,7 +34,7 @@
         <th style="width: 60.797px;">
             <span>شماره تماس</span>
             {% if buyer_seller.buyer_seller == 'buy' %}خریدار{% else %}فروشنده{% endif %}
-        </td>
+        </th>
         <td style="width: 150.797px;">{{ buyer_seller.phone }}</td>
     </tr>
 
@@ -43,29 +42,29 @@
         <th style="width: 60.797px;">
             <span>آدرس</span>
             {% if buyer_seller.buyer_seller == 'buy' %}خریدار{% else %}فروشنده{% endif %}
-        </td>
+        </th>
         <td style="width: 150.797px;">{{ buyer_seller.address }}</td>
     </tr>
 
     <tr>
-        <th style="width: 60.797px;">ترتیب پرداخت</td>
+        <th style="width: 60.797px;">ترتیب پرداخت</th>
         <td style="width: 150.797px;">{{ buyer_seller.persian_payment_order }}</td>
     </tr>
 
     {% if buyer_seller.payment_order == 'afc' %}
         <tr>
-            <th style="width: 60.797px;">سقف کنونی</td>
+            <th style="width: 60.797px;">سقف کنونی</th>
             <td style="width: 150.797px;">{{ buyer_seller.current_roof }}</td>
         </tr>
     {% endif %}
 
     <tr>
-        <th style="width: 60.797px;">مبلغ پرداختی</td>
+        <th style="width: 60.797px;">مبلغ پرداختی</th>
         <td style="width: 150.797px;">{{ buyer_seller.payment_amount }}</td>
     </tr>
     
     <tr>
-        <th style="width: 60.797px;">تاریخ پرداخت</td>
+        <th style="width: 60.797px;">تاریخ پرداخت</th>
         <td style="width: 150.797px;">{{ buyer_seller.payment_date|jformat:'%d / %m / %Y' }}</td>
     </tr>
 {% endblock %}

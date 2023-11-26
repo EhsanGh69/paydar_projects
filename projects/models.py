@@ -102,8 +102,10 @@ class WorkReference(models.Model):
     referrer = models.CharField(max_length=250, verbose_name='ارجاع دهنده')
     doing_agent = models.CharField(max_length=250, verbose_name='مأمور انجام')
     follow_confirm = models.BooleanField(default=False, verbose_name='تأیید پیگیری')
-    follow_date = jmodels.jDateTimeField(default=timezone.now, verbose_name='تاریخ پیگیری')
     result_explan = models.TextField(verbose_name='توضیح نتیجه')
+    follow_date = jmodels.jDateField(verbose_name='تاریخ پیگیری')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = WorkReferenceManager()
 
@@ -114,7 +116,6 @@ class WorkReference(models.Model):
     def __str__(self):
         return self.activity_type
     
-
 
 class CostsManager(models.Manager):
     def search(self, query):
@@ -184,7 +185,6 @@ class Costs(models.Model):
     def formatted_export_end_work(self):
         return "{:,}".format(self.export_end_work)
     
-
 
 class PaymentsImagesManager(models.Manager):
     def search(self, query):

@@ -36,7 +36,6 @@ class ContractorsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:contractors_search'
         context['create_url'] = 'non_government_accounts:contractor_create'
-        context['list_url'] = 'non_government_accounts:contractors'
         context['persian_object_name'] = 'پیمانکار'
         context['record_number'] = record_number
         context['records_count'] = records_count
@@ -144,7 +143,6 @@ class SuppliersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:suppliers_search'
         context['create_url'] = 'non_government_accounts:supplier_create'
-        context['list_url'] = 'non_government_accounts:suppliers'
         context['persian_object_name'] = 'تأمین کننده'
         context['record_number'] = record_number
         context['records_count'] = records_count
@@ -252,7 +250,6 @@ class PersonnelList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:personnel_search'
         context['create_url'] = 'non_government_accounts:personnel_create'
-        context['list_url'] = 'non_government_accounts:personnel'
         context['persian_object_name'] = 'شخص پرسنل'
         context['record_number'] = record_number
         context['records_count'] = records_count
@@ -360,7 +357,6 @@ class PartnersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:partners_search'
         context['create_url'] = 'non_government_accounts:partner_create'
-        context['list_url'] = 'non_government_accounts:partners'
         context['persian_object_name'] = 'شریک'
         context['record_number'] = record_number
         context['records_count'] = records_count
@@ -468,7 +464,6 @@ class BuyersSellersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:buyers_sellers_search'
         context['create_url'] = 'non_government_accounts:buyer_seller_create'
-        context['list_url'] = 'non_government_accounts:buyers_sellers'
         context['persian_object_name'] = 'خریدار / فروشنده'
         context['record_number'] = record_number
         context['records_count'] = records_count
@@ -609,7 +604,6 @@ class OrdersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:orders_search'
         context['create_url'] = 'non_government_accounts:order_create'
-        context['list_url'] = 'non_government_accounts:orders'
         context['persian_object_name'] = 'سفارش'
         context['record_number'] = record_number
         context['records_count'] = records_count
@@ -748,7 +742,6 @@ class ConflictOrdersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'non_government_accounts:conflict_orders_search'
         context['create_url'] = 'non_government_accounts:conflict_order_create'
-        context['list_url'] = 'non_government_accounts:conflict_orders'
         context['persian_object_name'] = 'مغایرت سفارش'
         context['record_number'] = record_number
         context['records_count'] = records_count

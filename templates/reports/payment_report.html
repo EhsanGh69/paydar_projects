@@ -1,5 +1,4 @@
 {% extends "reports/base_report.html" %}
-{% load static %}
 {% load jformat %}
 
 {% block title %}پرداخت{% endblock %}
@@ -14,23 +13,23 @@
 
 {% block report_body %}
     <tr>
-        <th style="width: 60.797px;">ارگان طرف حساب</td>
+        <th style="width: 60.797px;">ارگان طرف حساب</th>
         <td style="width: 150.797px;">{{ payment.organization }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">پرداخت بابت</td>
+        <th style="width: 60.797px;">پرداخت بابت</th>
         <td style="width: 150.797px;">{{ payment.payment_for }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">پروژه</td>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
         <td style="width: 150.797px;">{{ payment.project }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">مبلغ پرداختی</td>
+        <th style="width: 60.797px;">مبلغ پرداختی</th>
         <td style="width: 150.797px;">{{ payment.formatted_payment_amount }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">تاریخ پرداخت</td>
+        <th style="width: 60.797px;">تاریخ پرداخت</th>
         <td style="width: 150.797px;">{{ payment.payment_date|jformat:'%d / %m / %Y' }}</td>
     </tr>
 {% endblock %}

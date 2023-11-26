@@ -30,74 +30,75 @@
                     
                     {% if perms.projects.delete_owners or perms.projects.change_owners %}
                         <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
-
                 {% for owner in owners %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ owner.full_name }}</td>
-                        <td>{{ owner.phone }}</td>
+                    {% for row, object in records_dict.items %}
+                        {% if owner.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ owner.full_name }}</td>
+                                <td>{{ owner.phone }}</td>
 
-                        <td class="text-center col-img">
-                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                            data-target="#national_card{{ forloop.counter }}">
-                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                            </a>
-                        </td>
-
-                        {% include 'partials/img_modal.html' with img_type='national_card' id=forloop.counter img_src=owner.national_card_image.url label='کارت ملی' owner=owner.full_name %}
-
-                        <td class="text-center col-img">
-                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                            data-target="#birth_certificate{{ forloop.counter }}">
-                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                            </a>
-                        </td>
-
-                        {% include 'partials/img_modal.html' with img_type='birth_certificate' id=forloop.counter img_src=owner.birth_certificate_image.url label='شناسنامه' owner=owner.full_name %}
-
-                        <td class="text-center col-img">
-                            <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                            data-target="#ownership_document{{ forloop.counter }}">
-                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                            </a>
-                        </td>
-
-                        {% include 'partials/img_modal.html' with img_type='ownership_document' id=forloop.counter img_src=owner.ownership_document_image.url label='سند مالکیت' owner=owner.full_name %}
-
-                        {% if perms.projects.delete_owners or perms.projects.change_owners %}
-                            <td class="action-td text-center">
-                                {% if perms.projects.change_owners %}
-                                    <a href="{% url 'projects:owner_update' owner.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                                <td class="text-center col-img">
+                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                    data-target="#national_card{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
                                     </a>
-                                {% endif %}
+                                </td>
 
-                                {% if perms.projects.delete_owners %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'projects:owner_delete' pk=owner.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف '{{ owner.full_name }}' اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                {% include 'partials/img_modal.html' with img_type='national_card' id=row img_src=owner.national_card_image.url label='کارت ملی' owner=owner.full_name %}
+
+                                <td class="text-center col-img">
+                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                    data-target="#birth_certificate{{ row }}">
+                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
                                     </a>
+                                </td>
+
+                                {% include 'partials/img_modal.html' with img_type='birth_certificate' id=row img_src=owner.birth_certificate_image.url label='شناسنامه' owner=owner.full_name %}
+
+                                <td class="text-center col-img">
+                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                    data-target="#ownership_document{{ row }}">
+                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                    </a>
+                                </td>
+
+                                {% include 'partials/img_modal.html' with img_type='ownership_document' id=row img_src=owner.ownership_document_image.url label='سند مالکیت' owner=owner.full_name %}
+
+                                {% if perms.projects.delete_owners or perms.projects.change_owners %}
+                                    <td class="action-td text-center">
+                                        {% if perms.projects.change_owners %}
+                                            <a href="{% url 'projects:owner_update' owner.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.projects.delete_owners %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'projects:owner_delete' pk=owner.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف '{{ owner.full_name }}' اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
-                
-
             </tbody>
-        
         </table>
     </div>
 </div>

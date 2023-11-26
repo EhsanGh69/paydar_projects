@@ -1,0 +1,57 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+
+{% block title %}
+    ارجاع کار           
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'projects:work_references' %}" class="btn btn-info mb-4">بازگشت به لیست ارجاع کارها</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش ارجاع کار</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
+        <td style="width: 150.797px;">{{ work_reference.project }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">نوع فعالیت</th>
+        <td style="width: 150.797px;">{{ work_reference.activity_type }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">ارجاع دهنده</th>
+        <td style="width: 150.797px;">{{ work_reference.referrer }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">مأمور انجام</th>
+        <td style="width: 150.797px;">{{ work_reference.doing_agent }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">تأیید پیگیری</th>
+        <td style="width: 150.797px;">
+            {% if work_reference.follow_confirm %}
+                تأیید شده
+            {% else %}
+                تأیید نشده
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">شرح نتیجه</th>
+        <td style="width: 150.797px;">{{ work_reference.result_explan }}</td>
+    </tr>
+    
+    <tr>
+        <th style="width: 60.797px;">تاریخ پیگیری</th>
+        <td style="width: 150.797px;">{{ work_reference.follow_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+{% endblock %}

@@ -131,12 +131,12 @@
                                 
                                     <td class="text-center col-img">
                                         <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                        data-target="#sended{{ forloop.counter }}">
+                                        data-target="#sended{{ row }}">
                                             <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
                                         </a>
                                     </td>
 
-                                    {% include 'partials/img_modal.html' with img_type='sended' id=forloop.counter img_src=order.sended_image.url label='' owner=order.sended_image_type_label %}
+                                    {% include 'partials/img_modal.html' with img_type='sended' id=row img_src=order.sended_image.url label='' owner=order.sended_image_type_label %}
 
                                 {% else %}
                                     <td class="text-center col-img">

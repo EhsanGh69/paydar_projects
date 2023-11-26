@@ -1,5 +1,4 @@
 {% extends "reports/base_report.html" %}
-{% load static %}
 {% load jformat %}
 
 {% block title %}دریافت{% endblock %}
@@ -14,23 +13,23 @@
 
 {% block report_body %}
     <tr>
-        <th style="width: 60.797px;">ارگان طرف حساب</td>
+        <th style="width: 60.797px;">ارگان طرف حساب</th>
         <td style="width: 150.797px;">{{ receive.organization }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">دریافت بابت</td>
+        <th style="width: 60.797px;">دریافت بابت</th>
         <td style="width: 150.797px;">{{ receive.receive_for }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">پروژه</td>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
         <td style="width: 150.797px;">{{ receive.project }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">مبلغ دریافتی</td>
+        <th style="width: 60.797px;">مبلغ دریافتی</th>
         <td style="width: 150.797px;">{{ receive.formatted_receive_amount }}</td>
     </tr>
     <tr>
-        <th style="width: 60.797px;">تاریخ دریافت</td>
+        <th style="width: 60.797px;">تاریخ دریافت</th>
         <td style="width: 150.797px;">{{ receive.receive_date|jformat:'%d / %m / %Y' }}</td>
     </tr>
 {% endblock %}

@@ -41,61 +41,70 @@
                     
                     {% if perms.projects.delete_workreference or perms.projects.change_workreference %}
                         <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 172.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
             </thead>
-
             <tbody>
-
                 {% for work_reference in work_references %}
-                    <tr role="row" class="odd border-bottom">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ work_reference.project }}</td>
-                        <td>{{ work_reference.activity_type }}</td>
-                        <td>{{ work_reference.referrer }}</td>
-                        <td>{{ work_reference.doing_agent }}</td>
+                    {% for row, object in records_dict.items %}
+                        {% if work_reference.pk == object.pk %}
+                            <tr role="row" class="odd border-bottom">
+                                <td>{{ row }}</td>
+                                <td>{{ work_reference.project }}</td>
+                                <td>{{ work_reference.activity_type }}</td>
+                                <td>{{ work_reference.referrer }}</td>
+                                <td>{{ work_reference.doing_agent }}</td>
 
-                        <td class="text-center" data-sort="{{ work_reference.follow_confirm }}">
-                            {% if work_reference.follow_confirm %}
-                                <i class="fa fa-check-circle" style="color: green;"></i>
-                            {% else %}
-                                <i class="fa fa-minus-circle" style="color: red;"></i>
-                            {% endif %}
-                        </td>
-                        
-                        <td data-sort="{{ work_reference.follow_date|date:'Ymd' }}">
-                            {{ work_reference.follow_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                        </td>
-                        <td>{{ work_reference.result_explan }}</td>
-                        
-                        {% if perms.projects.delete_workreference or perms.projects.change_workreference %}
-                            <td class="action-td border-left text-center">
-                                {% if perms.projects.change_workreference %}
-                                    <a href="{% url 'projects:work_reference_update' work_reference.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                {% endif %}
+                                <td class="text-center" data-sort="{{ work_reference.follow_confirm }}">
+                                    {% if work_reference.follow_confirm %}
+                                        <i class="fa fa-check-circle" style="color: green;"></i>
+                                    {% else %}
+                                        <i class="fa fa-minus-circle" style="color: red;"></i>
+                                    {% endif %}
+                                </td>
+                                
+                                <td data-sort="{{ work_reference.follow_date|date:'Ymd' }}">
+                                    {{ work_reference.follow_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                <td>{{ work_reference.result_explan }}</td>
+                                
+                                {% if perms.projects.delete_workreference or perms.projects.change_workreference %}
+                                    <td class="action-td border-left text-center">
+                                        {% if perms.projects.change_workreference %}
+                                            <a href="{% url 'projects:work_reference_update' work_reference.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
 
-                                {% if perms.projects.delete_workreference %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'projects:work_reference_delete' pk=work_reference.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف '{{ work_reference.activity_type }}' اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                        {% if perms.projects.delete_workreference %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'projects:work_reference_delete' pk=work_reference.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف '{{ work_reference.activity_type }}' اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.projects.view_workreference %}
+                                            <a href="{% url 'reports:work_reference_report' work_reference.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-
         </table>
     </div>
 </div>
