@@ -1,5 +1,6 @@
-<div class="row">
+{% load jformat %}
 
+<div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
             <thead>
@@ -10,7 +11,21 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 236.797px;">
-                        سفارش
+                        <span>&emsp;&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.797px;">
+                        نوع سفارش
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 236.797px;">
+                        تأمین کننده سفارش
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تاریخ سفارش
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
@@ -19,6 +34,16 @@
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
                         مقدار مغایرت
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
                     </th>
 
                     {% if perms.non_government_accounts.delete_conflictorders or perms.non_government_accounts.change_conflictorders %}
@@ -37,7 +62,12 @@
                         {% if conflict_order.pk == object.pk %}
                             <tr role="row" class="odd">
                                 <td>{{ row }}</td>
-                                <td>{{ conflict_order.order }}</td>
+                                <td>{{ conflict_order.order.project }}</td>
+                                <td>{{ conflict_order.order.order_type }}</td>
+                                <td>{{ conflict_order.order.supplier }}</td>
+                                <td data-sort="{{ conflict_order.order.order_date|date:'Ymd' }}">
+                                    {{ conflict_order.order.order_date|jformat:'%d / %m / %Y' }}
+                                </td>
 
                                 <td>
                                     {% if conflict_order.conflict_type == 'pos' %}
@@ -51,6 +81,19 @@
                                     {{ conflict_order.formatted_conflict_amount }}
                                     {{ conflict_order.order.persian_measurement_unit }}
                                 </td>
+
+                                <td data-sort="{{ conflict_order.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ conflict_order.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if conflict_order.update_record|date:'Ymd-HMS' == conflict_order.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ conflict_order.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ conflict_order.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
                                 
                                 {% if perms.non_government_accounts.delete_conflictorders or perms.non_government_accounts.change_conflictorders %}
                                     <td class="action-td text-center">
@@ -71,6 +114,13 @@
                                             <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
                                             </a>
                                         {% endif %}
+
+                                        {% if perms.non_government_accounts.view_conflictorders %}
+                                            <a href="{% url 'reports:conflict_order_report' conflict_order.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
                                     </td>
                                 {% endif %}
                             </tr>
@@ -80,5 +130,4 @@
             </tbody>
         </table>
     </div>
-    
 </div>

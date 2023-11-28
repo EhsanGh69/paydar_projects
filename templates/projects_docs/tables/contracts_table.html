@@ -38,88 +38,112 @@
                         تاریخ قرارداد
                     </th>
 
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
+
                     {% if perms.projects_docs.delete_contracts or perms.projects_docs.change_contracts %}
                         <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
-
                 {% for contract in contracts %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
+                    {% for row, object in records_dict.items %}
+                        {% if contract.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
 
-                        
-                        {% if contract.related_to_project %}
-                            <td>{{ contract.related_to_project }}</td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                        {% endif %}
+                                {% if contract.related_to_project %}
+                                    <td>{{ contract.related_to_project }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
 
-                        {% if contract.unrelated_to_project %}
-                            <td>{{ contract.unrelated_to_project }}</td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                        {% endif %}
-                        
-                        <td class="text-center">
-                            {% if contract.contract_type == 'buy' %}
-                                خرید    
-                            {% elif contract.contract_type == 'sal' %}
-                                فروش        
-                            {% elif contract.contract_type == 'rnt' %}
-                                اجاره        
-                            {% else %}
-                                معاوضه
-                            {% endif %}
-                        </td>
-
-                        <td>{{ contract.contract_title }}</td>
-
-                        <td>{{ contract.contract_party }}</td>
-
-                        <td class="text-center col-img">
-                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                            data-target="#contract_image{{ forloop.counter }}">
-                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                            </a>
-                        </td>
-
-                        {% include 'partials/img_modal.html' with img_type='contract_image' id=forloop.counter img_src=contract.contract_image.url label='قرارداد' owner=contract.contract_title %}
-
-                        
-                        <td data-sort="{{ contract.contract_date|date:'Ymd' }}">
-                            {{ contract.contract_date|jformat:'%d / %m / %Y' }}
-                        </td>
-
-                        {% if perms.projects_docs.delete_contracts or perms.projects_docs.change_contracts %}
-                            <td class="action-td d-flex justify-content-center pb-4 rounded-0">
-                                {% if perms.projects_docs.change_contracts %}
-                                    <a href="{% url 'projects_docs:contract_update' contract.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
+                                {% if contract.unrelated_to_project %}
+                                    <td>{{ contract.unrelated_to_project }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
                                 {% endif %}
                                 
-                                {% if perms.projects_docs.delete_contracts %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'projects_docs:contract_delete' pk=contract.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف این قرارداد اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
-                                {% endif %}
-                            </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
+                                <td class="text-center">
+                                    {% if contract.contract_type == 'buy' %}
+                                        خرید    
+                                    {% elif contract.contract_type == 'sal' %}
+                                        فروش        
+                                    {% elif contract.contract_type == 'rnt' %}
+                                        اجاره        
+                                    {% else %}
+                                        معاوضه
+                                    {% endif %}
+                                </td>
 
+                                <td>{{ contract.contract_title }}</td>
+
+                                <td>{{ contract.contract_party }}</td>
+
+                                <td class="text-center col-img">
+                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                    data-target="#contract_image{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                    </a>
+                                </td>
+
+                                {% include 'partials/img_modal.html' with img_type='contract_image' id=row img_src=contract.contract_image.url label='قرارداد' owner=contract.contract_title %}
+
+                                <td data-sort="{{ contract.contract_date|date:'Ymd' }}">
+                                    {{ contract.contract_date|jformat:'%d / %m / %Y' }}
+                                </td>
+
+                                <td data-sort="{{ contract.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ contract.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if contract.update_record|date:'Ymd-HMS' == contract.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ contract.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ contract.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
+
+                                {% if perms.projects_docs.delete_contracts or perms.projects_docs.change_contracts %}
+                                    <td class="action-td d-flex justify-content-center pb-4 rounded-0">
+                                        {% if perms.projects_docs.change_contracts %}
+                                            <a href="{% url 'projects_docs:contract_update' contract.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+                                        
+                                        {% if perms.projects_docs.delete_contracts %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'projects_docs:contract_delete' pk=contract.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف این قرارداد اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
             </tbody>
-        
         </table>
     </div>
 </div>

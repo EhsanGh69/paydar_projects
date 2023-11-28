@@ -3,24 +3,24 @@
 
 {% block previous_page_url %}
     {% if 'search' in request.resolver_match.url_name %}
-        {% pagination_urls True False False record_number None search_url list_filters page_obj None %}
+        {% pagination_urls True False False record_number None search_url list_filters order_by page_obj None %}
     {% else %}
-        {% pagination_urls True False False record_number list_url None None page_obj None %}
+        {% pagination_urls True False False record_number list_url None None order_by page_obj None %}
     {% endif %}
 {% endblock  %}
 
 {% block page_item_url %}
     {% if 'search' in request.resolver_match.url_name %}
-        {% pagination_urls False True False record_number None search_url list_filters None page_item %}
+        {% pagination_urls False True False record_number None search_url list_filters order_by None page_item %}
     {% else %}
-        {% pagination_urls False True False record_number list_url None None None page_item %}
+        {% pagination_urls False True False record_number list_url None None order_by None page_item %}
     {% endif %}
 {% endblock  %}
 
 {% block next_page_url %}
     {% if 'search' in request.resolver_match.url_name %}
-        {% pagination_urls False False True record_number None search_url list_filters page_obj None %}
+        {% pagination_urls False False True record_number None search_url list_filters order_by page_obj None %}
     {% else %}
-        {% pagination_urls False False True record_number list_url None None page_obj None %}
+        {% pagination_urls False False True record_number list_url None None order_by page_obj None %}
     {% endif %}
 {% endblock  %}

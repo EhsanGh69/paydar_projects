@@ -36,11 +36,40 @@ class ContractsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "contracts"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Contracts.objects.order_by(order_by).all()
+        else:
+            queryset = Contracts.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = Contracts.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects_docs:contracts_search'
         context['create_url'] = 'projects_docs:contract_create'
+        context['list_url'] = 'projects_docs:contracts'
         context['persian_object_name'] = 'قرارداد'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'related_to_project__title', 'طرف قرارداد': 'contract_party',
+        'تاریخ قرارداد': '-contract_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -103,10 +132,12 @@ class ContractsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global query
         global date_filter
         global contract_type_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         contract_type_filter = self.request.GET.get('contract_type')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
@@ -124,17 +155,38 @@ class ContractsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:contracts_search'
         context['list_url'] = 'projects_docs:contracts'
-        context['query'] = query
-        context['date_filter'] = date_filter
-        context['contract_type_filter'] = contract_type_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter, 
+        'contract_type': contract_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'پروژه': 'related_to_project__title', 'طرف قرارداد': 'contract_party',
+        'تاریخ قرارداد': '-contract_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -152,11 +204,40 @@ class ProceedingsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "proceedings"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Proceedings.objects.order_by(order_by).all()
+        else:
+            queryset = Proceedings.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = Proceedings.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects_docs:proceedings_search'
         context['create_url'] = 'projects_docs:proceeding_create'
+        context['list_url'] = 'projects_docs:proceedings'
         context['persian_object_name'] = 'صورت جلسه'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'طرف حساب': 'account_party',
+        'تاریخ صورت جلسه': '-proceeding_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -201,10 +282,12 @@ class ProceedingsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global query
         global date_filter
         global proceeding_type_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         proceeding_type_filter = self.request.GET.get('proceeding_type')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
@@ -222,17 +305,38 @@ class ProceedingsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:proceedings_search'
         context['list_url'] = 'projects_docs:proceedings'
-        context['query'] = query
-        context['date_filter'] = date_filter
-        context['proceeding_type_filter'] = proceeding_type_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter, 
+        'proceeding_type': proceeding_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'پروژه': 'project__title', 'طرف حساب': 'account_party',
+        'تاریخ صورت جلسه': '-proceeding_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -249,11 +353,40 @@ class AgreementsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "agreements"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Agreements.objects.order_by(order_by).all()
+        else:
+            queryset = Agreements.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = Agreements.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects_docs:agreements_search'
         context['create_url'] = 'projects_docs:agreement_create'
+        context['list_url'] = 'projects_docs:agreements'
         context['persian_object_name'] = 'توافق‌نامه'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'طرف حساب': 'account_party',
+        'تاریخ توافق‌نامه': '-agreement_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -297,9 +430,11 @@ class AgreementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global not_found
         global query
         global date_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
@@ -310,16 +445,37 @@ class AgreementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:agreements_search'
         context['list_url'] = 'projects_docs:agreements'
-        context['query'] = query
-        context['date_filter'] = date_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'طرف حساب': 'account_party',
+        'تاریخ توافق‌نامه': '-agreement_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -336,11 +492,39 @@ class BankReceiptsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "bank_receipts"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = BankReceipts.objects.order_by(order_by).all()
+        else:
+            queryset = BankReceipts.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = BankReceipts.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects_docs:bank_receipts_search'
         context['create_url'] = 'projects_docs:bank_receipt_create'
+        context['list_url'] = 'projects_docs:bank_receipts'
         context['persian_object_name'] = 'رسید بانکی'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'تاریخ': '-receipt_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -385,10 +569,12 @@ class BankReceiptsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global query
         global date_filter
         global receipt_type_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         receipt_type_filter = self.request.GET.get('receipt_type')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
@@ -406,17 +592,37 @@ class BankReceiptsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:bank_receipts_search'
         context['list_url'] = 'projects_docs:bank_receipts'
-        context['query'] = query
-        context['date_filter'] = date_filter
-        context['receipt_type_filter'] = receipt_type_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter, 
+        'receipt_type': receipt_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'تاریخ': '-receipt_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -433,11 +639,39 @@ class ConditionStatementsList(LoginRequiredMixin, PermissionRequiredMixin, ListV
     context_object_name = "condition_statements"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = ConditionStatements.objects.order_by(order_by).all()
+        else:
+            queryset = ConditionStatements.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = ConditionStatements.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects_docs:condition_statements_search'
         context['create_url'] = 'projects_docs:condition_statement_create'
+        context['list_url'] = 'projects_docs:condition_statements'
         context['persian_object_name'] = 'صورت وضعیت'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'پیمانکار': 'contractor__full_name' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -482,10 +716,12 @@ class ConditionStatementsSearch(LoginRequiredMixin, PermissionRequiredMixin, Lis
         global query
         global accounting_confirm_filter
         global management_confirm_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         accounting_confirm_filter = self.request.GET.get('accounting_confirm')
         management_confirm_filter = self.request.GET.get('management_confirm')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
@@ -503,17 +739,37 @@ class ConditionStatementsSearch(LoginRequiredMixin, PermissionRequiredMixin, Lis
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:condition_statements_search'
         context['list_url'] = 'projects_docs:condition_statements'
-        context['query'] = query
-        context['accounting_confirm_filter'] = accounting_confirm_filter
-        context['management_confirm_filter'] = management_confirm_filter
+        context['list_filters'] = { 'data_search': query, 'accounting_confirm': accounting_confirm_filter, 
+        'management_confirm': management_confirm_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'پیمانکار': 'contractor__full_name' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -531,11 +787,39 @@ class RegisteredDocsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "registered_docs"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = RegisteredDocs.objects.order_by(order_by).all()
+        else:
+            queryset = RegisteredDocs.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = RegisteredDocs.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects_docs:registered_docs_search'
         context['create_url'] = 'projects_docs:registered_doc_create'
+        context['list_url'] = 'projects_docs:registered_docs'
         context['persian_object_name'] = 'سند ثبتی'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -579,9 +863,11 @@ class RegisteredDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         global not_found
         global query
         global doc_type_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         doc_type_filter = self.request.GET.get('doc_type')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
@@ -592,16 +878,36 @@ class RegisteredDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:registered_docs_search'
         context['list_url'] = 'projects_docs:registered_docs'
-        context['query'] = query
-        context['doc_type_filter'] = doc_type_filter
+        context['list_filters'] = { 'data_search': query, 'doc_type': doc_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -619,11 +925,40 @@ class OfficialDocsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "official_docs"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = OfficialDocs.objects.order_by(order_by).all()
+        else:
+            queryset = OfficialDocs.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = OfficialDocs.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects_docs:official_docs_search'
         context['create_url'] = 'projects_docs:official_doc_create'
+        context['list_url'] = 'projects_docs:official_docs'
         context['persian_object_name'] = 'سند اداری'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'عنوان سند': 'doc_title',
+        'تاریخ ارسال / دریافت': '-send_receive_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -694,10 +1029,12 @@ class OfficialDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global query
         global date_filter
         global doc_type_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         doc_type_filter = self.request.GET.get('doc_type')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
@@ -729,24 +1066,41 @@ class OfficialDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'projects_docs:official_docs_search'
         context['list_url'] = 'projects_docs:official_docs'
-        context['query'] = query
-        context['date_filter'] = date_filter
-        context['doc_type_filter'] = doc_type_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter, 
+        'doc_type': doc_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'پروژه': 'project__title', 'عنوان سند': 'doc_title',
+        'تاریخ ارسال/دریافت': '-send_receive_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
 # OfficialDocs - End
 
 # -----------------------------------------------------
-
-
-
-

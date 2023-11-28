@@ -12,9 +12,9 @@
 
 {% block record_control %}
     {% if 'search' in request.resolver_match.url_name %}
-        {% objects_records None search_url record_number records_count list_filters %}
+        {% objects_records None search_url record_number records_count fields_order order_by list_filters %}
     {% else %}
-        {% objects_records list_url None record_number records_count %}
+        {% objects_records list_url None record_number records_count fields_order order_by %}
     {% endif %}
 {% endblock %}
     

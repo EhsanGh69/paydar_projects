@@ -1,3 +1,5 @@
+{% load jformat %}
+
 <div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
@@ -9,7 +11,9 @@
                     </th>
 
                     <th class="text-center border-bottom-0" rowspan="2" colspan="1" style="width: 180.797px;">
-                        پروژه                                
+                        <span>&emsp;&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;&emsp;</span>                           
                     </th>
 
                     <td class="text-center text-light" rowspan="1" colspan="4" style="width: 172.797px; background-color: #808080;">
@@ -19,6 +23,16 @@
                     <td class="text-center text-light" rowspan="1" colspan="5" style="width: 172.797px; background-color: #808080;">
                         هزینه‌های شهرداری
                     </td>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
                     
                     {% if perms.projects.delete_paymentsimages or perms.projects.change_paymentsimages %}
                         <th class="text-center border-bottom-0 rounded-0 action-th" rowspan="2" colspan="1" style="width: 190.797px;">
@@ -157,6 +171,19 @@
                                 </td>
 
                                 {% include 'partials/img_modal.html' with img_type='social_security_share' id=row img_src=payments_image.social_security_share.url label='فیش پرداختی سهم تأمین اجتماعی' owner=payments_image.project %}
+
+                                <td data-sort="{{ payments_image.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ payments_image.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if payments_image.update_record|date:'Ymd-HMS' == payments_image.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ payments_image.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ payments_image.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
 
                                 {% if perms.projects.delete_paymentsimages or perms.projects.change_paymentsimages %}
                                     <td class="action-td text-center">

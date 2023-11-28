@@ -11,7 +11,9 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        پروژه‌
+                        <span>&emsp;&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -26,65 +28,85 @@
                         تاریخ توافق‌نامه
                     </th>
 
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
+
                     {% if perms.projects.delete_agreements or perms.projects.change_agreements %}
                         <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
-
                 {% for agreement in agreements %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
+                    {% for row, object in records_dict.items %}
+                        {% if agreement.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ agreement.project }}</td>
+                                <td>{{ agreement.account_party }}</td>
 
-                        <td>{{ agreement.project }}</td>
-
-                        <td>{{ agreement.account_party }}</td>
-
-                        <td class="text-center col-img">
-                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                            data-target="#agreement_image{{ forloop.counter }}">
-                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                            </a>
-                        </td>
-
-                        {% include 'partials/img_modal.html' with img_type='agreement_image' id=forloop.counter img_src=agreement.agreement_image.url label='توافق‌نامه' owner=agreement.account_party %}
-
-                        
-                        <td data-sort="{{ agreement.agreement_date|date:'Ymd' }}">
-                            {{ agreement.agreement_date|jformat:'%d / %m / %Y' }}
-                        </td>
-
-                        {% if perms.projects.delete_agreements or perms.projects.change_agreements %}
-                            <td class="action-td d-flex justify-content-center p-3 rounded-0">
-                                {% if perms.projects.change_agreements %}
-                                    <a href="{% url 'projects_docs:agreement_update' agreement.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                                <td class="text-center col-img">
+                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                    data-target="#agreement_image{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
                                     </a>
+                                </td>
+                                {% include 'partials/img_modal.html' with img_type='agreement_image' id=row img_src=agreement.agreement_image.url label='توافق‌نامه' owner=agreement.account_party %}
+
+                                <td data-sort="{{ agreement.agreement_date|date:'Ymd' }}">
+                                    {{ agreement.agreement_date|jformat:'%d / %m / %Y' }}
+                                </td>
+
+                                <td data-sort="{{ agreement.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ agreement.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if agreement.update_record|date:'Ymd-HMS' == agreement.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ agreement.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ agreement.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
                                 {% endif %}
 
-                                {% if perms.projects.delete_agreements %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'projects_docs:agreement_delete' pk=agreement.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف این توافق‌نامه اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                {% if perms.projects.delete_agreements or perms.projects.change_agreements %}
+                                    <td class="action-td d-flex justify-content-center p-3 rounded-0">
+                                        {% if perms.projects.change_agreements %}
+                                            <a href="{% url 'projects_docs:agreement_update' agreement.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.projects.delete_agreements %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'projects_docs:agreement_delete' pk=agreement.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف این توافق‌نامه اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
-                
-
             </tbody>
-        
         </table>
     </div>
 </div>

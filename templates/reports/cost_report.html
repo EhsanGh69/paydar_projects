@@ -17,7 +17,6 @@
 {% endblock %}
 
 {% block report_body %}
-
     <tr>
         <th style="width: 60.797px;">انشعاب آب</th>
         <td style="width: 150.797px;">
@@ -25,7 +24,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">انشعاب برق</th>
         <td style="width: 150.797px;">
@@ -33,7 +31,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">انشعاب گاز</th>
         <td style="width: 150.797px;">
@@ -41,7 +38,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">اشتراک تلفن</th>
         <td style="width: 150.797px;">
@@ -49,7 +45,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">دفتر طراح</th>
         <td style="width: 150.797px;">
@@ -57,7 +52,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">ناظرین</th>
         <td style="width: 150.797px;">
@@ -65,7 +59,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">نظام مهندسی</th>
         <td style="width: 150.797px;">
@@ -73,7 +66,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">تهیه نقشه کروکی</th>
         <td style="width: 150.797px;">
@@ -81,7 +73,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">صدور پروانه ساخت</th>
         <td style="width: 150.797px;">
@@ -89,7 +80,6 @@
             <span>ریال</span>
         </td>
     </tr>
-
     <tr>
         <th style="width: 60.797px;">صدور پایان کار</th>
         <td style="width: 150.797px;">
@@ -97,18 +87,8 @@
             <span>ریال</span>
         </td>
     </tr>
-
-    <tr>
-        <th style="width: 60.797px;">صدور پایان کار</th>
-        <td style="width: 150.797px;">
-            <span>{{ cost.export_end_work }}</span>
-            <span>ریال</span>
-        </td>
-    </tr>
-
     <tr>
         <th style="width: 60.797px;">جمع</th>
-        {% total_project_costs project.title %}
+        {% total_costs cost.project.title %}
     </tr>
-
 {% endblock %}

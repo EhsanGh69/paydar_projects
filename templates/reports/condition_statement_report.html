@@ -1,0 +1,60 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+
+{% block title %}صورت وضعیت{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'projects_docs:condition_statements' %}" class="btn btn-info mb-4">بازگشت به لیست صورت وضعیت‌ها</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش صورت وضعیت</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
+        <td style="width: 150.797px;">{{ condition_statement.project }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">پیمانکار</th>
+        <td style="width: 150.797px;">{{ condition_statement.contractor }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">واحد کار</th>
+        <td style="width: 150.797px;">{{ condition_statement.persian_work_unit }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">مبلغ درخواستی پیمانکار</th>
+        <td style="width: 150.797px;">
+            {{ condition_statement.formatted_requested_amount }}
+            ریال
+        </td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">مبلغ تأییدشده سرپرست کارگاه</th>
+        <td style="width: 150.797px;">
+            {{ condition_statement.formatted_confirmed_amount }}
+            ریال
+        </td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">وضعیت تأیید حسابداری</th>
+        <td style="width: 150.797px;">{{ condition_statement.persian_accounting_confirm }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">وضعیت تأیید مدیریت</th>
+        <td style="width: 150.797px;">{{ condition_statement.persian_management_confirm }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">مبلغ واریزی نهایی</th>
+        <td style="width: 150.797px;">
+            {% if condition_statement.management_confirm == 'con' %}
+                {{ condition_statement.formatted_final_deposit_amount }}
+                ریال
+            {% else %}
+                _
+            {% endif %}
+        </td>
+    </tr>
+{% endblock %}

@@ -1,3 +1,5 @@
+{% load jformat %}
+
 <div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
@@ -9,7 +11,9 @@
                     </th>
 
                     <th class="text-center" rowspan="2" colspan="1" style="width: 150.797px;">
-                        پروژه                                
+                        <span>&emsp;&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;&emsp;</span>                               
                     </th>
 
                     <td class="text-center text-light" rowspan="1" colspan="4" style="width: 172.094px; background-color: #808080;">
@@ -23,6 +27,16 @@
                     <td class="text-center text-light" rowspan="1" colspan="2" style="width: 172.797px; background-color: #808080;">
                         هزینه‌های شهرداری (ریال)
                     </td>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
                     
                     {% if perms.projects.delete_costs or perms.projects.change_costs %}
                         <th class="text-center rounded-0 action-th" rowspan="2" colspan="1" style="width: 190.797px;">
@@ -35,43 +49,63 @@
                 <tr role="row">
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 70.094px;">
-                        آب
+                        <span>&emsp;&emsp;</span>
+                        <span>آب</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 70.797px;">
-                        برق
+                        <span>&emsp;&emsp;</span>
+                        <span>برق</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 70.797px;">
-                        گاز
+                        <span>&emsp;&emsp;</span>
+                        <span>گاز</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 70.797px;">
-                        تلفن 
+                        <span>&emsp;&emsp;</span>
+                        <span>تلفن</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
-                        دفتر طراح
+                        <span>&emsp;</span>
+                        <span>دفتر طراح</span>
+                        <span>&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
-                        ناظرین
+                        <span>&emsp;&emsp;</span>
+                        <span>ناظرین</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
-                        نظام مهندسی
+                        <span>&emsp;</span>
+                        <span>نظام مهندسی</span>
+                        <span>&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
-                        نقشه کروکی
+                        <span>&emsp;</span>
+                        <span>نقشه کروکی</span>
+                        <span>&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
-                        صدور پروانه
+                        <span>&emsp;</span>
+                        <span>صدور پروانه</span>
+                        <span>&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 75.797px;">
-                        صدور پایان کار
+                        <span>&emsp;</span>
+                        <span>صدور پایان کار</span>
+                        <span>&emsp;</span>
                     </th>
 
                 </tr>
@@ -120,6 +154,19 @@
                                 <td data-sort="{{ cost.export_end_work }}">
                                     {{ cost.formatted_export_end_work }}
                                 </td>
+
+                                <td data-sort="{{ cost.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ cost.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if cost.update_record|date:'Ymd-HMS' == cost.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ cost.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ cost.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
                                 
                                 {% if perms.projects.delete_costs or perms.projects.change_costs %}
                                     <td class="action-td d-flex justify-content-center">

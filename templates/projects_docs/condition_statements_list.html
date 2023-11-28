@@ -1,5 +1,6 @@
 {% extends 'base_list.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست صورت وضعیت‌ها{% endblock %}
 
@@ -9,12 +10,20 @@
     {% include 'projects_docs/filters/condition_statements_filter.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت صورت وضعیت جدید' create_perm=perms.projects_docs.add_conditionstatements %}
 {% endblock %}
 
+{% block record_control %}
+    {% if 'search' in request.resolver_match.url_name %}
+        {% objects_records None search_url record_number records_count fields_order order_by list_filters %}
+    {% else %}
+        {% objects_records list_url None record_number records_count fields_order order_by %}
+    {% endif %}
+{% endblock %}
+
 {% block table %}
     {% include 'projects_docs/tables/condition_statements_table.html' %}
 {% endblock %}
 
 {% block pagination %}
-    {% include 'projects_docs/paginations/condition_statements_pagination.html' with page_obj=page_obj %}
+    {% include 'partials/objects_pagination.html' %}
 {% endblock %}
 
 {% block filter_control %}

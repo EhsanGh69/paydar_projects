@@ -1,16 +1,30 @@
-{% if 'search' in request.resolver_match.url_name %}
-<a href="{% url list_url %}" class="btn-lg btn-danger btn-lg pb-0" title="پاک کردن نتایج جستجو">
-    <i class="fa-solid fa-filter-circle-xmark" style="font-size: 1.5rem;"></i>
-</a>
-{% elif create_perm %}
-<a href="{% url create_url %}" class="btn-lg btn-success pb-0" title="{{ title }}">
-    {% if request.resolver_match.url_name == 'users' or request.resolver_match.url_name == 'users_search' %}
-        <i class="fa-solid fa-user-plus" style="font-size: 1.5rem;"></i>
-    {% else %}
-        <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
-    {% endif %}
-</a>
-{% endif %}
+<div class="d-flex justify-content-between">
+    <div>
+        {% if 'search' in request.resolver_match.url_name %}
+            <a href="{% url list_url %}" class="btn-lg btn-danger btn-lg pb-0" title="پاک کردن نتایج جستجو">
+                <i class="fa-solid fa-filter-circle-xmark" style="font-size: 1.5rem;"></i>
+            </a>
+        {% elif create_perm %}
+        <a href="{% url create_url %}" class="btn-lg btn-success pb-0" title="{{ title }}">
+            {% if 'users' in request.resolver_match.url_name %}
+                <i class="fa-solid fa-user-plus" style="font-size: 1.5rem;"></i>
+            {% else %}
+                <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+            {% endif %}
+        </a>
+        {% endif %}
+    </div>
+    <div>
+        {% if 'users' not in request.resolver_match.url_name and create_perm %}
+            <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
+                <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
+            </button>
+            <button class="btn btn-success mr-2" id="excel-btn" onclick="ExportToExcel('.xls')" title="خروجی اکسل">
+                <i class="fa-solid fa-file-excel" style="font-size: 1.5rem;"></i>
+            </button>
+        {% endif %}
+    </div>
+</div>
 
 <div class="row my-2">
     <div class="col-12 col-xl-9 mt-2">
@@ -63,17 +77,4 @@
             </form>
         </div>
     </div>
-    {% if request.resolver_match.url_name != 'users' and request.resolver_match.url_name != 'users_search' and create_perm %}
-            <div class="col-12 col-xl-3 mt-2" id="print-table">
-
-                <button class="btn btn-success mr-2" id="excel-btn" onclick="ExportToExcel('.xls')" title="خروجی اکسل">
-                    <i class="fa-solid fa-file-excel" style="font-size: 1.5rem;"></i>
-                </button>
-
-                <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
-                    <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
-                </button>
-
-            </div>
-    {% endif %}
 </div>

@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.query import Q
+from django.utils import timezone
 
 from django_jalali.db import models as jmodels
 
@@ -37,6 +38,8 @@ class Contracts(models.Model):
     contract_party = models.CharField(max_length=250, verbose_name='طرف قرارداد')
     contract_image = models.ImageField(upload_to='images/contract_images', verbose_name='تصویر قرارداد')
     contract_date = jmodels.jDateField(verbose_name='تاریخ قرارداد')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = ContractsManager()
 
@@ -70,6 +73,8 @@ class Proceedings(models.Model):
     proceeding_type = models.CharField(max_length=3, choices=PROCEEDING_TYPE_CHOICES, verbose_name='نوع صورت جلسه')
     proceeding_image = models.ImageField(upload_to='images/proceeding_image', verbose_name='تصویر صورت جلسه')
     proceeding_date = jmodels.jDateField(verbose_name='تاریخ صورت جلسه')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = ProceedingsManager()
 
@@ -98,6 +103,8 @@ class Agreements(models.Model):
     account_party = models.CharField(max_length=250, verbose_name='طرف حساب')
     agreement_image = models.ImageField(upload_to='images/agreement_images', verbose_name='تصویر توافق‌نامه')
     agreement_date = jmodels.jDateField(verbose_name='تاریخ توافق‌نامه')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = AgreementsManager()
 
@@ -127,8 +134,10 @@ class BankReceipts(models.Model):
                                 related_name='bank_receipt_projects',
                                 verbose_name='پروژه‌')
     receive_or_pay = models.CharField(max_length=3, choices=RECEIVE_PAY_CHOICES, verbose_name='دریافت / پرداخت')
-    receipt_date = jmodels.jDateField(verbose_name='تاریخ')
     receipt_image = models.ImageField(upload_to='images/receipt_images', verbose_name='تصویر رسید بانکی')
+    receipt_date = jmodels.jDateField(verbose_name='تاریخ')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = BankReceiptsManager()
 
@@ -183,6 +192,8 @@ class ConditionStatements(models.Model):
                                           verbose_name='وضعیت تأیید مدیریت')
     final_deposit_amount = models.PositiveBigIntegerField(default=0, null=True, blank=True,
                                                           verbose_name='مبلغ واریزی نهایی')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = ConditionStatementsManager()
 
@@ -201,6 +212,32 @@ class ConditionStatements(models.Model):
 
     def formatted_final_deposit_amount(self):
         return "{:,}".format(self.final_deposit_amount)
+    
+    def persian_work_unit(self):
+        if self.work_unit == 'sqm':
+            return 'مترمربع'
+        elif self.work_unit == 'mel':
+            return 'مترطول'
+        elif self.work_unit == 'kgm':
+            return 'کیلوگرم'
+        else:
+            return 'تن'
+    
+    def persian_accounting_confirm(self):
+        if self.accounting_confirm == 'con':
+            return 'تأییدشده'
+        elif self.accounting_confirm == 'nco':
+            return 'تأییدنشده'
+        else:
+            return 'در انتظار تأیید'
+        
+    def persian_management_confirm(self):
+        if self.management_confirm == 'con':
+            return 'تأییدشده'
+        elif self.management_confirm == 'nco':
+            return 'تأییدنشده'
+        else:
+            return 'در انتظار تأیید'
 
 
 class RegisteredDocsManager(models.Manager):
@@ -224,6 +261,8 @@ class RegisteredDocs(models.Model):
                                 verbose_name='پروژه‌')
     doc_type = models.CharField(max_length=3, choices=DOC_TYPE_CHOICES, verbose_name='نوع سند')
     doc_image = models.ImageField(upload_to='images/registered_doc_images', verbose_name='تصویر سند')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = RegisteredDocsManager()
 
@@ -275,6 +314,8 @@ class OfficialDocs(models.Model):
     doc_title = models.CharField(max_length=250, verbose_name='عنوان سند')
     doc_image = models.ImageField(upload_to='images/official_doc_images', verbose_name='تصویر سند')
     send_receive_date = jmodels.jDateField(verbose_name='تاریخ ارسال / دریافت')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = OfficialDocsManager()
 

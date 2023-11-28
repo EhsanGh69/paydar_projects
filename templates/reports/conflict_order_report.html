@@ -1,0 +1,63 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+{% load non_gov_tags %}
+
+{% block title %}
+    مغایرت سفارش
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'non_government_accounts:conflict_orders' %}" class="btn btn-info mb-4">بازگشت به لیست مغایرت سفارشات</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش مغایرت سفارش</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
+        <td style="width: 150.797px;">{{ conflict_order.order.project }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">تأمین کننده</th>
+        <td style="width: 150.797px;">{{ conflict_order.order.supplier }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">نوع سفارش</th>
+        <td style="width: 150.797px;">{{ conflict_order.order.order_type }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">تاریخ سفارش</td>
+        <td style="width: 150.797px;">{{ conflict_order.order.order_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">مقدار سفارش درخواست شده</th>
+        <td style="width: 150.797px;">
+            {{ conflict_order.order.formatted_order_amount }}
+            {{ conflict_order.order.persian_measurement_unit }}
+        </td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">مقدار سفارش دریافت شده</th>
+        <td style="width: 150.797px;">
+            {{ conflict_order.formatted_received_order_amount }}
+            {{ conflict_order.order.persian_measurement_unit }}
+        </td>
+    </tr>
+
+    <tr>
+        <th style="width: 60.797px;">مقدار و نوع مغایرت</th>
+        <td style="width: 150.797px;">
+            {{ conflict_order.formatted_conflict_amount }}
+            {{ conflict_order.order.persian_measurement_unit }}
+            {% if conflict_order.conflict_type == 'pos' %}بیشتر{% else %}کمتر{% endif %}
+            از سفارش درخواست شده
+        </td>
+    </tr>
+{% endblock %}

@@ -17,17 +17,19 @@ def min(value, arg):
     return value - arg
 
 @register.inclusion_tag("partials/objects_records.html")
-def objects_records(list_url, search_url, record_number, records_count, list_filters=None):
+def objects_records(list_url, search_url, record_number, records_count, fields_order, order_by, list_filters=None):
     return {
         "list_url": list_url,
         "search_url": search_url,
         "record_number": record_number,
         "records_count": records_count,
+        "fields_order": fields_order,
+        "order_by": order_by,
         "list_filters": list_filters
     }
 
 @register.inclusion_tag("partials/pagination_urls.html")
-def pagination_urls(previous_url, item_url, next_url, record_number, list_url, search_url, list_filters, page_obj, page_item):
+def pagination_urls(previous_url, item_url, next_url, record_number, list_url, search_url, list_filters, order_by, page_obj, page_item):
     return {
         "previous_url": previous_url,
         "item_url": item_url,
@@ -36,6 +38,7 @@ def pagination_urls(previous_url, item_url, next_url, record_number, list_url, s
         "search_url": search_url,
         "record_number": record_number,
         "list_filters": list_filters,
+        "order_by": order_by,
         "page_obj": page_obj,
         "page_item": page_item
     }

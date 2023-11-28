@@ -11,7 +11,9 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        پروژه‌
+                        <span>&emsp;&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -26,69 +28,100 @@
                         تاریخ
                     </th>
 
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
+
                     {% if perms.projects_docs.delete_bankreceipts or perms.projects_docs.change_bankreceipts %}
                         <th class="text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
-
                 {% for bank_receipt in bank_receipts %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
+                    {% for row, object in records_dict.items %}
+                        {% if bank_receipt.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ bank_receipt.project }}</td>
+                                <td>
+                                    {% if bank_receipt.receive_or_pay == 'rec' %}
+                                        دریافت
+                                    {% else %}
+                                        پرداخت
+                                    {% endif %}
+                                </td>
 
-                        <td>{{ bank_receipt.project }}</td>
-
-                        <td>
-                            {% if bank_receipt.receive_or_pay == 'rec' %}
-                                دریافت
-                            {% else %}
-                                پرداخت
-                            {% endif %}
-                        </td>
-
-                        <td class="text-center col-img">
-                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                            data-target="#receipt_image{{ forloop.counter }}">
-                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                            </a>
-                        </td>
-
-                        {% include 'partials/img_modal.html' with img_type='receipt_image' id=forloop.counter img_src=bank_receipt.receipt_image.url label='رسید بانکی مربوط به پروژه‌' owner=bank_receipt.project %}
-
-                        
-                        <td data-sort="{{ bank_receipt.receipt_date|date:'Ymd' }}">
-                            {{ bank_receipt.receipt_date|jformat:'%d / %m / %Y' }}
-                        </td>
-
-                        {% if perms.projects_docs.delete_bankreceipts or perms.projects_docs.change_bankreceipts %}
-                            <td class="action-td d-flex justify-content-center p-3 rounded-0">
-                                {% if perms.projects_docs.change_bankreceipts %}
-                                    <a href="{% url 'projects_docs:bank_receipt_update' bank_receipt.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                                <td class="text-center col-img">
+                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                    data-target="#receipt_image{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
                                     </a>
+                                </td>
+
+                                {% include 'partials/img_modal.html' with img_type='receipt_image' id=row img_src=bank_receipt.receipt_image.url label='رسید بانکی مربوط به پروژه‌' owner=bank_receipt.project %}
+
+                                
+                                <td data-sort="{{ bank_receipt.receipt_date|date:'Ymd' }}">
+                                    {{ bank_receipt.receipt_date|jformat:'%d / %m / %Y' }}
+                                </td>
+
+                                <td data-sort="{{ bank_receipt.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ bank_receipt.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if bank_receipt.update_record|date:'Ymd-HMS' == bank_receipt.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ bank_receipt.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ bank_receipt.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
                                 {% endif %}
 
-                                {% if perms.projects_docs.delete_bankreceipts %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'projects_docs:bank_receipt_delete' pk=bank_receipt.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف این رسید بانکی اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                {% if perms.projects_docs.delete_bankreceipts or perms.projects_docs.change_bankreceipts %}
+                                    <td class="action-td d-flex justify-content-center p-3 rounded-0">
+                                        {% if perms.projects_docs.change_bankreceipts %}
+                                            <a href="{% url 'projects_docs:bank_receipt_update' bank_receipt.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.projects_docs.delete_bankreceipts %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'projects_docs:bank_receipt_delete' pk=bank_receipt.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف این رسید بانکی اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.projects_docs.view_bankreceipts %}
+                                            <a href="{% url 'reports:bank_receipt_report' bank_receipt.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-        
         </table>
     </div>
 </div>

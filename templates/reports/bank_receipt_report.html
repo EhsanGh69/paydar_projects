@@ -1,0 +1,29 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+
+{% block title %}رسید بانکی{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'projects_docs:bank_receipts' %}" class="btn btn-info mb-4">بازگشت به لیست رسیدهای بانکی</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش رسید بانکی</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
+        <td style="width: 150.797px;">{{ bank_receipt.project }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">نوع رسید</th>
+        <td style="width: 150.797px;">
+            {% if bank_receipt.receive_or_pay == 'rec' %}دریافت{% else %}پرداخت{% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">تاریخ رسید</th>
+        <td style="width: 150.797px;">{{ bank_receipt.receipt_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+{% endblock %}

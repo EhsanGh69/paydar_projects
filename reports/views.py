@@ -6,8 +6,9 @@ from django.utils import timezone
 from jalali_date import datetime2jalali
 
 from government_accounts.models import Receive, Payment, Activity
-from non_government_accounts.models import BuyersSellers, Orders
+from non_government_accounts.models import BuyersSellers, Orders, ConflictOrders
 from projects.models import Project, Costs, WorkReference
+from projects_docs.models import BankReceipts, ConditionStatements
 
 
 class ReceiveReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -123,6 +124,51 @@ class WorkReferenceReport(LoginRequiredMixin, PermissionRequiredMixin, DetailVie
     def get_object(self):
         pk = self.kwargs.get('pk')
         return get_object_or_404(WorkReference, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+
+
+class ConflictOrdersReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'non_government_accounts.view_conflictorders'
+    context_object_name = "conflict_order"
+    template_name = "reports/conflict_order_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(ConflictOrders, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+
+
+class BankReceiptReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'projects_docs.view_bankreceipts'
+    context_object_name = "bank_receipt"
+    template_name = "reports/bank_receipt_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(BankReceipts, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+    
+
+class ConditionStatementReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'projects_docs.view_conditionstatements'
+    context_object_name = "condition_statement"
+    template_name = "reports/condition_statement_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(ConditionStatements, pk=pk)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

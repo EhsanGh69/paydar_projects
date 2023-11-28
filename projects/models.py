@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models.query import Q
-from django.utils import timezone
 
 from django_jalali.db import models as jmodels
 
@@ -144,6 +143,8 @@ class Costs(models.Model):
     # mayoralty costs
     export_permit = models.PositiveIntegerField(default=0, verbose_name='هزینه صدور پروانه')
     export_end_work = models.PositiveIntegerField(default=0, verbose_name='هزینه صدور پایان کار')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = CostsManager()
 
@@ -210,6 +211,8 @@ class PaymentsImages(models.Model):
     education_share = models.ImageField(upload_to='images/payment_receipts/education_share', verbose_name='سهم آموزش و پرورش')
     fire_stations_share = models.ImageField(upload_to='images/payment_receipts/fire_stations_share', verbose_name='سهم آتشنشانی')
     social_security_share = models.ImageField(upload_to='images/payment_receipts/social_security_share', verbose_name='سهم تأمین اجتماعی')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = PaymentsImagesManager()
     

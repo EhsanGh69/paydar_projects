@@ -30,7 +30,12 @@ class OwnersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         global queryset
-        queryset = Owners.objects.order_by('full_name').all()
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Owners.objects.order_by(order_by).all()
+        else:
+            queryset = Owners.objects.order_by('-id').all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -46,10 +51,16 @@ class OwnersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects:owners_search'
         context['create_url'] = 'projects:owner_create'
+        context['list_url'] = 'projects:owners'
         context['persian_object_name'] = 'مالک'
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'نام و نام خانوادگی': 'full_name'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -96,11 +107,17 @@ class OwnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         request = self.request
         query = request.GET.get('data_search')
         
-        search = Owners.objects.search(query) # type: ignore
-        if not search:
-            not_found = True
+        global search_result
+        search_result = Owners.objects.search(query) # type: ignore
 
-        return search
+        if not search_result:
+            not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
+
+        return search_result
         
     def get_context_data(self, **kwargs):
         records_count = search_result.count()
@@ -120,6 +137,11 @@ class OwnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'نام و نام خانوادگی': 'full_name'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -138,7 +160,12 @@ class ProjectList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         global queryset
-        queryset = Project.objects.order_by('-id').all()
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Project.objects.order_by(order_by).all()
+        else:
+            queryset = Project.objects.order_by('-id').all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -154,10 +181,16 @@ class ProjectList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects:projects_search'
         context['create_url'] = 'projects:project_create'
+        context['list_url'] = 'projects:projects'
         context['persian_object_name'] = 'پروژه'
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'عنوان پروژه': 'title', 'نوع قرارداد': 'contract_type' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -214,6 +247,10 @@ class ProjectSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
             
         return search_result
         
@@ -235,6 +272,11 @@ class ProjectSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'عنوان پروژه': 'title', 'نوع قرارداد': 'contract_type' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -254,7 +296,12 @@ class WorkReferenceList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         global queryset
-        queryset = WorkReference.objects.order_by('project__title', 'activity_type').all()
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = WorkReference.objects.order_by(order_by).all()
+        else:
+            queryset = WorkReference.objects.order_by('-id').all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -270,10 +317,17 @@ class WorkReferenceList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects:work_references_search'
         context['create_url'] = 'projects:work_reference_create'
+        context['list_url'] = 'projects:work_references'
         context['persian_object_name'] = 'ارجاع کار'
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'ارجاع دهنده': 'referrer', 
+        'مأمور انجام': 'doing_agent', 'تاریخ پیگیری': '-follow_date' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
     
 
@@ -343,6 +397,10 @@ class WorkReferenceSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
@@ -364,6 +422,12 @@ class WorkReferenceSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'پروژه': 'project__title', 'ارجاع دهنده': 'referrer', 
+        'مأمور انجام': 'doing_agent', 'تاریخ پیگیری': '-follow_date' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -382,7 +446,12 @@ class CostsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         global queryset
-        queryset = Costs.objects.order_by('project__title').all()
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Costs.objects.order_by(order_by).all()
+        else:
+            queryset = Costs.objects.order_by('-id').all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -398,10 +467,16 @@ class CostsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects:costs_search'
         context['create_url'] = 'projects:cost_create'
+        context['list_url'] = 'projects:costs'
         context['persian_object_name'] = 'هزینه'
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -447,10 +522,15 @@ class CostsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         not_found = False
         query = self.request.GET.get('data_search')
         
+        global search_result
         search_result = Costs.objects.search(query).all() # type: ignore
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
@@ -472,6 +552,11 @@ class CostsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'پروژه': 'project__title' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -490,7 +575,12 @@ class PaymentsImagesList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         global queryset
-        queryset = PaymentsImages.objects.order_by('project__title').all()
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = PaymentsImages.objects.order_by(order_by).all()
+        else:
+            queryset = PaymentsImages.objects.order_by('-id').all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -506,10 +596,16 @@ class PaymentsImagesList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'projects:payments_images_search'
         context['create_url'] = 'projects:payments_image_create'
+        context['list_url'] = 'projects:payments_images'
         context['persian_object_name'] = 'تصویر فیش پرداختی'
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
     
 
@@ -555,10 +651,15 @@ class PaymentsImagesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         not_found = False
         query = self.request.GET.get('data_search')
         
+        global search_result
         search_result = PaymentsImages.objects.search(query).all() # type: ignore
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
@@ -580,6 +681,11 @@ class PaymentsImagesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'پروژه': 'project__title' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 # PaymentsImages - End

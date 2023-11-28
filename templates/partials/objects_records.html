@@ -1,24 +1,29 @@
 <div class="row mb-2">
-    <div class="col">
-        {% if list_filters %}
-            <form action="{% url search_url %}" method="get" class="d-flex">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <form action="{% if list_filters %}{% url search_url %}{% else %}{% url list_url %}{% endif %}" method="get" class="d-flex">
+            {% if list_filters %}
                 {% for name, value in list_filters.items %}
                     <input type="hidden" name="{{ name }}" value="{{ value }}" /> 
                 {% endfor %}
-                <label>تعداد موارد قابل نمایش :</label>
-                <input type="number" name="record_number" min="1" max="{{ records_count }}" value="{{ record_number }}" style="width: 4.5rem;" class="form-control mr-2">
-                <button type="submit" class="btn btn-primary mr-2">
-                    <i class="fa-solid fa-filter"></i>
-                </button>
-            </form>
-        {% else %}
-            <form action="{% url list_url %}" method="get" class="d-flex">
-                <label>تعداد موارد قابل نمایش :</label>
-                <input type="number" name="record_number" min="1" max="{{ records_count }}" value="{{ record_number }}" style="width: 4.5rem;" class="form-control mr-2">
-                <button type="submit" class="btn btn-primary mr-2">
-                    <i class="fa-solid fa-filter"></i>
-                </button>
-            </form>
-        {% endif %}
+            {% endif %}
+            <div class="row">
+                <div class="form-group col-12 col-lg-5 col-xl-4 d-flex">
+                    <i class="fa-solid fa-list-ol mt-1 text-primary" style="font-size: 1.5rem;"></i>
+                    <input type="number" name="record_number" min="1" max="{{ records_count }}" value="{{ record_number }}" class="form-control mr-2 w-auto">
+                </div>
+                <div class="form-group col-12 col-lg-7 col-xl-8 d-flex">
+                    <i class="fa-solid fa-arrow-down-wide-short text-primary" style="font-size: 1.5rem;"></i>
+                    <select name="order_by" id="order-by" class="form-control w-auto mr-2" >
+                        <option value="none" selected>مرتب‌سازی</option>
+                        {% for title, value in fields_order.items %}
+                            <option value="{{ value }}" {% if order_by == value %}selected{% endif %}>{{ title }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary mr-3">
+                        <i class="fa-solid fa-filter"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

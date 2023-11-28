@@ -12,19 +12,27 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
-                        پروژه
+                        <span>&emsp;&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.094px;">
-                        نوع فعالیت‌
+                        <span>&emsp;&emsp;</span>
+                        <span>نوع فعالیت‌</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                        ارجاع دهنده
+                        <span>&emsp;&emsp;</span>
+                        <span>ارجاع دهنده</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
-                        مأمور انجام
+                        <span>&emsp;&emsp;</span>
+                        <span>مأمور انجام</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
@@ -37,6 +45,16 @@
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 172.797px;">
                         توضیح نتیجه
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
                     </th>
                     
                     {% if perms.projects.delete_workreference or perms.projects.change_workreference %}
@@ -68,9 +86,22 @@
                                 </td>
                                 
                                 <td data-sort="{{ work_reference.follow_date|date:'Ymd' }}">
-                                    {{ work_reference.follow_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    {{ work_reference.follow_date|jformat:'%d / %m / %Y' }}
                                 </td>
                                 <td>{{ work_reference.result_explan }}</td>
+
+                                <td data-sort="{{ work_reference.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ work_reference.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if work_reference.update_record|date:'Ymd-HMS' == work_reference.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ work_reference.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ work_reference.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
                                 
                                 {% if perms.projects.delete_workreference or perms.projects.change_workreference %}
                                     <td class="action-td border-left text-center">

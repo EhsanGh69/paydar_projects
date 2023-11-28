@@ -256,8 +256,7 @@ class Orders(models.Model):
 
 
     def __str__(self):
-        return f"{self.order_type} - {self.supplier} - {self.order_date.year}/{self.order_date.month}/{self.order_date.day}" # type: ignore
-
+        return f"{self.order_type} - {self.supplier} - پروژه {self.project.title}" # type: ignore
 
     def get_order_total_price(self):
         self.order_total_price = self.order_amount * self.unit_price
@@ -305,7 +304,8 @@ class ConflictOrdersManager(models.Manager):
     def search(self, query):
         lookup = (
             Q(order__order_type__icontains=query) |
-            Q(order__supplier__full_name__icontains=query)
+            Q(order__supplier__full_name__icontains=query) |
+            Q(order__project__title__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
 
@@ -318,6 +318,8 @@ class ConflictOrders(models.Model):
     order = models.ForeignKey(Orders, on_delete=models.CASCADE, related_name='order_conflicts', verbose_name='سفارش')
     conflict_type = models.CharField(max_length=3, choices=CONFLICT_TYPE_CHOICES, verbose_name="نوع مغایرت")
     conflict_amount = models.PositiveIntegerField(default=0, verbose_name='مقدار مغایرت')
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = ConflictOrdersManager()
 
@@ -331,3 +333,11 @@ class ConflictOrders(models.Model):
     
     def formatted_conflict_amount(self):
         return "{:,}".format(self.conflict_amount)
+    
+    def formatted_received_order_amount(self):
+        received_order_amount = 0
+        if self.conflict_type == 'pos':
+            received_order_amount = self.order.order_amount + self.conflict_amount
+        else:
+            received_order_amount = self.order.order_amount - self.conflict_amount
+        return "{:,}".format(received_order_amount)

@@ -75,7 +75,12 @@ class ReceiveList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     
     def get_queryset(self):
         global queryset
-        queryset = Receive.objects.order_by('-receive_date', '-create_record').all()
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Receive.objects.order_by(order_by).all()
+        else:
+            queryset = Receive.objects.order_by('-id').all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -91,10 +96,17 @@ class ReceiveList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:receives_search'
         context['create_url'] = 'government_accounts:receive_create'
+        context['list_url'] = 'government_accounts:receives'
         context['persian_object_name'] = 'دریافت'
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'ارگان' :'organization__organization_name', 'پروژه': 'project__title',
+        'دریافت بابت': 'receive_for', 'تاریخ دریافت': '-receive_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
     
 
@@ -138,9 +150,11 @@ class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global not_found
         global query
         global date_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
         if date_filter != "all":
@@ -150,6 +164,10 @@ class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
@@ -171,6 +189,12 @@ class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'ارگان' :'organization__organization_name', 'پروژه': 'project__title',
+        'دریافت بابت': 'receive_for', 'تاریخ دریافت': '-receive_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -189,7 +213,12 @@ class PaymentList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         global queryset
-        queryset = Payment.objects.order_by('-payment_date', '-create_record').all()
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Payment.objects.order_by(order_by).all()
+        else:
+            queryset = Payment.objects.order_by('-id').all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -205,10 +234,17 @@ class PaymentList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:payments_search'
         context['create_url'] = 'government_accounts:payment_create'
+        context['list_url'] = 'government_accounts:payments'
         context['persian_object_name'] = 'پرداخت'
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'ارگان' :'organization__organization_name', 'پروژه': 'project__title',
+        'پرداخت بابت': 'payment_for', 'تاریخ پرداخت': '-payment_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -252,9 +288,11 @@ class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global not_found
         global query
         global date_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
         if date_filter != "all":
@@ -264,6 +302,10 @@ class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
@@ -285,6 +327,12 @@ class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'ارگان' :'organization__organization_name', 'پروژه': 'project__title',
+        'پرداخت بابت': 'payment_for', 'تاریخ پرداخت': '-payment_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 # Payment - End
@@ -302,7 +350,12 @@ class ActivityList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         global queryset
-        queryset = Activity.objects.order_by('-activity_date', '-create_record').all()
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Activity.objects.order_by(order_by).all()
+        else:
+            queryset = Activity.objects.order_by('-id').all()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -318,10 +371,17 @@ class ActivityList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'government_accounts:activities_search'
         context['create_url'] = 'government_accounts:activity_create'
+        context['list_url'] = 'government_accounts:activities'
         context['persian_object_name'] = 'فعالیت'
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'ارگان' :'organization__organization_name', 'پروژه': 'project__title',
+        'نوع فعالیت': 'activity_type', 'تاریخ فعالیت': '-activity_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -366,10 +426,12 @@ class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global query
         global date_filter
         global activity_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         activity_filter = self.request.GET.get('activity_result')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
         if activity_filter != "all" and date_filter == 'all':
@@ -383,6 +445,10 @@ class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
             
         return search_result
         
@@ -405,6 +471,12 @@ class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'ارگان' :'organization__organization_name', 'پروژه': 'project__title',
+        'نوع فعالیت': 'activity_type', 'تاریخ فعالیت': '-activity_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
     
 # Activity - End
