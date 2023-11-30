@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -20,11 +20,40 @@ class ChequesList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "cheques"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Cheques.objects.order_by(order_by).all()
+        else:
+            queryset = Cheques.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = Cheques.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'cheques_receive_pay:cheques_search'
         context['create_url'] = 'cheques_receive_pay:cheque_create'
+        context['list_url'] = 'cheques_receive_pay:cheques'
         context['persian_object_name'] = 'چک'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'بابت': 'cheque_for', 'بانک و شعبه': 'bank_branch', 
+        'تاریخ صدور / دریافت': '-export_receive_date', 'تاریخ سررسید': 'due_date' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -36,13 +65,6 @@ class ChequesCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     success_url = reverse_lazy("cheques_receive_pay:cheques")
     success_message = "چک با موفقیت ثبت شد"
 
-    def get_form_kwargs(self):
-        kwargs = super(ChequesCreate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
-
 
 class ChequesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'cheques_receive_pay.change_cheques'
@@ -51,13 +73,6 @@ class ChequesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     form_class = ChequesForm
     success_url = reverse_lazy("cheques_receive_pay:cheques")
     success_message = "چک با موفقیت ویرایش شد"
-
-    def get_form_kwargs(self):
-        kwargs = super(ChequesUpdate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
 
 
 class ChequesDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -83,11 +98,13 @@ class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global query
         global date_filter
         global cheque_type_filter
+        global order_by
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
         cheque_type_filter = self.request.GET.get('cheque_type')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
@@ -108,13 +125,30 @@ class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:cheques_search'
         context['list_url'] = 'cheques_receive_pay:cheques'
-        context['query'] = query
-        context['date_filter'] = date_filter
-        context['cheque_type_filter'] = cheque_type_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter,
+        'cheque_type': cheque_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'بابت': 'cheque_for', 'بانک و شعبه': 'bank_branch', 
+        'تاریخ صدور / دریافت': '-export_receive_date', 'تاریخ سررسید': 'due_date' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -124,21 +158,53 @@ class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
 # Fund - Start
 
+
 class FundList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = 'cheques_receive_pay.view_fund'
     template_name = 'cheques_receive_pay/funds_list.html'
     model = Fund
     context_object_name = "funds"
-    paginate_by = 9
+    paginate_by = 3
 
     def get_queryset(self):
-        return Fund.objects.order_by('full_name', '-operation_type', '-id').all()
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = Fund.objects.order_by(order_by).all()
+        else:
+            queryset = Fund.objects.order_by('-id').all()
+        return queryset
 
     def get_context_data(self, **kwargs):
+        fund_names = []
+        if queryset:
+            for obj in queryset:
+                fund_names.append(obj.full_name) # type: ignore
+        records_count = Fund.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 3:
+            record_number = 3
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'cheques_receive_pay:funds_search'
         context['create_url'] = 'cheques_receive_pay:fund_create'
+        context['list_url'] = 'cheques_receive_pay:funds'
         context['persian_object_name'] = 'تنخواه'
+        context['fund_names'] = sorted(list(set(fund_names)))
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'نام و نام خانوادگی' : 'full_name', 'نوع عملیات': '-operation_type',
+        'تاریخ برداشت': '-removal_date', 'تاریخ واریز': '-charge_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -164,6 +230,16 @@ class FundCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
         else:
             return super().form_valid(form)
         
+    def get_context_data(self, **kwargs):
+        queryset = Fund.objects.all()
+        fund_names = []
+        if queryset:
+            for obj in queryset:
+                fund_names.append(obj.full_name)
+        context = super().get_context_data(**kwargs)
+        context['fund_names'] = sorted(list(set(fund_names)))
+        return context
+        
 
 class FundUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'cheques_receive_pay.change_fund'
@@ -186,6 +262,16 @@ class FundUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
             return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
+        
+    def get_context_data(self, **kwargs):
+        queryset = Fund.objects.all()
+        fund_names = []
+        if queryset:
+            for obj in queryset:
+                fund_names.append(obj.full_name)
+        context = super().get_context_data(**kwargs)
+        context['fund_names'] = sorted(list(set(fund_names)))
+        return context
 
     
 class FundDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -202,47 +288,66 @@ class FundDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
 class FundSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = 'cheques_receive_pay.view_fund'
     template_name = 'cheques_receive_pay/funds_list.html'
-    model = Cheques
+    model = Fund
     context_object_name = "funds"
-    paginate_by = 9
+    paginate_by = 3
 
     def get_queryset(self):
         global not_found
         global query
-        global date_filter
         global operation_type_filter
+        global order_by
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
-        date_filter = self.request.GET.get('date_filter')
         operation_type_filter = self.request.GET.get('operation_type')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
-        if operation_type_filter != "all" and date_filter == "all":
+        if operation_type_filter != "all":
             search_result = Fund.objects.search(query).filter(operation_type=operation_type_filter).all() # type: ignore
-
-        elif operation_type_filter == "all" and date_filter != "all":
-            search_result = Fund.objects.search(query).filter(charge_date__date__range=filter_date_values(date_filter)).all() # type: ignore
-
-        elif operation_type_filter != "all" and date_filter != "all":
-            search_result = Fund.objects.search(query).filter(charge_date__date__range=filter_date_values(date_filter), operation_type=operation_type_filter).all() # type: ignore
         else:
             search_result = Fund.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        fund_names = []
+        if search_result:
+            for obj in search_result:
+                fund_names.append(obj.full_name) # type: ignore
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 3:
+            record_number = 3
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:funds_search'
         context['list_url'] = 'cheques_receive_pay:funds'
-        context['query'] = query
-        context['date_filter'] = date_filter
-        context['operation_type_filter'] = operation_type_filter
+        context['fund_names'] = sorted(list(set(fund_names)))
+        context['list_filters'] = { 'data_search': query, 'operation_type': operation_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'نام و نام خانوادگی' : 'full_name', 'نوع عملیات': '-operation_type',
+        'تاریخ برداشت': '-removal_date', 'تاریخ واریز': '-charge_date'}
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -260,11 +365,39 @@ class ReceivePayList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = "receive_pays"
     paginate_by = 9
 
+    def get_queryset(self):
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = ReceivePay.objects.order_by(order_by).all()
+        else:
+            queryset = ReceivePay.objects.order_by('-id').all()
+        return queryset
+
     def get_context_data(self, **kwargs):
+        records_count = ReceivePay.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'cheques_receive_pay:receive_pays_search'
         context['create_url'] = 'cheques_receive_pay:receive_pay_create'
+        context['list_url'] = 'cheques_receive_pay:receive_pays'
         context['persian_object_name'] = 'دریافت / پرداخت'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'بابت': 'regard_to', 'تاریخ': 'date' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -275,13 +408,6 @@ class ReceivePayCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     form_class = ReceivePayForm
     success_url = reverse_lazy("cheques_receive_pay:receive_pays")
     success_message = "دریافت / پرداخت با موفقیت ثبت شد"
-
-    def get_form_kwargs(self):
-        kwargs = super(ReceivePayCreate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
     
 
 class ReceivePayUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -291,13 +417,6 @@ class ReceivePayUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     form_class = ReceivePayForm
     success_url = reverse_lazy("cheques_receive_pay:receive_pays")
     success_message = "دریافت / پرداخت با موفقیت ویرایش شد"
-
-    def get_form_kwargs(self):
-        kwargs = super(ReceivePayUpdate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
 
 
 class ReceivePayDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -322,30 +441,52 @@ class ReceivePaySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global not_found
         global query
         global date_filter
+        global order_by
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
 
         if date_filter != "all":
-            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = ReceivePay.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
-            search_result = Cheques.objects.search(query) # type: ignore
+            search_result = ReceivePay.objects.search(query) # type: ignore
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:receive_pays_search'
         context['list_url'] = 'cheques_receive_pay:receive_pays'
-        context['query'] = query
-        context['date_filter'] = date_filter
+        context['list_filters'] = { 'data_search': query, 'date_filter': date_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'پروژه': 'project__title', 'بابت': 'regard_to', 'تاریخ': 'date' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 
@@ -365,15 +506,39 @@ class CashBoxList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        return CashBox.objects.order_by('-id').all()
+        global queryset
+        global order_by
+        order_by = self.request.GET.get('order_by')
+        if order_by is not None and order_by != "none":
+            queryset = CashBox.objects.order_by(order_by).all()
+        else:
+            queryset = CashBox.objects.order_by('-id').all()
+        return queryset
 
     def get_context_data(self, **kwargs):
+        records_count = CashBox.objects.all().count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'cheques_receive_pay:cash_boxes_search'
         context['create_url'] = 'cheques_receive_pay:cash_box_create'
+        context['list_url'] = 'cheques_receive_pay:cash_boxes'
         context['persian_object_name'] = 'صندوق'
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['fields_order'] = { 'تاریخ واریز': '-settle_date', 'تاریخ برداشت': '-removal_date' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
-
 
 
 class CashBoxCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
@@ -392,6 +557,13 @@ class CashBoxCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
         else:
             return super().form_valid(form)
         
+    def get_form_kwargs(self):
+        kwargs = super(CashBoxCreate, self).get_form_kwargs() # type: ignore
+        kwargs.update({
+            'url_name': self.request.resolver_match.url_name
+        })
+        return kwargs
+        
 
 class CashBoxUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'cheques_receive_pay.change_cashbox'
@@ -408,6 +580,13 @@ class CashBoxUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
             return super().form_invalid(form) # type: ignore
         else:
             return super().form_valid(form)
+        
+    def get_form_kwargs(self):
+        kwargs = super(CashBoxUpdate, self).get_form_kwargs() # type: ignore
+        kwargs.update({
+            'url_name': self.request.resolver_match.url_name
+        })
+        return kwargs
 
 
 class CashBoxDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -426,30 +605,52 @@ class CashBoxSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'cheques_receive_pay/cash_boxes_list.html'
     model = CashBox
     context_object_name = "cash_boxes"
-    paginate_by = 1
+    paginate_by = 9
 
     def get_queryset(self):
         global not_found
         global operation_type_filter
+        global order_by
         not_found = False
         operation_type_filter = self.request.GET.get('operation_type')
+        order_by = self.request.GET.get('order_by')
 
         global search_result
-
         if operation_type_filter != "all":
             search_result = CashBox.objects.filter(operation_type=operation_type_filter).all() # type: ignore
 
         if not search_result:
             not_found = True
+        elif order_by is not None and order_by != "none":
+            search_result = search_result.order_by(order_by).all()
+        else:
+            search_result = search_result.order_by('-id').all()
 
         return search_result
         
     def get_context_data(self, **kwargs):
+        records_count = search_result.count()
+        records_rows = list(range(1, records_count + 1))
+        record_number = self.request.GET.get('record_number')
+        if record_number:
+            self.paginate_by = int(record_number) # type: ignore
+        elif records_count > 9:
+            record_number = 9
+        else:
+            record_number = records_count
         context = super().get_context_data(**kwargs)
         context['not_found'] = not_found
         context['search_url'] = 'cheques_receive_pay:cash_boxes_search'
         context['list_url'] = 'cheques_receive_pay:cash_boxes'
-        context['operation_type_filter'] = operation_type_filter
+        context['list_filters'] = { 'operation_type': operation_type_filter }
+        context['record_number'] = record_number
+        context['records_count'] = records_count
+        context['records_dict'] = dict(zip(records_rows, search_result))
+        context['fields_order'] = { 'تاریخ واریز': '-settle_date', 'تاریخ برداشت': '-removal_date' }
+        if order_by:
+            context['order_by'] = order_by
+        else:
+            context['order_by'] = "none"
         return context
 
 # CashBox - End

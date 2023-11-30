@@ -60,7 +60,6 @@ class WorkReferenceForm(forms.ModelForm):
         fields = ['project', 'activity_type', 'referrer', 'doing_agent', 'follow_confirm', 'follow_date', 'result_explan']
 
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(WorkReferenceForm, self).__init__(*args, **kwargs)
 
         self.fields['activity_type'] = forms.CharField(
@@ -77,16 +76,6 @@ class WorkReferenceForm(forms.ModelForm):
             label="مأمور انجام",
             validators=[none_numeric_value]
         )
-
-        if url_name == 'work_reference_create':
-            self.fields['follow_date'] = forms.DateTimeField(
-                label="تاریخ پیگیری",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
 
 
 class CostsForm(forms.ModelForm):
@@ -208,5 +197,4 @@ class PaymentsImagesForm(forms.ModelForm):
         fields = ['project', 'designer_office', 'supervisors', 'engineer_system',
                   'sketch_map', 'export_permit', 'visit_toll', 'education_share',
                   'fire_stations_share', 'social_security_share']
-
 

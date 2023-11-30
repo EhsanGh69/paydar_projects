@@ -11,7 +11,9 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        پروژه
+                        <span>&emsp;&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -27,7 +29,9 @@
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                        بابت
+                        <span>&emsp;&emsp;</span>
+                        <span>بابت</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -52,96 +56,122 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        تاریخ صدور / دریافت
+                        تاریخ صدور/دریافت
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
                         تاریخ سررسید
                     </th>
 
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="1" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
+
                     {% if perms.cheques_receive_pay.delete_cheques or perms.cheques_receive_pay.change_cheques %}
                         <th class=" text-center action-th rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
-
                 {% for cheque in cheques %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ cheque.project }}</td>
-                        <td>{{ cheque.account_owner }}</td>
-                        <td>{{ cheque.account_party }}</td>
-                        
-                        <td>
-                            {% if cheque.cheque_type == 'exp' %}
-                                صدور
-                            {% else %}
-                                دریافت
-                            {% endif %}
-                        </td>
-                        
-                        <td>{{ cheque.cheque_for }}</td>
-                        <td>{{ cheque.cheque_number }}</td>
-                        <td>{{ cheque.bank_branch }}</td>
-                        
-                        <td data-sort="{{ cheque.cheque_amount }}">
-                            {{ cheque.formatted_cheque_amount }}
-                        </td>
-
-                        <td class="text-center" data-sort="{{ cheque.registered }}">
-                            {% if cheque.registered %}
-                                <i class="fa fa-check-circle" style="color: green;"></i>
-                            {% else %}
-                                <i class="fa fa-minus-circle" style="color: red;"></i>
-                            {% endif %}
-                        </td>
-                        
-                    
-                        <td class="text-center col-img">
-                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                            data-target="#cheque_image{{ forloop.counter }}">
-                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                            </a>
-                        </td>
-
-                        {% include 'partials/img_modal.html' with img_type='cheque_image' id=forloop.counter img_src=cheque.cheque_image.url label='چک بابت' owner=cheque.cheque_for %}
-
-                        <td data-sort="{{ cheque.export_receive_date|date:'Ymd' }}">
-                            {{ cheque.export_receive_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                        </td>
-                        <td data-sort="{{ cheque.due_date|date:'Ymd' }}">
-                            {{ cheque.due_date|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                        </td>
-
-                        {% if perms.cheques_receive_pay.delete_cheques or perms.cheques_receive_pay.change_cheques %}
-                            <td class="action-td text-center d-flex p-3 rounded-0">
-                                {% if perms.cheques_receive_pay.change_cheques %}
-                                    <a href="{% url 'cheques_receive_pay:cheque_update' cheque.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                    {% for row, object in records_dict.items %}
+                        {% if cheque.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ cheque.project }}</td>
+                                <td>{{ cheque.account_owner }}</td>
+                                <td>{{ cheque.account_party }}</td>
+                                <td>
+                                    {% if cheque.cheque_type == 'exp' %}
+                                        صدور
+                                    {% else %}
+                                        دریافت
+                                    {% endif %}
+                                </td>
+                                <td>{{ cheque.cheque_for }}</td>
+                                <td>{{ cheque.cheque_number }}</td>
+                                <td>{{ cheque.bank_branch }}</td>
+                                <td data-sort="{{ cheque.cheque_amount }}">
+                                    {{ cheque.formatted_cheque_amount }}
+                                </td>
+                                <td class="text-center" data-sort="{{ cheque.registered }}">
+                                    {% if cheque.registered %}
+                                        <i class="fa fa-check-circle" style="color: green;"></i>
+                                    {% else %}
+                                        <i class="fa fa-minus-circle" style="color: red;"></i>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center col-img">
+                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                    data-target="#cheque_image{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
                                     </a>
+                                </td>
+                                {% include 'partials/img_modal.html' with img_type='cheque_image' id=row img_src=cheque.cheque_image.url label='چک بابت' owner=cheque.cheque_for %}
+
+                                <td data-sort="{{ cheque.export_receive_date|date:'Ymd' }}">
+                                    {{ cheque.export_receive_date|jformat:'%d / %m / %Y' }}
+                                </td>
+                                <td data-sort="{{ cheque.due_date|date:'Ymd' }}">
+                                    {{ cheque.due_date|jformat:'%d / %m / %Y' }}
+                                </td>
+
+                                <td data-sort="{{ cheque.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ cheque.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                </td>
+                                {% if cheque.update_record|date:'Ymd-HMS' == cheque.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ cheque.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ cheque.update_record|jformat:'%d / %m / %Y - %H:%M:%S' }}
+                                    </td>
                                 {% endif %}
 
-                                {% if perms.cheques_receive_pay.delete_cheques %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'cheques_receive_pay:cheque_delete' pk=cheque.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف چک '{{ cheque.cheque_for }}' اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                {% if perms.cheques_receive_pay.delete_cheques or perms.cheques_receive_pay.change_cheques %}
+                                    <td class="action-td text-center rounded-0">
+                                        {% if perms.cheques_receive_pay.change_cheques %}
+                                            <a href="{% url 'cheques_receive_pay:cheque_update' cheque.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.cheques_receive_pay.delete_cheques %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'cheques_receive_pay:cheque_delete' pk=cheque.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف چک '{{ cheque.cheque_for }}' اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.cheques_receive_pay.view_cheques %}
+                                            <a href="{% url 'reports:cheque_report' cheque.pk %}"
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-        
         </table>
     </div>
 </div>

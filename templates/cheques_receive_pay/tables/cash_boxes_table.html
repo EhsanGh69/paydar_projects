@@ -1,4 +1,5 @@
 {% load accounting_tags %}
+{% load jformat %}
 
 <div class="row">
     <div class="col-sm-12 table-responsive">
@@ -10,17 +11,29 @@
                         ردیف
                     </th>
 
-                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="4" style="width: 100.797px; background-color: #808080;">
                         واریز به صندوق
                     </td>
 
-                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="4" style="width: 100.797px; background-color: #808080;">
                         برداشت از صندوق
                     </td>
 
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
+
                     {% if perms.cheques_receive_pay.delete_cash_box or perms.cheques_receive_pay.change_cashbox %}
                         <th class=" text-center border-bottom-0 action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
@@ -35,7 +48,13 @@
                     </th>
 
                     <th class="text-center border-bottom-0 rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                        شرح
+                        <span>&emsp;&emsp;</span>
+                        <span>شرح</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center text-light border-left col-img" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تاریخ
                     </th>
 
                     <th class="text-center text-light border-left" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -48,95 +67,100 @@
                     </th>
 
                     <th class="text-center border-bottom-0 rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
-                        شرح
+                        <span>&emsp;&emsp;</span>
+                        <span>شرح</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center text-light border-left col-img" rowspan="1" colspan="1" style="width: 100.797px;">
+                        تاریخ
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {% for cash_box in cash_boxes %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
-                        
-                        {% if cash_box.operation_type == 'set' %}
-                            <td data-sort="{{ cash_box.settle_amount }}">
-                                {{ cash_box.formatted_settle_amount }}
-                            </td>
-    
-                            {% if cash_box.settle_image %}
-                                <td class="text-center col-img">
-                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#settle_image{{ forloop.counter }}">
-                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
+                    {% for row, object in records_dict.items %}
+                        {% if cash_box.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                
+                                {% if cash_box.operation_type == 'set' %}
+                                    <td data-sort="{{ cash_box.settle_amount }}">
+                                        {{ cash_box.formatted_settle_amount }}
+                                    </td>
+                                    <td class="text-center col-img">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#settle_image{{ row }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+                                    {% include 'partials/img_modal.html' with img_type='settle_image' id=row img_src=cash_box.settle_image.url label='فیش واریز به مبلغ' owner=cash_box.formatted_settle_amount %}
+                                    <td>{{ cash_box.settle_description }}</td>     
+                                    <td>{{ cash_box.settle_date|jformat:'%Y/%m/%d' }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                    <td class="text-center col-img">_</td>
+                                    <td class="text-center">_</td>
+                                    <td class="text-center">_</td>
+                                {% endif %}
+
+                                {% if cash_box.operation_type == 'rem' %}
+                                    <td data-sort="{{ cash_box.removal_amount }}">
+                                        {{ cash_box.formatted_removal_amount }}
+                                    </td>
+                                    <td class="text-center col-img">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#removal_image{{ row }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+                                    {% include 'partials/img_modal.html' with img_type='removal_image' id=row img_src=cash_box.removal_image.url label='فیش برداشت به مبلغ' owner=cash_box.formatted_removal_amount %}
+                                    <td>{{ cash_box.removal_description }}</td> 
+                                    <td>{{ cash_box.removal_date|jformat:'%Y/%m/%d' }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                    <td class="text-center col-img">_</td>
+                                    <td class="text-center">_</td>
+                                    <td class="text-center">_</td>
+                                {% endif %}
+
+                                <td data-sort="{{ cash_box.create_record|date:'Ymd' }}" class="border-left">
+                                    {{ cash_box.create_record|jformat:'%Y/%m/%d - %H:%M:%S' }}
                                 </td>
-
-                                {% include 'partials/img_modal.html' with img_type='settle_image' id=forloop.counter img_src=cash_box.settle_image.url label='فیش واریز به مبلغ' owner=cash_box.formatted_settle_amount %}
-                            {% else %}
-                                <td class="text-center col-img">
-                                    <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
-                                    <span class="text-danger">بدون تصویر</span>
-                                </td>
-                            {% endif %}
-                            
-                            <td>{{ cash_box.settle_description }}</td>     
-                        
-                        {% else %}
-                            <td class="text-center">_</td>
-                            <td class="text-center col-img">_</td>
-                            <td class="text-center">_</td>
-                        {% endif %}
-
-                        {% if cash_box.operation_type == 'rem' %}
-                            <td data-sort="{{ cash_box.removal_amount }}">
-                                {{ cash_box.formatted_removal_amount }}
-                            </td>
-
-                            {% if cash_box.removal_image %}
-                                <td class="text-center col-img">
-                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#removal_image{{ forloop.counter }}">
-                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
-
-                                {% include 'partials/img_modal.html' with img_type='removal_image' id=forloop.counter img_src=cash_box.removal_image.url label='فیش برداشت به مبلغ' owner=cash_box.formatted_removal_amount %}
-                            {% else %}
-                                <td class="text-center col-img">
-                                    <i class="fa-solid fa-xmark" style="font-size: 2rem; color: red;"></i><br>
-                                    <span class="text-danger">بدون تصویر</span>
-                                </td>
-                            {% endif %}
-                            
-                            <td>{{ cash_box.removal_description }}</td> 
-
-                        {% else %}
-                            <td class="text-center">_</td>
-                            <td class="text-center col-img">_</td>
-                            <td class="text-center">_</td>
-                        {% endif %}
-                        
-                        {% if perms.cheques_receive_pay.delete_cashbox or perms.cheques_receive_pay.change_cashbox %}
-                            <td class="action-td d-flex justify-content-center rounded-0 pb-4">
-                                {% if perms.cheques_receive_pay.change_cashbox %}
-                                    <a href="{% url 'cheques_receive_pay:cash_box_update' cash_box.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
+                                {% if cash_box.update_record|date:'Ymd-HMS' == cash_box.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ cash_box.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ cash_box.update_record|jformat:'%Y/%m/%d - %H:%M:%S' }}
+                                    </td>
                                 {% endif %}
                                 
-                                {% if perms.cheques_receive_pay.delete_cashbox %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'cheques_receive_pay:cash_box_delete' pk=cash_box.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف عملیات صندوق اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                {% if perms.cheques_receive_pay.delete_cashbox or perms.cheques_receive_pay.change_cashbox %}
+                                    <td class="action-td d-flex justify-content-center rounded-0 pb-4">
+                                        {% if perms.cheques_receive_pay.change_cashbox %}
+                                            <a href="{% url 'cheques_receive_pay:cash_box_update' cash_box.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+                                        
+                                        {% if perms.cheques_receive_pay.delete_cashbox %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'cheques_receive_pay:cash_box_delete' pk=cash_box.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف عملیات صندوق اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 {% endif %}
-                            </td>
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
             </tbody>
 

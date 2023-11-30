@@ -1,0 +1,58 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+{% load humanizelib %}
+
+{% block title %}
+    {% if receive_pay.receive_pay == 'rec' %}دریافت{% else %}پرداخت{% endif %}
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'cheques_receive_pay:receive_pays' %}" class="btn btn-info mb-4">بازگشت به لیست دریافت‌ها/پرداخت‌ها</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش
+        {% if receive_pay.receive_pay == 'rec' %}دریافت{% else %}پرداخت{% endif %}
+    </h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
+        <td style="width: 150.797px;">{{ receive_pay.project }}</td>
+    </tr>
+    <tr>
+        {% if receive_pay.organ %}
+            <th style="width: 60.797px;">ارگان طرف حساب</th>
+            <td style="width: 150.797px;">{{ receive_pay.organ }}</td>
+        {% elif receive_pay.contractor %}
+            <th style="width: 60.797px;">پیمانکار طرف حساب</th>
+            <td style="width: 150.797px;">{{ receive_pay.contractor }}</td>
+        {% elif receive_pay.supplier %}
+            <th style="width: 60.797px;">تأمین کننده طرف حساب</th>
+            <td style="width: 150.797px;">{{ receive_pay.supplier }}</td>
+        {% elif receive_pay.personnel %}
+            <th style="width: 60.797px;">پرسنل طرف حساب</th>
+            <td style="width: 150.797px;">{{ receive_pay.personnel }}</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">مبلغ</th>
+        <td style="width: 150.797px;">{{ receive_pay.amount|intcomma }} ریال</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">موضوع</th>
+        <td style="width: 150.797px;">
+            <span>{% if receive_pay.receive_pay == 'rec' %}دریافت{% else %}پرداخت{% endif %}</span>
+            <span>بابت</span>
+            <span>{{ receive_pay.regard_to }}</span>
+        </td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">
+            تاریخ
+            <span>{% if receive_pay.receive_pay == 'rec' %}دریافت{% else %}پرداخت{% endif %}</span>
+        </th>
+        <td style="width: 150.797px;">{{ receive_pay.date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+{% endblock %}

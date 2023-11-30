@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    jalaliDatepicker.startWatch({ time: true });
+    jalaliDatepicker.startWatch({ time: false });
     $("#submit-btn").attr("disabled", "disabled");
     if ($('#id_operation_type').val() == 'rem') {
         $("#rem-field").removeClass("d-none");
@@ -65,8 +65,12 @@ $(document).ready(function () {
     $('#id_charge_date').on('input', function (e) {
         e.preventDefault();
         var date_value = $('#id_charge_date').val();
-
         $('#id_charge_date').val(date_value.replaceAll('/', '-'));
+    });
+    $('#id_removal_date').on('input', function (e) {
+        e.preventDefault();
+        var date_value = $('#id_removal_date').val();
+        $('#id_removal_date').val(date_value.replaceAll('/', '-'));
     });
     const numFormat = new Intl.NumberFormat();
     $('#id_cost_amount').on('input', function(e) {

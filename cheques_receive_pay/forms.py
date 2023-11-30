@@ -17,7 +17,6 @@ class ChequesForm(forms.ModelForm):
                     'project', 'account_party']
     
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(ChequesForm, self).__init__(*args, **kwargs)
 
         self.fields['cheque_for'] = forms.CharField(
@@ -50,32 +49,13 @@ class ChequesForm(forms.ModelForm):
             ]
         )
 
-        if url_name == 'cheque_create':
-            self.fields['export_receive_date'] = forms.DateTimeField(
-                label="تاریخ صدور / دریافت",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
-
-            self.fields['due_date'] = forms.DateTimeField(
-                label="تاریخ سررسید",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
-
 
 class FundForm(forms.ModelForm):
     use_required_attribute = False
 
     class Meta:
         model = Fund
-        fields = ['full_name', 'operation_type', 'cost_amount', 'cost_description', 'receipt_image',
+        fields = ['full_name', 'operation_type', 'cost_amount', 'cost_description', 'removal_date', 'receipt_image',
                     'charge_amount', 'charge_date', 'charge_image']
     
     def __init__(self, *args, **kwargs):
@@ -87,15 +67,9 @@ class FundForm(forms.ModelForm):
             validators=[none_numeric_value]
         )
 
-        if url_name == 'fund_create':
-            self.fields['charge_date'] = forms.DateTimeField(
-                label="تاریخ واریز",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
+        if url_name == 'fund_update':
+            self.fields['full_name'].disabled = True
+            self.fields['operation_type'].disabled = True
 
         self.fields['charge_date'].required = False
         self.fields['cost_amount'].help_text = 'جهت عملیات برداشت از تنخواه این فیلد لازم است'
@@ -113,9 +87,7 @@ class ReceivePayForm(forms.ModelForm):
                    'amount', 'regard_to', 'date', 'receipt_image']
     
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(ReceivePayForm, self).__init__(*args, **kwargs)
-
 
         self.fields['amount'] = forms.IntegerField(
             label="مبلغ",
@@ -132,28 +104,21 @@ class ReceivePayForm(forms.ModelForm):
             validators=[none_numeric_value]
         )
 
-        if url_name == 'receive_pay_create':
-            self.fields['date'] = forms.DateTimeField(
-                label="تاریخ",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
-
-
 
 class CashBoxForm(forms.ModelForm):
     use_required_attribute = False
 
     class Meta:
         model = CashBox
-        fields = ['operation_type', 'settle_amount', 'settle_image', 'settle_description', 
-                  'removal_amount', 'removal_image', 'removal_description']
+        fields = ['operation_type', 'settle_amount', 'settle_image', 'settle_description', 'settle_date',
+                  'removal_amount', 'removal_image', 'removal_description', 'removal_date']
         
     def __init__(self, *args, **kwargs):
+        url_name = kwargs.pop('url_name')
         super(CashBoxForm, self).__init__(*args, **kwargs)
+
+        if url_name == 'cash_box_update':
+            self.fields['operation_type'].disabled = True
 
         self.fields['settle_amount'].help_text = 'جهت عملیات واریز به صندوق این فیلد لازم است'
         self.fields['settle_image'].help_text = 'جهت عملیات واریز به صندوق این فیلد لازم است'

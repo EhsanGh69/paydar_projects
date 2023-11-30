@@ -6,24 +6,25 @@
 {% endblock %}
 
 {% block main %}
-<div class="card card-primary p-5">
+  {% block extra_cart %}{% endblock %}
+  <div class="card card-primary p-5">
     <div class="card-body col-12 col-lg-8 offset-lg-2">
       <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <p>
-            <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
-          </p>
-            {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        <h5>
-                            <i class="fa-solid fa-circle-xmark"></i>
-                            <span class="text-danger">{{ error }}</span>
-                        </h5>
-                    </div>
-                {% endfor %}
-            {% endif %}
-            {% block form %}{% endblock %}
+        {% csrf_token %}
+        <p>
+          <i class="text-info">پر کردن موارد ستاره‌دار الزامی می‌باشد</i>
+        </p>
+          {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                <h5>
+                  <i class="fa-solid fa-circle-xmark"></i>
+                  <span class="text-danger">{{ error }}</span>
+                </h5>
+              </div>
+            {% endfor %}
+          {% endif %}
+          {% block form %}{% endblock %}
       </form>
     </div>
   </div>

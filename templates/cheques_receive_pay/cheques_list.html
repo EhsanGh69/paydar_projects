@@ -1,5 +1,6 @@
 {% extends 'base_list.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست چک‌ها{% endblock %}
 
@@ -8,13 +9,21 @@
 {% block filter %}
     {% include 'cheques_receive_pay/filters/cheques_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='ثبت چک' create_perm=perms.cheques_receive_pay.add_cheques %}
 {% endblock %}
+
+{% block record_control %}
+    {% if 'search' in request.resolver_match.url_name %}
+        {% objects_records None search_url record_number records_count fields_order order_by list_filters %}
+    {% else %}
+        {% objects_records list_url None record_number records_count fields_order order_by %}
+    {% endif %}
+{% endblock %}
     
 {% block table %}
     {% include 'cheques_receive_pay/tables/cheques_table.html' with obj_name=persian_object_name %}
 {% endblock %}
     
 {% block pagination %}
-    {% include 'cheques_receive_pay/paginations/cheques_pagination.html' with page_obj=page_obj %}
+    {% include 'partials/objects_pagination.html' %}
 {% endblock %}
     
 {% block filter_control %}

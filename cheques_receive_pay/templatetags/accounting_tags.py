@@ -12,9 +12,12 @@ def fund_cash(full_name):
     fund_person = Fund.objects.filter(full_name=full_name)
     sum_costs = fund_person.aggregate(Sum('cost_amount'))
     sum_charge = fund_person.aggregate(Sum('charge_amount'))
-    cash = sum_charge['charge_amount__sum'] - sum_costs['cost_amount__sum']
-    if cash < 0:
-        cash = 0
+    cash = 0
+    if not sum_costs:
+        cash = sum_charge['charge_amount__sum']
+    else:
+        cash = sum_charge['charge_amount__sum'] - sum_costs['cost_amount__sum']
+    
     return {
         "cash": cash,
         "formatted_cash": "{:,}".format(cash)

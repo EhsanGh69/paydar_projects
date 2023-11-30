@@ -17,13 +17,14 @@
     {% endif %}
 {% endblock %}
 
+{% block extra_cart %}
+    {% include "cheques_receive_pay/tables/fund_names_table.html" with fund_names=fund_names %}
+{% endblock %}
+
 {% block form %}
 	{% include "cheques_receive_pay/forms/fund_form.html" %}
 {% endblock %}
 
 {% block form_control %}
-    {% if request.resolver_match.url_name == 'fund_update' %}
-        <script src="{% static 'scripts/cheques_receive_pay/fund_update.js' %}"></script>
-    {% endif %}
     <script src="{% static 'scripts/cheques_receive_pay/fund_form.js' %}"></script>
 {% endblock %}

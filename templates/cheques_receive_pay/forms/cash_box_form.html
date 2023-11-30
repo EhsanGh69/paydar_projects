@@ -5,7 +5,7 @@
     <div class="col-12 col-xl-6 mb-3">
         {{ form.operation_type|as_crispy_field }}
     </div>
-    <fieldset class="input-group border-bottom mb-3 d-none" id="rem-field">
+    <fieldset class="input-group mb-3 d-none" id="rem-field">
         <div class="col-12 col-xl-6 mb-3">
             {{ form.removal_amount|as_crispy_field }}
             <small class="form-text text-muted">
@@ -28,12 +28,26 @@
             <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
+            <label>{{ form.removal_date.label }}</label>
+            {% if form.removal_date.errors %}
+                {{ form.removal_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+                {% for error in form.removal_date.errors %}
+                    <p class="text-danger">
+                        <strong>{{ error }}</strong>
+                    </p>
+                {% endfor %}
+            {% else %}
+                {{ form.removal_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% endif %}
+            <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
             {{ form.removal_image|as_crispy_field }}
             <span class="text-danger d-none"
                   id="removal_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
         </div>
     </fieldset>
-    <fieldset class="input-group border-bottom mb-3 d-none" id="set-field">
+    <fieldset class="input-group mb-3 d-none" id="set-field">
         <div class="col-12 col-xl-6 mb-3">
             {{ form.settle_amount|as_crispy_field }}
             <small class="form-text text-muted">
@@ -43,7 +57,6 @@
         </div>
         <div class="col-12 col-xl-6 mb-3 mb-3">
             <label for="">{{ form.settle_description.label }}</label>
-
             {% if form.settle_description.errors %}
                 {{ form.settle_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
                 {% for error in form.settle_description.errors %}
@@ -54,7 +67,21 @@
             {% else %}
                 {{ form.settle_description|add_class:"form-control"|attr:"rows:5" }}
             {% endif %}
-            <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
+            <small class="form-text text-muted">جهت عملیات واریز به صندوق این فیلد لازم است</small>
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            <label>{{ form.settle_date.label }}</label>
+            {% if form.settle_date.errors %}
+                {{ form.settle_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+                {% for error in form.settle_date.errors %}
+                    <p class="text-danger">
+                        <strong>{{ error }}</strong>
+                    </p>
+                {% endfor %}
+            {% else %}
+                {{ form.settle_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% endif %}
+            <small class="form-text text-muted">جهت عملیات واریز به صندوق این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.settle_image|as_crispy_field }}

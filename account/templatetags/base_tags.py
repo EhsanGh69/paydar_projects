@@ -17,7 +17,7 @@ def min(value, arg):
     return value - arg
 
 @register.inclusion_tag("partials/objects_records.html")
-def objects_records(list_url, search_url, record_number, records_count, fields_order, order_by, list_filters=None):
+def objects_records(list_url, search_url, record_number, records_count, fields_order, order_by, list_filters=None, have_order=True):
     return {
         "list_url": list_url,
         "search_url": search_url,
@@ -25,7 +25,8 @@ def objects_records(list_url, search_url, record_number, records_count, fields_o
         "records_count": records_count,
         "fields_order": fields_order,
         "order_by": order_by,
-        "list_filters": list_filters
+        "list_filters": list_filters,
+        "have_order": have_order
     }
 
 @register.inclusion_tag("partials/pagination_urls.html")

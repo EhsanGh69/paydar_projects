@@ -1,0 +1,65 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+{% load humanizelib %}
+
+{% block title %}چک{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'cheques_receive_pay:cheques' %}" class="btn btn-info mb-4">بازگشت به لیست چک‌ها</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش چک</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
+        <td style="width: 150.797px;">{{ cheque.project }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">موضوع</th>
+        <td style="width: 150.797px;">
+            <span>{% if cheque_type == 'exp' %}صادر شده{% else %}دریافت شده{% endif %}</span>
+            <span>بابت</span>
+            <span>{{ cheque.cheque_for }}</span>
+        </td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">مبلغ</th>
+        <td style="width: 150.797px;">{{ cheque.cheque_amount|intcomma }} ریال</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">شماره چک</th>
+        <td style="width: 150.797px;">{{ cheque.cheque_number }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">بانک و شعبه</th>
+        <td style="width: 150.797px;">{{ cheque.bank_branch }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">صاحب حساب</th>
+        <td style="width: 150.797px;">{{ cheque.account_owner }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">طرف حساب</th>
+        <td style="width: 150.797px;">{{ cheque.account_party }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">وضعیت ثبت</th>
+        <td style="width: 150.797px;">
+            {% if cheque.registered %}ثبت شده{% else %}ثبت نشده{% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">
+            تاریخ
+            <span>{% if cheque_type == 'exp' %}صدور{% else %}دریافت{% endif %}</span>
+        </th>
+        <td style="width: 150.797px;">{{ cheque.export_receive_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">تاریخ سررسید</th>
+        <td style="width: 150.797px;">{{ cheque.due_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+{% endblock %}

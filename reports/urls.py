@@ -4,7 +4,8 @@ from .views import (
     ProjectReport, CostReport, WorkReferenceReport,
     ReceiveReport, PaymentReport, ActivityReport, 
     BuyerSellerReport, OrderReport, ConflictOrdersReport,
-    BankReceiptReport, ConditionStatementReport
+    BankReceiptReport, ConditionStatementReport,
+    ChequeReport, ReceivePayReport
 )
 
 
@@ -22,4 +23,6 @@ urlpatterns = [
     path('conflict_orders/<int:pk>', ConflictOrdersReport.as_view(), name='conflict_order_report'),
     path('bank_receipts/<int:pk>', BankReceiptReport.as_view(), name='bank_receipt_report'),
     path('condition_statements/<int:pk>', ConditionStatementReport.as_view(), name='condition_statement_report'),
+    path('cheques/<int:pk>', ChequeReport.as_view(), name='cheque_report'),
+    path('receive_pays/<int:pk>', ReceivePayReport.as_view(), name='receive_pay_report'),
 ]

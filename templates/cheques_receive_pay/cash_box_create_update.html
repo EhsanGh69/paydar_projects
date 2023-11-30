@@ -17,13 +17,14 @@
     {% endif %}
 {% endblock %}
 
+{% block extra_cart %}
+    {% include "cheques_receive_pay/tables/total_cash_table.html" %}
+{% endblock %}
+
 {% block form %}
 	{% include "cheques_receive_pay/forms/cash_box_form.html" %}
 {% endblock %}
 
 {% block form_control %}
-    {% if request.resolver_match.url_name == 'cash_box_update' %}
-        <script src="{% static 'scripts/cheques_receive_pay/cash_box_update.js' %}"></script>
-    {% endif %}
     <script src="{% static 'scripts/cheques_receive_pay/cash_box_form.js' %}"></script>
 {% endblock %}

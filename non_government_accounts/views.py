@@ -225,6 +225,7 @@ class SupplierSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     def get_queryset(self):
         global not_found
         global query
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
 
@@ -938,6 +939,7 @@ class ConflictOrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         global not_found
         global query
         global conflict_type_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         conflict_type_filter = self.request.GET.get('conflict_type')

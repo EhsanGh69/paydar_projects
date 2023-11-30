@@ -9,6 +9,7 @@ from government_accounts.models import Receive, Payment, Activity
 from non_government_accounts.models import BuyersSellers, Orders, ConflictOrders
 from projects.models import Project, Costs, WorkReference
 from projects_docs.models import BankReceipts, ConditionStatements
+from cheques_receive_pay.models import Cheques, ReceivePay
 
 
 class ReceiveReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -174,3 +175,35 @@ class ConditionStatementReport(LoginRequiredMixin, PermissionRequiredMixin, Deta
         context = super().get_context_data(**kwargs)
         context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
         return context
+    
+
+class ChequeReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'cheques_receive_pay.view_cheques'
+    context_object_name = "cheque"
+    template_name = 'reports/cheque_report.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Cheques, pk=pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+    
+
+class ReceivePayReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'cheques_receive_pay.view_receivepay'
+    context_object_name = "receive_pay"
+    template_name = "reports/receive_pay_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(ReceivePay, pk=pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+
+

@@ -103,6 +103,7 @@ class OwnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     def get_queryset(self):
         global not_found
         global query
+        global order_by
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
@@ -234,6 +235,7 @@ class ProjectSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global not_found
         global query
         global contract_filter
+        global order_by
         not_found = False
         request = self.request
         query = request.GET.get('data_search')
@@ -339,13 +341,6 @@ class WorkReferenceCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     success_url = reverse_lazy("projects:work_references")
     success_message = "ارجاع کار با موفقیت ثبت گردید"
 
-    def get_form_kwargs(self):
-        kwargs = super(WorkReferenceCreate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
-
 
 class WorkReferenceUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects.change_workreference'
@@ -354,13 +349,6 @@ class WorkReferenceUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     form_class = WorkReferenceForm
     success_url = reverse_lazy("projects:work_references")
     success_message = "ارجاع کار با موفقیت ویرایش شد"
-
-    def get_form_kwargs(self):
-        kwargs = super(WorkReferenceUpdate, self).get_form_kwargs()
-        kwargs.update({
-            'url_name': self.request.resolver_match.url_name
-        })
-        return kwargs
     
 
 class WorkReferenceDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -385,6 +373,7 @@ class WorkReferenceSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         global not_found
         global query
         global date_filter
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         date_filter = self.request.GET.get('date_filter')
@@ -519,6 +508,7 @@ class CostsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     def get_queryset(self):
         global not_found
         global query
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         
@@ -648,6 +638,7 @@ class PaymentsImagesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
     def get_queryset(self):
         global not_found
         global query
+        global order_by
         not_found = False
         query = self.request.GET.get('data_search')
         
