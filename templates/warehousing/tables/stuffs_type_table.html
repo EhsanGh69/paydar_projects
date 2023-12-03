@@ -1,26 +1,27 @@
-{% load accounting_tags %}
+{% load warehousing_tags %}
 
 <div class="row">
     <div class="card col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
         <div class="card-body p-0 pt-2">
             <div class="table-responsive" style="max-height: 10rem; overflow-y: auto;">
-                <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
+                <table id="data-table" class="table table-bordered table-striped sortable" 
+                role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr role="row">
                             <th class="text-center rounded-0 border-left" rowspan="1" colspan="1" style="width: 358.797px;;">
-                                نام تنخواه
+                                نوع کالا
                             </th>
 
                             <th class="text-center rounded-0 border-left" rowspan="1" colspan="1" style="width: 358.797px;;">
-                                موجودی تنخواه
+                                موجودی انبار اصلی
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for fund_name in fund_names %}
+                        {% for stuff in stuffs %}
                             <tr role="row" class="odd">
-                                <td class="border-left">{{ fund_name }}</td>
-                                {% fund_cash fund_name %}
+                                <td class="border-left">{{ stuff.stuff_type }}</td>
+                                {% total_stock stuff.stuff_type stuff.measurement_unit %}
                             </tr>
                         {% endfor %}
                     </tbody>

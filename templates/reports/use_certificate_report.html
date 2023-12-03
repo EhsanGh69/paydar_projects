@@ -1,0 +1,63 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+{% load humanizelib %}
+
+{% block title %}
+    گواهی مصرف کالا
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'warehousing:use_certificates' %}" class="btn btn-info mb-4">
+        بازگشت به لیست گواهی‌های مصرف کالا
+    </a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش گواهی مصرف کالا</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">نوع کالا</th>
+        <td style="width: 150.797px;">{{ use_certificate.stuff_type.stuff_type }}</td>
+    </tr>
+    {% if use_certificate.is_deficient %}
+        <tr>
+            <th style="width: 60.797px;">مقدار کسری کالا</th>
+            <td style="width: 150.797px;">
+                {{ use_certificate.deficient_amount }}
+                {{ use_certificate.stuff_type.persian_measurement_unit }}
+            </td>
+        </tr>
+    {% elif use_certificate.is_excess %}
+        <tr>
+            <th style="width: 60.797px;">مقدار مازاد کالا</th>
+            <td style="width: 150.797px;">
+                {{ use_certificate.excess_amount }}
+                {{ use_certificate.stuff_type.persian_measurement_unit }}
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">مرجوعی به</th>
+            <td style="width: 150.797px;">
+                {% if use_certificate.returned_to == 'prw' %}
+                    انبار پروژه
+                {% else %}
+                    انبار اصلی  
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">تاریخ خروج کالا</th>
+            <td style="width: 150.797px;">{{ use_certificate.return_date|jformat:'%d / %m / %Y' }}</td>
+        </tr>
+    {% endif %}
+    <tr>
+        <th style="width: 60.797px;">تاریخ شروع مصرف</th>
+        <td style="width: 150.797px;">{{ use_certificate.start_using_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">تاریخ پایان مصرف</th>
+        <td style="width: 150.797px;">{{ use_certificate.finish_using_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+{% endblock %}

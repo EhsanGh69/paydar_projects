@@ -1,0 +1,73 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+{% load humanizelib %}
+
+{% block title %}
+    {% if project_warehouse.status == 'exp' %}خروج{% else %}ورود{% endif %}
+    کالا به انبار پروژه
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'warehousing:project_warehouses' %}" class="btn btn-info mb-4">
+        بازگشت به لیست ورود و خروج کالا به انبار پروژه
+    </a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش 
+        {% if project_warehouse.status == 'exp' %}خروج{% else %}ورود{% endif %}
+        کالا به انبار پروژه 
+    </h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">پروژه مربوطه</th>
+        <td style="width: 150.797px;">{{ project_warehouse.project }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">نوع کالا</th>
+        <td style="width: 150.797px;">{{ project_warehouse.stuff_type.stuff_type }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">مقدار کالا</th>
+        <td style="width: 150.797px;">
+            {{ project_warehouse.stuff_amount|intcomma }}
+            {{ project_warehouse.stuff_type.persian_measurement_unit }}
+        </td>
+    </tr>
+    <tr>
+        {% if project_warehouse.personnel_apply %}
+            <th style="width: 60.797px;">پرسنل درخواست کننده</th>
+            <td style="width: 150.797px;">{{ project_warehouse.personnel_apply }}</td>
+        {% elif project_warehouse.contractor_apply %}
+            <th style="width: 60.797px;">پیمانکار درخواست کننده</th>
+            <td style="width: 150.797px;">{{ project_warehouse.contractor_apply }}</td>
+        {% endif %}
+    </tr>
+    <tr>
+        {% if project_warehouse.personnel_delivery %}
+            <th style="width: 60.797px;">پرسنل تحویل گیرنده</th>
+            <td style="width: 150.797px;">{{ project_warehouse.personnel_delivery }}</td>
+        {% elif project_warehouse.contractor_delivery %}
+            <th style="width: 60.797px;">پیمانکار تحویل گیرنده</th>
+            <td style="width: 150.797px;">{{ project_warehouse.contractor_delivery }}</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">بازه زمانی مصرف</th>
+        <td style="width: 150.797px;">
+            از:
+            {{ project_warehouse.use_certificate.start_using_date|jformat:'%d / %m / %Y' }}
+             - تا:
+            {{ project_warehouse.use_certificate.finish_using_date|jformat:'%d / %m / %Y' }}
+        </td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">تاریخ
+            {% if project_warehouse.status == 'exp' %}خروج{% else %}ورود{% endif %}
+            کالا
+        </th>
+        <td style="width: 150.797px;">{{ project_warehouse.export_import_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+{% endblock %}

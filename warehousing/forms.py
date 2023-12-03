@@ -24,17 +24,15 @@ class StuffForm(forms.ModelForm):
         )
 
 
-
 class MainWarehouseImportForm(forms.ModelForm):
     use_required_attribute = False
 
     class Meta:
         model = MainWarehouseImport
-        fields = ['supplier', 'other_sender', 'stuff_type', 'measurement_unit', 'stuff_amount',
-                   'receiver', 'date_time', 'is_returned', 'project_returned',]
+        fields = ['supplier', 'other_sender', 'stuff_type', 'stuff_amount',
+                   'receiver', 'import_date', 'is_returned', 'project_returned',]
     
     def __init__(self, *args, **kwargs):
-        url_name = kwargs.pop('url_name')
         super(MainWarehouseImportForm, self).__init__(*args, **kwargs)
 
         self.fields['stuff_amount'] = forms.IntegerField(
@@ -47,24 +45,14 @@ class MainWarehouseImportForm(forms.ModelForm):
             ]
         )
 
-        if url_name == 'warehouse_import_create':
-            self.fields['date_time'] = forms.DateTimeField(
-                label="تاریخ ارسال",
-                widget=forms.DateTimeInput(
-                    attrs={
-                        'value': ""
-                    }
-                )
-            )
-
 
 class MainWarehouseExportForm(forms.ModelForm):
     use_required_attribute = False
 
     class Meta:
         model = MainWarehouseExport
-        fields = ['personnel', 'contractor', 'stuff_type', 'measurement_unit', 
-                  'stuff_amount', 'deliverer', 'project']
+        fields = ['personnel', 'contractor', 'stuff_type', 'stuff_amount', 'deliverer', 
+                  'project', 'export_date']
         
     def __init__(self, *args, **kwargs):
         super(MainWarehouseExportForm, self).__init__(*args, **kwargs)
@@ -85,7 +73,7 @@ class UseCertificateForm(forms.ModelForm):
 
     class Meta:
         model = UseCertificate
-        fields = ['stuff_type', 'measurement_unit', 'is_deficient', 'deficient_amount', 'is_excess',
+        fields = ['stuff_type', 'is_deficient', 'deficient_amount', 'is_excess',
                   'excess_amount', 'start_using_date', 'finish_using_date', 'returned_to', 'return_date']
         
 
@@ -94,7 +82,7 @@ class ProjectWarehouseForm(forms.ModelForm):
 
     class Meta:
         model = ProjectWarehouse
-        fields = ['project', 'personnel_apply', 'contractor_apply', 'stuff_type', 'measurement_unit', 
+        fields = ['project', 'personnel_apply', 'contractor_apply', 'stuff_type', 'export_import_date', 
                   'stuff_amount', 'personnel_delivery', 'contractor_delivery', 'use_certificate', 'status']
         
     def __init__(self, *args, **kwargs):

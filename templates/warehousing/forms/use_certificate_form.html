@@ -9,17 +9,15 @@
         <div class="col-12 col-xl-6 mb-3">
             {{ form.stuff_type|as_crispy_field }}
         </div>
-        <div class="col-12 col-xl-6 mb-3">
-            {{ form.measurement_unit|as_crispy_field }}
-        </div>
-        <div class="col-12 col-xl-6 mb-3">
+        <div class="d-none d-xl-block col-xl-6 mb-3"></div>
+        <div class="col-12 col-xl-6 mt-4">
             {{ form.is_deficient|as_crispy_field }}
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.deficient_amount|as_crispy_field }}
             <span class="text-danger d-none" id="deficient_alert">لطفا مقدار کسری را وارد نمایید</span>
         </div>
-        <div class="col-12 col-xl-6 mb-3">
+        <div class="col-12 col-xl-6 mt-4">
             {{ form.is_excess|as_crispy_field }}
         </div>
         <div class="col-12 col-xl-6 mb-3">

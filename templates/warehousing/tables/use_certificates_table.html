@@ -14,6 +14,10 @@
                         کالا
                     </td>
 
+                    <td class="text-center text-light border-left" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
+                        مرجوعی
+                    </td>
+
                     <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
                         تاریخ شروع مصرف
                     </th>
@@ -22,13 +26,21 @@
                         تاریخ پایان مصرف
                     </th>
 
-                    <td class="text-center text-light border-left" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
-                        مرجوعی
-                    </td>
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
 
                     {% if perms.warehousing.delete_usecertificate or perms.warehousing.change_usecertificate %}
                         <th class=" text-center border-bottom-0 action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
@@ -39,7 +51,7 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        کسری دارد؟
+                        دارای کسری
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -47,7 +59,7 @@
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        مازاد دارد؟
+                        دارای مازاد
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
@@ -65,84 +77,113 @@
                 </tr>
             </thead>
             <tbody>
-
                 {% for use_certificate in use_certificates %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ use_certificate.stuff_type }}</td>
-                        
-                        {% if use_certificate.is_deficient %}
-                            <td class="text-center">بله</td>
-                            <td data-sort="{{ use_certificate.deficient_amount }}">
-                                {{ use_certificate.formatted_deficient_amount }}
-                            </td>
-                        {% else %}
-                            <td class="text-center">خیر</td>
-                            <td class="text-center">_</td>
-                        {% endif %}
-
-                        {% if use_certificate.is_excess %}
-                            <td class="text-center">بله</td>
-                            <td data-sort="{{ use_certificate.excess_amount }}">
-                                {{ use_certificate.formatted_excess_amount }}
-                            </td>
-                        {% else %}
-                            <td class="text-center">خیر</td>
-                            <td class="text-center">_</td>
-                        {% endif %}
-
-                        <td data-sort="{{ use_certificate.start_using_date|date:'Ymd' }}">
-                            {{ use_certificate.start_using_date|jformat:'%d / %m / %Y' }}
-                        </td>
-
-                        <td data-sort="{{ use_certificate.finish_using_date|date:'Ymd' }}">
-                            {{ use_certificate.finish_using_date|jformat:'%d / %m / %Y' }}
-                        </td>
-
-                        {% if use_certificate.is_excess %}
-
-                            <td>
-                                {% if use_certificate.returned_to == 'prw' %}
-                                    انبار پروژه
+                    {% for row, object in records_dict.items %}
+                        {% if use_certificate.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ use_certificate.stuff_type.stuff_type }}</td>
+                                
+                                {% if use_certificate.is_deficient %}
+                                    <td class="text-center">
+                                        <i class="fa fa-check-circle" style="color: green;"></i>
+                                    </td>
+                                    <td data-sort="{{ use_certificate.deficient_amount }}">
+                                        {{ use_certificate.formatted_deficient_amount }}
+                                        {{ use_certificate.stuff_type.persian_measurement_unit }}
+                                    </td>
                                 {% else %}
-                                    انبار اصلی
+                                    <td class="text-center">
+                                        <i class="fa fa-minus-circle" style="color: red;"></i>
+                                    </td>
+                                    <td class="text-center">_</td>
                                 {% endif %}
-                            </td>
 
-                            <td data-sort="{{ use_certificate.return_date|date:'Ymd' }}">
-                                {{ use_certificate.return_date|jformat:'%d / %m / %Y' }}
-                            </td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                            <td class="text-center">_</td>
+                                {% if use_certificate.is_excess %}
+                                    <td class="text-center">
+                                        <i class="fa fa-check-circle" style="color: green;"></i>
+                                    </td>
+                                    <td data-sort="{{ use_certificate.excess_amount }}">
+                                        {{ use_certificate.formatted_excess_amount }}
+                                        {{ use_certificate.stuff_type.persian_measurement_unit }}
+                                    </td>
+                                {% else %}
+                                    <td class="text-center">
+                                        <i class="fa fa-minus-circle" style="color: red;"></i>
+                                    </td>
+                                    <td class="text-center">_</td>
+                                {% endif %}
+
+                                {% if use_certificate.is_excess %}
+                                    <td>
+                                        {% if use_certificate.returned_to == 'prw' %}
+                                            انبار پروژه
+                                        {% else %}
+                                            انبار اصلی
+                                        {% endif %}
+                                    </td>
+                                    <td data-sort="{{ use_certificate.return_date|date:'Ymd' }}">
+                                        {{ use_certificate.return_date|jformat:'%d / %m / %Y' }}
+                                    </td>
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                    <td class="text-center">_</td>
+                                {% endif %}
+
+                                <td data-sort="{{ use_certificate.start_using_date|date:'Ymd' }}">
+                                    {{ use_certificate.start_using_date|jformat:'%d / %m / %Y' }}
+                                </td>
+
+                                <td data-sort="{{ use_certificate.finish_using_date|date:'Ymd' }}">
+                                    {{ use_certificate.finish_using_date|jformat:'%d / %m / %Y' }}
+                                </td>
+
+                                <td data-sort="{{ use_certificate.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ use_certificate.create_record|jformat:'%Y/%m/%d - %H:%M:%S' }}
+                                </td>
+                                {% if use_certificate.update_record|date:'Ymd-HMS' == use_certificate.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ use_certificate.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ use_certificate.update_record|jformat:'%Y/%m/%d - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
+
+                                {% if perms.warehousing.delete_usecertificate or perms.warehousing.change_usecertificate %}
+                                    <td class="action-td d-flex justify-content-center rounded-0 pb-4">
+                                        {% if perms.warehousing.change_usecertificate %}
+                                            <a href="{% url 'warehousing:use_certificate_update' use_certificate.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.warehousing.delete_usecertificate %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'warehousing:use_certificate_delete' pk=use_certificate.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف این گواهی مصرف اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.warehousing.view_usecertificate %}
+                                            <a href="{% url 'reports:use_certificate_report' use_certificate.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                            </tr>
                         {% endif %}
-
-                        {% if perms.warehousing.delete_usecertificate or perms.warehousing.change_usecertificate %}
-                            <td class="action-td d-flex justify-content-center rounded-0 pb-4">
-                                {% if perms.warehousing.change_usecertificate %}
-                                    <a href="{% url 'warehousing:use_certificate_update' use_certificate.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                {% endif %}
-
-                                {% if perms.warehousing.delete_usecertificate %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'warehousing:use_certificate_delete' pk=use_certificate.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف این گواهی مصرف اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
-                                {% endif %}
-                            </td>
-                        {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-        
         </table>
     </div>
 </div>

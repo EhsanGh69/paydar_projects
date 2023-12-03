@@ -112,10 +112,10 @@ class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             search_result = Cheques.objects.search(query).filter(cheque_type=cheque_type_filter).all() # type: ignore
 
         elif cheque_type_filter == "all" and date_filter != "all":
-            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = Cheques.objects.search(query).filter(due_date__range=filter_date_values(date_filter)).all() # type: ignore
 
         elif cheque_type_filter != "all" and date_filter != "all":
-            search_result = Cheques.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter), cheque_type=cheque_type_filter).all() # type: ignore
+            search_result = Cheques.objects.search(query).filter(due_date__range=filter_date_values(date_filter), cheque_type=cheque_type_filter).all() # type: ignore
         else:
             search_result = Cheques.objects.search(query) # type: ignore
 
@@ -142,7 +142,7 @@ class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         'cheque_type': cheque_type_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'project__title', 'بابت': 'cheque_for', 'بانک و شعبه': 'bank_branch', 
         'تاریخ صدور / دریافت': '-export_receive_date', 'تاریخ سررسید': 'due_date' }
         if order_by:
@@ -164,7 +164,7 @@ class FundList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'cheques_receive_pay/funds_list.html'
     model = Fund
     context_object_name = "funds"
-    paginate_by = 3
+    paginate_by = 4
 
     def get_queryset(self):
         global queryset
@@ -186,8 +186,8 @@ class FundList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         record_number = self.request.GET.get('record_number')
         if record_number:
             self.paginate_by = int(record_number) # type: ignore
-        elif records_count > 3:
-            record_number = 3
+        elif records_count > 4:
+            record_number = 4
         else:
             record_number = records_count
         context = super().get_context_data(**kwargs)
@@ -290,7 +290,7 @@ class FundSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'cheques_receive_pay/funds_list.html'
     model = Fund
     context_object_name = "funds"
-    paginate_by = 3
+    paginate_by = 4
 
     def get_queryset(self):
         global not_found
@@ -329,8 +329,8 @@ class FundSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         record_number = self.request.GET.get('record_number')
         if record_number:
             self.paginate_by = int(record_number) # type: ignore
-        elif records_count > 3:
-            record_number = 3
+        elif records_count > 4:
+            record_number = 4
         else:
             record_number = records_count
         context = super().get_context_data(**kwargs)
@@ -451,7 +451,7 @@ class ReceivePaySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         global search_result
 
         if date_filter != "all":
-            search_result = ReceivePay.objects.search(query).filter(due_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = ReceivePay.objects.search(query).filter(date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
             search_result = ReceivePay.objects.search(query) # type: ignore
 
@@ -481,7 +481,7 @@ class ReceivePaySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['list_filters'] = { 'data_search': query, 'date_filter': date_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'project__title', 'بابت': 'regard_to', 'تاریخ': 'date' }
         if order_by:
             context['order_by'] = order_by

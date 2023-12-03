@@ -4,6 +4,17 @@
 <div class="row">
     <fieldset class="input-group border-bottom mb-3">
         <legend class="mb-3">
+            <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">کالا</i>
+        </legend>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.stuff_type|as_crispy_field }}
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.stuff_amount|as_crispy_field }}
+        </div>
+    </fieldset>
+    <fieldset class="input-group border-bottom mb-3">
+        <legend class="mb-3">
             <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">درخواست کننده</i>
         </legend>
         <div class="col-12 col-xl-6 mb-3">
@@ -14,28 +25,23 @@
             {{ form.contractor|as_crispy_field }}
         </div>
     </fieldset>
-    <fieldset class="input-group border-bottom mb-3">
-        <legend class="mb-3">
-            <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">کالا</i>
-        </legend>
-        <div class="col-12 col-xl-6 mb-3">
-            {{ form.stuff_type|as_crispy_field }}
-        </div>
-        <div class="col-12 col-xl-6 mb-3">
-            {{ form.measurement_unit|as_crispy_field }}
-        </div>
-        <div class="col-12 col-xl-6 mb-3">
-            {{ form.stuff_amount|as_crispy_field }}
-        </div>
-    </fieldset>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.deliverer|as_crispy_field }}
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.project|as_crispy_field }}
     </div>
-  </div>
-  <div class="row">
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.export_date.label }}*</label>
+        {{ form.export_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+        {% if form.export_date.errors %}
+            {% for error in form.export_date.errors %}
+                <p class="text-danger">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<div class="row">
     <div class="col-8 col-sm-6 col-xl-4 my-4">
         <button class="btn btn-success btn-block" type="submit">
             {% if request.resolver_match.url_name == 'warehouse_export_create' %}
@@ -44,5 +50,5 @@
                 <span>ویرایش کالای خارج شده از انبار</span>
             {% endif %}
         </button>
-      </div>
-  </div>
+    </div>
+</div>

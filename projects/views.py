@@ -380,7 +380,7 @@ class WorkReferenceSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
 
         global search_result
         if date_filter != "all":
-            search_result = WorkReference.objects.search(query).filter(follow_date__date__range=filter_date_values(date_filter)).all() # type: ignore
+            search_result = WorkReference.objects.search(query).filter(follow_date__range=filter_date_values(date_filter)).all() # type: ignore
         else:
             search_result = WorkReference.objects.search(query).all() # type: ignore
 

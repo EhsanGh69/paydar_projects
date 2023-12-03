@@ -4,6 +4,17 @@
 <div class="row">
     <fieldset class="input-group border-bottom mb-3">
         <legend class="mb-3">
+            <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">کالا</i>
+        </legend>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.stuff_type|as_crispy_field }}
+        </div>
+        <div class="col-12 col-xl-6 mb-3">
+            {{ form.stuff_amount|as_crispy_field }}
+        </div>
+    </fieldset>
+    <fieldset class="input-group border-bottom mb-3">
+        <legend class="mb-3">
             <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">فرستنده</i>
         </legend>
         <div class="col-12 col-xl-6 mb-3">
@@ -14,33 +25,19 @@
             {{ form.other_sender|add_class:"form-control"|attr:"rows:5" }}
         </div>
     </fieldset>
-    <fieldset class="input-group border-bottom mb-3">
-        <legend class="mb-3">
-            <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">کالا</i>
-        </legend>
+    <fieldset class="input-group mb-3 border-bottom">
+        <div class="col-12 col-xl-6 mb-3">{{ form.receiver|as_crispy_field }}</div>
         <div class="col-12 col-xl-6 mb-3">
-            {{ form.stuff_type|as_crispy_field }}
-        </div>
-        <div class="col-12 col-xl-6 mb-3">
-            {{ form.measurement_unit|as_crispy_field }}
-        </div>
-        <div class="col-12 col-xl-6 mb-3">
-            {{ form.stuff_amount|as_crispy_field }}
+            <label>{{ form.import_date.label }}*</label>
+            {{ form.import_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% if form.import_date.errors %}
+                {% for error in form.import_date.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
         </div>
     </fieldset>
-    <div class="col-12 col-xl-6 mb-3">
-    {{ form.receiver|as_crispy_field }}
-    </div>
-    <div class="col-12 col-xl-6 mb-3">
-        <label>{{ form.date_time.label }}*</label>
-        {{ form.date_time|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
-        {% if form.date_time.errors %}
-            {% for error in form.date_time.errors %}
-                <p class="text-danger">{{ error }}</p>
-            {% endfor %}
-        {% endif %}
-    </div>
-    <fieldset class="input-group border-bottom mb-3">
+    <fieldset class="input-group mb-3">
         <legend class="mb-3">
             <i class="bg-info text-light p-1 rounded" style="font-size: 1.2rem;">مرجوعی</i>
         </legend>

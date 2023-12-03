@@ -1,12 +1,21 @@
 {% extends 'base_list.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست ورود و خروج کالا به انبار پروژه{% endblock %}
 
 {% block page_title %}لیست ورود و خروج کالا به انبار پروژه{% endblock %}
 
 {% block filter %}
-    {% include 'warehousing/filters/project_warehouses_filter.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='ثبت عملیات انبار پروژه' create_perm=perms.warehousing.add_projectwarehouse %}
+    {% include 'warehousing/filters/project_warehouses_filter.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='ثبت عملیات انبار پروژه' create_perm=perms.warehousing.add_projectwarehouse %}
+{% endblock %}
+
+{% block record_control %}
+    {% if 'search' in request.resolver_match.url_name %}
+        {% objects_records None search_url record_number records_count fields_order order_by list_filters %}
+    {% else %}
+        {% objects_records list_url None record_number records_count fields_order order_by %}
+    {% endif %}
 {% endblock %}
 
 {% block table %}
@@ -14,7 +23,7 @@
 {% endblock %}
 
 {% block pagination %}
-    {% include 'warehousing/paginations/project_warehouses_pagination.html' with page_obj=page_obj %}
+    {% include 'partials/objects_pagination.html' %}
 {% endblock %}
 
 {% block filter_control %}

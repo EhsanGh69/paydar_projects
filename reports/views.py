@@ -10,6 +10,7 @@ from non_government_accounts.models import BuyersSellers, Orders, ConflictOrders
 from projects.models import Project, Costs, WorkReference
 from projects_docs.models import BankReceipts, ConditionStatements
 from cheques_receive_pay.models import Cheques, ReceivePay
+from warehousing.models import MainWarehouseImport, MainWarehouseExport, UseCertificate, ProjectWarehouse
 
 
 class ReceiveReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -207,3 +208,61 @@ class ReceivePayReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
         return context
 
 
+class MainWarehouseImportReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'warehousing.view_mainwarehouseimport'
+    context_object_name = "warehouse_import"
+    template_name = "reports/warehouse_import_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(MainWarehouseImport, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+
+
+class MainWarehouseExportReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'warehousing.view_mainwarehouseexport'
+    context_object_name = "warehouse_export"
+    template_name = "reports/warehouse_export_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(MainWarehouseExport, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+
+
+class UseCertificateReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'warehousing.view_usecertificate'
+    context_object_name = "use_certificate"
+    template_name = "reports/use_certificate_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(UseCertificate, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+    
+
+class ProjectWarehouseReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'warehousing.view_projectwarehouse'
+    context_object_name = "project_warehouse"
+    template_name = "reports/project_warehouse_report.html"
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(ProjectWarehouse, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context

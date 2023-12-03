@@ -677,7 +677,7 @@ class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         'payment_order': payment_order_filter, 'buyer_seller': buyer_seller_filter}
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'project__title', 'نام و نام خانوادگی': 'full_name',
         'تاریخ پرداخت': '-payment_date'}
         if order_by:
@@ -839,7 +839,7 @@ class OrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         'order_result': order_result_filter, 'order_image_type': order_image_filter}
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'project__title', 'تأمین کننده': 'supplier__full_name', 
         'نوع سفارش': 'order_type', 'تاریخ سفارش': '-order_date'}
         if order_by:
@@ -977,7 +977,7 @@ class ConflictOrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         context['list_filters'] = { 'data_search': query, 'conflict_type': conflict_type_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'order__project__title', 'تأمین‌کننده': 'order__supplier__full_name',
         'نوع سفارش': 'order__order_type', 'تاریخ سفارش': '-order__order_date'}
         if order_by:

@@ -1,5 +1,6 @@
 {% extends 'base_list.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست کالاها{% endblock %}
 
@@ -9,12 +10,20 @@
     {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='افزودن کالا' create_perm=perms.warehousing.add_stuff %}
 {% endblock %}
 
+{% block record_control %}
+    {% if 'search' in request.resolver_match.url_name %}
+        {% objects_records None search_url record_number records_count None None list_filters False %}
+    {% else %}
+        {% objects_records list_url None record_number records_count None None None False %}
+    {% endif %}
+{% endblock %}
+
 {% block table %}
-    {% include 'warehousing/tables/stuffs_table.html' with obj_name=persian_object_name %}
+    {% include 'warehousing/tables/stuffs_table.html' %}
 {% endblock %}
 
 {% block pagination %}
-    {% include 'warehousing/paginations/stuffs_pagination.html' with page_obj=page_obj %}
+    {% include 'partials/objects_pagination.html' %}
 {% endblock %}
 
 {% block filter_control %}

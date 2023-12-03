@@ -469,7 +469,7 @@ class AgreementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['list_filters'] = { 'data_search': query, 'date_filter': date_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'project__title', 'طرف حساب': 'account_party',
         'تاریخ توافق‌نامه': '-agreement_date'}
         if order_by:
@@ -617,7 +617,7 @@ class BankReceiptsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         'receipt_type': receipt_type_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'project__title', 'تاریخ': '-receipt_date'}
         if order_by:
             context['order_by'] = order_by
@@ -764,7 +764,7 @@ class ConditionStatementsSearch(LoginRequiredMixin, PermissionRequiredMixin, Lis
         'management_confirm': management_confirm_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'project__title', 'پیمانکار': 'contractor__full_name' }
         if order_by:
             context['order_by'] = order_by
@@ -902,7 +902,7 @@ class RegisteredDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         context['list_filters'] = { 'data_search': query, 'doc_type': doc_type_filter }
         context['record_number'] = record_number
         context['records_count'] = records_count
-        context['records_dict'] = dict(zip(records_rows, queryset))
+        context['records_dict'] = dict(zip(records_rows, search_result))
         context['fields_order'] = { 'پروژه': 'project__title' }
         if order_by:
             context['order_by'] = order_by

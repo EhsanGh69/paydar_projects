@@ -24,9 +24,6 @@
             {{ form.stuff_type|as_crispy_field }}
         </div>
         <div class="col-12 col-xl-6 mb-3">
-            {{ form.measurement_unit|as_crispy_field }}
-        </div>
-        <div class="col-12 col-xl-6 mb-3">
             {{ form.stuff_amount|as_crispy_field }}
         </div>
     </fieldset>
@@ -46,6 +43,15 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.status|as_crispy_field }}
+    </div>
+    <div class="col-12 col-xl-6 mb-3">
+        <label>{{ form.export_import_date.label }}*</label>
+        {{ form.export_import_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+        {% if form.export_import_date.errors %}
+            {% for error in form.export_import_date.errors %}
+                <p class="text-danger">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 <div class="row">

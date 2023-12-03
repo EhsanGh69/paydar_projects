@@ -5,7 +5,8 @@ from .views import (
     ReceiveReport, PaymentReport, ActivityReport, 
     BuyerSellerReport, OrderReport, ConflictOrdersReport,
     BankReceiptReport, ConditionStatementReport,
-    ChequeReport, ReceivePayReport
+    ChequeReport, ReceivePayReport,
+    MainWarehouseImportReport, MainWarehouseExportReport, UseCertificateReport, ProjectWarehouseReport
 )
 
 
@@ -25,4 +26,8 @@ urlpatterns = [
     path('condition_statements/<int:pk>', ConditionStatementReport.as_view(), name='condition_statement_report'),
     path('cheques/<int:pk>', ChequeReport.as_view(), name='cheque_report'),
     path('receive_pays/<int:pk>', ReceivePayReport.as_view(), name='receive_pay_report'),
+    path('warehouse_imports/<int:pk>', MainWarehouseImportReport.as_view(), name='warehouse_import_report'),
+    path('warehouse_exports/<int:pk>', MainWarehouseExportReport.as_view(), name='warehouse_export_report'),
+    path('use_certificates/<int:pk>', UseCertificateReport.as_view(), name='use_certificate_report'),
+    path('project_warehouses/<int:pk>', ProjectWarehouseReport.as_view(), name='project_warehouse_report'),
 ]

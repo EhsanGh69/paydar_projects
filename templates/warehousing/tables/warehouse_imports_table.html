@@ -11,140 +11,167 @@
                     </th>
 
                     <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
-                        فرستنده
-                    </td>
-
-                    <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
                         کالا
                     </td>
 
-                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                        تحویل گیرنده
-                    </th>
-
-                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                        تاریخ و زمان
-                    </th>
-
                     <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px; background-color: #808080;">
-                        مرجوعی
+                        فرستنده
                     </td>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                        <span>&emsp;</span>
+                        <span>تحویل گیرنده</span>
+                        <span>&emsp;</span>
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                        تاریخ ورود کالا
+                    </th>
+
+                    <th class="text-center text-light" rowspan="2" colspan="1" style="width: 100.797px;">
+                        مرجوعی
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                        مرجوعی از پروژه
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
+                    </th>
 
                     {% if perms.warehousing.delete_mainwarehouseimport or perms.warehousing.change_mainwarehouseimport %}
                         <th class="text-center action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
             
                 <tr role="row">
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        <span>&emsp;</span>
+                        <span>نوع کالا</span>
+                        <span>&emsp;</span>
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>مقدار</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
                     <th class="text-center border-left" rowspan="1" colspan="1" style="width: 100.797px;">
-                        تأمین کننده
+                        <span>&emsp;</span>
+                        <span>تأمین کننده</span>
+                        <span>&emsp;</span>
                     </th>
 
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        سایر
-                    </th>
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        نوع کالا
-                    </th>
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        مقدار
-                    </th>
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        مرجوعی هست یا خیر؟
-                    </th>
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        مرجوعی از پروژه
+                    <th class="text-center rounded-0" rowspan="1" colspan="1" style="width: 100.797px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>سایر</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
                     
                 </tr>
             </thead>
             <tbody>
-
                 {% for warehouse_import in warehouse_imports %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
+                    {% for row, object in records_dict.items %}
+                        {% if warehouse_import.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ warehouse_import.stuff_type.stuff_type }}</td>
+                                <td data-sort="{{ warehouse_import.stuff_amount }}">
+                                    {{ warehouse_import.stuff_amount }} 
+                                    {{ warehouse_import.stuff_type.persian_measurement_unit }}
+                                </td>
 
-                        {% if warehouse_import.supplier %}
-                            <td>{{ warehouse_import.supplier }}</td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                        {% endif %}
-
-                        {% if warehouse_import.other_sender %}
-                            <td>{{ warehouse_import.other_sender }}</td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                        {% endif %}
-
-                        <td>{{ warehouse_import.stuff_type }}</td>
-                        
-                        <td data-sort="{{ warehouse_import.stuff_amount }}">
-                            {{ warehouse_import.stuff_amount }} 
-                            {% if warehouse_import.measurement_unit == "sqm" %}
-                                مترمربع
-                            {% elif warehouse_import.measurement_unit == "mel" %}
-                                متر طول
-                            {% elif warehouse_import.measurement_unit == "kgm" %}
-                                کیلوگرم
-                            {% elif warehouse_import.measurement_unit == "ton" %}
-                                تن
-                            {% else %}
-                                عدد
-                            {% endif %}
-                        </td>
-                        
-                        <td>{{ warehouse_import.receiver }}</td>
-
-                        
-                        <td data-sort="{{ warehouse_import.date_time|date:'Ymd' }}">
-                            {{ warehouse_import.date_time|jformat:'%d / %m / %Y - %H:%M:%S' }}
-                        </td>
-                    
-
-                        {% if warehouse_import.is_returned %}
-                            <td class="text-center">بله</td>
-                        {% else %}
-                            <td class="text-center">خیر</td>
-                        {% endif %}
-
-                        {% if warehouse_import.project_returned %}
-                            <td>{{ warehouse_import.project_returned }}</td>
-                        {% else %}
-                            <td class="text-center">_ </td>
-                        {% endif %}
-
-                        {% if perms.warehousing.delete_mainwarehouseimport or perms.warehousing.change_mainwarehouseimport %}
-                            <td class="action-td d-flex justify-content-center rounded-0 pb-4">
-                                {% if perms.warehousing.change_mainwarehouseimport %}
-                                    <a href="{% url 'warehousing:warehouse_import_update' warehouse_import.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-2" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
+                                {% if warehouse_import.supplier %}
+                                    <td>{{ warehouse_import.supplier }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
                                 {% endif %}
 
-                                {% if perms.warehousing.delete_mainwarehouseimport %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'warehousing:warehouse_import_delete' pk=warehouse_import.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف این کالا اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                {% if warehouse_import.other_sender %}
+                                    <td>{{ warehouse_import.other_sender }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
                                 {% endif %}
-                            </td>
+                                
+                                <td>{{ warehouse_import.receiver }}</td>
+
+                                <td data-sort="{{ warehouse_import.import_date|date:'Ymd' }}">
+                                    {{ warehouse_import.import_date|jformat:'%d / %m / %Y' }}
+                                </td>
+
+                                <td class="text-center">
+                                    {% if warehouse_import.is_returned %}
+                                        <i class="fa fa-check-circle" style="color: green;"></i>
+                                    {% else %}
+                                        <i class="fa fa-minus-circle" style="color: red;"></i>
+                                    {% endif %}
+                                </td>
+
+                                {% if warehouse_import.project_returned %}
+                                    <td>{{ warehouse_import.project_returned }}</td>
+                                {% else %}
+                                    <td class="text-center">_ </td>
+                                {% endif %}
+
+                                <td data-sort="{{ warehouse_import.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ warehouse_import.create_record|jformat:'%Y/%m/%d - %H:%M:%S' }}
+                                </td>
+                                {% if warehouse_import.update_record|date:'Ymd-HMS' == warehouse_import.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ warehouse_import.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ warehouse_import.update_record|jformat:'%Y/%m/%d - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
+
+                                {% if perms.warehousing.delete_mainwarehouseimport or perms.warehousing.change_mainwarehouseimport %}
+                                    <td class="action-td d-flex justify-content-center rounded-0 pb-4">
+                                        {% if perms.warehousing.change_mainwarehouseimport %}
+                                            <a href="{% url 'warehousing:warehouse_import_update' warehouse_import.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-2" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.warehousing.delete_mainwarehouseimport %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'warehousing:warehouse_import_delete' pk=warehouse_import.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف این کالا اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.warehousing.view_mainwarehouseimport %}
+                                            <a href="{% url 'reports:warehouse_import_report' warehouse_import.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-        
         </table>
     </div>
 </div>

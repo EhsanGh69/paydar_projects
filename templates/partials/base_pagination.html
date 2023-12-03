@@ -1,55 +1,52 @@
 {% load base_tags %}
 
-<div class="row mt-3 p-0">
-            
-    <div class="col-6 col-sm-12 col-md-6">
+{% if records_count > record_number|to_int %}
+    <div class="row mt-3 p-0">
+        <div class="col-6 col-sm-12 col-md-6">
+            <div class="dataTables_paginate paging_simple_numbers d-flex justify-content-center justify-content-md-end" id="example1_paginate">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="paginate_button page-item previous" id="example1_previous">
+                            <a href="{% block previous_page_url %}{% endblock %}" 
+                            aria-controls="example1" 
+                            data-dt-idx="0" tabindex="0" class="page-link">قبلی</a>
+                        </li>
+                    {% endif %}
 
-        <div class="dataTables_paginate paging_simple_numbers d-flex justify-content-center justify-content-md-end" id="example1_paginate">
-
-            <ul class="pagination">
-
-                {% if page_obj.has_previous %}
-                    <li class="paginate_button page-item previous" id="example1_previous">
-                        <a href="{% block previous_page_url %}{% endblock %}" 
-                        aria-controls="example1" 
-                        data-dt-idx="0" tabindex="0" class="page-link">قبلی</a>
-                    </li>
-                {% endif %}
-
-                {% for page_item in page_obj.paginator.page_range %}
-                    {% if page_obj.number != page_item %}
-                        {% if page_obj.number|min:page_item == 1 or page_item|min:page_obj.number == 1 or forloop.first or forloop.last %}
-                            <li class="paginate_button page-item">
-                                <a href="{% block page_item_url %}{% endblock %}" 
-                                aria-controls="example1" data-dt-idx="1" 
+                    {% for page_item in page_obj.paginator.page_range %}
+                        {% if page_obj.number != page_item %}
+                            {% if page_obj.number|min:page_item == 1 or page_item|min:page_obj.number == 1 or forloop.first or forloop.last %}
+                                <li class="paginate_button page-item">
+                                    <a href="{% block page_item_url %}{% endblock %}" 
+                                    aria-controls="example1" data-dt-idx="1" 
+                                    tabindex="0" class="page-link">
+                                        {{ page_item }}
+                                    </a>
+                                </li>
+                            {% elif page_obj.number|min:page_item == 2 or page_item|min:page_obj.number == 2 %}
+                                <li class="mx-2">
+                                    <span>...</span>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="paginate_button page-item active">
+                                <span aria-controls="example1" data-dt-idx="1" 
                                 tabindex="0" class="page-link">
                                     {{ page_item }}
-                                </a>
-                            </li>
-                        {% elif page_obj.number|min:page_item == 2 or page_item|min:page_obj.number == 2 %}
-                            <li class="mx-2">
-                                <span>...</span>
-                            </li>
+                                </span>
+                            </li> 
                         {% endif %}
-                    {% else %}
-                        <li class="paginate_button page-item active">
-                            <span aria-controls="example1" data-dt-idx="1" 
-                            tabindex="0" class="page-link">
-                                {{ page_item }}
-                            </span>
-                        </li> 
-                    {% endif %}
-                {% endfor %}
+                    {% endfor %}
 
-                {% if page_obj.has_next %}
-                    <li class="paginate_button page-item next" id="example1_next">
-                        <a href="{% block next_page_url %}{% endblock %}" 
-                        aria-controls="example1" data-dt-idx="0" 
-                        tabindex="0" class="page-link">بعدی</a>
-                    </li>
-                {% endif %}
-                
-            </ul>
+                    {% if page_obj.has_next %}
+                        <li class="paginate_button page-item next" id="example1_next">
+                            <a href="{% block next_page_url %}{% endblock %}" 
+                            aria-controls="example1" data-dt-idx="0" 
+                            tabindex="0" class="page-link">بعدی</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}

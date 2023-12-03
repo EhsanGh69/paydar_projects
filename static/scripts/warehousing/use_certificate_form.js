@@ -9,11 +9,13 @@ $(document).ready(function () {
         if(this.checked){
             $("#deficient_alert").removeClass("d-none");
             $("#id_deficient_amount").removeAttr("disabled");
+            $("#id_is_excess").attr("disabled","disabled");
             $("#submit-btn").attr("type","button");
         }else{
             $("#deficient_alert").addClass("d-none");
             $("#id_deficient_amount").attr("disabled","disabled");
             $("#submit-btn").attr("type","submit");
+            $("#id_is_excess").removeAttr("disabled");
         }
     });
     $('#id_deficient_amount').change(function (e) { 
@@ -24,6 +26,7 @@ $(document).ready(function () {
     $('#id_is_excess').change(function (e) { 
         e.preventDefault();
         if(this.checked){
+            $("#id_is_deficient").attr("disabled","disabled");
             $("#excess_alert").removeClass("d-none");
             $("#return_alert").removeClass("d-none");
             $("#id_excess_amount").removeAttr("disabled");
@@ -31,6 +34,7 @@ $(document).ready(function () {
             $("#id_return_date").removeAttr("disabled");
             $("#submit-btn").attr("type","button");
         }else{
+            $("#id_is_deficient").removeAttr("disabled");
             $("#excess_alert").addClass("d-none");
             $("#return_alert").addClass("d-none");
             $("#id_excess_amount").attr("disabled","disabled");

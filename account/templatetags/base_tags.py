@@ -16,6 +16,10 @@ def main_menu(request, app_name, list_path_name, create_path_name, update_path_n
 def min(value, arg):
     return value - arg
 
+@register.filter()
+def to_int(value):
+    return int(value)
+
 @register.inclusion_tag("partials/objects_records.html")
 def objects_records(list_url, search_url, record_number, records_count, fields_order, order_by, list_filters=None, have_order=True):
     return {

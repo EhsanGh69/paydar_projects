@@ -1,12 +1,21 @@
 {% extends 'base_list.html' %}
 {% load static %}
+{% load base_tags %}
 
 {% block title %}لیست کالاهای خارج شده از انبار اصلی{% endblock %}
 
 {% block page_title %}لیست کالاهای خارج شده از انبار اصلی{% endblock %}
 
 {% block filter %}
-    {% include 'partials/search_print.html' with search_url=search_url date_filter=False create_url=create_url list_url=list_url title='افزودن کالا به انبار' create_perm=perms.warehousing.add_mainwarehouseexport %}
+    {% include 'partials/search_print.html' with search_url=search_url date_filter=True create_url=create_url list_url=list_url title='افزودن کالا به انبار' create_perm=perms.warehousing.add_mainwarehouseexport %}
+{% endblock %}
+
+{% block record_control %}
+    {% if 'search' in request.resolver_match.url_name %}
+        {% objects_records None search_url record_number records_count fields_order order_by list_filters %}
+    {% else %}
+        {% objects_records list_url None record_number records_count fields_order order_by %}
+    {% endif %}
 {% endblock %}
 
 {% block table %}
@@ -14,7 +23,7 @@
 {% endblock %}
 
 {% block pagination %}
-    {% include 'warehousing/paginations/warehouse_exports_pagination.html' with page_obj=page_obj %}
+    {% include 'partials/objects_pagination.html' %}
 {% endblock %}
     
 {% block filter_control %}

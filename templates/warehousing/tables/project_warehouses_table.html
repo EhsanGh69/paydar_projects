@@ -11,15 +11,17 @@
                     </th>
 
                     <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                        پروژه
+                        <span>&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;</span>
                     </th>
 
                     <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px;background-color: #808080;">
-                        درخواست کننده
+                        کالا
                     </td>
 
                     <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px;background-color: #808080;">
-                        کالا
+                        درخواست کننده
                     </td>
 
                     <td class="text-center text-light" rowspan="1" colspan="2" style="width: 100.797px;background-color: #808080;">
@@ -27,131 +29,181 @@
                     </td>
 
                     <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                        گواهی مصرف
+                        <span>&emsp;</span>
+                        <span>بازه زمانی مصرف</span>
+                        <span>&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
-                        وضعیت
+                        <span>&emsp;</span>
+                        <span>وضعیت</span>
+                        <span>&emsp;</span>
+                    </th>
+
+                    <th class="text-center" rowspan="2" colspan="1" style="width: 100.797px;">
+                        تاریخ ورود/خروج
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        <span>&emsp;</span>
+                        <span>زمان ثبت</span>
+                        <span>&emsp;</span>
+                    </th>
+
+                    <th class="text-center border-left" rowspan="2" colspan="1" style="width: 236.094px;">
+                        زمان آخرین ویرایش
                     </th>
                     
                     {% if perms.warehousing.delete_projectwarehouse or perms.warehousing.change_projectwarehouse %}
                         <th class=" text-center border-bottom-0 action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
-                            اقدام
+                            <span>&emsp;&emsp;&emsp;</span>
+                            <span>اقدام</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
                 <tr role="row">
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        پرسنل
-                    </th>
-
-                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        پیمانکار
-                    </th>
-
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
                         نوع کالا
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        مقدار
+                        <span>&emsp;&emsp;</span>
+                        <span>مقدار</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        پرسنل
+                        <span>&emsp;&emsp;</span>
+                        <span>پرسنل</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
                     <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
-                        پیمانکار
+                        <span>&emsp;&emsp;</span>
+                        <span>پیمانکار</span>
+                        <span>&emsp;&emsp;</span>
                     </th>
 
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>پرسنل</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
+
+                    <th class="text-center" rowspan="1" colspan="1" style="width: 100.797px;">
+                        <span>&emsp;&emsp;</span>
+                        <span>پیمانکار</span>
+                        <span>&emsp;&emsp;</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
-
                 {% for project_warehouse in project_warehouses %}
-                    <tr role="row" class="odd">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ project_warehouse.project }}</td>
-                        
-                        {% if project_warehouse.personnel_apply %}
-                            <td>{{ project_warehouse.personnel_apply }}</td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                        {% endif %}
+                    {% for row, object in records_dict.items %}
+                        {% if project_warehouse.pk == object.pk %}
+                            <tr role="row" class="odd">
+                                <td>{{ row }}</td>
+                                <td>{{ project_warehouse.project }}</td>
+                                <td>{{ project_warehouse.stuff_type.stuff_type }}</td>
 
-                        {% if project_warehouse.contractor_apply %}
-                            <td>{{ project_warehouse.contractor_apply }}</td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                        {% endif %}
-
-                        <td>{{ project_warehouse.stuff_type }}</td>
-
-                        <td data-sort="{{ project_warehouse.stuff_amount }}">
-                            {{ project_warehouse.formatted_stuff_amount }}
-                            {% if project_warehouse.measurement_unit == 'sqm' %}
-                                مترمربع
-                            {% elif project_warehouse.measurement_unit == 'mel' %}
-                                مترطول
-                            {% elif project_warehouse.measurement_unit == 'kgm' %}
-                                کیلوگرم
-                            {% elif project_warehouse.measurement_unit == 'ton' %}
-                                تن
-                            {% else %}
-                                عدد
-                            {% endif %}
-                        </td>
-
-                        {% if project_warehouse.personnel_delivery %}
-                            <td>{{ project_warehouse.personnel_delivery }}</td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                        {% endif %}
-
-                        {% if project_warehouse.contractor_delivery %}
-                            <td>{{ project_warehouse.contractor_delivery }}</td>
-                        {% else %}
-                            <td class="text-center">_</td>
-                        {% endif %}
-
-                        <td>{{ project_warehouse.use_certificate }}</td>
-
-                        <td>
-                            {% if project_warehouse.status == 'exp' %}
-                                خروج از انبار   
-                            {% else %}
-                                ورود به انبار   
-                            {% endif %}
-                        </td>
-                        
-                        {% if perms.warehousing.delete_projectwarehouse or perms.warehousing.change_projectwarehouse %}
-                            <td class="action-td d-flex justify-content-center rounded-0 pb-4">
-                                {% if perms.warehousing.change_projectwarehouse %}
-                                    <a href="{% url 'warehousing:project_warehouse_update' project_warehouse.pk %}" 
-                                    class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
+                                <td data-sort="{{ project_warehouse.stuff_amount }}">
+                                    {{ project_warehouse.formatted_stuff_amount }}
+                                    {{ project_warehouse.stuff_type.persian_measurement_unit }}
+                                </td>
+                                
+                                {% if project_warehouse.personnel_apply %}
+                                    <td>{{ project_warehouse.personnel_apply }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
                                 {% endif %}
 
-                                {% if perms.warehousing.delete_projectwarehouse %}
-                                    <a href="javascript:void(0)"  
-                                    data-toggle="modal"
-                                    class="btn btn-outline-danger mb-2 ml-2 pb-0"
-                                    data-url="{% url 'warehousing:project_warehouse_delete' pk=project_warehouse.pk %}"
-                                    data-target="#deleteItemModal" title="حذف"
-                                    data-message="آیا از حذف این عملیات اطمینان دارید؟">
-                                    <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
-                                    </a>
+                                {% if project_warehouse.contractor_apply %}
+                                    <td>{{ project_warehouse.contractor_apply }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
                                 {% endif %}
-                            </td>
+
+                                {% if project_warehouse.personnel_delivery %}
+                                    <td>{{ project_warehouse.personnel_delivery }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
+
+                                {% if project_warehouse.contractor_delivery %}
+                                    <td>{{ project_warehouse.contractor_delivery }}</td>
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
+
+                                <td>
+                                    <p>
+                                        از:
+                                        {{ project_warehouse.use_certificate.start_using_date|jformat:'%d / %m / %Y' }}
+                                    </p>
+                                    <p>
+                                        تا:
+                                        {{ project_warehouse.use_certificate.finish_using_date|jformat:'%d / %m / %Y' }}
+                                    </p>
+                                </td>
+
+                                <td>
+                                    {% if project_warehouse.status == 'exp' %}
+                                        خروج از انبار   
+                                    {% else %}
+                                        ورود به انبار   
+                                    {% endif %}
+                                </td>
+                                <td data-sort="{{ project_warehouse.import_date|date:'Ymd' }}">
+                                    {{ project_warehouse.export_import_date|jformat:'%d / %m / %Y' }}
+                                </td>
+
+                                <td data-sort="{{ project_warehouse.create_record|date:'Ymd-HMS' }}" class="border-left">
+                                    {{ project_warehouse.create_record|jformat:'%Y/%m/%d - %H:%M:%S' }}
+                                </td>
+                                {% if project_warehouse.update_record|date:'Ymd-HMS' == project_warehouse.create_record|date:'Ymd-HMS' %}
+                                    <td class="text-center">
+                                        <span style="font-size:1.5rem;">_</span>
+                                    </td>
+                                {% else %}
+                                    <td data-sort="{{ project_warehouse.update_record|date:'Ymd-HMS' }}" class="border-left">
+                                        {{ project_warehouse.update_record|jformat:'%Y/%m/%d - %H:%M:%S' }}
+                                    </td>
+                                {% endif %}
+                                
+                                {% if perms.warehousing.delete_projectwarehouse or perms.warehousing.change_projectwarehouse %}
+                                    <td class="action-td d-flex justify-content-center rounded-0 pb-4">
+                                        {% if perms.warehousing.change_projectwarehouse %}
+                                            <a href="{% url 'warehousing:project_warehouse_update' project_warehouse.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.warehousing.delete_projectwarehouse %}
+                                            <a href="javascript:void(0)"  
+                                            data-toggle="modal"
+                                            class="btn btn-outline-danger mb-2 ml-2 pb-0"
+                                            data-url="{% url 'warehousing:project_warehouse_delete' pk=project_warehouse.pk %}"
+                                            data-target="#deleteItemModal" title="حذف"
+                                            data-message="آیا از حذف این عملیات اطمینان دارید؟">
+                                            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.warehousing.view_projectwarehouse %}
+                                            <a href="{% url 'reports:project_warehouse_report' project_warehouse.pk %}" 
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                            </tr>
                         {% endif %}
-                    </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
-        
         </table>
     </div>
 </div>

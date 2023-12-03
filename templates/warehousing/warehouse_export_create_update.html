@@ -1,4 +1,5 @@
 {% extends 'base_create_update.html' %}
+{% load static %}
 
 {% block title %}
     {% if request.resolver_match.url_name == 'warehouse_export_create' %}
@@ -16,6 +17,14 @@
     {% endif %}
 {% endblock %}
 
+{% block extra_cart %}
+    {% include "warehousing/tables/stuffs_type_table.html" with stuffs=stuffs %}
+{% endblock %}
+
 {% block form %}
 	{% include "warehousing/forms/warehouse_export_form.html" %}
+{% endblock %}
+
+{% block form_control %}
+    <script src="{% static 'scripts/warehousing/warehouse_export_form.js' %}"></script>
 {% endblock %}

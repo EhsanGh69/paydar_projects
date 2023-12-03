@@ -1,0 +1,54 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+{% load humanizelib %}
+
+{% block title %}
+    ورود کالا به انبار اصلی
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'warehousing:warehouse_imports' %}" class="btn btn-info mb-4">
+        بازگشت به لیست کالاهای واردشده به انبار اصلی
+    </a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش ورود کالا به انبار اصلی</h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">نوع کالا</th>
+        <td style="width: 150.797px;">{{ warehouse_import.stuff_type.stuff_type }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">مقدار کالا</th>
+        <td style="width: 150.797px;">
+            {{ warehouse_import.stuff_amount|intcomma }}
+            {{ warehouse_import.stuff_type.persian_measurement_unit }}
+        </td>
+    </tr>
+    <tr>
+        {% if warehouse_import.supplier %}
+            <th style="width: 60.797px;">تأمین کننده</th>
+            <td style="width: 150.797px;">{{ warehouse_import.supplier }}</td>
+        {% elif warehouse_import.other_sender %}
+            <th style="width: 60.797px;">فرستنده</th>
+            <td style="width: 150.797px;">{{ warehouse_import.other_sender }}</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">تحویل گیرنده</th>
+        <td style="width: 150.797px;">{{ warehouse_import.receiver }}</td>
+    </tr>
+    <tr>
+        <th style="width: 60.797px;">تاریخ ورود کالا</th>
+        <td style="width: 150.797px;">{{ warehouse_import.import_date|jformat:'%d / %m / %Y' }}</td>
+    </tr>
+    {% if warehouse_import.is_returned %}
+        <tr>
+            <th style="width: 60.797px;">مرجوعی از پروژه</th>
+            <td style="width: 150.797px;">{{ warehouse_import.project_returned }}</td>
+        </tr>
+    {% endif %}
+{% endblock %}
