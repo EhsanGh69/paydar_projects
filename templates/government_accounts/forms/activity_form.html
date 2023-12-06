@@ -18,7 +18,7 @@
     </div>
     <div class="col-12 col-xl-6 mb-3 mb-3">
         <label>{{ form.activity_date.label }}*</label>
-        {{ form.activity_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {{ form.activity_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
 
         {% if form.activity_date.errors %}
               {% for error in form.activity_date.errors %}

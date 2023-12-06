@@ -5,7 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from utils.tools import filter_date_values, warehouse_export_validation
-
+from account.models import UserActionsLog
 from .models import Stuff, MainWarehouseImport, MainWarehouseExport, UseCertificate, ProjectWarehouse
 from .forms import StuffForm, MainWarehouseImportForm, MainWarehouseExportForm, UseCertificateForm, ProjectWarehouseForm
 
@@ -54,6 +54,10 @@ class StuffCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
     success_url = reverse_lazy('warehousing:stuffs')
     success_message = "کالا با موفقیت اضافه شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک کالای جدید")
+        return super().form_valid(form)
+
 
 class StuffUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'warehousing.change_stuff'
@@ -62,6 +66,10 @@ class StuffUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
     form_class = StuffForm
     success_url = reverse_lazy('warehousing:stuffs')
     success_message = "کالا با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک کالا")
+        return super().form_valid(form)
 
 
 class StuffDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -73,6 +81,10 @@ class StuffDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
         _id = int(self.kwargs.get('pk'))
         stuff = get_object_or_404(Stuff, pk=_id)
         return stuff
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک کالا")
+        return super().form_valid(form)
     
 
 class StuffSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -176,7 +188,11 @@ class WarehouseImportCreate(LoginRequiredMixin, PermissionRequiredMixin, Success
     template_name = 'warehousing/warehouse_import_create_update.html'
     form_class = MainWarehouseImportForm
     success_url = reverse_lazy("warehousing:warehouse_imports")
-    success_message = "کالا با موفقیت به انبار افزوده شد"
+    success_message = "کالا با موفقیت به انبار اصلی افزوده شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن کالا به انبار اصلی")
+        return super().form_valid(form)
         
     
 class WarehouseImportUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -185,18 +201,26 @@ class WarehouseImportUpdate(LoginRequiredMixin, PermissionRequiredMixin, Success
     template_name = 'warehousing/warehouse_import_create_update.html'
     form_class = MainWarehouseImportForm
     success_url = reverse_lazy("warehousing:warehouse_imports")
-    success_message = "کالای انبار با موفقیت ویرایش شد"
+    success_message = "کالای افزوده شده به انبار اصلی با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش کالای افزوده شده به انبار اصلی")
+        return super().form_valid(form)
     
 
 class WarehouseImportDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'warehousing.delete_mainwarehouseimport'
     success_url = reverse_lazy('warehousing:warehouse_imports')
-    success_message = "کالای انبار با موفقیت حذف شد"
+    success_message = "کالای افزوده شده به انبار اصلی با موفقیت حذف شد"
 
     def get_object(self, queryset=None):
         _id = int(self.kwargs.get('pk'))
         warehouse_import = get_object_or_404(MainWarehouseImport, pk=_id)
         return warehouse_import
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف کالای افزوده شده به انبار اصلی")
+        return super().form_valid(form)
     
 
 class WarehouseImportSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -321,7 +345,7 @@ class WarehouseExportCreate(LoginRequiredMixin, PermissionRequiredMixin, Success
     model = MainWarehouseExport
     form_class = MainWarehouseExportForm
     success_url = reverse_lazy("warehousing:warehouse_exports")
-    success_message = "خروج کالا از انبار با موفقیت ثبت شد"
+    success_message = "خروج کالا از انبار اصلی با موفقیت ثبت شد"
 
     def form_valid(self, form):
         stuff_amount = form.cleaned_data.get('stuff_amount')
@@ -333,6 +357,7 @@ class WarehouseExportCreate(LoginRequiredMixin, PermissionRequiredMixin, Success
         if not validation_result:
             return super().form_invalid(form) # type: ignore
         else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت خروج کالا از انبار اصلی")
             return super().form_valid(form)
     
     def get_context_data(self, **kwargs):
@@ -348,7 +373,7 @@ class WarehouseExportUpdate(LoginRequiredMixin, PermissionRequiredMixin, Success
     model = MainWarehouseExport
     form_class = MainWarehouseExportForm
     success_url = reverse_lazy("warehousing:warehouse_exports")
-    success_message = "کالای خارج‌ شده از انبار با موفقیت ویرایش شد"
+    success_message = "کالای خارج‌ شده از انبار اصلی با موفقیت ویرایش شد"
 
     def form_valid(self, form):
         stuff_amount = form.cleaned_data.get('stuff_amount')
@@ -359,6 +384,7 @@ class WarehouseExportUpdate(LoginRequiredMixin, PermissionRequiredMixin, Success
         if not validation_result:
             return super().form_invalid(form) # type: ignore
         else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش کالای خارج شده از انبار اصلی")
             return super().form_valid(form)
         
     def get_context_data(self, **kwargs):
@@ -371,12 +397,16 @@ class WarehouseExportUpdate(LoginRequiredMixin, PermissionRequiredMixin, Success
 class WarehouseExportDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'warehousing.delete_mainwarehouseexport'
     success_url = reverse_lazy('warehousing:warehouse_exports')
-    success_message = "کالای خارج‌ شده از انبار با موفقیت حذف شد"
+    success_message = "کالای خارج‌ شده از انبار اصلی با موفقیت حذف شد"
 
     def get_object(self, queryset=None):
         _id = int(self.kwargs.get('pk'))
         warehouse_export = get_object_or_404(MainWarehouseExport, pk=_id)
         return warehouse_export
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف کالای خارج شده از انبار اصلی")
+        return super().form_valid(form)
 
 
 class WarehouseExportSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -496,6 +526,10 @@ class UseCertificateCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     success_url = reverse_lazy("warehousing:use_certificates")
     success_message = "گواهی مصرف کالا با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت گواهی مصرف کالا")
+        return super().form_valid(form)
+
 
 class UseCertificateUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'warehousing.change_usecertificate'
@@ -504,6 +538,10 @@ class UseCertificateUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     form_class = UseCertificateForm
     success_url = reverse_lazy("warehousing:use_certificates")
     success_message = "گواهی مصرف کالا با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش گواهی مصرف کالا")
+        return super().form_valid(form)
 
 
 class UseCertificateDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -515,6 +553,10 @@ class UseCertificateDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
         _id = int(self.kwargs.get('pk'))
         use_certificate = get_object_or_404(UseCertificate, pk=_id)
         return use_certificate
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف گواهی مصرف کالا")
+        return super().form_valid(form)
     
 
 class UseCertificateSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -642,7 +684,6 @@ class ProjectWarehouseCreate(LoginRequiredMixin, PermissionRequiredMixin, Succes
     model = ProjectWarehouse
     form_class = ProjectWarehouseForm
     success_url = reverse_lazy("warehousing:project_warehouses")
-    success_message = "عملیات انبار پروژه با موفقیت ثبت شد"
 
     def form_valid(self, form):
         project = form.cleaned_data.get('project')
@@ -654,11 +695,15 @@ class ProjectWarehouseCreate(LoginRequiredMixin, PermissionRequiredMixin, Succes
 
         if status == 'imp':
             if warehouse_export_check:
+                self.success_message = "کالا با موفقیت به انبار پروژه افزوده شد"
+                UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن کالا به انبار پروژه")
                 return super().form_valid(form)
             else:
                 form.errors['__all__'] = form.error_class(["پروژه، نوع کالا یا مقدار کالای وارد‌شده با اطلاعات موجود در لیست خروج از انبار اصلی مغایرت دارد"])
                 return super().form_invalid(form) # type: ignore
         else:
+            self.success_message = "خروج کالا از انبار پروژه با موفقیت ثبت شد"
+            UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت خروج کالا از انبار پروژه")
             return super().form_valid(form)
 
 
@@ -668,7 +713,6 @@ class ProjectWarehouseUpdate(LoginRequiredMixin, PermissionRequiredMixin, Succes
     model = ProjectWarehouse
     form_class = ProjectWarehouseForm
     success_url = reverse_lazy("warehousing:project_warehouses")
-    success_message = "عملیات انبار پروژه با موفقیت ویرایش شد"
 
     def form_valid(self, form):
         project = form.cleaned_data.get('project')
@@ -679,24 +723,39 @@ class ProjectWarehouseUpdate(LoginRequiredMixin, PermissionRequiredMixin, Succes
         stuff_type=stuff_type, stuff_amount=stuff_amount).exists()
 
         if status == 'imp':
+            self.success_message = "کالای افزوده شده به انبار پروژه با موفقیت ویرایش شد"
+            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش کالای افزوده شده به انبار پروژه")
             if warehouse_export_check:
                 return super().form_valid(form)
             else:
                 form.errors['__all__'] = form.error_class(["پروژه، نوع کالا یا مقدار کالای وارد‌شده با اطلاعات موجود در لیست خروج از انبار اصلی مغایرت دارد"])
                 return super().form_invalid(form) # type: ignore
         else:
+            self.success_message = "کالای خارج‌ شده از انبار پروژه با موفقیت ویرایش شد"
+            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش کالای خارج شده از انبار پروژه")
             return super().form_valid(form)
 
 
 class ProjectWarehouseDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'warehousing.delete_projectwarehouse'
     success_url = reverse_lazy('warehousing:project_warehouses')
-    success_message = "عملیات انبار پروژه با موفقیت حذف شد"
 
     def get_object(self, queryset=None):
         _id = int(self.kwargs.get('pk'))
         project_warehouse = get_object_or_404(ProjectWarehouse, pk=_id)
         return project_warehouse
+    
+    def form_valid(self, form):
+        id = int(self.kwargs.get('pk'))
+        obj, log_content = get_object_or_404(ProjectWarehouse, pk=id), ""
+        if obj.status == "imp":
+            self.success_message = "کالای افزوده شده به انبار پروژه با موفقیت حذف شد"
+            log_content="حذف کالای افزوده شده به انبار پروژه"
+        else:
+            self.success_message = "کالای خارج شده از انبار پروژه با موفقیت حذف شد"
+            log_content="حذف کالای خارج شده از انبار پروژه"
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content=log_content)
+        return super().form_valid(form)
 
 
 class ProjectWarehouseSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):

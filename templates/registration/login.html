@@ -19,10 +19,8 @@
     <link rel="stylesheet" href="{% static 'panel/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'panel/dist/css/adminlte.min.css' %}">
-    <link
-      rel="stylesheet"
-      href="{% static 'panel/dist/css/bootstrap_rtl.min.css' %}"
-    />
+    <link rel="stylesheet" href="{% static 'panel/dist/css/bootstrap_rtl.min.css' %}">
+    <link rel="stylesheet" href="{% static 'farsi_fonts/farsi_fonts.css' %}">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <style>
@@ -32,22 +30,7 @@
             padding: 0.5rem;
         }
 
-        @font-face {
-            font-family: 'Vazir';
-            src: url('{% static "farsi_fonts/Vazir/Vazir.eot" %}');
-            src: url('{% static "farsi_fonts/Vazir/Vazir.eot?#iefix" %}') format('embedded-opentype'),
-            url('{% static "farsi_fonts/Vazir/Vazir.woff2" %}') format('woff2'),
-            url('{% static "farsi_fonts/Vazir/Vazir.woff" %}') format('woff'),
-            url('{% static "farsi_fonts/Vazir/Vazir.ttf" %}') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-            text-rendering: optimizeLegibility;
-            font-display: auto;
-        }
-
-
         body {
-            font-family: 'Vazir';
             background-image: url('{% static "panel/dist/img/Blog-Hero.jpg"%}');
             background-repeat: no-repeat;
             background-size: cover;

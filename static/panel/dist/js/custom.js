@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('#print-btn').click(function (e) { 
+    $('#print-btn').click(function (e) {
         e.preventDefault();
 
         $('.action-th').remove();
@@ -14,7 +14,6 @@ $(document).ready(function () {
         }, 1000);
         
     });
-    
 });
 
 

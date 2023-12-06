@@ -7,6 +7,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 
 from utils.tools import filter_date_values
+from account.models import UserActionsLog
 from .models import Owners, Project, WorkReference, Costs, PaymentsImages
 from .forms import OwnerForm, ProjectForm, WorkReferenceForm, CostsForm, PaymentsImagesForm
 
@@ -72,6 +73,10 @@ class OwnerCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
     success_url = reverse_lazy("projects:owners")
     success_message = "مالک با موفقیت اضافه شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک مالک جدید")
+        return super().form_valid(form)
+
 
 class OwnerUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects.change_owners'
@@ -80,6 +85,10 @@ class OwnerUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
     form_class = OwnerForm
     success_url = reverse_lazy("projects:owners")
     success_message = "مالک با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک مالک")
+        return super().form_valid(form)
 
 
 class OwnerDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -91,6 +100,10 @@ class OwnerDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
         _id = int(self.kwargs.get('pk'))
         owner = get_object_or_404(Owners, pk=_id)
         return owner
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک مالک")
+        return super().form_valid(form)
 
 
 class OwnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -203,6 +216,10 @@ class ProjectCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     success_url = reverse_lazy("projects:projects")
     success_message = "پروژه با موفقیت اضافه شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک پروژه جدید")
+        return super().form_valid(form)
+
 
 class ProjectUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects.change_project'
@@ -211,6 +228,10 @@ class ProjectUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     form_class = ProjectForm
     success_url = reverse_lazy("projects:projects")
     success_message = "پروژه با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک پروژه")
+        return super().form_valid(form)
 
 
 class ProjectDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -222,6 +243,10 @@ class ProjectDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
         _id = int(self.kwargs.get('pk'))
         project = get_object_or_404(Project, pk=_id)
         return project
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک پروژه")
+        return super().form_valid(form)
     
 
 class ProjectSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -341,6 +366,10 @@ class WorkReferenceCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     success_url = reverse_lazy("projects:work_references")
     success_message = "ارجاع کار با موفقیت ثبت گردید"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک ارجاع کار جدید")
+        return super().form_valid(form)
+
 
 class WorkReferenceUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects.change_workreference'
@@ -349,6 +378,10 @@ class WorkReferenceUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     form_class = WorkReferenceForm
     success_url = reverse_lazy("projects:work_references")
     success_message = "ارجاع کار با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک ارجاع کار")
+        return super().form_valid(form)
     
 
 class WorkReferenceDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -360,6 +393,10 @@ class WorkReferenceDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
         _id = int(self.kwargs.get('pk'))
         work_reference = get_object_or_404(WorkReference, pk=_id)
         return work_reference
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک ارجاع کار")
+        return super().form_valid(form)
     
 
 class WorkReferenceSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -477,6 +514,10 @@ class CostsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
     success_url = reverse_lazy("projects:costs")
     success_message = "هزینه با موفقیت ثبت گردید"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت هزینه‌های جدید")
+        return super().form_valid(form)
+
 
 class CostsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects.change_costs'
@@ -485,6 +526,10 @@ class CostsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
     form_class = CostsForm
     success_url = reverse_lazy("projects:costs")
     success_message = "هزینه با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="‌ویرایش هزینه‌ها")
+        return super().form_valid(form)
 
 
 class CostsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -496,6 +541,10 @@ class CostsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
         _id = int(self.kwargs.get('pk'))
         cost = get_object_or_404(Costs, pk=_id)
         return cost
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف هزینه‌ها")
+        return super().form_valid(form)
 
 
 class CostsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -607,6 +656,10 @@ class PaymentsImagesCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     success_url = reverse_lazy("projects:payments_images")
     success_message = "تصاویر فیش‌های پرداختی با موفقیت ثبت گردید"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت تصاویر فیش‌های پرداختی جدید")
+        return super().form_valid(form)
+
 
 class PaymentsImagesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects.change_paymentsimages'
@@ -615,6 +668,10 @@ class PaymentsImagesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     form_class = PaymentsImagesForm
     success_url = reverse_lazy("projects:payments_images")
     success_message = "تصاویر فیش‌های پرداختی با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش تصاویر فیش‌های پرداختی")
+        return super().form_valid(form)
 
 
 class PaymentsImagesDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -626,6 +683,10 @@ class PaymentsImagesDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
         _id = int(self.kwargs.get('pk'))
         payments_image = get_object_or_404(PaymentsImages, pk=_id)
         return payments_image
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف تصاویر فیش‌های پرداختی")
+        return super().form_valid(form)
     
 
 class PaymentsImagesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):

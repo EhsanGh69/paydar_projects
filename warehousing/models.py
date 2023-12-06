@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from django.db.models.query import Q
 
 from django_jalali.db import models as jmodels
@@ -115,8 +114,8 @@ class MainWarehouseExport(models.Model):
     stuff_amount = models.PositiveIntegerField(default=0, verbose_name='مقدار')
     deliverer = models.ForeignKey(Personnel, on_delete=models.CASCADE, related_name='warehouse_export_deliverers', verbose_name='تحویل دهنده')
     export_date = jmodels.jDateField(verbose_name='تاریخ خروج کالا')
-    create_record = jmodels.jDateTimeField(default=timezone.now)
-    update_record = jmodels.jDateTimeField(default=timezone.now)
+    create_record = jmodels.jDateTimeField(auto_now_add=True)
+    update_record = jmodels.jDateTimeField(auto_now=True)
 
     objects = MainWarehouseExportManager()
 
@@ -130,7 +129,6 @@ class MainWarehouseExport(models.Model):
     def formatted_stuff_amount(self):
         return "{:,}".format(self.stuff_amount)
     
-
 
 class UseCertificateManager(models.Manager):
     def search(self, query):

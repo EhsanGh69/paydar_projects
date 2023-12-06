@@ -5,6 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from utils.tools import filter_date_values, fund_validation, cash_box_validation
+from account.models import UserActionsLog
 from .models import Cheques, Fund, ReceivePay, CashBox
 from .forms import ChequesForm, FundForm, ReceivePayForm, CashBoxForm
 
@@ -63,7 +64,17 @@ class ChequesCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     model = Cheques
     form_class = ChequesForm
     success_url = reverse_lazy("cheques_receive_pay:cheques")
-    success_message = "چک با موفقیت ثبت شد"
+
+    def form_valid(self, form):
+        obj_type, log_content = form.cleaned_data.get('cheque_type'), ""
+        if obj_type == "exp":
+            self.success_message = "چک پرداختی با موفقیت ثبت شد"
+            log_content="ثبت چک پرداختی جدید"
+        else:
+            self.success_message = "چک دریافتی با موفقیت ثبت شد"
+            log_content="ثبت چک دریافتی جدید"
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content=log_content)
+        return super().form_valid(form)
 
 
 class ChequesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -72,18 +83,39 @@ class ChequesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     model = Cheques
     form_class = ChequesForm
     success_url = reverse_lazy("cheques_receive_pay:cheques")
-    success_message = "چک با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        obj_type, log_content = form.cleaned_data.get('cheque_type'), ""
+        if obj_type == "exp":
+            self.success_message = "چک پرداختی با موفقیت ویرایش شد"
+            log_content="ویرایش چک پرداختی"
+        else:
+            self.success_message = "چک دریافتی با موفقیت ویرایش شد"
+            log_content="ویرایش چک دریافتی"
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content=log_content)
+        return super().form_valid(form)
 
 
 class ChequesDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'cheques_receive_pay.delete_cheques'
     success_url = reverse_lazy("cheques_receive_pay:cheques")
-    success_message = "چک با موفقیت حذف شد"
 
     def get_object(self, queryset=None):
         _id = int(self.kwargs.get('pk'))
         cheque = get_object_or_404(Cheques, pk=_id)
         return cheque
+    
+    def form_valid(self, form):
+        id = int(self.kwargs.get('pk'))
+        obj, log_content = get_object_or_404(Cheques, pk=id), ""
+        if obj.cheque_type == "exp":
+            self.success_message = "چک پرداختی با موفقیت حذف شد"
+            log_content="حذف چک پرداختی"
+        else:
+            self.success_message = "چک دریافتی با موفقیت حذف شد"
+            log_content="حذف چک دریافتی"
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content=log_content)
+        return super().form_valid(form)
     
 
 class ChequesSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -214,7 +246,6 @@ class FundCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
     model = Fund
     form_class = FundForm
     success_url = reverse_lazy("cheques_receive_pay:funds")
-    success_message = "عملیات تنخواه با موفقیت ثبت شد"
 
     def get_form_kwargs(self):
         kwargs = super(FundCreate, self).get_form_kwargs()
@@ -225,9 +256,17 @@ class FundCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
     
     def form_valid(self, form):
         validation_result = fund_validation(form=form, model=Fund, url_name=self.request.resolver_match.url_name)
+        obj_type, log_content = form.cleaned_data.get('operation_type'), ""
+        if obj_type == "rem":
+            self.success_message = "برداشت از تنخواه با موفقیت ثبت شد"
+            log_content="ثبت برداشت از تنخواه"
+        else:
+            self.success_message = "واریز به تنخواه با موفقیت ثبت شد"
+            log_content="ثبت واریز به تنخواه"
         if not validation_result:
             return super().form_invalid(form)  # type: ignore
         else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content=log_content)
             return super().form_valid(form)
         
     def get_context_data(self, **kwargs):
@@ -247,7 +286,6 @@ class FundUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
     model = Fund
     form_class = FundForm
     success_url = reverse_lazy("cheques_receive_pay:funds")
-    success_message = "عملیات تنخواه با موفقیت ویرایش شد"
 
     def get_form_kwargs(self):
         kwargs = super(FundUpdate, self).get_form_kwargs()
@@ -258,9 +296,17 @@ class FundUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
     
     def form_valid(self, form):
         validation_result = fund_validation(form=form, model=Fund, url_name=self.request.resolver_match.url_name)
+        obj_type, log_content = form.cleaned_data.get('operation_type'), ""
+        if obj_type == "rem":
+            self.success_message = "برداشت از تنخواه با موفقیت ویرایش شد"
+            log_content="ویرایش برداشت از تنخواه"
+        else:
+            self.success_message = "واریز به تنخواه با موفقیت ویرایش شد"
+            log_content="ویرایش واریز به تنخواه"
         if not validation_result:
             return super().form_invalid(form) # type: ignore
         else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content=log_content)
             return super().form_valid(form)
         
     def get_context_data(self, **kwargs):
@@ -277,12 +323,23 @@ class FundUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
 class FundDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'cheques_receive_pay.delete_fund'
     success_url = reverse_lazy("cheques_receive_pay:funds")
-    success_message = "عملیات تنخواه با موفقیت حذف شد"
 
     def get_object(self, queryset=None):
         _id = int(self.kwargs.get('pk'))
         fund = get_object_or_404(Fund, pk=_id)
         return fund
+    
+    def form_valid(self, form):
+        id = int(self.kwargs.get('pk'))
+        obj, log_content = get_object_or_404(Fund, pk=id), ""
+        if obj.operation_type == "rem":
+            self.success_message = "برداشت از تنخواه با موفقیت حذف شد"
+            log_content="حذف برداشت از تنخواه"
+        else:
+            self.success_message = "واریز به تنخواه با موفقیت حذف شد"
+            log_content="حذف واریز به تنخواه"
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content=log_content)
+        return super().form_valid(form)
     
 
 class FundSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -404,19 +461,39 @@ class ReceivePayList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 class ReceivePayCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     permission_required = 'cheques_receive_pay.add_receivepay'
     template_name = 'cheques_receive_pay/receive_pay_create_update.html'
-    model = Cheques
+    model = ReceivePay
     form_class = ReceivePayForm
     success_url = reverse_lazy("cheques_receive_pay:receive_pays")
-    success_message = "دریافت / پرداخت با موفقیت ثبت شد"
+
+    def form_valid(self, form):
+        obj_type, log_content = form.cleaned_data.get('receive_pay'), ""
+        if obj_type == "rec":
+            self.success_message = "مبلغ پرداختی با موفقیت ثبت شد"
+            log_content="ثبت مبلغ پرداختی جدید"
+        else:
+            self.success_message = "مبلغ دریافتی با موفقیت ثبت شد"
+            log_content="ثبت مبلغ دریافتی جدید"
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content=log_content)
+        return super().form_valid(form)
     
 
 class ReceivePayUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'cheques_receive_pay.change_receivepay'
     template_name = 'cheques_receive_pay/receive_pay_create_update.html'
-    model = Cheques
+    model = ReceivePay
     form_class = ReceivePayForm
     success_url = reverse_lazy("cheques_receive_pay:receive_pays")
-    success_message = "دریافت / پرداخت با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        obj_type, log_content = form.cleaned_data.get('receive_pay'), ""
+        if obj_type == "rec":
+            self.success_message = "مبلغ پرداختی با موفقیت ویرایش شد"
+            log_content="ویرایش مبلغ پرداختی"
+        else:
+            self.success_message = "مبلغ دریافتی با موفقیت ویرایش شد"
+            log_content="ویرایش مبلغ دریافتی"
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content=log_content)
+        return super().form_valid(form)
 
 
 class ReceivePayDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -429,11 +506,23 @@ class ReceivePayDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
         receive_pay = get_object_or_404(ReceivePay, pk=_id)
         return receive_pay
     
+    def form_valid(self, form):
+        id = int(self.kwargs.get('pk'))
+        obj, log_content = get_object_or_404(ReceivePay, pk=id), ""
+        if obj.receive_pay == "rec":
+            self.success_message = "مبلغ پرداختی با موفقیت حذف شد"
+            log_content="حذف مبلغ پرداختی"
+        else:
+            self.success_message = "مبلغ دریافتی با موفقیت حذف شد"
+            log_content="حذف مبلغ دریافتی"
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content=log_content)
+        return super().form_valid(form)
+    
 
 class ReceivePaySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = 'cheques_receive_pay.view_receivepay'
     template_name = 'cheques_receive_pay/receive_pays_list.html'
-    model = Cheques
+    model = ReceivePay
     context_object_name = "receive_pays"
     paginate_by = 9
 
@@ -547,14 +636,20 @@ class CashBoxCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     model = CashBox
     form_class = CashBoxForm
     success_url = reverse_lazy("cheques_receive_pay:cash_boxes")
-    success_message = "عملیات صندوق با موفقیت ثبت شد"
 
     def form_valid(self, form):
-        validation_result = cash_box_validation(form=form, model=CashBox, 
-                                                url_name=self.request.resolver_match.url_name)
-        if not validation_result:
-            return super().form_invalid(form) # type: ignore
+        validation_result = cash_box_validation(form=form, model=CashBox, url_name=self.request.resolver_match.url_name)
+        obj_type, log_content = form.cleaned_data.get('operation_type'), ""
+        if obj_type == "rem":
+            self.success_message = "برداشت از صندوق با موفقیت ثبت شد"
+            log_content="ثبت برداشت از صندوق"
         else:
+            self.success_message = "واریز به صندوق با موفقیت ثبت شد"
+            log_content="ثبت واریز به صندوق"
+        if not validation_result:
+            return super().form_invalid(form)  # type: ignore
+        else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content=log_content)
             return super().form_valid(form)
         
     def get_form_kwargs(self):
@@ -571,14 +666,20 @@ class CashBoxUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     model = CashBox
     form_class = CashBoxForm
     success_url = reverse_lazy("cheques_receive_pay:cash_boxes")
-    success_message = "عملیات صندوق با موفقیت ویرایش شد"
 
     def form_valid(self, form):
-        validation_result = cash_box_validation(form=form, model=CashBox, 
-                                                url_name=self.request.resolver_match.url_name)
-        if not validation_result:
-            return super().form_invalid(form) # type: ignore
+        validation_result = cash_box_validation(form=form, model=CashBox, url_name=self.request.resolver_match.url_name)
+        obj_type, log_content = form.cleaned_data.get('operation_type'), ""
+        if obj_type == "rem":
+            self.success_message = "برداشت از صندوق با موفقیت ویرایش شد"
+            log_content="ویرایش برداشت از صندوق"
         else:
+            self.success_message = "واریز به صندوق با موفقیت ویرایش شد"
+            log_content="ویرایش واریز به صندوق"
+        if not validation_result:
+            return super().form_invalid(form)  # type: ignore
+        else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content=log_content)
             return super().form_valid(form)
         
     def get_form_kwargs(self):
@@ -592,12 +693,23 @@ class CashBoxUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
 class CashBoxDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'cheques_receive_pay.delete_cashbox'
     success_url = reverse_lazy("cheques_receive_pay:cash_boxes")
-    success_message = "عملیات صندوق با موفقیت حذف شد"
 
     def get_object(self, queryset=None):
         _id = int(self.kwargs.get('pk'))
         cash_box = get_object_or_404(CashBox, pk=_id)
         return cash_box
+    
+    def form_valid(self, form):
+        id = int(self.kwargs.get('pk'))
+        obj, log_content = get_object_or_404(CashBox, pk=id), ""
+        if obj.operation_type == "rem":
+            self.success_message = "برداشت از صندوق با موفقیت حذف شد"
+            log_content="حذف برداشت از صندوق"
+        else:
+            self.success_message = "واریز به صندوق با موفقیت حذف شد"
+            log_content="حذف واریز به صندوق"
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content=log_content)
+        return super().form_valid(form)
 
 
 class CashBoxSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):

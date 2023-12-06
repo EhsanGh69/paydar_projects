@@ -1,12 +1,16 @@
-from datetime import datetime
-
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
+from django.contrib.sessions.models import Session
 
 from jdatetime import JalaliToGregorian, datetime
+
+from account.models import User
+from non_government_accounts.models import BuyersSellers
+from projects.models import Project
+from projects.templatetags.projects_tags import total_project_costs
 
 
 
@@ -26,6 +30,21 @@ invalid_codenames = [
 
 valid_select_permissions = [(permission.codename, translate_permissions_names(permission.name)) for permission in Permission.objects.all() if permission.codename not in invalid_codenames] 
 
+
+# source: https://www.appsloveworld.com/django/100/4/how-to-get-the-list-of-the-authenticated-users
+def get_all_logged_in_users():
+    # Query all non-expired sessions
+    # use timezone.now() instead of datetime.now() in latest versions of Django
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    uid_list = []
+
+    # Build a list of user ids from that query
+    for session in sessions:
+        data = session.get_decoded()
+        uid_list.append(data.get('_auth_user_id', None))
+
+    # Query all logged in users based on id list
+    return User.objects.filter(id__in=uid_list)
 
 
 def none_numeric_value(value):
@@ -168,6 +187,11 @@ def warehouse_export_validation(**kwargs):
         return False
 
 
+def g_date_converter(j_year, j_month, j_day):
+    date_tuple = JalaliToGregorian(j_year, j_month, j_day).getGregorianList()
+    return f'{date_tuple[0]}-{date_tuple[1]}-{date_tuple[2]}'
+
+
 def filter_date_values(filter_value):
     now_day = timezone.now().day
     now_month = timezone.now().month
@@ -192,8 +216,56 @@ def filter_date_values(filter_value):
         else:
             return [f'{last_year}-{12}-{now_day}', now_date_str]
     elif filter_value == "current_year":
-        greg_tuple = JalaliToGregorian(datetime.now().year, 1, 1).getGregorianList()
-        return [f'{greg_tuple[0]}-{greg_tuple[1]}-{greg_tuple[2]}', now_date_str]
+        return [g_date_converter(datetime.now().year, 1, 1), now_date_str]
     else:
         return [now_date_str, now_date_str]
+    
+
+
+# def quarter_range_date(year_quarter):
+#     now_year = datetime.now().year
+
+#     if year_quarter == "first":
+#         return [g_date_converter(now_year, 1, 1), g_date_converter(now_year, 3, 31)]
+#     elif year_quarter == "second":
+#         return [g_date_converter(now_year, 4, 1), g_date_converter(now_year, 6, 31)]
+#     elif year_quarter == "third":
+#         return [g_date_converter(now_year, 7, 1), g_date_converter(now_year, 9, 30)]
+#     else:
+#         return [g_date_converter(now_year, 10, 1), g_date_converter(now_year, 12, 29)]
  
+
+def total_projects_buyers_sellers():
+    projects_count = Project.objects.all().count()
+    all_projects = Project.objects.order_by('-id').all()
+    total_projects_buyers = []
+    total_project_buyers = 0
+    total_projects_sellers = []
+    total_project_sellers = 0
+    for i in range(0, projects_count):
+        project_buyers = BuyersSellers.objects.filter(project=all_projects[i], buyer_seller='buy').all()
+        project_sellers = BuyersSellers.objects.filter(project=all_projects[i], buyer_seller='sel').all()
+        if project_buyers:
+            total_project_buyers = project_buyers.aggregate(Sum('payment_amount'))['payment_amount__sum']
+            total_projects_buyers.append(total_project_buyers)
+        else:
+            total_projects_buyers.append(0)
+        if project_sellers:
+            total_project_sellers = project_sellers.aggregate(Sum('payment_amount'))['payment_amount__sum']
+            total_projects_sellers.append(total_project_sellers)
+        else:
+            total_projects_sellers.append(0)
+    
+    return total_projects_buyers, total_projects_sellers
+
+
+def total_projects_costs():
+    all_projects = Project.objects.order_by('-id').all()
+    total_costs_list = []
+    total_costs = 0
+    for project in all_projects:
+        total_costs = total_project_costs(project.title)["total_amount"]
+        total_costs_list.append(total_costs)
+    
+    return total_costs_list
+    

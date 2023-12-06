@@ -37,7 +37,7 @@
     
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.payment_date.label }}*</label>
-        {{ form.payment_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {{ form.payment_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
 
         {% if form.payment_date.errors %}
               {% for error in form.payment_date.errors %}

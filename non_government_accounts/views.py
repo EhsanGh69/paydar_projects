@@ -5,6 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from utils.tools import filter_date_values
+from account.models import UserActionsLog
 from .models import Contractors, Suppliers, Personnel, Partners, BuyersSellers, Orders, ConflictOrders
 from .forms import ContractorForm, SupplierForm, PersonnelForm, PartnersForm, BuyersSellersForm, OrdersForm, ConflictOrdersForm
 
@@ -63,6 +64,10 @@ class ContractorCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     success_url = reverse_lazy("non_government_accounts:contractors")
     success_message = "پیمانکار با موفقیت اضافه شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک پیمانکار جدید")
+        return super().form_valid(form)
+
 
 class ContractorUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_contractors'
@@ -71,6 +76,10 @@ class ContractorUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     form_class = ContractorForm
     success_url = reverse_lazy("non_government_accounts:contractors")
     success_message = "پیمانکار با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک پیمانکار")
+        return super().form_valid(form)
 
 
 class ContractorDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -82,6 +91,10 @@ class ContractorDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
         _id = int(self.kwargs.get('pk'))
         contractor = get_object_or_404(Contractors, pk=_id)
         return contractor
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک پیمانکار")
+        return super().form_valid(form)
     
 
 class ContractorSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -194,6 +207,10 @@ class SupplierCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     success_url = reverse_lazy("non_government_accounts:suppliers")
     success_message = "تأمین کننده با موفقیت اضافه شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک تأمین کننده جدید")
+        return super().form_valid(form)
+
 
 class SupplierUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_suppliers'
@@ -202,6 +219,10 @@ class SupplierUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     form_class = SupplierForm
     success_url = reverse_lazy("non_government_accounts:suppliers")
     success_message = "تأمین کننده با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک تأمین کننده")
+        return super().form_valid(form)
 
 
 class SupplierDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -213,6 +234,10 @@ class SupplierDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
         _id = int(self.kwargs.get('pk'))
         supplier = get_object_or_404(Suppliers, pk=_id)
         return supplier
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک تأمین کننده")
+        return super().form_valid(form)
     
 
 class SupplierSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -323,6 +348,10 @@ class PersonnelCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
     success_url = reverse_lazy("non_government_accounts:personnel")
     success_message = "شخص با موفقیت به پرسنل اضافه شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک پرسنل جدید")
+        return super().form_valid(form)
+
 
 class PersonnelUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_personnel'
@@ -331,6 +360,10 @@ class PersonnelUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
     form_class = PersonnelForm
     success_url = reverse_lazy("non_government_accounts:personnel")
     success_message = "شخص پرسنل با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک پرسنل")
+        return super().form_valid(form)
 
 
 class PersonnelDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -342,6 +375,10 @@ class PersonnelDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
         _id = int(self.kwargs.get('pk'))
         person = get_object_or_404(Personnel, pk=_id)
         return person
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک پرسنل")
+        return super().form_valid(form)
     
 
 class PersonnelSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -452,6 +489,10 @@ class PartnersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     success_url = reverse_lazy("non_government_accounts:partners")
     success_message = "شریک با موفقیت اضافه شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک شریک جدید")
+        return super().form_valid(form)
+
 
 class PartnersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_partners'
@@ -460,6 +501,10 @@ class PartnersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     form_class = PartnersForm
     success_url = reverse_lazy("non_government_accounts:partners")
     success_message = "شریک با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک شریک")
+        return super().form_valid(form)
 
 
 class PartnersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -471,6 +516,10 @@ class PartnersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
         _id = int(self.kwargs.get('pk'))
         partner = get_object_or_404(Partners, pk=_id)
         return partner
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک شریک")
+        return super().form_valid(form)
     
 
 class PartnerSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -580,7 +629,17 @@ class BuyersSellersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     template_name = 'non_government_accounts/buyer_seller_create_update.html'
     form_class = BuyersSellersForm
     success_url = reverse_lazy("non_government_accounts:buyers_sellers")
-    success_message = "خریدار / فروشنده با موفقیت اضافه شد"
+
+    def form_valid(self, form):
+        obj_type, log_content = form.cleaned_data.get('buyer_seller'), ""
+        if obj_type == "buy":
+            self.success_message = "خریدار با موفقیت اضافه شد"
+            log_content="افزودن یک خریدار جدید"
+        else:
+            self.success_message = "فروشنده با موفقیت اضافه شد"
+            log_content="افزودن یک فروشنده جدید"
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content=log_content)
+        return super().form_valid(form)
 
 
 class BuyersSellersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -589,18 +648,39 @@ class BuyersSellersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     template_name = 'non_government_accounts/buyer_seller_create_update.html'
     form_class = BuyersSellersForm
     success_url = reverse_lazy("non_government_accounts:buyers_sellers")
-    success_message = "خریدار / فروشنده با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        obj_type, log_content = form.cleaned_data.get('buyer_seller'), ""
+        if obj_type == "buy":
+            self.success_message = "خریدار با موفقیت ویرایش شد"
+            log_content="ویرایش یک خریدار"
+        else:
+            self.success_message = "فروشنده با موفقیت ویرایش شد"
+            log_content="ویرایش یک فروشنده"
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content=log_content)
+        return super().form_valid(form)
 
 
 class BuyersSellersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'non_government_accounts.delete_buyerssellers'
     success_url = reverse_lazy("non_government_accounts:buyers_sellers")
-    success_message = "خریدار / فروشنده با موفقیت حذف شد"
 
     def get_object(self, queryset=None):
         _id = int(self.kwargs.get('pk'))
         buyer_seller = get_object_or_404(BuyersSellers, pk=_id)
         return buyer_seller
+    
+    def form_valid(self, form):
+        id = int(self.kwargs.get('pk'))
+        obj, log_content = get_object_or_404(BuyersSellers, pk=id), ""
+        if obj.buyer_seller == "buy":
+            self.success_message = "خریدار با موفقیت حذف شد"
+            log_content="حذف یک خریدار"
+        else:
+            self.success_message = "فروشنده با موفقیت حذف شد"
+            log_content="حذف یک فروشنده"
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content=log_content)
+        return super().form_valid(form)
 
 
 class BuyersSellersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -745,6 +825,10 @@ class OrdersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMi
     success_url = reverse_lazy("non_government_accounts:orders")
     success_message = "سفارش با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک سفارش جدید")
+        return super().form_valid(form)
+
 
 class OrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_orders'
@@ -753,6 +837,10 @@ class OrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMi
     form_class = OrdersForm
     success_url = reverse_lazy("non_government_accounts:orders")
     success_message = "سفارش با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک سفارش")
+        return super().form_valid(form)
 
 
 class OrdersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -764,6 +852,10 @@ class OrdersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMi
         _id = int(self.kwargs.get('pk'))
         order = get_object_or_404(Orders, pk=_id)
         return order
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک سفارش")
+        return super().form_valid(form)
 
 
 class OrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -907,6 +999,10 @@ class ConflictOrdersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     success_url = reverse_lazy("non_government_accounts:conflict_orders")
     success_message = "مغایرت سفارش با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک مغایرت سفارش جدید")
+        return super().form_valid(form)
+
 
 class ConflictOrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_conflictorders'
@@ -915,6 +1011,10 @@ class ConflictOrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     form_class = ConflictOrdersForm
     success_url = reverse_lazy("non_government_accounts:conflict_orders")
     success_message = "مغایرت سفارش با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک مغایرت سفارش")
+        return super().form_valid(form)
 
 
 class ConflictOrdersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -926,6 +1026,10 @@ class ConflictOrdersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
         _id = int(self.kwargs.get('pk'))
         conflict_order = get_object_or_404(ConflictOrders, pk=_id)
         return conflict_order
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک مغایرت سفارش")
+        return super().form_valid(form)
 
 
 class ConflictOrdersSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):

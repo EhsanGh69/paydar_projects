@@ -1,31 +1,57 @@
-Chart.defaults.global.defaultFontSize = 18;
+<script>
+
+$(document).ready(function () {
+
+    function PrintPDFFunc(ID){
+        const dataUrl = document.getElementById(ID).toDataURL();
+        let windowContent = '<!DOCTYPE html><html><head><title>Print</title></head><body><img src="' + dataUrl + '"></body></html>';
+        const printWin = window.open("", "", "width=" + screen.availWidth + ",height=" + screen.availHeight);
+        printWin.document.open();
+        printWin.document.write(windowContent);
+        printWin.document.addEventListener("load",function(){
+            printWin.focus();
+            printWin.print();
+            setTimeout(function(){
+                printWin.document.close();
+                printWin.close();
+            },901);
+        },true)
+    }
+
+    $('#line-chart').click(function (e) {
+        e.preventDefault();
+
+        PrintPDFFunc('buy_sell_chart');
+    });
+    $('#bar-chart').click(function (e) {
+        e.preventDefault();
+
+        PrintPDFFunc('cost_chart');
+    });
+});
+
+
+Chart.defaults.global.defaultFontSize = 16;
 Chart.defaults.global.defaultFontFamily = 'Vazirmatn';
 
+//console.log(JSON.parse('{{ total_costs|escapejs }}'));
 
-const ri_prog = $("#rial_progress");
+const bs_chart = $("#buy_sell_chart");
 
-const visit = new Chart(ri_prog, {
+const buySellChart = new Chart(bs_chart, {
     type: "line",
     data: {
-        labels: [
-            "شنبه",
-            "یک‌شنبه",
-            "دوشنبه",
-            "سه‌شنبه",
-            "چهارشنبه",
-            "پنج‌شنبه",
-            "جمعه",
-        ],
+        labels: JSON.parse('{{ projects|escapejs }}'),
 
         datasets: [
             {
-                data: [15000, 14700, 16500, 15600, 14700, 15000, 14000],
+                data: JSON.parse('{{ total_projects_buyers|escapejs }}'),
                 backgroundColor: "",
                 borderColor: "#17a2b8",
                 pointBackgroundColor: "#17a2b8",
             },
             {
-                data: [14000, 15700, 13500, 14600, 16700, 15200, 12500],
+                data: JSON.parse('{{ total_projects_sellers|escapejs }}'),
                 backgroundColor: "",
                 borderColor: "#ffc107",
                 pointBackgroundColor: "#ffc107",
@@ -61,28 +87,22 @@ const visit = new Chart(ri_prog, {
 
 // ----------------------------------------
 
-var tem_prog = $("#temporal_progress");
-var myChart = new Chart(tem_prog, {
+var c_chart = $("#cost_chart");
+var costChart = new Chart(c_chart, {
     type: 'bar',
     data: {
-        labels: [
-            "فروردین",
-            "اردیبهشت",
-            "خرداد",
-            "تیر",
-            "مرداد",
-            "شهریور",
-        ],
+        labels: JSON.parse('{{ projects|escapejs }}'),
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 8, 5, 14, 7],
+            data: JSON.parse('{{ total_costs|escapejs }}'),
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
                 'rgba(255, 206, 86, 0.2)',
                 'rgba(75, 192, 192, 0.2)',
                 'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(105, 215, 33, 0.2)'
             ],
             borderColor: [
                 'rgba(255, 99, 132, 1)',
@@ -90,7 +110,8 @@ var myChart = new Chart(tem_prog, {
                 'rgba(255, 206, 86, 1)',
                 'rgba(75, 192, 192, 1)',
                 'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
+                'rgba(255, 159, 64, 1)',
+                'rgba(105, 215, 33, 1)'
             ],
             borderWidth: 1
         }]
@@ -121,3 +142,5 @@ var myChart = new Chart(tem_prog, {
         },
     },
 });
+
+</script>

@@ -1,14 +1,21 @@
+/* @font-face {
+	font-family: 'Vazir';
+	src: url('Vazir/Vazir.eot');
+	src: url('Vazir/Vazir.eot?#iefix') format('embedded-opentype'),
+		url('Vazir/Vazir.woff2') format('woff2'),
+		url('Vazir/Vazir.woff') format('woff'),
+		url('Vazir/Vazir.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+	text-rendering: optimizeLegibility;
+	font-display: auto;
+} */
+
 @font-face {
-	font-family: 'Tanha';
-	src: url('Farsi-Digits/Tanha-FD.eot');
-	/* IE9 Compat Modes */
-	src: url('Farsi-Digits/Tanha-FD.eot?#iefix') format('embedded-opentype'),
-		/* IE6-IE8 */
-		url('Farsi-Digits/Tanha-FD.woff2') format('woff2'),
+	font-family: 'Vazirmatn';
+	src: url('Farsi-Digits/Vazirmatn-FD-Regular.woff2') format('woff2'),
 		/* Modern Browsers */
-		url('Farsi-Digits/Tanha-FD.woff') format('woff'),
-		/* Modern Browsers */
-		url('Farsi-Digits/Tanha-FD.ttf') format('truetype');
+		url('Farsi-Digits/Vazirmatn-FD-Regular.ttf') format('truetype');
 	/* Safari, Android, iOS */
 	font-weight: normal;
 	font-style: normal;
@@ -21,5 +28,5 @@
 }
 
 body{
-    font-family: 'Tanha';
+    font-family: 'Vazirmatn';
 }

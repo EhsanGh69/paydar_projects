@@ -101,6 +101,11 @@ background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
     width: 40%;
 }
 
+.clock #MyDayDisplay{
+    letter-spacing: 0;
+    font-size: 1.5rem;
+}
+
 #id_permissions, #selected_permissions{
     height: 300px;
 }

@@ -5,25 +5,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from utils.tools import filter_date_values
-from .models import (
-    Contracts, 
-    Proceedings, 
-    Agreements, 
-    BankReceipts, 
-    ConditionStatements,
-    RegisteredDocs,
-    OfficialDocs
-)
-from .forms import (
-    ContractsForm, 
-    ProceedingsForm, 
-    AgreementsForm, 
-    BankReceiptsForm, 
-    ConditionStatementsForm,
-    RegisteredDocsForm,
-    OfficialDocsForm
-)
-
+from account.models import UserActionsLog
+from .models import ( Contracts,  Proceedings,  Agreements,  BankReceipts,  ConditionStatements, RegisteredDocs, OfficialDocs)
+from .forms import (ContractsForm, ProceedingsForm, AgreementsForm, BankReceiptsForm, ConditionStatementsForm,RegisteredDocsForm,OfficialDocsForm)
 
 
 
@@ -88,6 +72,7 @@ class ContractsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
             form.errors['__all__'] = form.error_class(["لطفاً پروژه‌ایی را انتخاب کنید یا توضیح قرارداد غیرمرتبط با پروژه را وارد نمایید"])
             return super().form_invalid(form) # type: ignore
         else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک قرارداد جدید")
             return super().form_valid(form)
 
 
@@ -106,6 +91,7 @@ class ContractsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
             form.errors['__all__'] = form.error_class(["لطفاً پروژه‌ایی را انتخاب کنید یا توضیح قرارداد غیرمرتبط با پروژه را وارد نمایید"])
             return super().form_invalid(form) # type: ignore
         else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک قرارداد")
             return super().form_valid(form)
 
 
@@ -118,6 +104,10 @@ class ContractsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
         _id = int(self.kwargs.get('pk'))
         contract = get_object_or_404(Contracts, pk=_id)
         return contract
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک قرارداد")
+        return super().form_valid(form)
 
 
 class ContractsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -249,6 +239,10 @@ class ProceedingsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMess
     success_url = reverse_lazy("projects_docs:proceedings")
     success_message = "صورت جلسه با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک صورت جلسه جدید")
+        return super().form_valid(form)
+
 
 class ProceedingsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects_docs.change_proceedings'
@@ -257,6 +251,10 @@ class ProceedingsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMess
     form_class = ProceedingsForm
     success_url = reverse_lazy("projects_docs:proceedings")
     success_message = "صورت جلسه با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک صورت جلسه")
+        return super().form_valid(form)
 
 
 class ProceedingsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -268,6 +266,10 @@ class ProceedingsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMess
         _id = int(self.kwargs.get('pk'))
         proceeding = get_object_or_404(Proceedings, pk=_id)
         return proceeding
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک صورت جلسه")
+        return super().form_valid(form)
 
 
 class ProceedingsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -398,6 +400,10 @@ class AgreementsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     success_url = reverse_lazy("projects_docs:agreements")
     success_message = "توافق‌نامه با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک توافق‌نامه جدید")
+        return super().form_valid(form)
+
 
 class AgreementsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects_docs.change_agreements'
@@ -406,6 +412,10 @@ class AgreementsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     form_class = AgreementsForm
     success_url = reverse_lazy("projects_docs:agreements")
     success_message = "توافق‌نامه با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک توافق‌نامه")
+        return super().form_valid(form)
 
 
 class AgreementsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -417,6 +427,10 @@ class AgreementsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
         _id = int(self.kwargs.get('pk'))
         agreement = get_object_or_404(Agreements, pk=_id)
         return agreement
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک توافق‌نامه")
+        return super().form_valid(form)
 
 
 class AgreementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -536,6 +550,10 @@ class BankReceiptsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
     success_url = reverse_lazy("projects_docs:bank_receipts")
     success_message = "رسید بانکی با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک رسید بانکی جدید")
+        return super().form_valid(form)
+
 
 class BankReceiptsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects_docs.change_bankreceipts'
@@ -544,6 +562,10 @@ class BankReceiptsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
     form_class = BankReceiptsForm
     success_url = reverse_lazy("projects_docs:bank_receipts")
     success_message = "رسید بانکی با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک رسید بانکی")
+        return super().form_valid(form)
 
 
 class BankReceiptsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -555,6 +577,10 @@ class BankReceiptsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
         _id = int(self.kwargs.get('pk'))
         bank_receipt = get_object_or_404(BankReceipts, pk=_id)
         return bank_receipt
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک رسید بانکی")
+        return super().form_valid(form)
 
 
 class BankReceiptsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -683,6 +709,10 @@ class ConditionStatementsCreate(LoginRequiredMixin, PermissionRequiredMixin, Suc
     success_url = reverse_lazy("projects_docs:condition_statements")
     success_message = "صورت وضعیت با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک صورت وضعیت جدید")
+        return super().form_valid(form)
+
 
 class ConditionStatementsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects_docs.change_conditionstatements'
@@ -691,6 +721,10 @@ class ConditionStatementsUpdate(LoginRequiredMixin, PermissionRequiredMixin, Suc
     form_class = ConditionStatementsForm
     success_url = reverse_lazy("projects_docs:condition_statements")
     success_message = "صورت وضعیت با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک صورت وضعیت")
+        return super().form_valid(form)
 
 
 class ConditionStatementsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -702,6 +736,10 @@ class ConditionStatementsDelete(LoginRequiredMixin, PermissionRequiredMixin, Suc
         _id = int(self.kwargs.get('pk'))
         condition_statement = get_object_or_404(ConditionStatements, pk=_id)
         return condition_statement
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک صورت وضعیت")
+        return super().form_valid(form)
 
 
 class ConditionStatementsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -831,6 +869,10 @@ class RegisteredDocsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     success_url = reverse_lazy("projects_docs:registered_docs")
     success_message = "سند ثبتی با موفقیت ثبت شد"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک سند ثبتی جدید")
+        return super().form_valid(form)
+
 
 class RegisteredDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects_docs.change_registereddocs'
@@ -839,6 +881,10 @@ class RegisteredDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     form_class = RegisteredDocsForm
     success_url = reverse_lazy("projects_docs:registered_docs")
     success_message = "سند ثبتی با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک سند ثبتی")
+        return super().form_valid(form)
 
 
 class RegisteredDocsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -850,6 +896,10 @@ class RegisteredDocsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
         _id = int(self.kwargs.get('pk'))
         registered_doc = get_object_or_404(RegisteredDocs, pk=_id)
         return registered_doc
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک سند ثبتی")
+        return super().form_valid(form)
 
 
 class RegisteredDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -981,6 +1031,7 @@ class OfficialDocsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
             form.add_error('license_type', 'لطفا نوع پروانه را انتخاب کنید')
             return super().form_invalid(form) # type: ignore
         else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک سند اداری جدید")
             return super().form_valid(form)
 
 
@@ -1003,6 +1054,7 @@ class OfficialDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
             form.add_error('license_type', 'لطفا نوع پروانه را انتخاب کنید')
             return super().form_invalid(form) # type: ignore
         else:
+            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک سند اداری")
             return super().form_valid(form)
 
 
@@ -1015,6 +1067,10 @@ class OfficialDocsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
         _id = int(self.kwargs.get('pk'))
         official_doc = get_object_or_404(OfficialDocs, pk=_id)
         return official_doc
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک سند اداری")
+        return super().form_valid(form)
 
 
 class OfficialDocsSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):

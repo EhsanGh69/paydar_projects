@@ -6,13 +6,9 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 
 from utils.tools import filter_date_values
+from account.models import UserActionsLog
 from .models import Receive, Organization, Payment, Activity
-from .forms import (
-    ReceiveForm, 
-    OrganizationForm,
-    PaymentForm,
-    ActivityForm
-)
+from .forms import ReceiveForm, OrganizationForm, PaymentForm, ActivityForm
 
 
 # Organization - Start
@@ -39,6 +35,10 @@ class OrganizationCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
     form_class = OrganizationForm
     success_url = reverse_lazy("government_accounts:organizations")
     success_message = "ارگان با موفقیت افزوده شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک ارگان جدید")
+        return super().form_valid(form)
     
 
 class OrganizationUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -48,6 +48,10 @@ class OrganizationUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
     form_class = OrganizationForm
     success_url = reverse_lazy("government_accounts:organizations")
     success_message = "ارگان با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک ارگان")
+        return super().form_valid(form)
 
 
 class OrganizationDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -59,6 +63,10 @@ class OrganizationDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
         _id = int(self.kwargs.get('pk'))
         organization = get_object_or_404(Organization, pk=_id)
         return organization
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک ارگان")
+        return super().form_valid(form)
 
 
 # Organization - End
@@ -117,6 +125,10 @@ class ReceiveCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     form_class = ReceiveForm
     success_url = reverse_lazy("government_accounts:receives")
     success_message = "دریافت با موفقیت ثبت گردید"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک دریافت دولتی جدید")
+        return super().form_valid(form)
     
 
 class ReceiveUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -126,6 +138,10 @@ class ReceiveUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     form_class = ReceiveForm
     success_url = reverse_lazy("government_accounts:receives")
     success_message = "دریافت با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک دریافت دولتی")
+        return super().form_valid(form)
 
 
 class ReceiveDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -137,6 +153,10 @@ class ReceiveDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
         _id = int(self.kwargs.get('pk'))
         receive = get_object_or_404(Receive, pk=_id)
         return receive
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک دریافت دولتی")
+        return super().form_valid(form)
 
 
 class ReceiveSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -256,6 +276,10 @@ class PaymentCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     success_url = reverse_lazy("government_accounts:payments")
     success_message = "پرداخت با موفقیت ثبت گردید"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک پرداخت دولتی جدید")
+        return super().form_valid(form)
+
 
 class PaymentUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'government_accounts.change_payment'
@@ -264,6 +288,10 @@ class PaymentUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     form_class = PaymentForm
     success_url = reverse_lazy("government_accounts:payments")
     success_message = "پرداخت با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک پرداخت دولتی")
+        return super().form_valid(form)
 
 
 class PaymentDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -275,6 +303,10 @@ class PaymentDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
         _id = int(self.kwargs.get('pk'))
         payment = get_object_or_404(Payment, pk=_id)
         return payment
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک پرداخت دولتی")
+        return super().form_valid(form)
 
 
 class PaymentSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -393,6 +425,10 @@ class ActivityCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     success_url = reverse_lazy("government_accounts:activities")
     success_message = "فعالیت با موفقیت ثبت گردید"
 
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک فعالیت جدید")
+        return super().form_valid(form)
+
 
 class ActivityUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'government_accounts.change_activity'
@@ -401,6 +437,10 @@ class ActivityUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     form_class = ActivityForm
     success_url = reverse_lazy("government_accounts:activities")
     success_message = "فعالیت با موفقیت ویرایش شد"
+
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک فعالیت")
+        return super().form_valid(form)
 
 
 class ActivityDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -412,6 +452,10 @@ class ActivityDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
         _id = int(self.kwargs.get('pk'))
         activity = get_object_or_404(Activity, pk=_id)
         return activity
+    
+    def form_valid(self, form):
+        UserActionsLog.objects.create(user=self.request.user, log_type="DL", log_content="حذف یک فعالیت")
+        return super().form_valid(form)
 
 
 class ActivitySearch(LoginRequiredMixin, PermissionRequiredMixin, ListView):

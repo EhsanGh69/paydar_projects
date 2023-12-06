@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models.query import Q
 
+from django_jalali.db import models as jmodels
 from jalali_date import datetime2jalali
 
 
@@ -26,4 +27,19 @@ class User(AbstractUser):
     
     def jalali_last_login(self):
         return datetime2jalali(self.last_login).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+    
+
+class UserActionsLog(models.Model):
+    LOG_TYPE = [
+        ("CR", "Create Object"),
+        ("UP", "Update Object"),
+        ("DL", "Delete Object"),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_logs')
+    log_type = models.CharField(max_length=2, choices=LOG_TYPE)
+    log_content = models.CharField(max_length=250)
+    log_time = jmodels.jDateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username}-{self.log_content}'
     

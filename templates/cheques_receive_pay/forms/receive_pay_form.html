@@ -37,7 +37,7 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.date.label }}*</label>
-        {{ form.date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {{ form.date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% if form.date.errors %}
               {% for error in form.date.errors %}
                   <p class="text-danger">{{ error }}</p>

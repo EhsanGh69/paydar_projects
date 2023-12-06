@@ -3,7 +3,10 @@ function showTime(){
     var h = date.getHours(); // 0 - 23
     var m = date.getMinutes(); // 0 - 59
     var s = date.getSeconds(); // 0 - 59
+    var d = date.getDay();
     // var session = "AM";
+
+    var j_days = { 0:"یکشنبه", 1:"دوشنبه", 2:"سه‌شنبه", 3:"چهارشنبه", 4:"پنج‌شنبه", 5:"جمعه", 6:"شنبه" }
     
     if(h == 0){
         h = 12;
@@ -26,6 +29,9 @@ function showTime(){
 
     document.getElementById("MyDateDisplay").innerText = j_date;
     document.getElementById("MyDateDisplay").textContent = j_date;
+
+    document.getElementById("MyDayDisplay").innerText = d;
+    document.getElementById("MyDayDisplay").textContent = j_days[d];
     
     setTimeout(showTime, 1000);
     

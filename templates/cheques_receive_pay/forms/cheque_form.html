@@ -38,7 +38,7 @@
     
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.export_receive_date.label }}*</label>
-        {{ form.export_receive_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {{ form.export_receive_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% if form.export_receive_date.errors %}
               {% for error in form.export_receive_date.errors %}
                   <p class="text-danger">{{ error }}</p>
@@ -47,7 +47,7 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.due_date.label }}*</label>
-        {{ form.due_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
+        {{ form.due_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% if form.due_date.errors %}
               {% for error in form.due_date.errors %}
                   <p class="text-danger">{{ error }}</p>
