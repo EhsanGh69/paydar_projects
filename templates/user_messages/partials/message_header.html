@@ -1,0 +1,21 @@
+<div class="card-header d-flex flex-row-reverse justify-content-between w-100">
+    <div class="card-tools">
+        <form action="{% url 'user_messages:search_messages' %}" method="get" id="search-form">
+            <div class="input-group">
+                <input type="text" class="form-control" name="data_search" value="{{ request.GET.data_search }}"
+                placeholder="جستجو در همه‌ی پیام‌ها" id="search-input">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" id="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <h4>
+      {% if request.resolver_match.url_name == 'received_messages' %}پیام‌های دریافت شده{% endif %}
+      {% if request.resolver_match.url_name == 'sent_messages' %}پیام های ارسال شده{% endif %}
+      {% if request.resolver_match.url_name == 'archived_messages' %}پیام های حذف شده{% endif %}
+      {% if request.resolver_match.url_name == 'search_messages' %}پیام‌های یافت شده{% endif %}
+    </h3>
+</div>

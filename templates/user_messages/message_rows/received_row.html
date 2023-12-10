@@ -1,0 +1,61 @@
+<tr>
+    <td class="mailbox-star">
+        <a href="{% url 'user_messages:received_message' msg.sender msg.id %}" class="nav-link text-secondary">
+            {% if msg.seen %}
+                <i class="fas fa-envelope-open text-secondary ml-3 mr-0" style="font-size:1.3rem;"></i>
+            {% else %}
+                <i class="fas fa-envelope text-success ml-3 mr-0" style="font-size:1.3rem;"></i>
+            {% endif %}
+            <i class="fa-solid fa-arrow-left text-success m-0" style="font-size:1.3rem;"></i>
+        </a>
+    </td>
+    <td class="mailbox-name">
+        <a href="{% url 'user_messages:received_message' msg.sender msg.id %}" class="nav-link text-secondary">
+            <i class="fas fa-user text-muted" style="font-size:1.3rem;"></i>
+            <strong>{{ msg.sender.get_full_name }}</strong>
+        </a>
+    </td>
+    <td class="mailbox-subject">
+        <a href="{% url 'user_messages:received_message' msg.sender msg.id %}" class="nav-link text-dark">
+            <i class="fas fa-file-text text-muted" style="font-size:1.3rem;"></i>
+            <b>{{ msg.subject }}</b>
+        </a>
+    </td>
+    <td class="mailbox-date">
+        <a href="{% url 'user_messages:received_message' msg.sender msg.id %}" class="nav-link text-secondary">
+            <i class="fa-solid fa-clock text-muted mr-1" style="font-size:1.3rem;"></i>
+            <i>{{ msg.date_time|timesince }} پیش</i>
+        </a>
+    </td>
+    <td class="d-flex justify-content-start">
+        {% if request.resolver_match.url_name == 'archived_messages' %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="rec_receive_id" value="{{ msg.id }}">
+                <button type="submit" class="btn btn-outline-info" title="خروج از بایگانی">
+                    <i class="fas fa-recycle" style="font-size:1.1rem;"></i>
+                </button>
+            </form>
+        {% endif %}
+        {% if request.resolver_match.url_name != 'archived_messages' %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="arc_receive_id" value="{{ msg.id }}">
+                <button type="submit" class="btn btn-outline-info" title="بایگانی کردن">
+                    <i class="fas fa-archive" style="font-size:1.1rem;"></i>
+                </button>
+            </form>
+        {% endif %}
+        <a href="javascript:void(0)"  
+        data-toggle="modal"
+        class="btn btn-outline-danger ml-5"
+        {% if request.resolver_match.url_name == 'archived_messages'  %}
+            data-url="{% url 'user_messages:remove_message' msg_type='ar_received' pk=msg.pk %}"
+        {% else %}
+            data-url="{% url 'user_messages:remove_message' msg_type='received' pk=msg.pk %}"
+        {% endif %}
+        data-target="#deleteItemModal" title="حذف کامل پیام">
+        <i class="fas fa-trash" style="font-size:1.1rem;"></i>
+        </a>
+    </td>
+</tr>

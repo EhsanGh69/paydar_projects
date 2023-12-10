@@ -1,0 +1,45 @@
+{% extends 'user_messages/base_messages.html' %}
+
+{% block title %}جستجو در پیام‌ها{% endblock %}
+
+{% block page_title %}جستجو در پیام‌ها{% endblock %}
+
+{% block message_link %}
+    <a href="{% url 'user_messages:received_messages' %}" class="btn btn-warning btn-block mb-3">
+        <i class="fas fa-reply"></i>
+        <span>بازگشت به لیست پیام‌ها</span>
+    </a>
+{% endblock %}
+
+{% block message_cart %}
+<div class="col-md-9">
+    <div class="card card-primary card-outline">
+
+        {% include "user_messages/partials/message_header.html" %}
+
+        <div class="card-body p-0">
+            <div class="table-responsive mailbox-messages">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    {% for msg in found_messages %}
+                        {% if msg.receiver == request.user %}
+                            {% include "user_messages/message_rows/received_row.html" with msg=msg %}
+                        {% else %}
+                            {% include "user_messages/message_rows/sent_row.html" with msg=msg %}
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td class="h4 text-center text-muted">پیامی وجود ندارد</td>
+                        </tr>
+                    {% endfor %}
+                    {% include 'partials/confirm_delete.html' with obj_name='پیام' %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        
+        {% include "user_messages/partials/message_pagination.html" with page_obj=page_obj query=query %}
+
+    </div>
+  </div>
+{% endblock %}

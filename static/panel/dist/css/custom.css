@@ -1,3 +1,7 @@
+*{
+    direction: rtl !important;
+}
+
 .layout-fixed .main-sidebar {
     right: 0;
 }

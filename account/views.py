@@ -105,10 +105,10 @@ class UpdateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
         is_exits_mobile_number = other_users.filter(mobile_number=mobile_number).exists()
         if is_exits_username:
             form.add_error('username', 'کاربری با نام کاربری وارد شده وجود دارد، لطفا نام کاربری دیگری وارد کنید')
-            return super().form_invalid(form) # type: ignore
+            return super().form_invalid(form)
         elif is_exits_mobile_number:
             form.add_error('mobile_number', 'شماره همراه وارد شده از قبل وجود دارد، لطفا شماره همراه دیگری وارد کنید')
-            return super().form_invalid(form) # type: ignore
+            return super().form_invalid(form) 
                 
         if not is_active:
             User.objects.filter(pk=id).update(username=username, mobile_number=mobile_number,
@@ -148,7 +148,7 @@ class SearchUsers(LoginRequiredMixin, ListView):
         not_found = False
         query = self.request.GET.get('data_search')
         
-        search_result = User.objects.search(query).all() # type: ignore
+        search_result = User.objects.search(query).all() 
         
         if not search_result:
             not_found = True
@@ -234,7 +234,7 @@ class UpdateGroup(LoginRequiredMixin, SuccessMessageMixin, FormView):
         is_exits_group_name = other_groups.filter(name=group_name).exists()
         if is_exits_group_name:
             form.add_error('group_name', 'گروه دسترسی با این نام وجود دارد، لطفا نام دیگری وارد کنید')
-            return super().form_invalid(form) # type: ignore
+            return super().form_invalid(form) 
 
         Group.objects.filter(pk=id).update(name=group_name)
 

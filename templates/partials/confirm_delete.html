@@ -3,17 +3,22 @@
          aria-labelledby="deleteItemModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document"> </div>
         <div class="modal-content">
-    
           <div class="modal-header">
             <h5>تأیید حذف {{ obj_name }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-    
           <div class="modal-body confirm-delete text-center" >
-              <div class="alert" id="delete_item_alert"></div>
-              <h5 id="modal-message"></h5>
+              {% if obj_name == 'پیام' %}
+                <h5 id="modal-message">آیا از حذف این پیام اطمینان دارید؟</h5>
+                <p class="alert alert-danger">
+                  با حذف این پیام دیگر به آن دسترسی نخواهید داشت!
+                </p>
+              {% else %}
+                <div class="alert" id="delete_item_alert"></div>
+                <h5 id="modal-message"></h5>
+              {% endif %}
               <hr>
               <form action="" method="post" id="form_confirm_modal">
                   {% csrf_token %}
@@ -22,8 +27,6 @@
               </form>
               <input type="hidden" id="address_suppress"/>
           </div>
-    
         </div>
-    
     </div>
 </div>

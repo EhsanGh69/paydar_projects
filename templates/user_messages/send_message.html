@@ -1,0 +1,55 @@
+{% extends 'user_messages/base_messages.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block title %}نوشتن پیام جدید{% endblock %}
+
+{% block link %}
+    <style>
+        .note-editable.card-block{
+            height: 300px;
+        }
+    </style>
+{% endblock %}
+
+{% block page_title %}نوشتن پیام جدید{% endblock %}
+
+{% block message_link %}
+    <a href="{% url 'user_messages:received_messages' %}" class="btn btn-warning btn-block mb-3">
+        <i class="fas fa-reply"></i>
+        <span>بازگشت به لیست پیام‌ها</span>
+    </a>
+{% endblock %}
+
+{% block message_cart %}
+<div class="col-md-9">
+    <div class="card card-primary card-outline">
+        <form method="post">
+            {% csrf_token %}
+            <div class="card-body">
+                <div class="form-group">
+                    {{ form.receiver_name|as_crispy_field }}
+                </div>
+                <div class="form-group">
+                    {{ form.subject|as_crispy_field }}
+                </div>
+                <div class="form-group">
+                    {{ form.content|as_crispy_field }}
+                </div>
+            </div>
+          
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="far fa-envelope"></i>
+                    <span class="ml-2">ارسال</span>
+                </button>
+                
+                <button type="reset" class="btn btn-default">
+                    <i class="fas fa-times"></i> 
+                    <span class="ml-2">پاک کردن تغییرات</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

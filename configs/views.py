@@ -6,11 +6,11 @@ from django.contrib.auth.decorators import login_required
 from cheques_receive_pay.models import Cheques
 from account.models import UserActionsLog
 from projects.models import Project
-from utils.tools import get_all_logged_in_users, total_projects_buyers_sellers, total_projects_costs
+from utils.tools import get_all_logged_in_users, total_projects_buyers_sellers, total_projects_costs, messages_filters
 
 
 
-@login_required # type: ignore
+@login_required
 def index(request):
     all_cheques_count = Cheques.objects.all().count()
     exp_cheques_count = Cheques.objects.filter(cheque_type="exp").count()
@@ -32,7 +32,6 @@ def index(request):
     
     if user_logs.count() > 4:
         user_logs[0].delete()
-        user_logs[0].save()
 
     context = {
         'all_cheques_count': all_cheques_count,
@@ -44,6 +43,7 @@ def index(request):
         'total_projects_buyers': json.dumps(total_projects_buyers),
         'total_projects_sellers': json.dumps(total_projects_sellers),
         'total_costs': json.dumps(total_costs),
+        'unseen_count': messages_filters(request)['unseen_count']
     }
     
     return render(request, 'home.html', context)

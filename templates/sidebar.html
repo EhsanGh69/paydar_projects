@@ -274,11 +274,14 @@
                 {% endif %}
 
                 <li class="nav-item border-top border-light ">
-                    <a href="#" class="nav-link">
-                        <i class="fa-solid fa-comments text-primary" style="font-size: 1.2rem;"></i>
+                    <a href="{% url 'user_messages:received_messages' %}" class="nav-link
+                    {% if request.resolver_match.app_name == 'user_messages' %}active{% endif %}">
+                        <i class="fa-solid fa-envelope text-primary" style="font-size: 1.2rem;"></i>
                         <span class="ml-2">
                             پیام‌ها
-                            <span class="badge badge-danger">جدید</span>
+                            {% if unseen_count > 0 %}
+                                <span class="badge badge-success">جدید {{ unseen_count }}</span>
+                            {% endif %}
                         </span>
                     </a>
                 </li>

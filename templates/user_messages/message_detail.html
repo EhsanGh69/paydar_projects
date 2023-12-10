@@ -1,0 +1,87 @@
+{% extends 'user_messages/base_messages.html' %}
+{% load static %}
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'received_message' %}مشاهده پیام دریافتی{% endif %}
+    {% if request.resolver_match.url_name == 'sent_message' %}مشاهده پیام ارسالی{% endif %}
+{% endblock %}
+
+{% block page_title %}
+    {% if request.resolver_match.url_name == 'received_message' %}مشاهده پیام دریافتی از «{{ msg.sender }}»{% endif %}
+    {% if request.resolver_match.url_name == 'sent_message' %}مشاهده پیام ارسالی به «{{ msg.receiver }}»{% endif %}
+{% endblock %}
+
+{% block message_link %}
+    <a href="{% url 'user_messages:received_messages' %}" class="btn btn-warning btn-block mb-3">
+        <i class="fas fa-reply"></i>
+        <span>بازگشت به لیست پیام‌ها</span>
+    </a>
+{% endblock %}
+
+{% block message_cart %}
+    <div class="col-md-9">
+        <div class="card card-primary card-outline">
+            <div class="card-body p-0" id="msg-content">
+                <div class="mailbox-read-info px-5">
+                    <div class="mb-3">
+                        <i class="text-muted" style="font-size: 1.2rem;">موضوع: </i>
+                        <span class="font-weight-bold" style="font-size: 1.4rem;">{{ msg.subject }}</span>
+                    </div>
+                    <div>
+                        {% if request.resolver_match.url_name == 'received_message' %}
+                            <i class="text-muted" style="font-size: 1rem;">دریافت شده از: 
+                                {{ msg.sender.get_full_name }}
+                            </i>
+                        {% endif %}
+                        {% if request.resolver_match.url_name == 'sent_message' %}
+                            <i class="text-muted" style="font-size: 1rem;">ارسال شده به: 
+                                {{ msg.receiver.get_full_name }}
+                            </i>
+                        {% endif %}                        
+                        <span class="mailbox-read-time float-right text-secondary" style="font-size: 1rem;">
+                            {{ j_date_time }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="mailbox-read-message px-5" style="font-size: 1.2rem;">
+                    {{ msg.content|safe }}
+                </div>
+            </div>
+            <div class="card-footer d-flex">
+                <a href="javascript:void(0)"  
+                data-toggle="modal"
+                class="btn btn-outline-danger ml-3"
+                {% if request.resolver_match.url_name == 'received_message'  %}
+                    data-url="{% url 'user_messages:remove_message' msg_type='received' pk=msg.pk %}"
+                {% else %}
+                    data-url="{% url 'user_messages:remove_message' msg_type='sent' pk=msg.pk %}"
+                {% endif %}
+                data-target="#deleteItemModal" title="حذف کامل پیام">
+                <i class="fas fa-trash" style="font-size:1.1rem;"></i>
+                </a>
+                <button type="button" class="btn btn-outline-success mr-3" id="print-btn" title="چاپ پیام">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% if request.resolver_match.url_name == 'received_message' %}
+        {% include 'partials/confirm_delete.html' with obj_name='پیام دریافتی' %}
+    {% else %}
+        {% include 'partials/confirm_delete.html' with obj_name='پیام ارسالی' %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+    <script src="{% static 'panel/dist/js/printThis.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#print-btn').click(function (e) {
+                e.preventDefault();
+                $('#msg-content').printThis();
+            });
+        });
+    </script>
+{% endblock %}

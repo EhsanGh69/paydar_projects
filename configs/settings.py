@@ -19,7 +19,7 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "index"
 LOGIN_URL = "login"
 LOGOUT_REDIRECT_URL = "login"
 
@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'projects_docs.apps.ProjectsDocsConfig',
     'account.apps.AccountConfig',
     'reports.apps.ReportsConfig',
+    'user_messages.apps.UserMessagesConfig'
 ]
 
 MIDDLEWARE = [

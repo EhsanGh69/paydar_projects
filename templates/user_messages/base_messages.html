@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+  {% include 'partials/messages.html' with messages=messages %}
+  <div class="row">
+      <div class="col-md-3">
+
+        {% block message_link %}{% endblock %}
+
+        {% include "user_messages/message_sidebar.html" with sent_count=sent_count received_count=received_count unseen_count=unseen_count archived_count=archived_count %}
+      </div>
+
+      {% block message_cart %}{% endblock %}
+      
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'panel/dist/js/confirm_delete.js' %}"></script>
+  <script>
+    $(document).ready(function() {
+      $("#search-btn").click(function() {
+          if($('#search-input').val() != ''){
+              $("#search-form").submit();
+          }
+      });
+    });
+  </script>
+{% endblock %}

@@ -23,10 +23,10 @@ class User(AbstractUser):
     objects = UserManager()
 
     def jalali_date_joined(self):
-        return datetime2jalali(self.date_joined).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return datetime2jalali(self.date_joined).strftime('%Y/%m/%d _ %H:%M:%S')
     
     def jalali_last_login(self):
-        return datetime2jalali(self.last_login).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return datetime2jalali(self.last_login).strftime('%Y/%m/%d _ %H:%M:%S') 
     
 
 class UserActionsLog(models.Model):

@@ -30,9 +30,14 @@ function showTime(){
     document.getElementById("MyDateDisplay").innerText = j_date;
     document.getElementById("MyDateDisplay").textContent = j_date;
 
-    document.getElementById("MyDayDisplay").innerText = d;
-    document.getElementById("MyDayDisplay").textContent = j_days[d];
-    
+    if (document.getElementById("MyDayDisplay")){
+        document.getElementById("MyDayDisplay").innerText = d;
+    }
+
+    if (document.getElementById("MyDayDisplay")){
+        document.getElementById("MyDayDisplay").textContent = j_days[d];
+    }
+
     setTimeout(showTime, 1000);
     
 }

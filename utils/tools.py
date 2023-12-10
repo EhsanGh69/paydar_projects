@@ -1,9 +1,10 @@
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
 from django.contrib.sessions.models import Session
+from django.core.paginator import Paginator
 
 from jdatetime import JalaliToGregorian, datetime
 
@@ -11,6 +12,7 @@ from account.models import User
 from non_government_accounts.models import BuyersSellers
 from projects.models import Project
 from projects.templatetags.projects_tags import total_project_costs
+from user_messages.models import Message
 
 
 
@@ -268,4 +270,45 @@ def total_projects_costs():
         total_costs_list.append(total_costs)
     
     return total_costs_list
-    
+
+
+def messages_filters(request):
+    all_messages = Message.objects.all()
+    sent_messages = all_messages.filter(sender=request.user).order_by('-date_time').all()
+    received_messages = all_messages.filter(receiver=request.user).order_by('seen', '-date_time').all()
+    archived_messages = [
+        received_messages.filter(visible_receiver=True, archive_receiver=True).all(), 
+        sent_messages.filter(visible_sender=True, archive_sender=True).all()
+    ]
+    return {
+        'sent_count': sent_messages.filter(visible_sender=True, archive_sender=False).count(), 
+        'received_count': received_messages.filter(visible_receiver=True, archive_receiver=False).count(),
+        'unseen_count': received_messages.filter(seen=False, visible_receiver=True, archive_receiver=False).count(),
+        'received_messages': received_messages.filter(visible_receiver=True, archive_receiver=False).all(),
+        'sent_messages': sent_messages.filter(visible_sender=True, archive_sender=False).all(), 
+        'archived_received': archived_messages[0],
+        'archived_sent': archived_messages[1],
+        'archived_count': archived_messages[0].count() + archived_messages[1].count(),
+    }
+
+
+def messages_pagination(request):
+    page_number = request.GET.get("page")
+    if request.resolver_match.url_name == 'received_messages':
+        paginator = Paginator(messages_filters(request)['received_messages'], 10)
+        page_obj = paginator.get_page(page_number)
+        return page_obj
+    elif request.resolver_match.url_name == 'sent_messages':
+        paginator = Paginator(messages_filters(request)['sent_messages'], 10)
+        page_obj = paginator.get_page(page_number)
+        return page_obj
+    else:
+        archived_messages = Message.objects.filter(
+            Q(receiver=request.user, visible_receiver=True, archive_receiver=True) |
+            Q(sender=request.user, visible_sender=True, archive_sender=True)
+        )
+        paginator = Paginator(archived_messages, 1)
+        page_obj = paginator.get_page(page_number)
+        return page_obj
+
+

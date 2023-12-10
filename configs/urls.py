@@ -7,7 +7,7 @@ from .views import index
 from account.views import CustomLogin
 
 urlpatterns = [
-    path('', index),
+    path('', index, name="index"),
     path('', include('django.contrib.auth.urls')),
     path('government_accounts/', include('government_accounts.urls')),
     path('non_government_accounts/', include('non_government_accounts.urls')),
@@ -18,6 +18,7 @@ urlpatterns = [
     path('login/', CustomLogin.as_view(), name='login'),
     path('account/', include('account.urls')),
     path('reports/', include('reports.urls')),
+    path('user_messages/', include('user_messages.urls')),
     path('admin/', admin.site.urls, name="home"),
 ]
 

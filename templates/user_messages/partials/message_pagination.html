@@ -1,0 +1,31 @@
+<div class="card-footer p-0">
+    <div class="mailbox-controls ml-3 h5">
+      <div class="float-right">
+        <div class="btn-group my-2">
+          {% if page_obj.has_next %}
+            <a href="
+            {% if request.resolver_match.url_name == 'search_messages' %}
+                {% url 'user_messages:search_messages' page_obj.next_page_number %}?data_search={{query}}
+            {% else %}
+                ?page={{ page_obj.next_page_number }}
+            {% endif %}
+            " class="btn btn-outline-default btn-sm ml-2">
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          {% endif %}
+          <span class="text-secondary">{{ page_obj.paginator.num_pages }} / {{ page_obj.number }}</span>
+          {% if page_obj.has_previous %}
+            <a href="
+            {% if request.resolver_match.url_name == 'search_messages' %}
+                {% url 'user_messages:search_messages' page_obj.previous_page_number %}?data_search={{query}}
+            {% else %}
+                ?page={{ page_obj.previous_page_number }}
+            {% endif %}
+            " class="btn btn-outline-default btn-sm mr-2">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
