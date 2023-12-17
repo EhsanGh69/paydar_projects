@@ -1,7 +1,6 @@
 from django import forms
 from django.core import validators
 from django.contrib.auth.models import Group
-from django.contrib.auth.forms import AuthenticationForm
 
 from utils.tools import none_numeric_value, valid_select_permissions
 
@@ -9,8 +8,131 @@ from .models import User
 
 
 
-class AuthenticateForm(AuthenticationForm):
+class UserLogin(forms.Form):
     use_required_attribute = False
+
+    username = forms.CharField(
+        widget=forms.TextInput(),
+        required=False,
+        label='نام کاربری'
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(),
+        required=False,
+        label='رمز عبور'
+    )
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not username:
+            raise forms.ValidationError('لطفاً نام کاربری خود را وارد نمایید')
+        
+        return username
+    
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if not password:
+            raise forms.ValidationError('لطفاً رمز عبور خود را وارد نمایید')
+        
+        return password
+
+
+class UserChangePassword(forms.Form):
+    use_required_attribute = False
+
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(),
+        required=False,
+        label='رمز عبور کنونی'
+    )
+
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(),
+        required=False,
+        label='رمز عبور جدید'
+    )
+
+    confirm_new_password = forms.CharField(
+        widget=forms.PasswordInput(),
+        required=False,
+        label='تأیید رمز عبور جدید'
+    )
+
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get('old_password')
+        if not old_password:
+            raise forms.ValidationError('لطفاً رمز عبور کنونی خود را وارد نمایید')
+        
+        return old_password
+    
+    def clean_new_password(self):
+        new_password = self.cleaned_data.get('new_password')
+        if not new_password:
+            raise forms.ValidationError('لطفاً رمز عبور جدید خود را وارد نمایید')
+        
+        return new_password
+    
+    def clean_confirm_new_password(self):
+        new_password = self.cleaned_data.get('new_password')
+        confirm_new_password = self.cleaned_data.get('confirm_new_password')
+        if not confirm_new_password and new_password:
+            raise forms.ValidationError('لطفاً رمز عبور جدید خود تأیید نمایید')
+        if new_password and confirm_new_password != new_password:
+            raise forms.ValidationError('تأیید رمز عبور جدید با رمز عبور جدید یکسان نیست')
+        
+        return confirm_new_password
+
+
+class UserEditAccount(forms.Form):
+    use_required_attribute = False
+
+    mobile_number = forms.CharField(
+        widget=forms.TextInput(),
+        required=False,
+        label='شماره همراه',
+        validators=[
+            validators.RegexValidator(
+                regex=r'09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
+                message='شماره همراه وارد شده معتبر نمی‌باشد'
+            )
+        ]
+    )
+
+    first_name = forms.CharField(
+        widget=forms.TextInput(),
+        validators=[none_numeric_value],
+        required=False,
+        label='نام'
+    )
+
+    last_name = forms.CharField(
+        widget=forms.TextInput(),
+        validators=[none_numeric_value],
+        required=False,
+        label='نام خانوادگی'
+    )
+
+    def clean_mobile_number(self):
+        mobile_number = self.cleaned_data.get('mobile_number')
+        if not mobile_number:
+            raise forms.ValidationError('لطفاً شماره همراه خود را وارد نمایید')
+        
+        return mobile_number
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if not first_name:
+            raise forms.ValidationError('لطفاً نام خود را وارد نمایید')
+        
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not last_name:
+            raise forms.ValidationError('لطفاً نام خانوادگی خود را وارد نمایید')
+        
+        return last_name
 
 
 class AddUserForm(forms.Form):
@@ -71,7 +193,7 @@ class AddUserForm(forms.Form):
         label='شماره همراه',
         validators=[
             validators.RegexValidator(
-                regex=r'^0\d{10}$',
+                regex=r'09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
                 message="شماره همراه وارد شده معتبر نمی‌باشد"
             )
         ]
@@ -180,7 +302,7 @@ class UpdateUserForm(forms.Form):
         label='شماره همراه',
         validators=[
             validators.RegexValidator(
-                regex=r'^0\d{10}$',
+                regex=r'09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
                 message="شماره همراه وارد شده معتبر نمی‌باشد"
             )
         ]

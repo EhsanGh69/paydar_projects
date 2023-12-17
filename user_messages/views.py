@@ -8,7 +8,7 @@ from django.views.generic import FormView, ListView
 from django.db.models import Q
 
 from jalali_date import datetime2jalali
-from utils.tools import messages_filters, messages_pagination
+from utils.tools import messages_filters, messages_pagination, get_all_logged_in_users
 from account.models import User
 from account.models import UserActionsLog
 from .models import Message
@@ -107,7 +107,6 @@ def list_messages(request):
     }
 
     return render(request, "user_messages/list_messages.html", context)
-
 
 
 @login_required

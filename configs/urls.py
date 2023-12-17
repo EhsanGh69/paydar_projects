@@ -4,18 +4,19 @@ from django.urls import path, include
 from django.conf.urls.static import static
 
 from .views import index
-from account.views import CustomLogin
+from account.views import Login, log_out, ChangePassword
 
 urlpatterns = [
     path('', index, name="index"),
-    path('', include('django.contrib.auth.urls')),
     path('government_accounts/', include('government_accounts.urls')),
     path('non_government_accounts/', include('non_government_accounts.urls')),
     path('projects/', include('projects.urls')),
     path('cheques_receive_pay/', include('cheques_receive_pay.urls')),
     path('warehousing/', include('warehousing.urls')),
     path('projects_docs/', include('projects_docs.urls')),
-    path('login/', CustomLogin.as_view(), name='login'),
+    path('login/', Login.as_view(), name='login'),
+    path('logout/', log_out, name='logout'),
+    path('change_password/', ChangePassword.as_view(), name='change_password'),
     path('account/', include('account.urls')),
     path('reports/', include('reports.urls')),
     path('user_messages/', include('user_messages.urls')),

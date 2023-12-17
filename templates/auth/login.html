@@ -1,0 +1,75 @@
+{% extends "auth/base_auth.html" %}
+{% load widget_tweaks %}
+
+{% block title %}ورود{% endblock %}
+
+{% block desc %}برای ورود به سامانه نام کاربری و رمز عبور خود را وارد نمایید{% endblock %}
+
+{% block form %}
+    <form method="post">
+        {% csrf_token %}
+        {% if form.username.errors or form.non_field_errors %}
+            <div class="input-group">
+                {{ form.username|add_class:"form-control border border-danger"|attr:"autocomplete:off"|attr:"placeholder:نام کاربری"|attr:"dir:rtl"}}
+                <div class="input-group-append border border-danger">
+                    <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-danger mb-3 mt-1">
+                {% for error in form.username.errors %}
+                    <span>{{ error }}</span>
+                    <i class="fa-solid fa-exclamation-circle" style="font-size: 1.2rem;"></i>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="input-group mb-3">
+                {{ form.username|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:نام کاربری"|attr:"dir:rtl"}}
+                <div class="input-group-append ">
+                    <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if form.password.errors or form.non_field_errors %}
+            <div class="input-group">
+                <input type="password" name="password" dir="rtl" placeholder="رمز عبور"
+                value="{{ form.password.value }}"
+                autocomplete="off" class="form-control border border-danger" id="id_password">
+                <div class="input-group-append border border-danger">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-danger mb-3 mt-1">
+                {% for error in form.password.errors %}
+                    <span>{{ error }}</span>
+                    <i class="fa-solid fa-exclamation-circle" style="font-size: 1.2rem;"></i>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="input-group mb-3">
+                {{ form.password|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:رمز عبور"|attr:"dir:rtl"}}
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="row my-5">
+            <div class="col-4 offset-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat rounded">ورود</button>
+            </div>
+        </div>
+    </form>
+    <p class="mb-1">
+        {#<a href="#">رمز عبور خود را فراموش کرده‌ام</a>#}
+        <span class="text-muted">رمز عبور خود را فراموش کرده‌ام</span>
+    </p>
+{% endblock %}

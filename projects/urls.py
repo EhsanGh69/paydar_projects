@@ -1,7 +1,6 @@
 from django.urls import path
 
 from .views import (
-    charts,
     OwnersList, OwnerCreate, OwnerUpdate, OwnerDelete, OwnerSearch,
     ProjectList, ProjectCreate, ProjectUpdate, ProjectDelete, ProjectSearch,
     WorkReferenceList, WorkReferenceCreate, WorkReferenceUpdate, WorkReferenceDelete, WorkReferenceSearch,
@@ -15,8 +14,6 @@ from .views import (
 app_name = "projects"
 
 urlpatterns = [
-    path('charts/', charts, name='charts'),
-
     path('owners/', OwnersList.as_view(), name='owners'),
     path('owners/page/<int:page>', OwnersList.as_view(), name='owners'),
     path('owners/search', OwnerSearch.as_view(), name='owners_search'),

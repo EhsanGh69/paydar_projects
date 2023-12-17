@@ -6,15 +6,17 @@ from django.contrib.auth.decorators import login_required
 from cheques_receive_pay.models import Cheques
 from account.models import UserActionsLog
 from projects.models import Project
-from utils.tools import get_all_logged_in_users, total_projects_buyers_sellers, total_projects_costs, messages_filters
-
+from utils.tools import (
+    get_all_logged_in_users, total_projects_buyers_sellers, total_projects_costs, messages_filters
+)
+from jdatetime import datetime
 
 
 @login_required
 def index(request):
-    all_cheques_count = Cheques.objects.all().count()
-    exp_cheques_count = Cheques.objects.filter(cheque_type="exp").count()
-    rec_cheques_count = Cheques.objects.filter(cheque_type="rec").count()
+    now_date = datetime.now().date()
+    all_cheques = Cheques.objects.all()
+    soon_cheques = [cheque for cheque in all_cheques if (cheque.due_date > now_date) and (cheque.due_date.day - now_date.day <= 3)]
     user_logs = UserActionsLog.objects.filter(user=request.user).all()
     all_projects = Project.objects.order_by('-id').all()
     if len(all_projects) > 7:
@@ -34,9 +36,8 @@ def index(request):
         user_logs[0].delete()
 
     context = {
-        'all_cheques_count': all_cheques_count,
-        'exp_cheques_count': exp_cheques_count,
-        'rec_cheques_count': rec_cheques_count,
+        'soon_cheques': soon_cheques,
+        'soon_cheques_count': len(soon_cheques),
         'all_logged_in_users': get_all_logged_in_users(),
         'user_logs': user_logs.order_by('-id').all(),
         'projects': json.dumps(projects),

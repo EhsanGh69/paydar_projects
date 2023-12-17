@@ -6,8 +6,7 @@ from account.models import User
 
 class MessageForm(forms.Form):
     use_required_attribute = False
-    self_user = kwargs.pop('user')
-    FULL_NAMES = [(user.id, user.get_full_name()) for user in User.objects.all() if user != self_user]
+    FULL_NAMES = [(user.id, user.get_full_name()) for user in User.objects.all()]
     receiver_name = forms.ChoiceField(
         widget=forms.Select(),
         choices=FULL_NAMES,

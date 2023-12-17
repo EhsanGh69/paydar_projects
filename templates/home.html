@@ -1,178 +1,164 @@
 {% extends 'base.html' %} 
 {% load static %} 
 {% load jformat %}
+{% load base_tags %}
 
 {% block title %}خانه{% endblock %}
 
 {% block main %}
-<div class="container">
+  {% include 'partials/messages.html' with messages=messages not_found=None %}
+  <div class="container">
+    <div class="row pl-3">
+        <div class="col-12 col-lg-3 mt-2 text-center text-lg-left pr-0">
+          <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="Paydar Logo" class="mr-5 mr-lg-0" width="130">
+        </div>
+        <div class="col-12 col-lg-5 mt-2 mt-lg-5 text-center">
+          <h1 class="pr-2 font-weight-bold ml-3">سامانه پایدار</h1>
+        </div>
+        <div class="col-12 col-lg-4 clock my-3 py-3 bg-primary text-light rounded text-center" 
+        onload="showTime()">
+          <p id="MyDayDisplay" class="mb-0 font-weight-bold"></p>
+          <p id="MyDateDisplay" class="mb-2"></p>
+          <p id="MyClockDisplay" class="mb-0"></p>
+        </div>
+    </div>
+    
+    <div class="row">
+      {% if perms.cheques_receive_pay.view_cheques %}
+        <div class="col-sm-12 col-xl-4 mt-5">
+          <div class="card text-white bg-success mb-3">
+            <h4 class="card-header text-center">
+              <span>اعلان سررسید چک‌ها</span>
+              <span class="badge badge-warning">{{ soon_cheques_count }}</span>
+            </h4>
+            <div class="card-body">
+              <ul class="list-unstyled">
+                {% for cheque in soon_cheques %}
+                  <li class="mb-3 text-light {% if forloop.counter >= 1 %}border-bottom{% endif %}">
+                    <i class="fa-solid fa-trowel-bricks text-warning" style="font-size: 1.2rem;"></i>
+                    <span>پروژه‌ {{ cheque.project }}</span> - 
+                    <i class="fa-solid fa-money-bill-transfer text-warning" style="font-size: 1.2rem;"></i>
+                    <span>چک {% if cheque.cheque_type == 'exp' %}پرداختی{% else %}دریافتی{% endif %}</span>
+                    <span>بابت {{ cheque.cheque_for }}</span><br>
+                    <i class="fa-solid fa-calendar-days text-warning" style="font-size: 1.2rem;"></i>
+                    <span>{{ cheque.due_date|jformat:'%Y/%m/%d' }}</span>
+                  </li>
+                {% empty %}
+                  <li class="mb-3 text-light">
+                    <i>چکی وجود ندارد</i>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
-  <div class="row pl-3">
-
-      <div class="col-12 col-lg-3 mt-2 text-center text-lg-left pr-0">
-        <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="Paydar Logo" class="mr-5 mr-lg-0" width="130">
-      </div>
-  
-      <div class="col-12 col-lg-5 mt-2 mt-lg-5 text-center">
-        <h1 class="pr-2 font-weight-bold ml-3">سامانه پایدار</h1>
-      </div>
-
-      <div class="col-12 col-lg-4 clock my-3 py-3 bg-primary text-light rounded text-center" 
-      onload="showTime()">
-        <p id="MyDayDisplay" class="mb-0 font-weight-bold"></p>
-        <p id="MyDateDisplay" class="mb-2"></p>
-        <p id="MyClockDisplay" class="mb-0"></p>
-      </div>
-  </div>
-  
-  <div class="row">
-
-    {% if perms.cheques_receive_pay.view_cheques %}
       <div class="col-sm-12 col-xl-3 mt-5">
-        <div class="card text-white bg-success mb-3">
+        <div class="card text-white bg-info mb-3">
           <h4 class="card-header text-center">
-            <span>چک ها</span>
-            <span class="badge badge-warning">{{ all_cheques_count }}</span>
+            <span>کاربران آنلاین</span>
+            {% if all_logged_in_users.count > 1 %}
+              <span class="badge badge-danger">{{ all_logged_in_users.count|min:1 }}</span>
+            {% endif %}
           </h4>
           <div class="card-body">
             <ul class="list-unstyled">
-              <li class="mb-3">
-                <a href="{% url "cheques_receive_pay:cheques_search" %}?data_search=&date_filter=all&cheque_type=rec"
-                class="nav-link text-light p-0">
-                  <span>چک‌های دریافتی</span>
-                  <span class="badge badge-warning">{{ rec_cheques_count }}</span>
-                </a>
-              </li>
-              <li>
-                <a href="{% url "cheques_receive_pay:cheques_search" %}?data_search=&date_filter=all&cheque_type=exp"
-                class="nav-link text-light p-0">
-                  <span>چک‌های پرداختی</span>
-                  <span class="badge badge-warning">{{ exp_cheques_count }}</span>
-                </a>
-              </li>
+              {% for user in all_logged_in_users %}
+                {% if forloop.counter <= 5 and user != request.user %}
+                  <li class="mb-3">
+                    <a href="#" class="nav-link text-light p-0">
+                      <span>{{ user.get_full_name }}</span>
+                      <i class="fa-solid fa-envelope text-danger" style="font-size: 1.2rem;"></i>
+                    </a>
+                  </li>
+                {% else %}
+                  <li>
+                    <i>کاربر آنلاینی وجود ندارد</i>
+                  </li>
+                {% endif %}
+              {% endfor %}
             </ul>
           </div>
         </div>
       </div>
-    {% endif %}
-
-    <div class="col-sm-12 col-xl-4 mt-5">
-      <div class="card text-white bg-info mb-3">
-        <h4 class="card-header text-center">
-          <span>کاربران آنلاین</span>
-          <span class="badge badge-danger">{{ all_logged_in_users.count }}</span>
-        </h4>
-        <div class="card-body">
-          <ul class="list-unstyled">
-            {% for user in all_logged_in_users %}
-              {% if forloop.counter <= 4 %}
+      
+      <div class="col-sm-12 col-xl-5 mt-5">
+        <div class="card text-light bg-warning mb-3">
+          <h4 class="card-header text-center">فعالیت‌های اخیر</h4>
+          <div class="card-body">
+            <ul class="list-unstyled">
+              {% for log in user_logs %}
                 <li class="mb-3">
-                  <a href="#" class="nav-link text-light p-0">
-                    <span>{{ user.get_full_name }}</span>
-                    <i class="fa-solid fa-envelope text-danger" style="font-size: 1.2rem;"></i>
-                  </a>
+                  <span>
+                    <i class="fa-solid
+                    {% if log.log_type == "CR" %}
+                      fa-plus text-success
+                    {% elif log.log_type == "UP" %}
+                      fa-pen text-info
+                    {% else %}
+                      fa-xmark text-danger
+                    {% endif %}
+                    " style="font-size: 1.5rem;"></i>
+                  </span>
+                  <span class="text-primary p-0">{{ log.log_content }} :</span>
+                  <i class="fa-solid fa-calendar-days text-primary p-0"></i>
+                  <span class="text-primary p-0">{{ log.log_time|jformat:'%Y/%m/%d'}} - </span> 
+                  <i class="fa-solid fa-clock text-primary p-0"></i>
+                  <span class="text-primary p-0">{{ log.log_time|jformat:'%H:%M:%S'}}</span>
                 </li>
-              {% else %}
-                <li>
-                  <a href="#">مشاهده همه ...</a>
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-sm-12 col-xl-5 mt-5">
-      <div class="card text-light bg-warning mb-3">
-        <h4 class="card-header text-center">فعالیت‌های اخیر</h4>
-        <div class="card-body">
-          <ul class="list-unstyled">
-            {% for log in user_logs %}
-              <li class="mb-3">
-                <span>
-                  <i class="fa-solid
-                  {% if log.log_type == "CR" %}
-                    fa-plus text-success
-                  {% elif log.log_type == "UP" %}
-                    fa-pen text-info
-                  {% else %}
-                    fa-xmark text-danger
-                  {% endif %}
-                  " style="font-size: 1.5rem;"></i>
-                </span>
-                <span class="text-primary p-0">{{ log.log_content }} :</span>
-                <i class="fa-solid fa-calendar-days text-primary p-0"></i>
-                <span class="text-primary p-0">{{ log.log_time|jformat:'%Y/%m/%d'}} - </span> 
-                <i class="fa-solid fa-clock text-primary p-0"></i>
-                <span class="text-primary p-0">{{ log.log_time|jformat:'%H:%M:%S'}}</span>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">
-    <div class="col-12 mt-4">
-      <div class="card text-right text-dark bg-white my-3 border-0 shadow">
-
-        <div class="card-header">
-          <ul class="nav nav-tabs nav-fill card-header-tabs">
-              <li class="nav-item">
-                  <a class="nav-link active" href="#buy_sell" data-toggle="tab">نمودار مجموع خرید و فروش پروژه‌ها</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="#cost" data-toggle="tab">نمودار مجموع هزینه‌های پروژه‌ها</a>
-              </li>
-          </ul>
-      </div>
-
-      <div class="tab-content">
-
-          <div class="tab-pane fade show active" id="buy_sell">
-            <div class="card-body">
-              <section class="d-flex justify-content-between mb-3">
-                <div class="progress" style="width: 5rem; height:1.5rem;">
-                  <div style="width: 100%;" class="progress-bar bg-info">خرید</div>
-                  <div style="width: 100%;" class="progress-bar bg-warning">فروش</div>
-                </div>
-
-                <button type="submit" class="btn btn-warning" id="line-chart" title="خروجی پی دی اف">
-                  <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
-                </button>
-
-              </section>
-              <canvas id="buy_sell_chart" class="w-100" height="300"></canvas>
-            </div>
-
+              {% endfor %}
+            </ul>
           </div>
+        </div>
+      </div>
 
-          <div class="tab-pane fade" id="cost">
-            <div class="card-body">
+    </div>
+
+    <div class="row">
+      <div class="col-12 mt-4">
+        <div class="card text-right text-dark bg-white my-3 border-0 shadow">
+          <div class="card-header">
+            <ul class="nav nav-tabs nav-fill card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#buy_sell" data-toggle="tab">نمودار مجموع خرید و فروش پروژه‌ها</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#cost" data-toggle="tab">نمودار مجموع هزینه‌های پروژه‌ها</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="buy_sell">
+              <div class="card-body">
                 <section class="d-flex justify-content-between mb-3">
-                  <div class="btn-group btn-group-toggle" data-toggle="buttons" dir="ltr">
-                    
+                  <div class="progress" style="width: 5rem; height:1.5rem;">
+                    <div style="width: 100%;" class="progress-bar bg-info">خرید</div>
+                    <div style="width: 100%;" class="progress-bar bg-warning">فروش</div>
                   </div>
-    
-                  <button type="submit" class="btn btn-warning" id="bar-chart" title="خروجی پی دی اف">
+                  <button type="submit" class="btn btn-warning" id="line-chart" title="خروجی پی دی اف">
                     <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
                   </button>
                 </section>
-               <canvas id="cost_chart" class="w-100" height="90"></canvas>
-            </div>  
-          </div>
-
-      </div>
-
+                <canvas id="buy_sell_chart" class="w-100" height="300"></canvas>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="cost">
+              <div class="card-body">
+                  <section class="d-flex justify-content-between mb-3">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons" dir="ltr"></div>
+                    <button type="submit" class="btn btn-warning" id="bar-chart" title="خروجی پی دی اف">
+                      <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
+                    </button>
+                  </section>
+                <canvas id="cost_chart" class="w-100" height="90"></canvas>
+              </div>  
+            </div>
+        </div>
+        </div>
       </div>
     </div>
   </div>
-
-</div>
-
 {% endblock %}
 
 {% block scripts %}

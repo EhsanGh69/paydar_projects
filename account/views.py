@@ -1,22 +1,110 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.hashers import check_password
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, DeleteView, FormView, CreateView, DetailView
-from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import Group, Permission
 
-from utils.tools import valid_select_permissions
+from utils.tools import valid_select_permissions, password_validation
 
 from .models import User
-from .forms import AuthenticateForm, AddUserForm, UpdateUserForm, AddGroupForm, UpdateGroupForm
+from .forms import (
+    UserLogin, UserChangePassword, AddUserForm, UpdateUserForm, AddGroupForm, UpdateGroupForm, UserEditAccount
+)
 
 
 
-class CustomLogin(LoginView):
-    redirect_authenticated_user = True
-    form_class = AuthenticateForm
+class Login(FormView):
+    template_name = 'auth/login.html'
+    form_class = UserLogin
+    success_url = reverse_lazy('index')
 
+    def form_valid(self, form):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(self.request, username=username, password=password)
+        if user:
+            login(self.request, user)
+            return super().form_valid(form)
+        else:
+            form.errors['__all__'] = form.error_class(["نام کاربری یا رمز عبور اشتباه است"])
+            return super().form_invalid(form)
+
+
+def log_out(request):
+    logout(request)
+    return redirect('login')
+
+
+class ChangePassword(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    template_name = 'auth/change_password.html'
+    form_class = UserChangePassword
+    success_url = reverse_lazy('index')
+    success_message = "رمز عبور شما با موفقیت تغییر یافت"
+
+    def form_valid(self, form):
+        user = self.request.user
+        old_password = form.cleaned_data.get('old_password')
+        new_password = form.cleaned_data.get('new_password')
+        confirm_new_password = form.cleaned_data.get('confirm_new_password')
+        print(form.cleaned_data)
+        check_old_password = check_password(old_password, user.password)
+        validation_result = password_validation(new_password, user.username)
+        if check_old_password and validation_result == 'not_err':
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(self.request, user)
+            return super().form_valid(form)
+        elif not check_old_password:
+            form.add_error('old_password', 'رمز عبور کنونی اشتباه وارد شده است')
+            return super().form_invalid(form)
+        elif len(new_password) < 8:
+            form.add_error('new_password', 'رمز عبور باید حداقل هشت کاراکتر باشد')
+            return super().form_invalid(form)
+        elif validation_result == 'combine_err':
+            form.add_error('new_password', 'رمز عبور باید ترکیبی از حروف و اعداد باشد')
+            return super().form_invalid(form)
+        elif validation_result == 'similar_err':
+            form.add_error('new_password', 'رمز عبور نباید شبیه نام کاربری باشد')
+            return super().form_invalid(form)
+
+
+class EditAccount(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    template_name = "auth/edit_account.html"
+    form_class = UserEditAccount
+    success_url = reverse_lazy('index')
+    success_message = "مشخصات کاربری شما با موفقیت ویرایش شد"
+
+    def get_initial(self):
+        initial = super(EditAccount, self).get_initial()
+        username = self.kwargs.get('username')
+        user = get_object_or_404(User, username=username)
+        initial.update({
+            'mobile_number': user.mobile_number,
+            'first_name': user.first_name,
+            'last_name': user.last_name
+        })
+        return initial
+
+    def form_valid(self, form):
+        username = self.kwargs.get('username')
+        user = get_object_or_404(User, username=username)
+        mobile_number = form.cleaned_data.get('mobile_number')
+        first_name = form.cleaned_data.get('first_name')
+        last_name = form.cleaned_data.get('last_name')
+
+        other_users = User.objects.exclude(username=user.username)
+        is_exits_mobile_number = other_users.filter(mobile_number=mobile_number).exists()
+        if is_exits_mobile_number:
+            form.add_error('mobile_number', 'شماره همراه وارد شده از قبل وجود دارد، لطفا شماره همراه دیگری وارد کنید')
+            return super().form_invalid(form)
+
+        User.objects.filter(username=user.username).update(mobile_number=mobile_number,first_name=first_name, 
+        last_name=last_name)
+                
+        return super().form_valid(form)
 
 
 # Users - Start

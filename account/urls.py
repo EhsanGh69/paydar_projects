@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import (
     UsersList, CreateUser, UpdateUser, DeleteUser, SearchUsers,
-    GroupList, CreateGroup, UpdateGroup, DeleteGroup
+    GroupList, CreateGroup, UpdateGroup, DeleteGroup,
+    EditAccount
 )
 
 app_name = "account"
@@ -21,4 +22,6 @@ urlpatterns = [
     path('groups/create', CreateGroup.as_view(), name="group_create"),
     path('groups/update/<int:pk>', UpdateGroup.as_view(), name="group_update"),
     path('groups/delete/<int:pk>', DeleteGroup.as_view(), name="group_delete"),
+
+    path('edit_account/<str:username>', EditAccount.as_view(), name="edit_account")
 ] 

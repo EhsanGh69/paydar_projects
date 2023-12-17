@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}ویرایش مشخصات کاربری{% endblock %}
+
+{% block page_title %}ویرایش مشخصات کاربری{% endblock %}
+
+{% block main %}
+    <div class="card card-primary p-5">
+        <div class="card-body col-12 col-lg-8 offset-lg-2">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-12 col-xl-6 mb-3">
+                      {{ form.first_name|as_crispy_field }}
+                    </div>
+                
+                    <div class="col-12 col-xl-6 mb-3">
+                      {{ form.last_name|as_crispy_field }}
+                    </div>
+
+                    <div class="col-12 col-xl-6 mb-3">
+                        {{ form.mobile_number|as_crispy_field }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8 col-sm-6 col-xl-4 my-4">
+                        <button class="btn btn-success btn-block" type="submit">
+                            <i class="fa-solid fa-save" style="font-size: 1.2rem;"></i>
+                            <span>ذخیره تغییرات</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

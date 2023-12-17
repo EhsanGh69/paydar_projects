@@ -3,27 +3,20 @@
 
 
 <aside class="main-sidebar sidebar-dark-cyan elevation-4">
-
-    <!-- Sidebar -->
     <div class="sidebar h-100">
-        
-         <!-- Brand Logo -->
-        <a href="/" class="nav-link" style="border-bottom: 1px solid #4f5962;">
+        <a href="{% url 'index' %}" class="nav-link" style="border-bottom: 1px solid #4f5962;">
             <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="AdminLTE Logo" style="opacity: .8" width="70">
             <span class="brand-text mr-2">املاک پایدار</span>
         </a>
-    
-        <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-around">
             <div class="image">
                 <img src="{% static 'panel/dist/img/co.png' %}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ user.get_full_name }}</a>
+                <a href="{% url 'account:edit_account' request.user.username %}" class="d-block">{{ user.get_full_name }}</a>
             </div>
         </div>
 
-        <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
@@ -137,18 +130,6 @@
 
                             {% if perms.projects.view_paymentsimages %}
                                 {% main_menu request 'projects' 'payments_images' 'payments_image_create' 'payments_image_update' 'payments_images_search' 'fa-file-image' 'تصاویر فیش‌های پرداختی' %}
-                            {% endif %}
-
-                            {% if request.user.is_superuser %}
-                                <li class="nav-item">
-                                    <a href="{% url 'projects:charts' %}" class="nav-link
-                                    {% if request.resolver_match.url_name == 'charts' %}
-                                        active
-                                    {% endif %}">
-                                        <i class="fa-solid fa-chart-line text-primary" style="font-size: 1.2rem;"></i>
-                                        <span class="ml-2">نمودارها</span>
-                                    </a>
-                                </li>
                             {% endif %}
 
                         </ul>
@@ -279,7 +260,7 @@
                         <i class="fa-solid fa-envelope text-primary" style="font-size: 1.2rem;"></i>
                         <span class="ml-2">
                             پیام‌ها
-                            {% if unseen_count > 0 %}
+                            {% if unseen_count %}
                                 <span class="badge badge-success">جدید {{ unseen_count }}</span>
                             {% endif %}
                         </span>

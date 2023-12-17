@@ -14,12 +14,6 @@ from .forms import OwnerForm, ProjectForm, WorkReferenceForm, CostsForm, Payment
 
 
 
-@login_required
-def charts(request):
-    
-    return render(request, 'projects/charts.html', )
-
-
 # Owners - Start
 
 class OwnersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
