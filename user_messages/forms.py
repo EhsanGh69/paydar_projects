@@ -11,7 +11,7 @@ class MessageForm(forms.Form):
         widget=forms.Select(),
         choices=FULL_NAMES,
         label='گیرنده پیام',
-        required=True
+        required=False
     )
 
     subject = forms.CharField(

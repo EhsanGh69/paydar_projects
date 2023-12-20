@@ -253,19 +253,21 @@
 
                     </li>
                 {% endif %}
-
-                <li class="nav-item border-top border-light ">
-                    <a href="{% url 'user_messages:received_messages' %}" class="nav-link
-                    {% if request.resolver_match.app_name == 'user_messages' %}active{% endif %}">
-                        <i class="fa-solid fa-envelope text-primary" style="font-size: 1.2rem;"></i>
-                        <span class="ml-2">
-                            پیام‌ها
-                            {% if unseen_count %}
-                                <span class="badge badge-success">جدید {{ unseen_count }}</span>
-                            {% endif %}
-                        </span>
-                    </a>
-                </li>
+                
+                {% if perms.user_messages.seen_message %}
+                    <li class="nav-item border-top border-light ">
+                        <a href="{% url 'user_messages:received_messages' %}" class="nav-link
+                        {% if request.resolver_match.app_name == 'user_messages' %}active{% endif %}">
+                            <i class="fa-solid fa-envelope text-primary" style="font-size: 1.2rem;"></i>
+                            <span class="ml-2">
+                                پیام‌ها
+                                {% if unseen_count %}
+                                    <span class="badge badge-success">جدید {{ unseen_count }}</span>
+                                {% endif %}
+                            </span>
+                        </a>
+                    </li>
+                {% endif %}
                 
                 {% if request.user.is_superuser %}
                     <p class="border-top border-light mb-0"></p>

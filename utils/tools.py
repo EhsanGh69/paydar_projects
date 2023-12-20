@@ -28,9 +28,16 @@ invalid_codenames = [
     'add_session', 'change_session', 'delete_session', 'view_session',
     'add_user', 'change_user', 'delete_user', 'view_user',
     'add_group', 'change_group', 'delete_group', 'view_group',
+    'add_report', 'change_report', 'delete_report', 'view_report',
+    'add_message', 'change_message', 'delete_message', 'view_message',
+    'add_useractionslog', 'change_useractionslog', 'delete_useractionslog', 'view_useractionslog',
 ]
 
-valid_select_permissions = [(permission.codename, translate_permissions_names(permission.name)) for permission in Permission.objects.all() if permission.codename not in invalid_codenames] 
+valid_select_permissions = [
+    (permission.codename, translate_permissions_names(permission.name)) 
+    for permission in Permission.objects.order_by('name').all() 
+    if permission.codename not in invalid_codenames
+] 
 
 
 # source: https://www.appsloveworld.com/django/100/4/how-to-get-the-list-of-the-authenticated-users

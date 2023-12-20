@@ -5,10 +5,12 @@
 {% block page_title %}لیست پیام‌ها{% endblock %}
 
 {% block message_link %}
+  {% if perms.user_messages.write_message %}
     <a href="{% url 'user_messages:send_message' %}" class="btn btn-success btn-block mb-3">
         <i class="fa-solid fa-pen"></i>
         <span>نوشتن پیام جدید</span>
     </a>
+  {% endif %}
 {% endblock %}
 
 {% block message_cart %}

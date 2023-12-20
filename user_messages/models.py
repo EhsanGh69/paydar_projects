@@ -32,5 +32,11 @@ class Message(models.Model):
 
     objects = MessageManager()
 
+    class Meta:
+        permissions = (
+            ("write_message", "نوشتن پیام"),
+            ("seen_message", "مشاهده پیام")
+        )
+
     def __str__(self):
         return f'از: {self.sender} - به: {self.receiver} - موضوع: {self.subject}'

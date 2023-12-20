@@ -28,7 +28,12 @@
             {% csrf_token %}
             <div class="card-body">
                 <div class="form-group">
-                    {{ form.receiver_name|as_crispy_field }}
+                    {% if request.GET.receiver %}
+                        <label>گیرنده پیام</label>
+                        <input type="text" class="form-control" disabled value="{{ request.GET.receiver }}">
+                    {% else %}
+                        {{ form.receiver_name|as_crispy_field }}
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     {{ form.subject|as_crispy_field }}

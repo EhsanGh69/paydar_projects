@@ -1,36 +1,44 @@
 <div class="card">
     <div class="card-body p-0">
       <ul class="nav nav-pills flex-column">
-        <li class="nav-item active h5">
-          <a href="{% url 'user_messages:received_messages' %}" class="nav-link
-          {% if request.resolver_match.url_name == 'received_messages' %}active{% endif %}">
-            <i class="fas fa-inbox"></i>
-            <span>پیام‌های دریافت شده</span>
-            <span class="badge bg-warning float-right">{{ received_count }}</span>
-            {% if unseen_count > 0 %}
-              <span class="badge bg-success float-right ml-3">
-                <i class="far fa-envelope"></i>
-                {{ unseen_count }}
-              </span>
-            {% endif %}
-          </a>
-        </li>
-        <li class="nav-item h5">
-          <a href="{% url 'user_messages:sent_messages' %}" class="nav-link
-          {% if request.resolver_match.url_name == 'sent_messages' %}active{% endif %}">
-            <i class="far fa-envelope"></i>
-            <span>پیام های ارسال شده</span>
-            <span class="badge bg-warning float-right">{{ sent_count }}</span>
-          </a>
-        </li>
-        <li class="nav-item h5">
-          <a href="{% url 'user_messages:archived_messages' %}" class="nav-link
-          {% if request.resolver_match.url_name == 'archived_messages' %}active{% endif %}">
-            <i class="fas fa-archive"></i>
-            <span>پیام‌های بایگانی شده</span>
-            <span class="badge bg-warning float-right">{{ archived_count }}</span>
-          </a>
-        </li>
+        {% if perms.user_messages.seen_message %}
+          <li class="nav-item active h5">
+            <a href="{% url 'user_messages:received_messages' %}" class="nav-link
+            {% if request.resolver_match.url_name == 'received_messages' %}active{% endif %}">
+              <i class="fas fa-inbox"></i>
+              <span>پیام‌های دریافت شده</span>
+              <span class="badge bg-warning float-right">{{ received_count }}</span>
+              {% if unseen_count > 0 %}
+                <span class="badge bg-success float-right ml-3">
+                  <i class="far fa-envelope"></i>
+                  {{ unseen_count }}
+                </span>
+              {% endif %}
+            </a>
+          </li>
+        {% endif %}
+        
+        {% if perms.user_messages.write_message %}
+          <li class="nav-item h5">
+            <a href="{% url 'user_messages:sent_messages' %}" class="nav-link
+            {% if request.resolver_match.url_name == 'sent_messages' %}active{% endif %}">
+              <i class="far fa-envelope"></i>
+              <span>پیام های ارسال شده</span>
+              <span class="badge bg-warning float-right">{{ sent_count }}</span>
+            </a>
+          </li>
+        {% endif %}
+        
+        {% if perms.user_messages.seen_message or perms.user_messages.write_message %}
+          <li class="nav-item h5">
+            <a href="{% url 'user_messages:archived_messages' %}" class="nav-link
+            {% if request.resolver_match.url_name == 'archived_messages' %}active{% endif %}">
+              <i class="fas fa-archive"></i>
+              <span>پیام‌های بایگانی شده</span>
+              <span class="badge bg-warning float-right">{{ archived_count }}</span>
+            </a>
+          </li>
+        {% endif %}
       </ul>
     </div>
 </div>

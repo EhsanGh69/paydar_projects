@@ -69,7 +69,10 @@
               {% if all_logged_in_users.count <= 5 %}
                 {% for user in all_logged_in_users %}
                   <li class="mb-3">
-                    <a href="#" class="nav-link text-light p-0">
+                    <a href="
+                    {% if perms.user_messages.write_message %}{% url 'user_messages:send_message' %}?receiver={{user.username}}
+                    {% else %}#{% endif %}
+                    " class="nav-link text-light p-0">
                       <span>{{ user.get_full_name }}</span>
                       <i class="fa-solid fa-envelope text-danger" style="font-size: 1.2rem;"></i>
                     </a>

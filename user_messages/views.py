@@ -1,8 +1,8 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import FormView, ListView
 from django.db.models import Q
@@ -16,17 +16,22 @@ from .forms import MessageForm
 
 
 
-class SendMessage(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class SendMessage(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, FormView):
+    permission_required = 'user_messages.write_message'
     template_name = "user_messages/send_message.html"
     form_class = MessageForm
     success_url = reverse_lazy('user_messages:sent_messages')
     success_message = "پیام شما با موفقیت ارسال گردید"
 
     def form_valid(self, form):
-        receiver_id = form.cleaned_data.get('receiver_name')
+        receiver_username = self.request.GET.get('receiver')
+        if receiver_username is not None:
+            receiver = get_object_or_404(User, username=receiver_username)
+        else:
+            receiver_id = form.cleaned_data.get('receiver_name')
+            receiver = get_object_or_404(User, pk=receiver_id)
         subject = form.cleaned_data.get('subject')
         content = form.cleaned_data.get('content')
-        receiver = get_object_or_404(User, pk=receiver_id)
         if receiver == self.request.user:
             form.add_error('receiver_name', 'گیرنده پیام باید کاربری غیر از شما باشد')
             return super().form_invalid(form)
@@ -45,7 +50,8 @@ class SendMessage(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return context
 
 
-class SearchMessages(LoginRequiredMixin, ListView):
+class SearchMessages(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'user_messages.seen_message'
     template_name = "user_messages/search_messages.html"
     model = Message
     context_object_name = "found_messages"
@@ -75,6 +81,7 @@ class SearchMessages(LoginRequiredMixin, ListView):
     
 
 @login_required
+@permission_required('user_messages.seen_message')
 def list_messages(request):
     if request.method == 'POST' and request.resolver_match.url_name == 'received_messages':
         msg_id = request.POST.get('arc_receive_id')
@@ -110,6 +117,7 @@ def list_messages(request):
 
 
 @login_required
+@permission_required('user_messages.seen_message')
 def remove_message(request, **kwargs):
     msg_type = kwargs['msg_type']
     pk = kwargs['pk']
@@ -138,6 +146,7 @@ def remove_message(request, **kwargs):
 
 
 @login_required
+@permission_required('user_messages.seen_message')
 def message_detail(request, **kwargs):
     username = kwargs['username'] # sender in received messages & receiver in sent messages
     pk = kwargs['pk']
