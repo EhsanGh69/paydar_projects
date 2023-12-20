@@ -9,7 +9,7 @@
     <form method="post">
         {% csrf_token %}
         {% if form.username.errors or form.non_field_errors %}
-            <div class="input-group">
+            <div class="input-group flex-row-reverse">
                 {{ form.username|add_class:"form-control border border-danger"|attr:"autocomplete:off"|attr:"placeholder:نام کاربری"|attr:"dir:rtl"}}
                 <div class="input-group-append border border-danger">
                     <div class="input-group-text">
@@ -24,7 +24,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 flex-row-reverse">
                 {{ form.username|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:نام کاربری"|attr:"dir:rtl"}}
                 <div class="input-group-append ">
                     <div class="input-group-text">
@@ -35,7 +35,7 @@
         {% endif %}
 
         {% if form.password.errors or form.non_field_errors %}
-            <div class="input-group">
+            <div class="input-group flex-row-reverse">
                 <input type="password" name="password" dir="rtl" placeholder="رمز عبور"
                 value="{{ form.password.value }}"
                 autocomplete="off" class="form-control border border-danger" id="id_password">
@@ -52,7 +52,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 flex-row-reverse">
                 {{ form.password|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:رمز عبور"|attr:"dir:rtl"}}
                 <div class="input-group-append">
                     <div class="input-group-text">

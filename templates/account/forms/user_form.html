@@ -15,7 +15,14 @@
   {% endif %}
   {% if request.resolver_match.url_name == 'user_create' %}
     <div class="col-12 col-xl-6 mb-3">
-        {{ form.access_groups|as_crispy_field }}
+      <label>{{ form.access_groups.label }}*</label>
+      <select name="access_groups" class="selectmultiple form-control" id="id_access_groups" multiple>
+          {% for group in all_groups %}
+              <option value="{{ group.name }}">
+                  {{ group.name }}
+              </option>
+          {% endfor %}
+      </select>
     </div>
   {% else %}
     <div class="col-12 col-xl-6 mb-3">

@@ -29,7 +29,9 @@
           <div class="card text-white bg-success mb-3">
             <h4 class="card-header text-center">
               <span>اعلان سررسید چک‌ها</span>
-              <span class="badge badge-warning">{{ soon_cheques_count }}</span>
+              {% if soon_cheques_count %}
+                <span class="badge badge-warning">{{ soon_cheques_count }}</span>
+              {% endif %}
             </h4>
             <div class="card-body">
               <ul class="list-unstyled">
@@ -64,20 +66,20 @@
           </h4>
           <div class="card-body">
             <ul class="list-unstyled">
-              {% for user in all_logged_in_users %}
-                {% if forloop.counter <= 5 and user != request.user %}
+              {% if all_logged_in_users.count <= 5 %}
+                {% for user in all_logged_in_users %}
                   <li class="mb-3">
                     <a href="#" class="nav-link text-light p-0">
                       <span>{{ user.get_full_name }}</span>
                       <i class="fa-solid fa-envelope text-danger" style="font-size: 1.2rem;"></i>
                     </a>
                   </li>
-                {% else %}
+                {% empty %}
                   <li>
                     <i>کاربر آنلاینی وجود ندارد</i>
                   </li>
-                {% endif %}
-              {% endfor %}
+                {% endfor %}
+              {% endif %}
             </ul>
           </div>
         </div>

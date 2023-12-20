@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import (
     UsersList, CreateUser, UpdateUser, DeleteUser, SearchUsers,
-    GroupList, CreateGroup, UpdateGroup, DeleteGroup,
+    GroupList, CreateGroup, UpdateGroup, DeleteGroup, SearchGroups,
     EditAccount
 )
 
@@ -19,6 +19,8 @@ urlpatterns = [
 
     path('groups/', GroupList.as_view(), name="groups"),
     path('groups/page/<int:page>', GroupList.as_view(), name="groups"),
+    path('groups/search', SearchGroups.as_view(), name="groups_search"),
+    path('groups/search/page/<int:page>', SearchGroups.as_view(), name="groups_search"),
     path('groups/create', CreateGroup.as_view(), name="group_create"),
     path('groups/update/<int:pk>', UpdateGroup.as_view(), name="group_update"),
     path('groups/delete/<int:pk>', DeleteGroup.as_view(), name="group_delete"),

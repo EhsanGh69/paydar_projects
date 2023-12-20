@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.hashers import check_password
 from django.contrib.messages.views import SuccessMessageMixin
@@ -110,24 +110,30 @@ class EditAccount(LoginRequiredMixin, SuccessMessageMixin, FormView):
 # Users - Start
 
 
-class UsersList(LoginRequiredMixin, ListView):
+class UsersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'account.view_user'
     template_name = 'account/users_list.html'
     model = User
     context_object_name = "users"
     paginate_by = 9
 
     def get_queryset(self):
-        return User.objects.order_by('-is_superuser', '-date_joined').all()
+        global queryset
+        queryset = User.objects.order_by('-is_superuser', '-date_joined').all()
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_url'] = 'account:users_search'
         context['create_url'] = 'account:user_create'
+        context['records_count'] = queryset.count()
+        context['record_number'] = 9
         context['persian_object_name'] = 'کاربر'
         return context
     
 
-class CreateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class CreateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, FormView):
+    permission_required = 'account.add_user'
     template_name = 'account/user_create_update.html'
     form_class = AddUserForm
     success_url = reverse_lazy('account:users')
@@ -148,9 +154,15 @@ class CreateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
             user.groups.add(group)
 
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_groups'] = Group.objects.all()
+        return context
     
 
-class UpdateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class UpdateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, FormView):
+    permission_required = 'account.change_user'
     template_name = 'account/user_create_update.html'
     form_class = UpdateUserForm
     success_url = reverse_lazy('account:users')
@@ -214,7 +226,8 @@ class UpdateUser(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return super().form_valid(form)
     
 
-class DeleteUser(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class DeleteUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'account.delete_user'
     success_url = reverse_lazy("account:users")
     success_message = "کاربر با موفقیت حذف شد"
 
@@ -224,7 +237,8 @@ class DeleteUser(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return user
     
 
-class SearchUsers(LoginRequiredMixin, ListView):
+class SearchUsers(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'account.view_user'
     template_name = 'account/users_list.html'
     model = User
     context_object_name = "users"
@@ -233,6 +247,7 @@ class SearchUsers(LoginRequiredMixin, ListView):
     def get_queryset(self):
         global not_found
         global query
+        global search_result
         not_found = False
         query = self.request.GET.get('data_search')
         
@@ -249,6 +264,8 @@ class SearchUsers(LoginRequiredMixin, ListView):
         context['search_url'] = 'account:users_search'
         context['list_url'] = 'account:users'
         context['query'] = query
+        context['records_count'] = search_result.count()
+        context['record_number'] = 9
         return context
 
 
@@ -258,19 +275,30 @@ class SearchUsers(LoginRequiredMixin, ListView):
 
 # Group - Start
 
-class GroupList(LoginRequiredMixin, ListView):
+class GroupList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'account.view_group'
     template_name = 'account/groups_list.html'
     model = Group
     context_object_name = 'groups'
-    paginate_by = 9
+    paginate_by = 4
+
+    def get_queryset(self):
+        global queryset
+        queryset = Group.objects.order_by('name').all()
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['search_url'] = 'account:groups_search'
+        context['create_url'] = 'account:group_create'
+        context['records_count'] = queryset.count()
+        context['record_number'] = 4
         context['persian_object_name'] = 'گروه دسترسی'
         return context
 
 
-class CreateGroup(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class CreateGroup(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, FormView):
+    permission_required = 'account.add_group'
     template_name = 'account/group_create_update.html'
     form_class = AddGroupForm
     success_url = reverse_lazy('account:groups')
@@ -288,7 +316,8 @@ class CreateGroup(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return super().form_valid(form)
 
 
-class UpdateGroup(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class UpdateGroup(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, FormView):
+    permission_required = 'account.change_group'
     template_name = 'account/group_create_update.html'
     form_class = UpdateGroupForm
     success_url = reverse_lazy('account:groups')
@@ -336,7 +365,8 @@ class UpdateGroup(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return super().form_valid(form)
 
 
-class DeleteGroup(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class DeleteGroup(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'account.delete_group'
     success_url = reverse_lazy("account:groups")
     success_message = "گروه دسترسی با موفقیت حذف شد"
 
@@ -344,6 +374,39 @@ class DeleteGroup(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         _id = int(self.kwargs.get('pk'))
         group = get_object_or_404(Group, pk=_id)
         return group
+
+
+class SearchGroups(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'account.view_group'
+    template_name = 'account/groups_list.html'
+    model = Group
+    context_object_name = 'groups'
+    paginate_by = 4
+
+    def get_queryset(self):
+        global not_found
+        global query
+        global search_result
+        not_found = False
+        query = self.request.GET.get('data_search')
+        
+        search_result = Group.objects.filter(name__icontains=query).distinct().all()
+        
+        if not search_result:
+            not_found = True
+
+        return search_result
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['not_found'] = not_found
+        context['search_url'] = 'account:groups_search'
+        context['list_url'] = 'account:groups'
+        context['query'] = query
+        context['records_count'] = search_result.count()
+        context['record_number'] = 4
+        return context
+
 
 # Group - End
 

@@ -93,7 +93,7 @@ class UserEditAccount(forms.Form):
         label='شماره همراه',
         validators=[
             validators.RegexValidator(
-                regex=r'09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
+                regex=r'^09\d{9}$',
                 message='شماره همراه وارد شده معتبر نمی‌باشد'
             )
         ]
@@ -193,7 +193,7 @@ class AddUserForm(forms.Form):
         label='شماره همراه',
         validators=[
             validators.RegexValidator(
-                regex=r'09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
+                regex=r'^09\d{9}$',
                 message="شماره همراه وارد شده معتبر نمی‌باشد"
             )
         ]
@@ -302,7 +302,7 @@ class UpdateUserForm(forms.Form):
         label='شماره همراه',
         validators=[
             validators.RegexValidator(
-                regex=r'09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
+                regex=r'^09\d{9}$',
                 message="شماره همراه وارد شده معتبر نمی‌باشد"
             )
         ]

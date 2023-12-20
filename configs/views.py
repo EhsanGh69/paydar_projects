@@ -38,7 +38,7 @@ def index(request):
     context = {
         'soon_cheques': soon_cheques,
         'soon_cheques_count': len(soon_cheques),
-        'all_logged_in_users': get_all_logged_in_users(),
+        'all_logged_in_users': get_all_logged_in_users().exclude(username=request.user.username),
         'user_logs': user_logs.order_by('-id').all(),
         'projects': json.dumps(projects),
         'total_projects_buyers': json.dumps(total_projects_buyers),

@@ -23,6 +23,10 @@
 	font-display: auto;
 }
 
+*{
+	direction: rtl !important;
+}
+
 body{
     font-family: 'Vazirmatn';
 }

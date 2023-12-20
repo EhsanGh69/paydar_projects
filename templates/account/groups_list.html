@@ -1,14 +1,12 @@
 {% extends 'base_list.html' %}
+{% load static %}
 
 {% block title %}لیست گروه‌های دسترسی سامانه{% endblock %}
 
 {% block page_title %}لیست گروه‌های دسترسی سامانه{% endblock %}
 
 {% block filter %}
-    <a href="{% url 'account:group_create' %}" class="btn btn-outline-success btn-lg pb-0 mb-3" title="ایجاد گروه دسترسی جدید">
-        <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
-        <i class="fa-solid fa-users-rectangle" style="font-size: 2rem;"></i>
-    </a>
+    {% include 'partials/search_print.html' with search_url=search_url date_filter=False list_url=list_url create_url=create_url title='ایجاد گروه دسترسی جدید' create_perm=perms.account.add_group %}
 {% endblock %}
 
 {% block table %}
@@ -17,4 +15,8 @@
     
 {% block pagination %}
     {% include 'account/paginations/groups_pagination.html' with page_obj=page_obj %}
+{% endblock %}
+
+{% block filter_control %}
+    <script src="{% static 'scripts/account/users_list.js' %}"></script>
 {% endblock %}

@@ -8,6 +8,9 @@
         <a href="{% url create_url %}" class="btn-lg btn-success pb-0" title="{{ title }}">
             {% if 'users' in request.resolver_match.url_name %}
                 <i class="fa-solid fa-user-plus" style="font-size: 1.5rem;"></i>
+            {% elif 'groups' in request.resolver_match.url_name %}
+                <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+                <i class="fa-solid fa-users-rectangle" style="font-size: 1.5rem;"></i>
             {% else %}
                 <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
             {% endif %}
@@ -15,7 +18,7 @@
         {% endif %}
     </div>
     <div>
-        {% if 'users' not in request.resolver_match.url_name and create_perm %}
+        {% if 'users' not in request.resolver_match.url_name and 'groups' not in request.resolver_match.url_name and create_perm %}
             <button type="submit" class="btn btn-warning" id="print-btn" title="خروجی پی دی اف">
                 <i class="fa-solid fa-file-pdf" style="font-size: 1.5rem;"></i>
             </button>
