@@ -1,7 +1,8 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404, render
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required, permission_required
 
 from jalali_date import datetime2jalali
 
@@ -9,8 +10,8 @@ from government_accounts.models import Receive, Payment, Activity
 from non_government_accounts.models import BuyersSellers, Orders, ConflictOrders
 from projects.models import Project, Costs, WorkReference
 from projects_docs.models import BankReceipts, ConditionStatements
-from cheques_receive_pay.models import Cheques, ReceivePay
-from warehousing.models import MainWarehouseImport, MainWarehouseExport, UseCertificate, ProjectWarehouse
+from cheques_receive_pay.models import Cheques, ReceivePay, Fund, CashBox
+from warehousing.models import MainWarehouseImport, MainWarehouseExport, UseCertificate, ProjectWarehouse, Stuff
 
 
 class ReceiveReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -266,3 +267,49 @@ class ProjectWarehouseReport(LoginRequiredMixin, PermissionRequiredMixin, Detail
         context = super().get_context_data(**kwargs)
         context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
         return context
+
+
+class FundReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'cheques_receive_pay.view_fund'
+    context_object_name = 'fund'
+    template_name = 'reports/fund_report.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Fund, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
+        return context
+
+
+class CashBoxReport(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'cheques_receive_pay.view_cashbox'
+    context_object_name = 'cashbox'
+    template_name = 'reports/cashbox_report.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(CashBox, pk=pk)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_date'] = datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S')
+        return context
+
+
+@login_required
+@permission_required('warehousing.view_projectwarehouse')
+def project_stuffs_list(request, **kwargs):
+    project_title = kwargs['project']
+    project_stuffs = get_list_or_404(ProjectWarehouse, project__title=project_title)
+
+    context = {
+        'all_stuffs': Stuff.objects.all(),
+        'project_title': project_title,
+        'project_stuffs': project_stuffs,
+        'report_date': datetime2jalali(timezone.now()).strftime('%Y/%m/%d _ %H:%M:%S')
+    }
+
+    return render(request, 'reports/project_stuffs.html', context)

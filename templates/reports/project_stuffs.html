@@ -1,0 +1,31 @@
+{% extends "reports/base_report.html" %}
+{% load warehousing_tags %}
+
+{% block title %}
+    کالاهای انبار پروژه {{ project_title }}
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'warehousing:project_warehouses' %}" class="btn btn-info mb-4">
+        بازگشت به لیست ورود و خروج کالا به انبار پروژه
+    </a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>گزارش 
+        کالاهای انبار پروژه {{ project_title }}
+    </h5>
+{% endblock %}
+
+{% block report_body %}
+    {% for stuff in all_stuffs %}
+        <tr>
+            <th style="width: 200.797px;">{{ stuff.stuff_type }}</th>
+            {% project_total_stock stuff.stuff_type stuff.measurement_unit project_title %}
+        </tr>
+    {% empty %}
+        <tr>
+            <td class="h4 text-muted">کالایی وجود ندارد</td>
+        </tr>
+    {% endfor %}
+{% endblock %}

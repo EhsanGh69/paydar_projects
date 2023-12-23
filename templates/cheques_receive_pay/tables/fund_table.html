@@ -14,11 +14,11 @@
                         نام تنخواه
                     </th>
 
-                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="4" style="width: 100.797px; background-color: #808080;">
+                    <td class="text-center text-light border-left col-td-4" rowspan="1" colspan="4" style="width: 100.797px; background-color: #808080;">
                         هزینه (برداشت از تنخواه)
                     </td>
 
-                    <td class="text-center text-light border-left col-td" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
+                    <td class="text-center text-light border-left col-td-3" rowspan="1" colspan="3" style="width: 100.797px; background-color: #808080;">
                         شارژ (واریز به تنخواه)
                     </td>
 
@@ -34,9 +34,9 @@
 
                     {% if perms.cheques_receive_pay.delete_fund or perms.cheques_receive_pay.change_fund %}
                         <th class=" text-center border-bottom-0 action-th rounded-0" rowspan="2" colspan="1" style="width: 100.797px;">
-                            <span>&emsp;&emsp;</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                             <span>اقدام</span>
-                            <span>&emsp;&emsp;</span>
+                            <span>&emsp;&emsp;&emsp;</span>
                         </th>
                     {% endif %}
                 </tr>
@@ -158,6 +158,13 @@
                                             data-target="#deleteItemModal" title="حذف"
                                             data-message="آیا از حذف عملیات تنخواه '{{ fund.full_name }}' اطمینان دارید؟">
                                             <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.cheques_receive_pay.view_fund %}
+                                            <a href="{% url 'reports:fund_report' fund.pk %}"
+                                            class="btn btn-outline-info mb-2 pb-0" title="مشاهده گزارش">
+                                            <i class="fa-solid fa-paste"></i>
                                             </a>
                                         {% endif %}
                                     </td>

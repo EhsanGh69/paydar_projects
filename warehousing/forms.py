@@ -73,7 +73,7 @@ class UseCertificateForm(forms.ModelForm):
 
     class Meta:
         model = UseCertificate
-        fields = ['stuff_type', 'is_deficient', 'deficient_amount', 'is_excess',
+        fields = ['project', 'stuff_type', 'is_deficient', 'deficient_amount', 'is_excess',
                   'excess_amount', 'start_using_date', 'finish_using_date', 'returned_to', 'return_date']
         
 
@@ -83,7 +83,7 @@ class ProjectWarehouseForm(forms.ModelForm):
     class Meta:
         model = ProjectWarehouse
         fields = ['project', 'personnel_apply', 'contractor_apply', 'stuff_type', 'export_import_date', 
-                  'stuff_amount', 'personnel_delivery', 'contractor_delivery', 'use_certificate', 'status']
+                  'stuff_amount', 'personnel_delivery', 'contractor_delivery', 'status']
         
     def __init__(self, *args, **kwargs):
         super(ProjectWarehouseForm, self).__init__(*args, **kwargs)

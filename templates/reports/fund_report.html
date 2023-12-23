@@ -1,0 +1,58 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+{% load humanizelib %}
+
+{% block title %}
+    {% if fund.operation_type == 'rem' %}
+        برداشت از
+    {% else %}
+        واریز به
+    {% endif %}
+    تنخواه
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'cheques_receive_pay:funds' %}" class="btn btn-info mb-4">بازگشت به لیست عملیات تنخواه</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>
+        <span>گزارش</span>
+        {% if fund.operation_type == 'rem' %}
+            <span>برداشت از</span>
+        {% else %}
+            <span>واریز به</span>
+        {% endif %}
+        <span>تنخواه</span>
+    </h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">نام تنخواه</th>
+        <td style="width: 150.797px;">{{ fund.full_name }}</td>
+    </tr>
+    {% if fund.operation_type == 'rem' %}
+        <tr>
+            <th style="width: 60.797px;">مبلغ</th>
+            <td style="width: 150.797px;">{{ fund.cost_amount|intcomma }} ریال</td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">شرح</th>
+            <td style="width: 150.797px;">{{ fund.cost_description }}</td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">تاریخ</th>
+            <td style="width: 150.797px;">{{ fund.removal_date|jformat:'%d / %m / %Y' }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <th style="width: 60.797px;">مبلغ</th>
+            <td style="width: 150.797px;">{{ fund.charge_amount|intcomma }} ریال</td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">تاریخ</th>
+            <td style="width: 150.797px;">{{ fund.charge_date|jformat:'%d / %m / %Y' }}</td>
+        </tr>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "reports/base_report.html" %}
+{% load jformat %}
+{% load humanizelib %}
+
+{% block title %}
+    {% if cashbox.operation_type == 'rem' %}
+        برداشت از
+    {% else %}
+        واریز به
+    {% endif %}
+    صندوق
+{% endblock %}
+
+{% block back_link %}
+    <a href="{% url 'cheques_receive_pay:cash_boxes' %}" class="btn btn-info mb-4">بازگشت به لیست عملیات صندوق</a>
+{% endblock %}
+
+{% block report_title %}
+    <h5>
+        <span>گزارش</span>
+        {% if cashbox.operation_type == 'rem' %}
+            <span>برداشت از</span>
+        {% else %}
+            <span>واریز به</span>
+        {% endif %}
+        <span>صندوق</span>
+    </h5>
+{% endblock %}
+
+{% block report_body %}
+    <tr>
+        <th style="width: 60.797px;">نام تنخواه</th>
+        <td style="width: 150.797px;">{{ cashbox.full_name }}</td>
+    </tr>
+    {% if cashbox.operation_type == 'rem' %}
+        <tr>
+            <th style="width: 60.797px;">مبلغ</th>
+            <td style="width: 150.797px;">{{ cashbox.removal_amount|intcomma }} ریال</td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">شرح</th>
+            <td style="width: 150.797px;">{{ cashbox.removal_description }}</td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">تاریخ</th>
+            <td style="width: 150.797px;">{{ cashbox.removal_date|jformat:'%d / %m / %Y' }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <th style="width: 60.797px;">مبلغ</th>
+            <td style="width: 150.797px;">{{ cashbox.settle_amount|intcomma }} ریال</td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">شرح</th>
+            <td style="width: 150.797px;">{{ cashbox.settle_description }}</td>
+        </tr>
+        <tr>
+            <th style="width: 60.797px;">تاریخ</th>
+            <td style="width: 150.797px;">{{ cashbox.settle_date|jformat:'%d / %m / %Y' }}</td>
+        </tr>
+    {% endif %}
+{% endblock %}

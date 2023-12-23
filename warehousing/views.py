@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
+
 from utils.tools import filter_date_values, warehouse_export_validation
 from account.models import UserActionsLog
 from .models import Stuff, MainWarehouseImport, MainWarehouseExport, UseCertificate, ProjectWarehouse
@@ -509,7 +510,7 @@ class UseCertificateList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, queryset))
-        context['fields_order'] = {'نوع کالا': 'stuff_type__stuff_type','تاریخ شروع مصرف': '-start_using_date',
+        context['fields_order'] = {'پروژه': 'project__title','نوع کالا': 'stuff_type__stuff_type','تاریخ شروع مصرف': '-start_using_date',
         'تاریخ پایان مصرف': '-finish_using_date','تاریخ ارجاع به انبار': '-return_date'}
         if order_by:
             context['order_by'] = order_by
@@ -617,7 +618,7 @@ class UseCertificateSearch(LoginRequiredMixin, PermissionRequiredMixin, ListView
         context['record_number'] = record_number
         context['records_count'] = records_count
         context['records_dict'] = dict(zip(records_rows, search_result))
-        context['fields_order'] = {'نوع کالا': 'stuff_type__stuff_type','تاریخ شروع مصرف': '-start_using_date',
+        context['fields_order'] = {'پروژه': 'project__title','نوع کالا': 'stuff_type__stuff_type','تاریخ شروع مصرف': '-start_using_date',
         'تاریخ پایان مصرف': '-finish_using_date','تاریخ ارجاع به انبار': '-return_date'}
         if order_by:
             context['order_by'] = order_by

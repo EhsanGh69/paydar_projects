@@ -55,15 +55,6 @@
         {% endif %}
     </tr>
     <tr>
-        <th style="width: 60.797px;">بازه زمانی مصرف</th>
-        <td style="width: 150.797px;">
-            از:
-            {{ project_warehouse.use_certificate.start_using_date|jformat:'%d / %m / %Y' }}
-             - تا:
-            {{ project_warehouse.use_certificate.finish_using_date|jformat:'%d / %m / %Y' }}
-        </td>
-    </tr>
-    <tr>
         <th style="width: 60.797px;">تاریخ
             {% if project_warehouse.status == 'exp' %}خروج{% else %}ورود{% endif %}
             کالا

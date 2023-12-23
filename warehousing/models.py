@@ -24,6 +24,7 @@ class Stuff(models.Model):
         ('kgm', 'کیلوگرم'),
         ('ton', 'تن'),
         ('num', 'عدد'),
+        ('bag', 'کیسه'),
     )
     stuff_type = models.CharField(max_length=100, verbose_name='نوع کالا')
     measurement_unit = models.CharField(max_length=3, choices=MEASUREMENT_UNIT_CHOICES, verbose_name='واحد اندازه گیری')
@@ -47,8 +48,10 @@ class Stuff(models.Model):
             return 'کیلوگرم' 
         elif self.measurement_unit == "ton":
             return 'تن' 
+        elif self.measurement_unit == "num":
+            return 'عدد' 
         else:
-            return 'عدد'
+            return 'کیسه'
 
 
 class MainWarehouseImportManager(models.Manager):
@@ -133,6 +136,7 @@ class MainWarehouseExport(models.Model):
 class UseCertificateManager(models.Manager):
     def search(self, query):
         lookup = (
+            Q(project__title__icontains=query)|
             Q(stuff_type__stuff_type__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
@@ -143,6 +147,7 @@ class UseCertificate(models.Model):
         ('prw', 'انبار پروژه'),
         ('maw', 'انبار اصلی'),
     )
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='use_certificate_projects',verbose_name='پروژه')
     # stuff
     stuff_type = models.ForeignKey(Stuff, on_delete=models.CASCADE, related_name='use_certificate_stuffs', verbose_name='نوع کالا')
     is_deficient = models.BooleanField(default=False, verbose_name='کسری دارد')
@@ -164,7 +169,7 @@ class UseCertificate(models.Model):
         verbose_name_plural = "گواهی‌های مصرف کالا"
 
     def __str__(self):
-        return f"{self.stuff_type.stuff_type} : از {self.start_using_date.year}/{self.start_using_date.month}/{self.start_using_date.day} - تا {self.finish_using_date.year}/{self.finish_using_date.month}/{self.finish_using_date.day}"
+        return f"{self.project.title}-{self.stuff_type.stuff_type}: از {self.start_using_date.year}/{self.start_using_date.month}/{self.start_using_date.day} - تا {self.finish_using_date.year}/{self.finish_using_date.month}/{self.finish_using_date.day}"
     
     def formatted_deficient_amount(self):
         return "{:,}".format(self.deficient_amount)
@@ -201,7 +206,6 @@ class ProjectWarehouse(models.Model):
     # deliverer
     personnel_delivery = models.ForeignKey(Personnel, on_delete=models.CASCADE, related_name='project_warehouse_personnel_deliveries',null=True, blank=True,verbose_name='پرسنل')
     contractor_delivery = models.ForeignKey(Contractors, on_delete=models.CASCADE, related_name='project_warehouse_contractors_deliveries',null=True, blank=True,verbose_name='پیمانکار')
-    use_certificate = models.ForeignKey(UseCertificate, on_delete=models.CASCADE, related_name='project_warehouse_use_certificates',verbose_name='گواهی مصرف')
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, verbose_name='وضعیت')
     export_import_date = jmodels.jDateField(verbose_name='تاریخ ورود/خروج')
     create_record = jmodels.jDateTimeField(auto_now_add=True)

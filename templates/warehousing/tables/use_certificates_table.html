@@ -10,6 +10,12 @@
                         ردیف
                     </th>
 
+                    <th class="text-center border-bottom-0 rounded-0" rowspan="2" colspan="1" style="width: 40.797px;">
+                        <span>&emsp;</span>
+                        <span>پروژه</span>
+                        <span>&emsp;</span>
+                    </th>
+
                     <td class="text-center text-light" rowspan="1" colspan="5" style="width: 100.797px;background-color: #808080;">
                         کالا
                     </td>
@@ -82,6 +88,7 @@
                         {% if use_certificate.pk == object.pk %}
                             <tr role="row" class="odd">
                                 <td>{{ row }}</td>
+                                <td>{{ use_certificate.project }}</td>
                                 <td>{{ use_certificate.stuff_type.stuff_type }}</td>
                                 
                                 {% if use_certificate.is_deficient %}
