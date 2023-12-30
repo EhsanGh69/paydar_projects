@@ -5,21 +5,24 @@
     <div class="col-12 col-xl-6 mb-3">
       {{ form.project|as_crispy_field }}
     </div>
-
     <div class="col-12 col-xl-6 mb-3">
         {{ form.buyer_seller|as_crispy_field }}
     </div>
-
     <div class="col-12 col-xl-6 mb-3">
       {{ form.full_name|as_crispy_field }}
       {{ form.phone|as_crispy_field }}
     </div>
-    
     <div class="col-12 col-xl-6 mb-3 mb-3">
       <label for="">{{ form.address.label }}*</label>
-      {{ form.address|add_class:"form-control"|attr:"rows:5" }}
+      {% if form.address.errors %}
+        {{ form.address|add_class:"form-control border border-danger"|attr:"rows:5" }}
+        {% for error in form.address.errors %}
+            <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+        {% endfor %}
+      {% else %}
+        {{ form.address|add_class:"form-control"|attr:"rows:5" }}
+      {% endif %}
     </div>
-    
     <div class="col-12 col-xl-6 mb-3">
       {{ form.payment_amount|as_crispy_field }}
       <small class="form-text text-muted">
@@ -27,29 +30,36 @@
         <span>ریال</span>
       </small>
     </div>
-   
     <div class="col-12 col-xl-6 mb-3">
         {{ form.payment_order|as_crispy_field }}
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.current_roof|as_crispy_field }}
     </div>
-    
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.payment_date.label }}*</label>
-        {{ form.payment_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
-
         {% if form.payment_date.errors %}
-              {% for error in form.payment_date.errors %}
-                  <p class="text-danger">{{ error }}</p>
-              {% endfor %}
+          {{ form.payment_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+          {% for error in form.payment_date.errors %}
+            <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+          {% endfor %}
+        {% else %}
+          {{ form.payment_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% endif %}
     </div>
     <div class="col-12 col-xl-6 mb-3">
       {{ form.contract_image|as_crispy_field }}
+      <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+      {% if not size_valid and form_invalid %}
+        <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+        {% endif %}
+        {% if request.FILES.contract_image %}
+          <strong class="form-text text-muted" style="font-size:90%">
+            نام فایل: {{ request.FILES.contract_image }}
+          </strong>
+      {% endif %}
     </div>
 </div>
-
 <div class="row">
   <div class="col-8 col-sm-6 col-xl-4 my-4">
       <button class="btn btn-success btn-block" type="submit">

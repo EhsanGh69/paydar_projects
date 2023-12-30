@@ -20,14 +20,25 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.contract_image|as_crispy_field }}
+        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        {% if not size_valid and form_invalid %}
+            <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+        {% endif %}
+        {% if request.FILES.contract_image %}
+            <strong class="form-text text-muted" style="font-size:90%">
+                نام فایل: {{ request.FILES.contract_image }}
+            </strong>
+        {% endif %}
     </div>
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.contract_date.label }}*</label>
-        {{ form.contract_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% if form.contract_date.errors %}
-              {% for error in form.contract_date.errors %}
-                  <p class="text-danger">{{ error }}</p>
-              {% endfor %}
+            {{ form.contract_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% for error in form.contract_date.errors %}
+                <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+            {% endfor %}
+        {% else %}
+            {{ form.contract_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% endif %}
     </div>
 </div>

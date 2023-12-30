@@ -20,12 +20,13 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.payment_date.label }}*</label>
-        {{ form.payment_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
-
         {% if form.payment_date.errors %}
-              {% for error in form.payment_date.errors %}
-                  <p class="text-danger">{{ error }}</p>
-              {% endfor %}
+            {{ form.payment_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% for error in form.payment_date.errors %}
+                <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+            {% endfor %}
+        {% else %}
+            {{ form.payment_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% endif %}
     </div>
 </div>

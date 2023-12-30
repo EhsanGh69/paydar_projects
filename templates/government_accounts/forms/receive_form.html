@@ -19,13 +19,14 @@
         </small>
     </div>
     <div class="col-12 col-xl-6 mb-3">
-        <label>{{ form.receive_date.label }}*</label>
-        {{ form.receive_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
-
+        <label>{{ form.receive_date.label }}*</label>        
         {% if form.receive_date.errors %}
+            {{ form.receive_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
             {% for error in form.receive_date.errors %}
-                <p class="text-danger">{{ error }}</p>
+                <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
             {% endfor %}
+        {% else %}
+            {{ form.receive_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% endif %}
     </div>
 </div>

@@ -18,12 +18,13 @@
     </div>
     <div class="col-12 col-xl-6 mb-3 mb-3">
         <label>{{ form.activity_date.label }}*</label>
-        {{ form.activity_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
-
         {% if form.activity_date.errors %}
-              {% for error in form.activity_date.errors %}
-                  <p class="text-danger">{{ error }}</p>
-              {% endfor %}
+            {{ form.activity_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% for error in form.activity_date.errors %}
+                <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+            {% endfor %}
+        {% else %}
+            {{ form.activity_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% endif %}
     </div>
 </div>

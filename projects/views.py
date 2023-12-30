@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.conf import settings
 
-
-from utils.tools import filter_date_values
+from utils.tools import filter_date_values, image_size_validation
 from account.models import UserActionsLog
 from .models import Owners, Project, WorkReference, Costs, PaymentsImages
 from .forms import OwnerForm, ProjectForm, WorkReferenceForm, CostsForm, PaymentsImagesForm
@@ -68,8 +68,18 @@ class OwnerCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
     success_message = "مالک با موفقیت اضافه شد"
 
     def form_valid(self, form):
+        fields = ['national_card_image', 'birth_certificate_image', 'ownership_document_image']
+        result_validation = image_size_validation(form, fields)
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک مالک جدید")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        fields = ['national_card_image', 'birth_certificate_image', 'ownership_document_image']
+        invalid_fields = [field for field in fields if not image_size_validation(form, [field])]
+        return self.render_to_response(self.get_context_data(invalid_fields=invalid_fields, form_invalid=True))
 
 
 class OwnerUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -81,8 +91,18 @@ class OwnerUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
     success_message = "مالک با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        fields = ['national_card_image', 'birth_certificate_image', 'ownership_document_image']
+        result_validation = image_size_validation(form, fields)
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک مالک")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        fields = ['national_card_image', 'birth_certificate_image', 'ownership_document_image']
+        invalid_fields = [field for field in fields if not image_size_validation(form, [field])]
+        return self.render_to_response(self.get_context_data(invalid_fields=invalid_fields, form_invalid=True))
 
 
 class OwnerDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -651,9 +671,21 @@ class PaymentsImagesCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     success_message = "تصاویر فیش‌های پرداختی با موفقیت ثبت گردید"
 
     def form_valid(self, form):
+        fields = ['designer_office', 'supervisors', 'engineer_system','sketch_map', 'export_permit', 'visit_toll', 'education_share',
+                  'fire_stations_share', 'social_security_share']
+        result_validation = image_size_validation(form, fields)
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت تصاویر فیش‌های پرداختی جدید")
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        fields = ['designer_office', 'supervisors', 'engineer_system', 'sketch_map', 'export_permit', 'visit_toll', 'education_share',
+                  'fire_stations_share', 'social_security_share']
+        invalid_fields = [field for field in fields if not image_size_validation(form, [field])]
+        return self.render_to_response(self.get_context_data(invalid_fields=invalid_fields, form_invalid=True))
+    
 
 class PaymentsImagesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'projects.change_paymentsimages'
@@ -664,8 +696,20 @@ class PaymentsImagesUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     success_message = "تصاویر فیش‌های پرداختی با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        fields = ['designer_office', 'supervisors', 'engineer_system','sketch_map', 'export_permit', 'visit_toll', 'education_share',
+                  'fire_stations_share', 'social_security_share']
+        result_validation = image_size_validation(form, fields)
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش تصاویر فیش‌های پرداختی")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        fields = ['designer_office', 'supervisors', 'engineer_system', 'sketch_map', 'export_permit', 'visit_toll', 'education_share',
+                  'fire_stations_share', 'social_security_share']
+        invalid_fields = [field for field in fields if not image_size_validation(form, [field])]
+        return self.render_to_response(self.get_context_data(invalid_fields=invalid_fields, form_invalid=True))
 
 
 class PaymentsImagesDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):

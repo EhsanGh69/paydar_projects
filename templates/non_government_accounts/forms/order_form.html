@@ -8,11 +8,9 @@
     <div class="col-12 col-xl-6 mb-3">
       {{ form.supplier|as_crispy_field }}
     </div>
-
     <div class="col-12 col-xl-6 mb-3">
       {{ form.order_type|as_crispy_field }}
     </div>
-   
     <div class="col-12 col-xl-6 mb-3">
         {{ form.measurement_unit|as_crispy_field }}
     </div>
@@ -26,17 +24,17 @@
     <div class="col-12 col-xl-6 mb-3">
         {{ form.order_amount|as_crispy_field }}
     </div>
-    
     <div class="col-12 col-xl-6 mb-3">
-        <label>{{ form.order_date.label }}*</label>
+      <label>{{ form.order_date.label }}*</label>
+      {% if form.order_date.errors %}
+        {{ form.order_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+        {% for error in form.order_date.errors %}
+          <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+        {% endfor %}
+      {% else %}
         {{ form.order_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
-        {% if form.order_date.errors %}
-              {% for error in form.order_date.errors %}
-                  <p class="text-danger">{{ error }}</p>
-              {% endfor %}
-        {% endif %}
+      {% endif %}
     </div>
-    
     <div class="col-12 col-xl-6 mb-3">
         {{ form.order_respite|as_crispy_field }}
     </div>
@@ -48,13 +46,22 @@
       {{ form.sending_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ و ساعت کلیک کنید"|attr:"autocomplete:off" }}
       <small class="form-text text-muted">{{ form.sending_date.help_text }}</small>
       {% if form.sending_date.errors %}
-            {% for error in form.sending_date.errors %}
-                <p class="text-danger">{{ error }}</p>
-            {% endfor %}
+        {% for error in form.sending_date.errors %}
+            <p class="text-danger">{{ error }}</p>
+        {% endfor %}
       {% endif %}
     </div>
     <div class="col-12 col-xl-6 mb-3">
       {{ form.sended_image|as_crispy_field }}
+      <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+      {% if not size_valid and form_invalid %}
+        <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+      {% endif %}
+      {% if request.FILES.sended_image %}
+        <strong class="form-text text-muted" style="font-size:90%">
+          نام فایل: {{ request.FILES.sended_image }}
+        </strong>
+      {% endif %}
     </div>
     <div class="col-12 col-xl-6 mb-3">
       {{ form.sended_image_type|as_crispy_field }}
@@ -64,7 +71,6 @@
       {{ form.explan_order_cancel|add_class:"form-control"|attr:"rows:5"|attr:"disabled:disabled" }}
     </div>
 </div>
-
 <div class="row">
   <div class="col-8 col-sm-6 col-xl-4 my-4">
       <button class="btn btn-success btn-block" type="submit">

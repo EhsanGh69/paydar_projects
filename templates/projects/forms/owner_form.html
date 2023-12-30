@@ -1,4 +1,5 @@
 {% load crispy_forms_tags %}
+{% load account_tags %}
 
 <div class="row">
     <div class="col-12 col-xl-6 mb-3">
@@ -8,13 +9,40 @@
         {{ form.phone|as_crispy_field }}
     </div>
     <div class="col-12 col-xl-6 mb-3">
-      {{ form.national_card_image|as_crispy_field }}
+        {{ form.national_card_image|as_crispy_field }}
+        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        {% if 'national_card_image' in invalid_fields and form_invalid %}
+            <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+        {% endif %}
+        {% if request.FILES.national_card_image %}
+            <strong class="form-text text-muted" style="font-size:90%">
+                نام فایل: {{ request.FILES.national_card_image }}
+            </strong>
+        {% endif %}
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.birth_certificate_image|as_crispy_field }}
+        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        {% if 'birth_certificate_image' in invalid_fields and form_invalid %}
+            <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+        {% endif %}
+        {% if request.FILES.birth_certificate_image %}
+            <strong class="form-text text-muted" style="font-size:90%">
+                نام فایل: {{ request.FILES.birth_certificate_image }}
+            </strong>
+        {% endif %}
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.ownership_document_image|as_crispy_field }}
+        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        {% if 'ownership_document_image' in invalid_fields and form_invalid %}
+            <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+        {% endif %}
+        {% if request.FILES.ownership_document_image %}
+            <strong class="form-text text-muted" style="font-size:90%">
+                نام فایل: {{ request.FILES.ownership_document_image }}
+            </strong>
+        {% endif %}
     </div>
 </div>
 

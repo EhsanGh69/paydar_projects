@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from utils.tools import filter_date_values
+from utils.tools import filter_date_values, image_size_validation
 from account.models import UserActionsLog
 from .models import ( Contracts,  Proceedings,  Agreements,  BankReceipts,  ConditionStatements, RegisteredDocs, OfficialDocs)
 from .forms import (ContractsForm, ProceedingsForm, AgreementsForm, BankReceiptsForm, ConditionStatementsForm,RegisteredDocsForm,OfficialDocsForm)
@@ -66,14 +66,21 @@ class ContractsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
     success_message = "قرارداد با موفقیت ثبت شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        if not result_validation:
+            return super().form_invalid(form)
         related_to_project = form.cleaned_data.get('related_to_project')
         unrelated_to_project = form.cleaned_data.get('unrelated_to_project')
         if related_to_project is None and unrelated_to_project == '':
             form.errors['__all__'] = form.error_class(["لطفاً پروژه‌ایی را انتخاب کنید یا توضیح قرارداد غیرمرتبط با پروژه را وارد نمایید"])
-            return super().form_invalid(form) # type: ignore
-        else:
-            UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک قرارداد جدید")
-            return super().form_valid(form)
+            return super().form_invalid(form)
+        
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک قرارداد جدید")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class ContractsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -85,14 +92,21 @@ class ContractsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
     success_message = "قرارداد با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
         related_to_project = form.cleaned_data.get('related_to_project')
         unrelated_to_project = form.cleaned_data.get('unrelated_to_project')
         if related_to_project is None and unrelated_to_project == '':
             form.errors['__all__'] = form.error_class(["لطفاً پروژه‌ایی را انتخاب کنید یا توضیح قرارداد غیرمرتبط با پروژه را وارد نمایید"])
             return super().form_invalid(form) # type: ignore
-        else:
-            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک قرارداد")
-            return super().form_valid(form)
+        
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک قرارداد")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class ContractsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -240,8 +254,16 @@ class ProceedingsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMess
     success_message = "صورت جلسه با موفقیت ثبت شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['proceeding_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک صورت جلسه جدید")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['proceeding_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class ProceedingsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -253,8 +275,16 @@ class ProceedingsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMess
     success_message = "صورت جلسه با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['proceeding_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
+
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک صورت جلسه")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['proceeding_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class ProceedingsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -401,8 +431,16 @@ class AgreementsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     success_message = "توافق‌نامه با موفقیت ثبت شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['agreement_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک توافق‌نامه جدید")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['agreement_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class AgreementsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -414,8 +452,16 @@ class AgreementsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     success_message = "توافق‌نامه با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['agreement_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
+
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک توافق‌نامه")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['agreement_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class AgreementsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -551,8 +597,16 @@ class BankReceiptsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
     success_message = "رسید بانکی با موفقیت ثبت شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['receipt_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک رسید بانکی جدید")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['receipt_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class BankReceiptsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -564,8 +618,16 @@ class BankReceiptsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
     success_message = "رسید بانکی با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['receipt_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
+
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک رسید بانکی")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['receipt_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class BankReceiptsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -870,8 +932,16 @@ class RegisteredDocsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     success_message = "سند ثبتی با موفقیت ثبت شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['doc_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک سند ثبتی جدید")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['doc_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class RegisteredDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -883,8 +953,16 @@ class RegisteredDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessM
     success_message = "سند ثبتی با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['doc_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
+
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک سند ثبتی")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['doc_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class RegisteredDocsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -1021,6 +1099,9 @@ class OfficialDocsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
     success_message = "سند اداری با موفقیت ثبت شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['doc_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
         doc_type = form.cleaned_data.get('doc_type')
         letter_type = form.cleaned_data.get('letter_type')
         license_type = form.cleaned_data.get('license_type')
@@ -1030,9 +1111,13 @@ class OfficialDocsCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
         elif doc_type == "lic" and license_type is None:
             form.add_error('license_type', 'لطفا نوع پروانه را انتخاب کنید')
             return super().form_invalid(form) # type: ignore
-        else:
-            UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک سند اداری جدید")
-            return super().form_valid(form)
+        
+        UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک سند اداری جدید")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['doc_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class OfficialDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -1044,6 +1129,9 @@ class OfficialDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
     success_message = "سند اداری با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['doc_image'])
+        if not result_validation:
+            return super().form_invalid(form) # type: ignore
         doc_type = form.cleaned_data.get('doc_type')
         letter_type = form.cleaned_data.get('letter_type')
         license_type = form.cleaned_data.get('license_type')
@@ -1053,9 +1141,13 @@ class OfficialDocsUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMes
         elif doc_type == "lic" and license_type is None:
             form.add_error('license_type', 'لطفا نوع پروانه را انتخاب کنید')
             return super().form_invalid(form) # type: ignore
-        else:
-            UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک سند اداری")
-            return super().form_valid(form)
+
+        UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک سند اداری")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['doc_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class OfficialDocsDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):

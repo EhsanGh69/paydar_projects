@@ -1,0 +1,163 @@
+* {
+  direction: rtl !important;
+}
+
+.layout-fixed .main-sidebar {
+  right: 0;
+}
+.brand-image {
+  float: right;
+}
+.content-wrapper,
+.main-footer,
+.main-header {
+  margin-left: 0px;
+  margin-right: 250px;
+}
+.mr-auto-navbav {
+  margin-right: auto !important;
+}
+.navbar-expand .navbar-nav .nav-link {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+.dataTables_paginate > ul.pagination {
+  direction: ltr !important;
+  font-size: 1.2rem;
+}
+
+.dataTables_wrapper #print-table {
+  padding-left: 3rem;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+[class*="icheck-"]
+  > input:first-child:checked
+  + input[type="hidden"]
+  + label::after,
+[class*="icheck-"] > input:first-child:checked + label::after {
+  right: 15px;
+  left: auto;
+}
+.nav-sidebar .nav-link > .right,
+.nav-sidebar .nav-link > p > .right {
+  left: 1rem;
+  right: auto;
+}
+.nav-sidebar .nav-link > .right:nth-child(2),
+.nav-sidebar .nav-link > p > .right:nth-child(2) {
+  left: 2.2rem;
+  right: auto;
+}
+.small-box .icon > i {
+  left: 15px;
+  right: auto;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+input[type="file"]::before {
+  content: "فایل تصویر را انتخاب کنید";
+  display: inline-block;
+  background: #2fd849;
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 8px 8px;
+  margin-top: 0.5rem;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: auto;
+  cursor: pointer;
+  /* text-shadow: 1px 1px #fff; */
+  font-weight: 700;
+  font-size: 10pt;
+}
+
+input[type="file"]::after{
+  visibility: hidden;
+}
+
+input[type="file"]:hover::before {
+  border-color: rgb(18, 20, 138);
+  background: #83e091;
+}
+input[type="file"]:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.card table td a.modal-tag {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  /* background-color: #999; */
+  border-radius: 0.25rem;
+  color: #ddd;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card table td a.modal-tag:hover {
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.clock {
+  color: #17a2b8;
+  font-size: 20px;
+  letter-spacing: 7px;
+  width: 40%;
+}
+
+.clock #MyDayDisplay {
+  letter-spacing: 0;
+  font-size: 1.5rem;
+}
+
+#id_permissions,
+#selected_permissions {
+  height: 300px;
+}
+
+@media (min-width: 992px) {
+  .sidebar-mini.sidebar-collapse .content-wrapper,
+  .sidebar-mini.sidebar-collapse .main-footer,
+  .sidebar-mini.sidebar-collapse .main-header {
+    margin-right: 4.6rem !important;
+  }
+  .sidebar-mini.sidebar-collapse .content-wrapper,
+  .sidebar-mini.sidebar-collapse .main-footer,
+  .sidebar-mini.sidebar-collapse .main-header {
+    margin-right: 4.6rem !important;
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .main-sidebar,
+  .main-sidebar::before {
+    box-shadow: none !important;
+    margin-right: -250px;
+  }
+
+  .content-wrapper,
+  .content-wrapper::before,
+  .main-footer,
+  .main-footer::before,
+  .main-header,
+  .main-header::before {
+    margin-right: 0;
+  }
+
+  .sidebar-open .main-sidebar,
+  .sidebar-open .main-sidebar::before {
+    margin-right: 0;
+  }
+
+  .clock {
+    font-size: 18px;
+  }
+}

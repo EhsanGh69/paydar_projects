@@ -17,20 +17,28 @@
     </div>
 
     <div class="col-12 col-xl-6 mb-3 mb-3">
-      <label for="">{{ form.result_explan.label }}*</label>
-      {{ form.result_explan|add_class:"form-control"|attr:"rows:5" }}
-      <br>
-      {{ form.follow_confirm|as_crispy_field }}
+        <label for="">{{ form.result_explan.label }}*</label>
+        {% if form.result_explan.errors %}
+            {{ form.result_explan|add_class:"form-control border border-danger"|attr:"rows:5" }}
+            {% for error in form.result_explan.errors %}
+                <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+            {% endfor %}
+        {% else %}
+            {{ form.result_explan|add_class:"form-control"|attr:"rows:5" }}
+        {% endif %}
+        <br>
+        {{ form.follow_confirm|as_crispy_field }}
     </div>
 
     <div class="col-12 col-xl-6 mb-3 mb-3">
         <label>{{ form.follow_date.label }}*</label>
-        {{ form.follow_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
-
         {% if form.follow_date.errors %}
-              {% for error in form.follow_date.errors %}
-                  <p class="text-danger">{{ error }}</p>
-              {% endfor %}
+            {{ form.follow_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% for error in form.follow_date.errors %}
+                <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+            {% endfor %}
+        {% else %}
+            {{ form.follow_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% endif %}
     </div>
 

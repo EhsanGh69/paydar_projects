@@ -34,6 +34,23 @@ $(document).ready(function () {
             $("#id_explan_order_cancel").attr("disabled","disabled");
         }
     });
+    if($('#id_order_result').val() == 'spd'){
+        $("#id_sending_date").removeAttr("disabled");
+    }else{
+        $("#id_sending_date").attr("disabled","disabled");
+    }
+    if($('#id_order_result').val() == 'snd'){
+        $("#id_sended_image").removeAttr("disabled");
+        $("#id_sended_image_type").removeAttr("disabled");
+    }else{
+        $("#id_sended_image").attr("disabled","disabled");
+        $("#id_sended_image_type").attr("disabled","disabled");
+    }
+    if($('#id_order_result').val() == 'cld'){
+        $("#id_explan_order_cancel").removeAttr("disabled");
+    }else{
+        $("#id_explan_order_cancel").attr("disabled","disabled");
+    }
     $('#id_unit_price').on('input', function(e) {
         e.preventDefault();
         var amount_value = $('#id_unit_price').val();

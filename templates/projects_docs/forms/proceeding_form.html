@@ -13,14 +13,25 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.proceeding_image|as_crispy_field }}
+        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        {% if not size_valid and form_invalid %}
+            <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+        {% endif %}
+        {% if request.FILES.proceeding_image %}
+            <strong class="form-text text-muted" style="font-size:90%">
+                نام فایل: {{ request.FILES.proceeding_image }}
+            </strong>
+        {% endif %}
     </div>
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.proceeding_date.label }}*</label>
-        {{ form.proceeding_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% if form.proceeding_date.errors %}
-              {% for error in form.proceeding_date.errors %}
-                  <p class="text-danger">{{ error }}</p>
-              {% endfor %}
+            {{ form.proceeding_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% for error in form.proceeding_date.errors %}
+                <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+            {% endfor %}
+        {% else %}
+            {{ form.proceeding_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% endif %}
     </div>
     

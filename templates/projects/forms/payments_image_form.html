@@ -4,6 +4,11 @@
     <div class="col-12 col-xl-6 mb-3">
         {{ form.project|as_crispy_field }}
     </div>
+    <div class="col-12 col-xl-6 mb-3"></div>
+
+    <div class="col-12 col-xl-6 mb-3">
+        <i class="text-info">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</i>
+    </div>
     {# engineer costs #}
     <fieldset class="input-group border-bottom mb-3">
         <legend class="mb-3">
@@ -11,15 +16,47 @@
         </legend>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.designer_office|as_crispy_field }}
+            {% if 'designer_office' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.designer_office %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.designer_office }}
+                </strong>
+            {% endif %}
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.supervisors|as_crispy_field }}
+            {% if 'supervisors' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.supervisors %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.supervisors }}
+                </strong>
+            {% endif %}
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.engineer_system|as_crispy_field }}
+            {% if 'engineer_system' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.engineer_system %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.engineer_system }}
+                </strong>
+            {% endif %}
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.sketch_map|as_crispy_field }}
+            {% if 'sketch_map' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.sketch_map %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.sketch_map }}
+                </strong>
+            {% endif %}
         </div>
     </fieldset>
     {# mayoralty costs #}
@@ -29,18 +66,58 @@
         </legend>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.export_permit|as_crispy_field }}
+            {% if 'export_permit' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.export_permit %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.export_permit }}
+                </strong>
+            {% endif %}
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.visit_toll|as_crispy_field }}
+            {% if 'visit_toll' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.visit_toll %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.visit_toll }}
+                </strong>
+            {% endif %}
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.education_share|as_crispy_field }}
+            {% if 'education_share' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.education_share %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.education_share }}
+                </strong>
+            {% endif %}
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.fire_stations_share|as_crispy_field }}
+            {% if 'fire_stations_share' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.fire_stations_share %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.fire_stations_share }}
+                </strong>
+            {% endif %}
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.social_security_share|as_crispy_field }}
+            {% if 'social_security_share' in invalid_fields and form_invalid %}
+                <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+            {% endif %}
+            {% if request.FILES.social_security_share %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.social_security_share }}
+                </strong>
+            {% endif %}
         </div>
     </fieldset>
   </div>

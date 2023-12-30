@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     'projects_docs.apps.ProjectsDocsConfig',
     'account.apps.AccountConfig',
     'reports.apps.ReportsConfig',
-    'user_messages.apps.UserMessagesConfig'
+    'user_messages.apps.UserMessagesConfig',
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 MIDDLEWARE = [
@@ -173,3 +174,5 @@ AUTH_USER_MODEL = "account.User"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+MAX_UPLOAD_SIZE = 153600 # 150kb

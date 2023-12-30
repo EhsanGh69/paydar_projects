@@ -3,8 +3,9 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.conf import settings
 
-from utils.tools import filter_date_values
+from utils.tools import filter_date_values, image_size_validation
 from account.models import UserActionsLog
 from .models import Contractors, Suppliers, Personnel, Partners, BuyersSellers, Orders, ConflictOrders
 from .forms import ContractorForm, SupplierForm, PersonnelForm, PartnersForm, BuyersSellersForm, OrdersForm, ConflictOrdersForm
@@ -349,8 +350,16 @@ class PersonnelCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
     success_message = "شخص با موفقیت به پرسنل اضافه شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک پرسنل جدید")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class PersonnelUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -362,8 +371,16 @@ class PersonnelUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
     success_message = "شخص پرسنل با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک پرسنل")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class PersonnelDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -490,8 +507,16 @@ class PartnersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     success_message = "شریک با موفقیت اضافه شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="افزودن یک شریک جدید")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class PartnersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -503,8 +528,16 @@ class PartnersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessage
     success_message = "شریک با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک شریک")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class PartnersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -631,6 +664,10 @@ class BuyersSellersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     success_url = reverse_lazy("non_government_accounts:buyers_sellers")
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        if not result_validation:
+            return super().form_invalid(form)
+
         obj_type, log_content = form.cleaned_data.get('buyer_seller'), ""
         if obj_type == "buy":
             self.success_message = "خریدار با موفقیت اضافه شد"
@@ -641,6 +678,10 @@ class BuyersSellersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content=log_content)
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
+
 
 class BuyersSellersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'non_government_accounts.change_buyerssellers'
@@ -650,6 +691,10 @@ class BuyersSellersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
     success_url = reverse_lazy("non_government_accounts:buyers_sellers")
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        if not result_validation:
+            return super().form_invalid(form)
+
         obj_type, log_content = form.cleaned_data.get('buyer_seller'), ""
         if obj_type == "buy":
             self.success_message = "خریدار با موفقیت ویرایش شد"
@@ -659,6 +704,10 @@ class BuyersSellersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMe
             log_content="ویرایش یک فروشنده"
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content=log_content)
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['contract_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class BuyersSellersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -826,8 +875,16 @@ class OrdersCreate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMi
     success_message = "سفارش با موفقیت ثبت شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['sended_image'])
+        if not result_validation:
+            return super().form_invalid(form)
+
         UserActionsLog.objects.create(user=self.request.user, log_type="CR", log_content="ثبت یک سفارش جدید")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['sended_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class OrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -839,8 +896,16 @@ class OrdersUpdate(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMi
     success_message = "سفارش با موفقیت ویرایش شد"
 
     def form_valid(self, form):
+        result_validation = image_size_validation(form, ['sended_image'])
+        if not result_validation:
+            return super().form_invalid(form)
+            
         UserActionsLog.objects.create(user=self.request.user, log_type="UP", log_content="ویرایش یک سفارش")
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        result_validation = image_size_validation(form, ['sended_image'])
+        return self.render_to_response(self.get_context_data(size_valid=result_validation, form_invalid=True))
 
 
 class OrdersDelete(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):

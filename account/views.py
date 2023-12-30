@@ -49,7 +49,6 @@ class ChangePassword(LoginRequiredMixin, SuccessMessageMixin, FormView):
         old_password = form.cleaned_data.get('old_password')
         new_password = form.cleaned_data.get('new_password')
         confirm_new_password = form.cleaned_data.get('confirm_new_password')
-        print(form.cleaned_data)
         check_old_password = check_password(old_password, user.password)
         validation_result = password_validation(new_password, user.username)
         if check_old_password and validation_result == 'not_err':

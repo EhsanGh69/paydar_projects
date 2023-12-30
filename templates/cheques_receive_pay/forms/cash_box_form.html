@@ -18,33 +18,32 @@
             {% if form.removal_description.errors %}
                 {{ form.removal_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
                 {% for error in form.removal_description.errors %}
-                    <p class="text-danger">
-                        <strong>{{ error }}</strong>
-                    </p>
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
                 {% endfor %}
             {% else %}
                 {{ form.removal_description|add_class:"form-control"|attr:"rows:5" }}
             {% endif %}
-            <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
-            <label>{{ form.removal_date.label }}</label>
+            <label>{{ form.removal_date.label }}*</label>
             {% if form.removal_date.errors %}
                 {{ form.removal_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
                 {% for error in form.removal_date.errors %}
-                    <p class="text-danger">
-                        <strong>{{ error }}</strong>
-                    </p>
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
                 {% endfor %}
             {% else %}
                 {{ form.removal_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
             {% endif %}
-            <small class="form-text text-muted">جهت عملیات برداشت از صندوق این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.removal_image|as_crispy_field }}
-            <span class="text-danger d-none"
-                  id="removal_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+            <span class="text-danger d-none" id="removal_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+            <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+            {% if request.FILES.removal_image %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.removal_image }}
+                </strong>
+            {% endif %}
         </div>
     </fieldset>
     <fieldset class="input-group mb-3 d-none" id="set-field">
@@ -60,37 +59,35 @@
             {% if form.settle_description.errors %}
                 {{ form.settle_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
                 {% for error in form.settle_description.errors %}
-                    <p class="text-danger">
-                        <strong>{{ error }}</strong>
-                    </p>
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
                 {% endfor %}
             {% else %}
                 {{ form.settle_description|add_class:"form-control"|attr:"rows:5" }}
             {% endif %}
-            <small class="form-text text-muted">جهت عملیات واریز به صندوق این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
-            <label>{{ form.settle_date.label }}</label>
+            <label>{{ form.settle_date.label }}*</label>
             {% if form.settle_date.errors %}
                 {{ form.settle_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
                 {% for error in form.settle_date.errors %}
-                    <p class="text-danger">
-                        <strong>{{ error }}</strong>
-                    </p>
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
                 {% endfor %}
             {% else %}
                 {{ form.settle_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
             {% endif %}
-            <small class="form-text text-muted">جهت عملیات واریز به صندوق این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.settle_image|as_crispy_field }}
-            <span class="text-danger d-none"
-                  id="settle_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+            <span class="text-danger d-none" id="settle_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+            <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+            {% if request.FILES.settle_image %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.settle_image }}
+                </strong>
+            {% endif %}
         </div>
     </fieldset>
 </div>
-
 <div class="row">
     <div class="col-8 col-sm-6 col-xl-4 my-4">
         <button class="btn btn-success btn-block" type="submit" id="submit-btn">

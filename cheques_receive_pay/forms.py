@@ -72,10 +72,6 @@ class FundForm(forms.ModelForm):
             self.fields['operation_type'].disabled = True
 
         self.fields['charge_date'].required = False
-        self.fields['cost_amount'].help_text = 'جهت عملیات برداشت از تنخواه این فیلد لازم است'
-        self.fields['receipt_image'].help_text = 'جهت عملیات برداشت از تنخواه این فیلد لازم است'
-        self.fields['charge_amount'].help_text = 'جهت عملیات واریز به تنخواه این فیلد لازم است'
-        self.fields['charge_image'].help_text = 'جهت عملیات واریز به تنخواه این فیلد لازم است'
     
 
 class ReceivePayForm(forms.ModelForm):
@@ -119,8 +115,3 @@ class CashBoxForm(forms.ModelForm):
 
         if url_name == 'cash_box_update':
             self.fields['operation_type'].disabled = True
-
-        self.fields['settle_amount'].help_text = 'جهت عملیات واریز به صندوق این فیلد لازم است'
-        self.fields['settle_image'].help_text = 'جهت عملیات واریز به صندوق این فیلد لازم است'
-        self.fields['removal_amount'].help_text = 'جهت عملیات برداشت از صندوق این فیلد لازم است'
-        self.fields['removal_image'].help_text = 'جهت عملیات برداشت از صندوق این فیلد لازم است'

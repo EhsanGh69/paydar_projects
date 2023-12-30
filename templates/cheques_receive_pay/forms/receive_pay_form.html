@@ -37,15 +37,27 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         <label>{{ form.date.label }}*</label>
-        {{ form.date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% if form.date.errors %}
-              {% for error in form.date.errors %}
-                  <p class="text-danger">{{ error }}</p>
-              {% endfor %}
+            {{ form.date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
+            {% for error in form.date.errors %}
+                <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+            {% endfor %}
+        {% else %}
+            {{ form.date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
         {% endif %}
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.receipt_image|as_crispy_field }}
+        {{ form.invalid }}
+        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        {% if not size_valid and form_invalid %}
+            <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
+        {% endif %}
+        {% if request.FILES.receipt_image %}
+            <strong class="form-text text-muted" style="font-size:90%">
+                نام فایل: {{ request.FILES.receipt_image }}
+            </strong>
+        {% endif %}
     </div>
 </div>
 <div class="row">

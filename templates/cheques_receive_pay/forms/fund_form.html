@@ -17,36 +17,36 @@
             </small>
         </div>
         <div class="col-12 col-xl-6 mb-3 mb-3">
-            <label for="">{{ form.cost_description.label }}</label>
+            <label for="">{{ form.cost_description.label }}*</label>
             {% if form.cost_description.errors %}
                 {{ form.cost_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
                 {% for error in form.cost_description.errors %}
-                    <p class="text-danger">
-                        <strong>{{ error }}</strong>
-                    </p>
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
                 {% endfor %}
             {% else %}
                 {{ form.cost_description|add_class:"form-control"|attr:"rows:5" }}
             {% endif %}
-            <small class="form-text text-muted">جهت عملیات برداشت از تنخواه این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
-            <label>{{ form.removal_date.label }}</label>
+            <label>{{ form.removal_date.label }}*</label>
             {% if form.removal_date.errors %}
                 {{ form.removal_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
                 {% for error in form.removal_date.errors %}
-                    <p class="text-danger">
-                        <strong>{{ error }}</strong>
-                    </p>
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
                 {% endfor %}
             {% else %}
                 {{ form.removal_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
             {% endif %}
-            <small class="form-text text-muted">جهت عملیات برداشت از تنخواه این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.receipt_image|as_crispy_field }}
             <span class="text-danger d-none" id="receipt_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+            <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+            {% if request.FILES.receipt_image %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.receipt_image }}
+                </strong>
+            {% endif %}
         </div>
     </fieldset>
     <fieldset class="input-group mb-3 d-none" id="set-field">
@@ -58,22 +58,25 @@
             </small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
-            <label>{{ form.charge_date.label }}</label>
+            <label>{{ form.charge_date.label }}*</label>
             {% if form.charge_date.errors %}
                 {{ form.charge_date|add_class:"form-control border border-danger"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
                 {% for error in form.charge_date.errors %}
-                    <p class="text-danger">
-                        <strong>{{ error }}</strong>
-                    </p>
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
                 {% endfor %}
             {% else %}
                 {{ form.charge_date|add_class:"form-control"|attr:"data-jdp"|attr:"placeholder:برای انتخاب تاریخ کلیک کنید"|attr:"autocomplete:off" }}
             {% endif %}
-            <small class="form-text text-muted">جهت عملیات واریز به تنخواه این فیلد لازم است</small>
         </div>
         <div class="col-12 col-xl-6 mb-3">
             {{ form.charge_image|as_crispy_field }}
             <span class="text-danger d-none" id="charge_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
+            <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+            {% if request.FILES.charge_image %}
+                <strong class="form-text text-muted" style="font-size:90%">
+                    نام فایل: {{ request.FILES.charge_image }}
+                </strong>
+            {% endif %}
         </div>
     </fieldset>
 </div>
