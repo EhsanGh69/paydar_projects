@@ -54,12 +54,12 @@ class ChangePassword(LoginRequiredMixin, SuccessMessageMixin, FormView):
         if check_old_password and validation_result == 'not_err':
             user.set_password(new_password) # type: ignore
             user.save()
-            update_session_auth_hash(self.request, user)
+            update_session_auth_hash(self.request, user) # type: ignore
             return super().form_valid(form)
         elif not check_old_password:
             form.add_error('old_password', 'رمز عبور کنونی اشتباه وارد شده است')
             return super().form_invalid(form)
-        elif len(new_password) < 8:
+        elif len(new_password) < 8: # type: ignore
             form.add_error('new_password', 'رمز عبور باید حداقل هشت کاراکتر باشد')
             return super().form_invalid(form)
         elif validation_result == 'combine_err':
@@ -67,6 +67,9 @@ class ChangePassword(LoginRequiredMixin, SuccessMessageMixin, FormView):
             return super().form_invalid(form)
         elif validation_result == 'similar_err':
             form.add_error('new_password', 'رمز عبور نباید شبیه نام کاربری باشد')
+            return super().form_invalid(form)
+        elif new_password != confirm_new_password:
+            form.add_error('confirm_new_password', 'تایید رمز عبور با رمز عبور یکسان نمی باشد')
             return super().form_invalid(form)
 
 
@@ -225,7 +228,7 @@ class UpdateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
             group = get_object_or_404(Group, name=user_group)
             user.groups.remove(group)
         
-        for access_group in access_groups:
+        for access_group in access_groups: # type: ignore
             group = get_object_or_404(Group, name=access_group)
             user.groups.add(group)
         return super().form_valid(form)
@@ -256,7 +259,7 @@ class SearchUsers(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         not_found = False
         query = self.request.GET.get('data_search')
         
-        search_result = User.objects.search(query).all() 
+        search_result = User.objects.search(query).all()  # type: ignore
         
         if not search_result:
             not_found = True
@@ -314,7 +317,7 @@ class CreateGroup(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
         codenames = form.cleaned_data.get('permissions')
         group = Group.objects.create(name=group_name)
 
-        for codename in codenames:
+        for codename in codenames: # type: ignore
             permission = get_object_or_404(Permission, codename=codename)
             group.permissions.add(permission)
 
@@ -364,7 +367,7 @@ class UpdateGroup(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
             permission = get_object_or_404(Permission, codename=group_permission.codename)
             group.permissions.remove(permission)
         
-        for codename in codenames:
+        for codename in codenames: # type: ignore
             permission = get_object_or_404(Permission, codename=codename)
             group.permissions.add(permission)
         return super().form_valid(form)

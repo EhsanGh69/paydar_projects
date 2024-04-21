@@ -10,7 +10,7 @@
         {% csrf_token %}
         {% if form.username.errors or form.non_field_errors %}
             <div class="input-group flex-row-reverse">
-                {{ form.username|add_class:"form-control border border-danger"|attr:"autocomplete:off"|attr:"placeholder:نام کاربری"|attr:"dir:rtl"}}
+                {{ form.username|add_class:"form-control is-invalid border border-danger"|attr:"autocomplete:off"|attr:"placeholder:نام کاربری"|attr:"dir:rtl"}}
                 <div class="input-group-append border border-danger">
                     <div class="input-group-text">
                         <span class="fas fa-user"></span>
@@ -36,9 +36,12 @@
 
         {% if form.password.errors or form.non_field_errors %}
             <div class="input-group flex-row-reverse">
+                <span class="fa-solid fa-eye fa-eye-slash 
+                pt-2 pl-2 border border-left-0 rounded border-danger" 
+                id="toggle-icon"></span>
                 <input type="password" name="password" dir="rtl" placeholder="رمز عبور"
                 value="{{ form.password.value }}"
-                autocomplete="off" class="form-control border border-danger" id="id_password">
+                autocomplete="off" class="form-control is-invalid border border-danger" id="id_password">
                 <div class="input-group-append border border-danger">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
@@ -53,7 +56,9 @@
             </div>
         {% else %}
             <div class="input-group mb-3 flex-row-reverse">
-                {{ form.password|add_class:"form-control"|attr:"autocomplete:off"|attr:"placeholder:رمز عبور"|attr:"dir:rtl"}}
+                <span class="fa-solid fa-eye fa-eye-slash 
+                pt-2 pl-2 border border-left-0 rounded" id="toggle-icon"></span>
+                {{ form.password|add_class:"form-control border-left-0"|attr:"autocomplete:off"|attr:"placeholder:رمز عبور"|attr:"dir:rtl"}}
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
@@ -73,3 +78,23 @@
         <span class="text-muted">رمز عبور خود را فراموش کرده‌ام</span>
     </p>
 {% endblock %}
+
+{% block scripts %}
+<script>
+    const passwordField = document.getElementById("id_password");
+    const togglePassword = document.querySelector("#toggle-icon");
+
+    togglePassword.addEventListener("click", function () {
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        togglePassword.classList.remove("fa-eye");
+        togglePassword.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        togglePassword.classList.remove("fa-eye-slash");
+        togglePassword.classList.add("fa-eye");
+    }
+    });
+</script>
+{% endblock %}
+
