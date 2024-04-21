@@ -13,29 +13,31 @@
         {{ form.confirm_password|as_crispy_field }}
     </div>
   {% endif %}
-  {% if request.resolver_match.url_name == 'user_create' %}
     <div class="col-12 col-xl-6 mb-3">
       <label>{{ form.access_groups.label }}*</label>
-      <select name="access_groups" class="selectmultiple form-control" id="id_access_groups" multiple>
+      <select name="access_groups" class="selectmultiple form-control 
+      {% if form.access_groups.errors %}border border-danger{% endif %}" 
+      id="id_access_groups" multiple>
+        {% if request.resolver_match.url_name == 'user_create' %}
           {% for group in all_groups %}
               <option value="{{ group.name }}">
                   {{ group.name }}
               </option>
           {% endfor %}
+        {% else %}
+          {% for group in all_groups %}
+              <option value="{{ group.name }}" {% if group in user_groups %}selected{% endif %}>
+                  {{ group.name }}
+              </option>
+          {% endfor %}
+        {% endif %}
       </select>
+      {% if form.access_groups.errors %}
+          {% for error in form.access_groups.errors %}
+              <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+          {% endfor %}
+      {% endif %}
     </div>
-  {% else %}
-    <div class="col-12 col-xl-6 mb-3">
-        <label>{{ form.access_groups.label }}*</label>
-        <select name="access_groups" class="selectmultiple form-control" id="id_access_groups" multiple>
-            {% for group in all_groups %}
-                <option value="{{ group.name }}" {% if group in user_groups %}selected{% endif %}>
-                    {{ group.name }}
-                </option>
-            {% endfor %}
-          </select>
-    </div>
-  {% endif %}
     <div class="col-12 col-xl-6 mb-3">
         {{ form.mobile_number|as_crispy_field }}
     </div>

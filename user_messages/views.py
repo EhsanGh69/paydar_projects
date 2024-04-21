@@ -59,11 +59,10 @@ class SearchMessages(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         global query
-        not_found = False
         query = self.request.GET.get('data_search')
 
         global search_result
-        search_result = Message.objects.search(query).filter(
+        search_result = Message.objects.search(query).filter( # type: ignore
             Q(receiver=self.request.user, visible_receiver=True) |
             Q(sender=self.request.user, visible_sender=True)
         )
@@ -174,7 +173,7 @@ def message_detail(request, **kwargs):
 
     context = {
         'msg': msg,
-        'j_date_time': datetime2jalali(msg.date_time).strftime('%Y/%m/%d _ %H:%M:%S'),
+        'j_date_time': datetime2jalali(msg.date_time).strftime('%Y/%m/%d _ %H:%M:%S'), # type: ignore
         'received_count': messages_filters(request)['received_count'],
         'sent_count': messages_filters(request)['sent_count'],
         'unseen_count': messages_filters(request)['unseen_count'],

@@ -2,7 +2,7 @@ from django import forms
 from django.core import validators
 from django.contrib.auth.models import Group
 
-from utils.tools import none_numeric_value, valid_select_permissions
+from utils.tools import none_numeric_value, valid_select_permissions, password_validation
 
 from .models import User
 
@@ -183,8 +183,8 @@ class AddUserForm(forms.Form):
 
     access_groups = forms.MultipleChoiceField(
         choices=GROUP_CHOICES,
-        required=True,
-        label='گروه‌های دسترسی'              
+        required=False,
+        label='گروه‌های دسترسی' 
     )
 
     mobile_number = forms.CharField(
@@ -193,7 +193,8 @@ class AddUserForm(forms.Form):
         label='شماره همراه',
         validators=[
             validators.RegexValidator(
-                regex=r'^09\d{9}$',
+                # regex=r'^09\d{9}$',
+                regex=r'^(?:(?:(?:\\+?|00)(98))|(0))?((?:90|91|92|93|99)[0-9]{8})$',
                 message="شماره همراه وارد شده معتبر نمی‌باشد"
             )
         ]
@@ -221,7 +222,7 @@ class AddUserForm(forms.Form):
         if is_exits_username:
             raise forms.ValidationError('کاربری با نام کاربری وارد شده وجود دارد، لطفا نام کاربری دیگری وارد کنید')
         
-        for char in username:
+        for char in username: # type: ignore
             err_count = 0
             for valid_range in valid_ranges:
                 if ord(char) not in valid_range:
@@ -233,16 +234,13 @@ class AddUserForm(forms.Form):
 
 
     def clean_password(self):
+        username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
-        nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+        check_password = password_validation(password, username) # type: ignore
         
-        list_control = []
-        for char in password:
-            if char in nums:
-                list_control.append('n')
-            else:
-                list_control.append('l')
-        if 'n' not in list_control or 'l' not in list_control:
+        if check_password == "similar_err":
+            raise forms.ValidationError('رمز عبور نباید شبیه نام کاربری باشد')
+        elif check_password == "combine_err":
             raise forms.ValidationError('رمز عبور باید ترکیبی از حروف و اعداد باشد')
         
         return password
@@ -256,6 +254,7 @@ class AddUserForm(forms.Form):
         
         return confirm_password
     
+
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data.get('mobile_number')
         is_exits_mobile_number = User.objects.filter(mobile_number=mobile_number).exists()
@@ -302,7 +301,7 @@ class UpdateUserForm(forms.Form):
         label='شماره همراه',
         validators=[
             validators.RegexValidator(
-                regex=r'^09\d{9}$',
+                regex=r'^(?:(?:(?:\\+?|00)(98))|(0))?((?:90|91|92|93|99)[0-9]{8})$',
                 message="شماره همراه وارد شده معتبر نمی‌باشد"
             )
         ]
@@ -332,7 +331,7 @@ class UpdateUserForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         valid_ranges = [range(48, 58), range(65, 91), range(97, 123), [43, 45, 46, 64, 95]]
-        for char in username:
+        for char in username: # type: ignore
             err_count = 0
             for valid_range in valid_ranges:
                 if ord(char) not in valid_range:

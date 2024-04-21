@@ -15,6 +15,19 @@ class UserManager(BaseUserManager):
             Q(last_name__icontains=query)
         )
         return self.get_queryset().filter(lookup).distinct()
+    
+    def create_superuser(self, email, password):
+        """
+        Creates and saves a superuser with the given email and password.
+        """
+        user = self.create_user( # type: ignore
+            email,
+            password=password,
+        )
+        user.staff = True
+        user.admin = True
+        user.save(using=self._db)
+        return user
 
 
 class User(AbstractUser):
@@ -23,10 +36,10 @@ class User(AbstractUser):
     objects = UserManager()
 
     def jalali_date_joined(self):
-        return datetime2jalali(self.date_joined).strftime('%Y/%m/%d _ %H:%M:%S')
+        return datetime2jalali(self.date_joined).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
     
     def jalali_last_login(self):
-        return datetime2jalali(self.last_login).strftime('%Y/%m/%d _ %H:%M:%S') 
+        return datetime2jalali(self.last_login).strftime('%Y/%m/%d _ %H:%M:%S')  # type: ignore
     
 
 class UserActionsLog(models.Model):

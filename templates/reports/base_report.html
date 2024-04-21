@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{% static 'panel/dist/css/bootstrap_rtl.min.css' %}">
+    <link rel="stylesheet" href="{% static 'panel/css/bootstrap_rtl.min.css' %}">
     <link rel="stylesheet" href="{% static 'farsi_fonts/farsi_font.css' %}" />
     <title>گزارش {% block title %}{% endblock %}</title>
 </head>
@@ -19,7 +19,7 @@
         <div class="row p-5 border" id="printable">
             <div class="text-center w-100 border pb-3">
                 <div class="my-2">
-                    <img src="{% static 'panel/dist/img/logo.700.png' %}" alt="logo" width="100">
+                    <img src="{% static 'panel/img/logo.700.png' %}" alt="logo" width="100">
                 </div>
                 <h4>شرکت املاک پایدار</h4>
                 {% block report_title %}{% endblock %}

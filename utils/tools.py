@@ -72,7 +72,7 @@ def password_validation(password, username):
     if 'n' not in list_control or 'l' not in list_control:
         return 'combine_err'
     # checking password similarity to username
-    elif username_letters.union(password_letters) == username_letters:
+    elif username_letters.intersection(password_letters) == username_letters:
         return 'similar_err'
     else:
         return 'not_err' 
@@ -361,7 +361,7 @@ def messages_pagination(request):
             Q(receiver=request.user, visible_receiver=True, archive_receiver=True) |
             Q(sender=request.user, visible_sender=True, archive_sender=True)
         )
-        paginator = Paginator(archived_messages, 1)
+        paginator = Paginator(archived_messages, 10)
         page_obj = paginator.get_page(page_number)
         return page_obj
 

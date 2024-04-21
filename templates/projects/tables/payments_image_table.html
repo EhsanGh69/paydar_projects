@@ -91,86 +91,122 @@
                                 <td>{{ row }}</td>
                                 <td>{{ payments_image.project }}</td>
 
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#designer_office{{ row }}">
+                                {% if payments_image.designer_office %}
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#designer_office{{ row }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+
+                                    {% include 'partials/img_modal.html' with img_type='designer_office' id=row img_src=payments_image.designer_office.url label='فیش پرداختی دفتر طراح' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
+                                
+                                {% if payments_image.supervisors %}
+                                    <td class="text-center">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#supervisors{{ row }}">
                                         <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                        </a>
+                                    </td>
 
-                                {% include 'partials/img_modal.html' with img_type='designer_office' id=row img_src=payments_image.designer_office.url label='فیش پرداختی دفتر طراح' owner=payments_image.project %}
+                                    {% include 'partials/img_modal.html' with img_type='supervisors' id=row img_src=payments_image.supervisors.url label='فیش پرداختی ناظرین' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
 
-                                <td class="text-center">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#supervisors{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                {% if payments_image.engineer_system %}
+                                    <td class="text-center">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#engineer_system{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
 
-                                {% include 'partials/img_modal.html' with img_type='supervisors' id=row img_src=payments_image.supervisors.url label='فیش پرداختی ناظرین' owner=payments_image.project %}
-
-                                <td class="text-center">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#engineer_system{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
-
-                                {% include 'partials/img_modal.html' with img_type='engineer_system' id=row img_src=payments_image.engineer_system.url label='فیش پرداختی نظام مهندسی' owner=payments_image.project %}
+                                    {% include 'partials/img_modal.html' with img_type='engineer_system' id=row img_src=payments_image.engineer_system.url label='فیش پرداختی نظام مهندسی' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
                                 
-                                <td class="text-center">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#sketch_map{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                {% if payments_image.sketch_map %}
+                                    <td class="text-center">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#sketch_map{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
 
-                                {% include 'partials/img_modal.html' with img_type='sketch_map' id=row img_src=payments_image.sketch_map.url label='فیش پرداختی تهیه نقشه کروکی' owner=payments_image.project %}
+                                    {% include 'partials/img_modal.html' with img_type='sketch_map' id=row img_src=payments_image.sketch_map.url label='فیش پرداختی تهیه نقشه کروکی' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
                                 
-                                <td class="text-center">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#export_permit{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                {% if payments_image.export_permit %}
+                                    <td class="text-center">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#export_permit{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
 
-                                {% include 'partials/img_modal.html' with img_type='export_permit' id=row img_src=payments_image.export_permit.url label='فیش پرداختی عوارض صدور پروانه' owner=payments_image.project %}
+                                    {% include 'partials/img_modal.html' with img_type='export_permit' id=row img_src=payments_image.export_permit.url label='فیش پرداختی عوارض صدور پروانه' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
                                 
-                                <td class="text-center">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#visit_toll{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                {% if payments_image.visit_toll %}
+                                    <td class="text-center">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#visit_toll{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
 
-                                {% include 'partials/img_modal.html' with img_type='visit_toll' id=row img_src=payments_image.visit_toll.url label='فیش پرداختی عوارض بازدید' owner=payments_image.project %}
+                                    {% include 'partials/img_modal.html' with img_type='visit_toll' id=row img_src=payments_image.visit_toll.url label='فیش پرداختی عوارض بازدید' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
                                 
-                                <td class="text-center">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#education_share{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                {% if payments_image.education_share %}
+                                    <td class="text-center">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#education_share{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
 
-                                {% include 'partials/img_modal.html' with img_type='education_share' id=row img_src=payments_image.education_share.url label='فیش پرداختی سهم آموزش و پرورش' owner=payments_image.project %}
+                                    {% include 'partials/img_modal.html' with img_type='education_share' id=row img_src=payments_image.education_share.url label='فیش پرداختی سهم آموزش و پرورش' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
                                 
-                                <td class="text-center">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#fire_stations_share{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                {% if payments_image.fire_stations_share %}
+                                    <td class="text-center">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#fire_stations_share{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
 
-                                {% include 'partials/img_modal.html' with img_type='fire_stations_share' id=row img_src=payments_image.fire_stations_share.url label='فیش پرداختی سهم آتشنشانی' owner=payments_image.project %}
+                                    {% include 'partials/img_modal.html' with img_type='fire_stations_share' id=row img_src=payments_image.fire_stations_share.url label='فیش پرداختی سهم آتشنشانی' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
                                 
-                                <td class="text-center">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#social_security_share{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                {% if payments_image.social_security_share %}
+                                    <td class="text-center">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#social_security_share{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
 
-                                {% include 'partials/img_modal.html' with img_type='social_security_share' id=row img_src=payments_image.social_security_share.url label='فیش پرداختی سهم تأمین اجتماعی' owner=payments_image.project %}
+                                    {% include 'partials/img_modal.html' with img_type='social_security_share' id=row img_src=payments_image.social_security_share.url label='فیش پرداختی سهم تأمین اجتماعی' owner=payments_image.project %}
+                                {% else %}
+                                    <td class="text-center">_</td>
+                                {% endif %}
 
                                 <td data-sort="{{ payments_image.create_record|date:'Ymd-HMS' }}" class="border-left">
                                     {{ payments_image.create_record|jformat:'%d / %m / %Y - %H:%M:%S' }}

@@ -2,9 +2,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, DeleteView, FormView, CreateView, DetailView
+from django.views.generic import ListView, DeleteView, FormView
 from django.contrib.auth.models import Group, Permission
 
 from utils.tools import valid_select_permissions, password_validation
@@ -49,10 +49,10 @@ class ChangePassword(LoginRequiredMixin, SuccessMessageMixin, FormView):
         old_password = form.cleaned_data.get('old_password')
         new_password = form.cleaned_data.get('new_password')
         confirm_new_password = form.cleaned_data.get('confirm_new_password')
-        check_old_password = check_password(old_password, user.password)
-        validation_result = password_validation(new_password, user.username)
+        check_old_password = check_password(old_password, user.password) # type: ignore
+        validation_result = password_validation(new_password, user.username) # type: ignore
         if check_old_password and validation_result == 'not_err':
-            user.set_password(new_password)
+            user.set_password(new_password) # type: ignore
             user.save()
             update_session_auth_hash(self.request, user)
             return super().form_valid(form)
@@ -106,7 +106,7 @@ class EditAccount(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return super().form_valid(form)
 
 
-# Users - Start
+#? Users - Start
 
 
 class UsersList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -140,19 +140,25 @@ class CreateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
     
     def form_valid(self, form):
         username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password')
+        password = make_password(form.cleaned_data.get('password'))
         mobile_number = form.cleaned_data.get('mobile_number')
         first_name = form.cleaned_data.get('first_name')
         last_name = form.cleaned_data.get('last_name')
         access_groups = form.cleaned_data.get('access_groups')
-        user = User.objects.create(username=username, password=password, mobile_number=mobile_number,
-                                    first_name=first_name, last_name=last_name)
-        
-        for access_group in access_groups:
-            group = get_object_or_404(Group, name=access_group)
-            user.groups.add(group)
+
+        if self.request.POST.get('access_groups') is None :
+            form.add_error('access_groups', 'لطفا گروه های دسترسی کاربر را تعیین کنید')
+            return super().form_invalid(form)
+        else:
+            user = User.objects.create(username=username, password=password, mobile_number=mobile_number,
+                                        first_name=first_name, last_name=last_name)
+            
+            for access_group in access_groups: # type: ignore
+                group = get_object_or_404(Group, name=access_group)
+                user.groups.add(group)
 
         return super().form_valid(form)
+        
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
