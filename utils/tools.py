@@ -106,7 +106,7 @@ def fund_validation(**kwargs):
     if operation_type == 'rem':
         cost_amount = kwargs['form'].cleaned_data.get('cost_amount')
         cost_description = kwargs['form'].cleaned_data.get('cost_description')
-        receipt_image = kwargs['form'].cleaned_data.get('receipt_image')
+        # receipt_image = kwargs['form'].cleaned_data.get('receipt_image')
         removal_date = kwargs['form'].cleaned_data.get('removal_date')
         fund_person = kwargs['model'].objects.filter(full_name=full_name)
         if fund_person:
@@ -119,9 +119,9 @@ def fund_validation(**kwargs):
             if removal_date is None:
                 kwargs['form'].add_error('removal_date', 'لطفا تاریخ برداشت را انتخاب نمایید')
                 fund_valid = False
-            if kwargs['url_name'] == 'fund_create' and receipt_image is None:
-                kwargs['form'].add_error('receipt_image', 'لطفا تصویر فیش پرداختی را بارگذاری نمایید')
-                fund_valid = False
+            # if kwargs['url_name'] == 'fund_create' and receipt_image is None:
+            #     kwargs['form'].add_error('receipt_image', 'لطفا تصویر فیش پرداختی را بارگذاری نمایید')
+            #     fund_valid = False
             result_validation = image_size_validation(kwargs['form'], ['receipt_image'])
             if not result_validation:
                 fund_valid = False
@@ -138,16 +138,16 @@ def fund_validation(**kwargs):
     else:
         charge_amount = kwargs['form'].cleaned_data.get('charge_amount')
         charge_date = kwargs['form'].cleaned_data.get('charge_date')
-        charge_image = kwargs['form'].cleaned_data.get('charge_image')
+        # charge_image = kwargs['form'].cleaned_data.get('charge_image')
         if charge_amount == 0:
             kwargs['form'].add_error('charge_amount', 'لطفا مبلغ واریزی را وارد نمایید')
             fund_valid = False
         if charge_date is None:
             kwargs['form'].add_error('charge_date', 'لطفا تاریخ واریز را وارد نمایید')
             fund_valid = False
-        if kwargs['url_name'] == 'fund_create' and charge_image is None:
-            kwargs['form'].add_error('charge_image', 'لطفا تصویر فیش واریزی را بارگذاری نمایید')
-            fund_valid = False
+        # if kwargs['url_name'] == 'fund_create' and charge_image is None:
+        #     kwargs['form'].add_error('charge_image', 'لطفا تصویر فیش واریزی را بارگذاری نمایید')
+        #     fund_valid = False
         result_validation = image_size_validation(kwargs['form'], ['charge_image'])
         if not result_validation:
             fund_valid = False
@@ -161,7 +161,7 @@ def cash_box_validation(**kwargs):
     if operation_type == 'rem':
         removal_amount = kwargs['form'].cleaned_data.get('removal_amount')
         removal_description = kwargs['form'].cleaned_data.get('removal_description')
-        removal_image = kwargs['form'].cleaned_data.get('removal_image')
+        # removal_image = kwargs['form'].cleaned_data.get('removal_image')
         removal_date = kwargs['form'].cleaned_data.get('removal_date')
         rem_operate = kwargs['model'].objects.filter(operation_type='rem')
         set_operate = kwargs['model'].objects.filter(operation_type='set')
@@ -175,9 +175,9 @@ def cash_box_validation(**kwargs):
             if removal_date is None:
                 kwargs['form'].add_error('removal_date', 'لطفا تاریخ برداشت را انتخاب نمایید')
                 cashbox_valid = False
-            if kwargs['url_name'] == 'cash_box_create' and removal_image is None:
-                kwargs['form'].add_error('removal_image', 'لطفا تصویر فیش برداشت را بارگذاری نمایید')
-                cashbox_valid = False
+            # if kwargs['url_name'] == 'cash_box_create' and removal_image is None:
+            #     kwargs['form'].add_error('removal_image', 'لطفا تصویر فیش برداشت را بارگذاری نمایید')
+            #     cashbox_valid = False
             result_validation = image_size_validation(kwargs['form'], ['removal_image'])
             if not result_validation:
                 cashbox_valid = False
@@ -200,7 +200,7 @@ def cash_box_validation(**kwargs):
     else:
         settle_amount = kwargs['form'].cleaned_data.get('settle_amount')
         settle_description = kwargs['form'].cleaned_data.get('settle_description')
-        settle_image = kwargs['form'].cleaned_data.get('settle_image')
+        # settle_image = kwargs['form'].cleaned_data.get('settle_image')
         settle_date = kwargs['form'].cleaned_data.get('settle_date')
         if settle_amount == 0:
             kwargs['form'].add_error('settle_amount', 'لطفا مبلغ واریزی را وارد نمایید')
@@ -211,9 +211,9 @@ def cash_box_validation(**kwargs):
         if settle_date is None:
             kwargs['form'].add_error('settle_date', 'لطفا تاریخ واریز را انتخاب نمایید')
             cashbox_valid = False
-        if kwargs['url_name'] == 'cash_box_create' and settle_image is None:
-            kwargs['form'].add_error('settle_image', 'لطفا تصویر فیش واریز را بارگذاری نمایید')
-            cashbox_valid = False
+        # if kwargs['url_name'] == 'cash_box_create' and settle_image is None:
+        #     kwargs['form'].add_error('settle_image', 'لطفا تصویر فیش واریز را بارگذاری نمایید')
+        #     cashbox_valid = False
         result_validation = image_size_validation(kwargs['form'], ['settle_image'])
         if not result_validation:
             cashbox_valid = False

@@ -80,7 +80,7 @@ class Personnel(models.Model):
     job = models.CharField(max_length=100, verbose_name="رشته شغلی")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
     address = models.TextField(verbose_name="آدرس")
-    contract_image = models.ImageField(upload_to='images/personnel', verbose_name="تصویر قرارداد")
+    contract_image = models.ImageField(upload_to='images/personnel', null=True, blank=True, verbose_name="تصویر قرارداد")
 
     objects = PersonnelManager()
 
@@ -106,7 +106,7 @@ class PartnersManager(models.Manager):
 class Partners(models.Model):
     investment_amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ سرمایه‌گذاری')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_partners', verbose_name='پروژه')
-    contract_image = models.ImageField(upload_to='images/partners', verbose_name="تصویر قرارداد")
+    contract_image = models.ImageField(upload_to='images/partners', null=True, blank=True, verbose_name="تصویر قرارداد")
     full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
     address = models.TextField(verbose_name="آدرس")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
@@ -157,7 +157,7 @@ class BuyersSellers(models.Model):
     full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
     address = models.TextField(verbose_name="آدرس")
-    contract_image = models.ImageField(upload_to='images/buyers_sellers', verbose_name="تصویر قرارداد")
+    contract_image = models.ImageField(upload_to='images/buyers_sellers', null=True, blank=True, verbose_name="تصویر قرارداد")
     payment_order = models.CharField(max_length=3, choices=PAYMENT_ORDER_CHOICES, verbose_name='ترتیب پرداخت')
     current_roof = models.CharField(max_length=50, blank=True, null=True, verbose_name="سقف کنونی")
     payment_amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ پرداختی')

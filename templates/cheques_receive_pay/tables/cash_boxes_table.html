@@ -1,5 +1,6 @@
 {% load accounting_tags %}
 {% load jformat %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-sm-12 table-responsive">
@@ -88,13 +89,20 @@
                                     <td data-sort="{{ cash_box.settle_amount }}">
                                         {{ cash_box.formatted_settle_amount }}
                                     </td>
-                                    <td class="text-center col-img">
-                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                        data-target="#settle_image{{ row }}">
-                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                        </a>
-                                    </td>
-                                    {% include 'partials/img_modal.html' with img_type='settle_image' id=row img_src=cash_box.settle_image.url label='فیش واریز به مبلغ' owner=cash_box.formatted_settle_amount %}
+                                    {% if cash_box.settle_image %}
+                                        <td class="text-center col-img">
+                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                            data-target="#settle_image{{ row }}">
+                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                            </a>
+                                        </td>
+                                        {% include 'partials/img_modal.html' with img_type='settle_image' id=row img_src=cash_box.settle_image.url label='فیش واریز به مبلغ' owner=cash_box.formatted_settle_amount %}
+                                    {% else %}
+                                        <td class="text-center text-danger col-img">
+                                            {% none_img_tag %}
+                                        </td>
+                                    {% endif %}
+                                    
                                     <td>{{ cash_box.settle_description }}</td>     
                                     <td>{{ cash_box.settle_date|jformat:'%Y/%m/%d' }}</td>
                                 {% else %}
@@ -108,13 +116,19 @@
                                     <td data-sort="{{ cash_box.removal_amount }}">
                                         {{ cash_box.formatted_removal_amount }}
                                     </td>
-                                    <td class="text-center col-img">
-                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                        data-target="#removal_image{{ row }}">
-                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                        </a>
-                                    </td>
-                                    {% include 'partials/img_modal.html' with img_type='removal_image' id=row img_src=cash_box.removal_image.url label='فیش برداشت به مبلغ' owner=cash_box.formatted_removal_amount %}
+                                    {% if cash_box.removal_image %}
+                                        <td class="text-center col-img">
+                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                            data-target="#removal_image{{ row }}">
+                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                            </a>
+                                        </td>
+                                        {% include 'partials/img_modal.html' with img_type='removal_image' id=row img_src=cash_box.removal_image.url label='فیش برداشت به مبلغ' owner=cash_box.formatted_removal_amount %}
+                                    {% else %}
+                                        <td class="text-center text-danger col-img">
+                                            {% none_img_tag %}
+                                        </td>
+                                    {% endif %}
                                     <td>{{ cash_box.removal_description }}</td> 
                                     <td>{{ cash_box.removal_date|jformat:'%Y/%m/%d' }}</td>
                                 {% else %}

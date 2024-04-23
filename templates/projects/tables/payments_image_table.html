@@ -1,4 +1,5 @@
 {% load jformat %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-sm-12 table-responsive">
@@ -101,7 +102,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='designer_office' id=row img_src=payments_image.designer_office.url label='فیش پرداختی دفتر طراح' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
                                 
                                 {% if payments_image.supervisors %}
@@ -114,7 +117,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='supervisors' id=row img_src=payments_image.supervisors.url label='فیش پرداختی ناظرین' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
 
                                 {% if payments_image.engineer_system %}
@@ -127,7 +132,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='engineer_system' id=row img_src=payments_image.engineer_system.url label='فیش پرداختی نظام مهندسی' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
                                 
                                 {% if payments_image.sketch_map %}
@@ -140,7 +147,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='sketch_map' id=row img_src=payments_image.sketch_map.url label='فیش پرداختی تهیه نقشه کروکی' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
                                 
                                 {% if payments_image.export_permit %}
@@ -153,7 +162,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='export_permit' id=row img_src=payments_image.export_permit.url label='فیش پرداختی عوارض صدور پروانه' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
                                 
                                 {% if payments_image.visit_toll %}
@@ -166,7 +177,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='visit_toll' id=row img_src=payments_image.visit_toll.url label='فیش پرداختی عوارض بازدید' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
                                 
                                 {% if payments_image.education_share %}
@@ -179,7 +192,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='education_share' id=row img_src=payments_image.education_share.url label='فیش پرداختی سهم آموزش و پرورش' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
                                 
                                 {% if payments_image.fire_stations_share %}
@@ -192,7 +207,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='fire_stations_share' id=row img_src=payments_image.fire_stations_share.url label='فیش پرداختی سهم آتشنشانی' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
                                 
                                 {% if payments_image.social_security_share %}
@@ -205,7 +222,9 @@
 
                                     {% include 'partials/img_modal.html' with img_type='social_security_share' id=row img_src=payments_image.social_security_share.url label='فیش پرداختی سهم تأمین اجتماعی' owner=payments_image.project %}
                                 {% else %}
-                                    <td class="text-center">_</td>
+                                    <td class="text-center text-danger">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
 
                                 <td data-sort="{{ payments_image.create_record|date:'Ymd-HMS' }}" class="border-left">

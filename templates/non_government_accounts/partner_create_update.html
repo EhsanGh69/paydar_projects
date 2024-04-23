@@ -1,4 +1,5 @@
 {% extends 'base_create_update.html' %}
+{% load static %}
 
 {% block title %}
     {% if request.resolver_match.url_name == 'partner_create' %}
@@ -18,4 +19,8 @@
 
 {% block form %}
 	{% include "non_government_accounts/forms/partner_form.html" %}
+{% endblock %}
+
+{% block form_control %}
+    <script src="{% static 'scripts/non_government_accounts/partner_form.js' %}"></script>
 {% endblock %}

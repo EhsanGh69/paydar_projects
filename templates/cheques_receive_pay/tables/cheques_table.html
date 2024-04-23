@@ -1,4 +1,5 @@
 {% load jformat %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-sm-12 table-responsive">
@@ -111,13 +112,20 @@
                                         <i class="fa fa-minus-circle" style="color: red;"></i>
                                     {% endif %}
                                 </td>
-                                <td class="text-center col-img">
-                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#cheque_image{{ row }}">
-                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
-                                {% include 'partials/img_modal.html' with img_type='cheque_image' id=row img_src=cheque.cheque_image.url label='چک بابت' owner=cheque.cheque_for %}
+                                {% if cheque.cheque_image %}
+                                    <td class="text-center col-img">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#cheque_image{{ row }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+                                    {% include 'partials/img_modal.html' with img_type='cheque_image' id=row img_src=cheque.cheque_image.url label='چک بابت' owner=cheque.cheque_for %}
+                                {% else %}
+                                    <td class="text-center text-danger col-img">
+                                        {% none_img_tag %}
+                                    </td>
+                                {% endif %}
+                                
 
                                 <td data-sort="{{ cheque.export_receive_date|date:'Ymd' }}">
                                     {{ cheque.export_receive_date|jformat:'%d / %m / %Y' }}

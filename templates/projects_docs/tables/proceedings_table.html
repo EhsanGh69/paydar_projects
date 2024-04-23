@@ -1,4 +1,5 @@
 {% load jformat %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-sm-12 table-responsive">
@@ -67,15 +68,20 @@
                                     {% endif %}
                                 </td>
 
-                                <td class="text-center col-img">
-                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#proceeding_image{{ row }}">
-                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
-
-                                {% include 'partials/img_modal.html' with img_type='proceeding_image' id=row img_src=proceeding.proceeding_image.url label='صورت جلسه‌' owner=proceeding.account_party %}
-
+                                {% if proceeding.proceeding_image %}
+                                    <td class="text-center col-img">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#proceeding_image{{ row }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+                                    {% include 'partials/img_modal.html' with img_type='proceeding_image' id=row img_src=proceeding.proceeding_image.url label='صورت جلسه‌' owner=proceeding.account_party %}
+                                {% else %}
+                                    <td class="text-center text-danger col-img">
+                                        {% none_img_tag %}
+                                    </td>
+                                {% endif %}
+                                
                                 <td data-sort="{{ proceeding.proceeding_date|date:'Ymd' }}">
                                     {{ proceeding.proceeding_date|jformat:'%d / %m / %Y' }}
                                 </td>

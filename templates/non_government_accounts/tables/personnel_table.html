@@ -1,3 +1,5 @@
+{% load base_tags %}
+
 <div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
@@ -48,15 +50,19 @@
                                     <td>{{ person.job }}</td>
                                     <td>{{ person.phone }}</td>
                                     <td>{{ person.address }}</td>
-
-                                    <td class="text-center col-img">
-                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                        data-target="#contract{{ row }}">
-                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                        </a>
-                                    </td>
-
-                                    {% include 'partials/img_modal.html' with img_type='contract' id=row img_src=person.contract_image.url label='قرارداد' owner=person.full_name %}
+                                    {% if person.contract_image %}
+                                        <td class="text-center col-img">
+                                            <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                            data-target="#contract{{ row }}">
+                                                <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                            </a>
+                                        </td>
+                                        {% include 'partials/img_modal.html' with img_type='contract' id=row img_src=person.contract_image.url label='قرارداد' owner=person.full_name %}
+                                    {% else %}
+                                        <td class="text-center text-danger col-img">
+                                            {% none_img_tag %}
+                                        </td>
+                                    {% endif %}
                                     
                                     {% if perms.non_government_accounts.delete_personnel or perms.non_government_accounts.change_personnel %}
                                         <td class="action-td text-center">

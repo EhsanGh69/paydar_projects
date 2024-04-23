@@ -35,7 +35,7 @@ class Cheques(models.Model):
     bank_branch = models.CharField(max_length=50, verbose_name='بانک و شعبه')
     cheque_amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ')
     registered = models.BooleanField(default=False, verbose_name='ثبت شده')
-    cheque_image = models.ImageField(upload_to='images/cheques', verbose_name='تصویر چک')
+    cheque_image = models.ImageField(upload_to='images/cheques', null=True, blank=True, verbose_name='تصویر چک')
     export_receive_date = jmodels.jDateField(verbose_name='تاریخ صدور / دریافت')
     due_date = jmodels.jDateField(verbose_name='تاریخ سررسید')
     account_owner = models.CharField(max_length=250, verbose_name='صاحب حساب')
@@ -85,7 +85,7 @@ class ReceivePay(models.Model):
     amount = models.PositiveBigIntegerField(default=0, verbose_name='مبلغ')
     regard_to = models.CharField(max_length=100, verbose_name='بابت')
     date = jmodels.jDateField(verbose_name='تاریخ')
-    receipt_image = models.ImageField(upload_to='images/receive_pays', verbose_name='تصویر فیش')
+    receipt_image = models.ImageField(upload_to='images/receive_pays', null=True, blank=True, verbose_name='تصویر فیش')
     create_record = jmodels.jDateTimeField(auto_now_add=True)
     update_record = jmodels.jDateTimeField(auto_now=True)
 

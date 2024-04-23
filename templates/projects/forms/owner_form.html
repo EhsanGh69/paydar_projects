@@ -1,5 +1,6 @@
 {% load crispy_forms_tags %}
 {% load account_tags %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-12 col-xl-6 mb-3">
@@ -10,7 +11,7 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.national_card_image|as_crispy_field }}
-        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        <small class="form-text text-muted">{% img_size_msg %}</small>
         {% if 'national_card_image' in invalid_fields and form_invalid %}
             <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
         {% endif %}
@@ -22,7 +23,7 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.birth_certificate_image|as_crispy_field }}
-        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        <small class="form-text text-muted">{% img_size_msg %}</small>
         {% if 'birth_certificate_image' in invalid_fields and form_invalid %}
             <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
         {% endif %}
@@ -34,7 +35,7 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
         {{ form.ownership_document_image|as_crispy_field }}
-        <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+        <small class="form-text text-muted">{% img_size_msg %}</small>
         {% if 'ownership_document_image' in invalid_fields and form_invalid %}
             <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
         {% endif %}

@@ -1,5 +1,6 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-12 col-xl-6 mb-3">
@@ -49,7 +50,7 @@
     </div>
     <div class="col-12 col-xl-6 mb-3">
       {{ form.contract_image|as_crispy_field }}
-      <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+      <small class="form-text text-muted">{% img_size_msg %}</small>
       {% if not size_valid and form_invalid %}
         <strong class="form-text text-danger" style="font-size:80%">حجم تصویر بیش از حد مجاز است</strong>
         {% endif %}

@@ -1,4 +1,5 @@
 {% load jformat %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-sm-12 table-responsive">
@@ -106,20 +107,27 @@
 
                                 <td>{{ official_doc.doc_title }}</td>
 
-                                <td class="text-center col-img">
-                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#doc_image{{ row }}">
-                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
+                                {% if official_doc.doc_image %}
+                                    <td class="text-center col-img">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#doc_image{{ row }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
 
-                                {% if official_doc.letter_type %}
-                                    {% include 'partials/img_modal.html' with img_type='doc_image' id=row img_src=official_doc.doc_image.url label='‌نامه‌ی مربوط به پروژه‌' owner=registered_doc.project %}
-                                {% elif official_doc.license_type %}
-                                    {% include 'partials/img_modal.html' with img_type='doc_image' id=row img_src=official_doc.doc_image.url label='‌پروانه‌ی مربوط به پروژه‌' owner=registered_doc.project %}
+                                    {% if official_doc.letter_type %}
+                                        {% include 'partials/img_modal.html' with img_type='doc_image' id=row img_src=official_doc.doc_image.url label='‌نامه‌ی مربوط به پروژه‌' owner=registered_doc.project %}
+                                    {% elif official_doc.license_type %}
+                                        {% include 'partials/img_modal.html' with img_type='doc_image' id=row img_src=official_doc.doc_image.url label='‌پروانه‌ی مربوط به پروژه‌' owner=registered_doc.project %}
+                                    {% else %}
+                                        {% include 'partials/img_modal.html' with img_type='doc_image' id=row img_src=official_doc.doc_image.url label='گواهی مربوط به پروژه‌' owner=registered_doc.doc_type %}
+                                    {% endif %}
                                 {% else %}
-                                    {% include 'partials/img_modal.html' with img_type='doc_image' id=row img_src=official_doc.doc_image.url label='گواهی مربوط به پروژه‌' owner=registered_doc.doc_type %}
+                                    <td class="text-center text-danger col-img">
+                                        {% none_img_tag %}
+                                    </td>
                                 {% endif %}
+                                
 
                                 <td data-sort="{{ official_doc.send_receive_date|date:'Ymd' }}">
                                     {{ official_doc.send_receive_date|jformat:'%d / %m / %Y' }}

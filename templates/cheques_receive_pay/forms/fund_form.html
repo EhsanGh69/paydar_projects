@@ -1,5 +1,6 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-12 col-xl-6 mb-3">
@@ -10,7 +11,15 @@
     </div>
     <fieldset class="input-group mb-3 d-none" id="rem-field">
         <div class="col-12 col-xl-6 mb-3">
-            {{ form.cost_amount|as_crispy_field }}
+            <label for="">{{ form.cost_amount.label }}*</label>
+            {% if form.cost_amount.errors %}
+                {{ form.cost_amount|add_class:"form-control border border-danger" }}
+                {% for error in form.cost_amount.errors %}
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+                {% endfor %}
+            {% else %}
+                {{ form.cost_amount|add_class:"form-control" }}
+            {% endif %}
             <small class="form-text text-muted">
                 <span id="cost_counter">0</span>
                 <span>ریال</span>
@@ -41,7 +50,7 @@
         <div class="col-12 col-xl-6 mb-3">
             {{ form.receipt_image|as_crispy_field }}
             <span class="text-danger d-none" id="receipt_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
-            <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+            <small class="form-text text-muted">{% img_size_msg %}</small>
             {% if request.FILES.receipt_image %}
                 <strong class="form-text text-muted" style="font-size:90%">
                     نام فایل: {{ request.FILES.receipt_image }}
@@ -51,7 +60,15 @@
     </fieldset>
     <fieldset class="input-group mb-3 d-none" id="set-field">
         <div class="col-12 col-xl-6 mb-3">
-            {{ form.charge_amount|as_crispy_field }}
+            <label for="">{{ form.charge_amount.label }}*</label>
+            {% if form.charge_amount.errors %}
+                {{ form.charge_amount|add_class:"form-control border border-danger" }}
+                {% for error in form.charge_amount.errors %}
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+                {% endfor %}
+            {% else %}
+                {{ form.charge_amount|add_class:"form-control" }}
+            {% endif %}
             <small class="form-text text-muted">
                 <span id="charge_counter">0</span>
                 <span>ریال</span>
@@ -71,7 +88,7 @@
         <div class="col-12 col-xl-6 mb-3">
             {{ form.charge_image|as_crispy_field }}
             <span class="text-danger d-none" id="charge_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
-            <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+            <small class="form-text text-muted">{% img_size_msg %}</small>
             {% if request.FILES.charge_image %}
                 <strong class="form-text text-muted" style="font-size:90%">
                     نام فایل: {{ request.FILES.charge_image }}

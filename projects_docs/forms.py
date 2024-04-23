@@ -85,10 +85,6 @@ class ConditionStatementsForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super(ConditionStatementsForm, self).__init__(*args, **kwargs)
-
-        self.fields['requested_amount'].help_text = "این فیلد توسط پیمانکار وارد شود"
-        self.fields['confirmed_amount'].help_text = "این فیلد توسط سرپرست کارگاه وارد شود"
-        self.fields['final_deposit_amount'].help_text = "این فیلد توسط حسابدار وارد شود"
         
 
 

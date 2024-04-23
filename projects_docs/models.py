@@ -36,7 +36,7 @@ class Contracts(models.Model):
     contract_type = models.CharField(max_length=3, choices=CONTRACT_TYPE_CHOICES, verbose_name='نوع قرارداد')
     contract_title = models.CharField(max_length=250, verbose_name='عنوان قرارداد')
     contract_party = models.CharField(max_length=250, verbose_name='طرف قرارداد')
-    contract_image = models.ImageField(upload_to='images/contract_images', verbose_name='تصویر قرارداد')
+    contract_image = models.ImageField(upload_to='images/contract_images', null=True, blank=True, verbose_name='تصویر قرارداد')
     contract_date = jmodels.jDateField(verbose_name='تاریخ قرارداد')
     create_record = jmodels.jDateTimeField(auto_now_add=True)
     update_record = jmodels.jDateTimeField(auto_now=True)
@@ -71,7 +71,7 @@ class Proceedings(models.Model):
                                 verbose_name='پروژه‌')
     account_party = models.CharField(max_length=250, verbose_name='طرف حساب')
     proceeding_type = models.CharField(max_length=3, choices=PROCEEDING_TYPE_CHOICES, verbose_name='نوع صورت جلسه')
-    proceeding_image = models.ImageField(upload_to='images/proceeding_image', verbose_name='تصویر صورت جلسه')
+    proceeding_image = models.ImageField(upload_to='images/proceeding_image', null=True, blank=True, verbose_name='تصویر صورت جلسه')
     proceeding_date = jmodels.jDateField(verbose_name='تاریخ صورت جلسه')
     create_record = jmodels.jDateTimeField(auto_now_add=True)
     update_record = jmodels.jDateTimeField(auto_now=True)
@@ -101,7 +101,7 @@ class Agreements(models.Model):
                                 related_name='agreement_projects',
                                 verbose_name='پروژه‌')
     account_party = models.CharField(max_length=250, verbose_name='طرف حساب')
-    agreement_image = models.ImageField(upload_to='images/agreement_images', verbose_name='تصویر توافق‌نامه')
+    agreement_image = models.ImageField(upload_to='images/agreement_images', null=True, blank=True, verbose_name='تصویر توافق‌نامه')
     agreement_date = jmodels.jDateField(verbose_name='تاریخ توافق‌نامه')
     create_record = jmodels.jDateTimeField(auto_now_add=True)
     update_record = jmodels.jDateTimeField(auto_now=True)
@@ -134,7 +134,7 @@ class BankReceipts(models.Model):
                                 related_name='bank_receipt_projects',
                                 verbose_name='پروژه‌')
     receive_or_pay = models.CharField(max_length=3, choices=RECEIVE_PAY_CHOICES, verbose_name='دریافت / پرداخت')
-    receipt_image = models.ImageField(upload_to='images/receipt_images', verbose_name='تصویر رسید بانکی')
+    receipt_image = models.ImageField(upload_to='images/receipt_images', null=True, blank=True, verbose_name='تصویر رسید بانکی')
     receipt_date = jmodels.jDateField(verbose_name='تاریخ')
     create_record = jmodels.jDateTimeField(auto_now_add=True)
     update_record = jmodels.jDateTimeField(auto_now=True)
@@ -260,7 +260,7 @@ class RegisteredDocs(models.Model):
                                 related_name='registered_doc_projects',
                                 verbose_name='پروژه‌')
     doc_type = models.CharField(max_length=3, choices=DOC_TYPE_CHOICES, verbose_name='نوع سند')
-    doc_image = models.ImageField(upload_to='images/registered_doc_images', verbose_name='تصویر سند')
+    doc_image = models.ImageField(upload_to='images/registered_doc_images', null=True, blank=True, verbose_name='تصویر سند')
     create_record = jmodels.jDateTimeField(auto_now_add=True)
     update_record = jmodels.jDateTimeField(auto_now=True)
 
@@ -312,7 +312,7 @@ class OfficialDocs(models.Model):
                                     null=True, blank=True,
                                     verbose_name='نوع پروانه')
     doc_title = models.CharField(max_length=250, verbose_name='عنوان سند')
-    doc_image = models.ImageField(upload_to='images/official_doc_images', verbose_name='تصویر سند')
+    doc_image = models.ImageField(upload_to='images/official_doc_images', null=True, blank=True, verbose_name='تصویر سند')
     send_receive_date = jmodels.jDateField(verbose_name='تاریخ ارسال / دریافت')
     create_record = jmodels.jDateTimeField(auto_now_add=True)
     update_record = jmodels.jDateTimeField(auto_now=True)

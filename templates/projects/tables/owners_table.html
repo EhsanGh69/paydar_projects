@@ -1,3 +1,5 @@
+{% load base_tags %}
+
 <div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
@@ -45,34 +47,48 @@
                                 <td>{{ row }}</td>
                                 <td>{{ owner.full_name }}</td>
                                 <td>{{ owner.phone }}</td>
-
-                                <td class="text-center col-img">
-                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#national_card{{ row }}">
+                                {% if owner.national_card_image %}
+                                    <td class="text-center col-img">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#national_card{{ row }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+                                    {% include 'partials/img_modal.html' with img_type='national_card' id=row img_src=owner.national_card_image.url label='کارت ملی' owner=owner.full_name %}
+                                {% else %}
+                                    <td class="text-center text-danger col-img">
+                                        {% none_img_tag %}
+                                    </td>
+                                {% endif %}
+                                
+                                {% if owner.birth_certificate_image %}
+                                    <td class="text-center col-img">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#birth_certificate{{ row }}">
                                         <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
-
-                                {% include 'partials/img_modal.html' with img_type='national_card' id=row img_src=owner.national_card_image.url label='کارت ملی' owner=owner.full_name %}
-
-                                <td class="text-center col-img">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#birth_certificate{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
-
-                                {% include 'partials/img_modal.html' with img_type='birth_certificate' id=row img_src=owner.birth_certificate_image.url label='شناسنامه' owner=owner.full_name %}
-
-                                <td class="text-center col-img">
-                                    <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
-                                    data-target="#ownership_document{{ row }}">
-                                    <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
-
-                                {% include 'partials/img_modal.html' with img_type='ownership_document' id=row img_src=owner.ownership_document_image.url label='سند مالکیت' owner=owner.full_name %}
-
+                                        </a>
+                                    </td>
+                                    {% include 'partials/img_modal.html' with img_type='birth_certificate' id=row img_src=owner.birth_certificate_image.url label='شناسنامه' owner=owner.full_name %}
+                                {% else %}
+                                    <td class="text-center text-danger col-img">
+                                        {% none_img_tag %}
+                                    </td>
+                                {% endif %}
+                                
+                                {% if owner.ownership_document_image %}
+                                    <td class="text-center col-img">
+                                        <a href="#" data-toggle="modal" class="btn btn-success" title="مشاهده تصویر"
+                                        data-target="#ownership_document{{ row }}">
+                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+                                    {% include 'partials/img_modal.html' with img_type='ownership_document' id=row img_src=owner.ownership_document_image.url label='سند مالکیت' owner=owner.full_name %}
+                                {% else %}
+                                    <td class="text-center text-danger col-img">
+                                        {% none_img_tag %}
+                                    </td>
+                                {% endif %}
+                                
                                 {% if perms.projects.delete_owners or perms.projects.change_owners %}
                                     <td class="action-td text-center">
                                         {% if perms.projects.change_owners %}

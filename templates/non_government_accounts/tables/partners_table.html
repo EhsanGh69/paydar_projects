@@ -1,3 +1,5 @@
+{% load base_tags %}
+
 <div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="data-table" class="table table-bordered table-striped sortable" role="grid" aria-describedby="example1_info">
@@ -52,16 +54,20 @@
                                 <td data-sort="{{ partner.investment_amount }}">
                                     {{ partner.formatted_investment_amount }}
                                 </td>
-
-                                <td class="text-center col-img">
-                                    <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
-                                    data-target="#contract{{ row }}">
-                                        <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
-                                    </a>
-                                </td>
-
-                                {% include 'partials/img_modal.html' with img_type='contract' id=row img_src=partner.contract_image.url label='قرارداد' owner=partner.full_name %}
-
+                                {% if partner.contract_image %}
+                                    <td class="text-center col-img">
+                                        <a href="#" class="btn btn-success" data-toggle="modal" title="مشاهده تصویر" 
+                                        data-target="#contract{{ row }}">
+                                            <i class="fa-solid fa-image" style="font-size: 2rem;"></i><br>
+                                        </a>
+                                    </td>
+                                    {% include 'partials/img_modal.html' with img_type='contract' id=row img_src=partner.contract_image.url label='قرارداد' owner=partner.full_name %}
+                                {% else %}
+                                    <td class="text-center text-danger col-img">
+                                        {% none_img_tag %}
+                                    </td>
+                                {% endif %}
+                                
                                 <td>{{ partner.phone }}</td>
                                 <td>{{ partner.address }}</td>
 

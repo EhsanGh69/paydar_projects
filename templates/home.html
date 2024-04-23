@@ -74,7 +74,11 @@
                     {% url 'user_messages:send_message' %}?receiver={{user.username}}&full_name={{user.get_full_name}}
                     {% else %}#{% endif %}
                     " class="nav-link text-light p-0">
-                      <span>{{ user.get_full_name }}</span>
+                      <span>
+                        {% if user.get_full_name %}{{ user.get_full_name }}
+                        {% else %}{{user.username}}
+                        {% endif %}
+                      </span>
                       <i class="fa-solid fa-envelope text-danger" style="font-size: 1.2rem;"></i>
                     </a>
                   </li>

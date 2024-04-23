@@ -1,5 +1,6 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% load base_tags %}
 
 <div class="row">
     <div class="col-12 col-xl-6 mb-3">
@@ -7,14 +8,22 @@
     </div>
     <fieldset class="input-group mb-3 d-none" id="rem-field">
         <div class="col-12 col-xl-6 mb-3">
-            {{ form.removal_amount|as_crispy_field }}
+            <label for="">{{ form.removal_amount.label }}*</label>
+            {% if form.removal_amount.errors %}
+                {{ form.removal_amount|add_class:"form-control border border-danger" }}
+                {% for error in form.removal_amount.errors %}
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+                {% endfor %}
+            {% else %}
+                {{ form.removal_amount|add_class:"form-control" }}
+            {% endif %}
             <small class="form-text text-muted">
                 <span id="removal_counter">0</span>
                 <span>ریال</span>
             </small>
         </div>
         <div class="col-12 col-xl-6 mb-3 mb-3">
-            <label for="">{{ form.removal_description.label }}</label>
+            <label for="">{{ form.removal_description.label }}*</label>
             {% if form.removal_description.errors %}
                 {{ form.removal_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
                 {% for error in form.removal_description.errors %}
@@ -38,7 +47,7 @@
         <div class="col-12 col-xl-6 mb-3">
             {{ form.removal_image|as_crispy_field }}
             <span class="text-danger d-none" id="removal_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
-            <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+            <small class="form-text text-muted">{% img_size_msg %}</small>
             {% if request.FILES.removal_image %}
                 <strong class="form-text text-muted" style="font-size:90%">
                     نام فایل: {{ request.FILES.removal_image }}
@@ -48,14 +57,22 @@
     </fieldset>
     <fieldset class="input-group mb-3 d-none" id="set-field">
         <div class="col-12 col-xl-6 mb-3">
-            {{ form.settle_amount|as_crispy_field }}
+            <label for="">{{ form.settle_amount.label }}*</label>
+            {% if form.settle_amount.errors %}
+                {{ form.settle_amount|add_class:"form-control border border-danger" }}
+                {% for error in form.settle_amount.errors %}
+                    <strong class="form-text text-danger" style="font-size:80%">{{ error }}</strong>
+                {% endfor %}
+            {% else %}
+                {{ form.settle_amount|add_class:"form-control" }}
+            {% endif %}
             <small class="form-text text-muted">
                 <span id="settle_counter">0</span>
                 <span>ریال</span>
             </small>
         </div>
         <div class="col-12 col-xl-6 mb-3 mb-3">
-            <label for="">{{ form.settle_description.label }}</label>
+            <label for="">{{ form.settle_description.label }}*</label>
             {% if form.settle_description.errors %}
                 {{ form.settle_description|add_class:"form-control border border-danger"|attr:"rows:5" }}
                 {% for error in form.settle_description.errors %}
@@ -79,7 +96,7 @@
         <div class="col-12 col-xl-6 mb-3">
             {{ form.settle_image|as_crispy_field }}
             <span class="text-danger d-none" id="settle_image_alert">لطفا تصویر جدیدی بارگذاری نمایید</span>
-            <small class="form-text text-muted">حجم تصویر نباید بیشتر از ۱۵۰ کیلوبایت باشد</small>
+            <small class="form-text text-muted">{% img_size_msg %}</small>
             {% if request.FILES.settle_image %}
                 <strong class="form-text text-muted" style="font-size:90%">
                     نام فایل: {{ request.FILES.settle_image }}

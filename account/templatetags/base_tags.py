@@ -1,4 +1,5 @@
 from django import template
+from django.utils.html import format_html
 
 register = template.Library()
 
@@ -47,3 +48,11 @@ def pagination_urls(previous_url, item_url, next_url, record_number, list_url, s
         "page_obj": page_obj,
         "page_item": page_item
     }
+
+@register.simple_tag
+def img_size_msg():
+    return "حجم تصویر نباید بیشتر از ۲۰۰ کیلوبایت باشد"
+
+@register.simple_tag
+def none_img_tag():
+    return format_html('<p><i class="fa-solid fa-square-xmark" style="font-size: 2rem;"></i></p><p>بدون تصویر</p>')

@@ -16,9 +16,9 @@ class OwnersManager(models.Manager):
 class Owners(models.Model):
     full_name = models.CharField(max_length=250, verbose_name="نام و نام خانوادگی")
     phone = models.CharField(max_length=20, verbose_name="شماره تماس")
-    national_card_image = models.ImageField(upload_to='images/owners/national_cards', verbose_name="تصویر کارت ملی")
-    birth_certificate_image = models.ImageField(upload_to='images/owners/birth_certificates', verbose_name="تصویر شناسنامه")
-    ownership_document_image = models.ImageField(upload_to='images/owners/ownership_documents', verbose_name="تصویر سند مالکیت")
+    national_card_image = models.ImageField(upload_to='images/owners/national_cards', null=True, blank=True, verbose_name="تصویر کارت ملی")
+    birth_certificate_image = models.ImageField(upload_to='images/owners/birth_certificates', null=True, blank=True, verbose_name="تصویر شناسنامه")
+    ownership_document_image = models.ImageField(upload_to='images/owners/ownership_documents', null=True, blank=True, verbose_name="تصویر سند مالکیت")
 
     objects = OwnersManager()
 
