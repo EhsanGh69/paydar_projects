@@ -137,7 +137,6 @@ class UserEditAccount(forms.Form):
 
 class AddUserForm(forms.Form):
     use_required_attribute = False
-    GROUP_CHOICES = [(group.name, group.name) for group in Group.objects.all()]
 
     username = forms.CharField(
         widget=forms.TextInput(),
@@ -181,10 +180,10 @@ class AddUserForm(forms.Form):
         label='تأیید رمز عبور',
     )
 
-    access_groups = forms.MultipleChoiceField(
-        choices=GROUP_CHOICES,
-        required=False,
-        label='گروه‌های دسترسی' 
+    access_group = forms.ModelChoiceField(
+        queryset=Group.objects.all(),
+        label="گروه های دسترسی",
+        required=True
     )
 
     mobile_number = forms.CharField(
@@ -258,7 +257,6 @@ class AddUserForm(forms.Form):
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data.get('mobile_number')
         is_exits_mobile_number = User.objects.filter(mobile_number=mobile_number).exists()
-
         if is_exits_mobile_number:
             raise forms.ValidationError('شماره همراه وارد شده از قبل وجود دارد، لطفا شماره همراه دیگری وارد کنید')
         
@@ -267,7 +265,6 @@ class AddUserForm(forms.Form):
 
 class UpdateUserForm(forms.Form):
     use_required_attribute = False
-    GROUP_CHOICES = [(group.name, group.name) for group in Group.objects.all()]
 
     username = forms.CharField(
         widget=forms.TextInput(),
@@ -289,10 +286,10 @@ class UpdateUserForm(forms.Form):
                   '''
     )
 
-    access_groups = forms.MultipleChoiceField(
-        choices=GROUP_CHOICES,
-        required=True,
-        label='گروه‌های دسترسی'              
+    access_group = forms.ModelChoiceField(
+        queryset=Group.objects.all(),
+        label="گروه های دسترسی",
+        required=True
     )
 
     mobile_number = forms.CharField(

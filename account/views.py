@@ -1,3 +1,4 @@
+from os import name
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -147,26 +148,15 @@ class CreateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
         mobile_number = form.cleaned_data.get('mobile_number')
         first_name = form.cleaned_data.get('first_name')
         last_name = form.cleaned_data.get('last_name')
-        access_groups = form.cleaned_data.get('access_groups')
+        access_group = form.cleaned_data.get('access_group')
 
-        if self.request.POST.get('access_groups') is None :
-            form.add_error('access_groups', 'لطفا گروه های دسترسی کاربر را تعیین کنید')
-            return super().form_invalid(form)
-        else:
-            user = User.objects.create(username=username, password=password, mobile_number=mobile_number,
+        user = User.objects.create(username=username, password=password, mobile_number=mobile_number,
                                         first_name=first_name, last_name=last_name)
+        group = get_object_or_404(Group, name=access_group)
+        user.groups.add(group)
             
-            for access_group in access_groups: # type: ignore
-                group = get_object_or_404(Group, name=access_group)
-                user.groups.add(group)
 
         return super().form_valid(form)
-        
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['all_groups'] = Group.objects.all()
-        return context
     
 
 class UpdateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, FormView):
@@ -189,14 +179,6 @@ class UpdateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
         })
         return initial
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        id = int(self.kwargs.get('pk'))
-        user = get_object_or_404(User, pk=id)
-        context['user_groups'] = user.groups.all()
-        context['all_groups'] = Group.objects.all()
-        return context
-    
     def form_valid(self, form):
         id = int(self.kwargs.get('pk'))
         user = get_object_or_404(User, pk=id)
@@ -204,7 +186,7 @@ class UpdateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
         first_name = form.cleaned_data.get('first_name')
         last_name = form.cleaned_data.get('last_name')
         username = form.cleaned_data.get('username')
-        access_groups = form.cleaned_data.get('access_groups')
+        access_group = form.cleaned_data.get('access_group')
         is_active = form.cleaned_data.get('is_active')
         user_groups = user.groups.all()
 
@@ -228,9 +210,9 @@ class UpdateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
             group = get_object_or_404(Group, name=user_group)
             user.groups.remove(group)
         
-        for access_group in access_groups: # type: ignore
-            group = get_object_or_404(Group, name=access_group)
-            user.groups.add(group)
+        new_group = get_object_or_404(Group, name=access_group)
+        user.groups.add(new_group)
+            
         return super().form_valid(form)
     
 
