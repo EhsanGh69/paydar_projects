@@ -35,6 +35,9 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
     def jalali_date_joined(self):
         return datetime2jalali(self.date_joined).strftime('%Y/%m/%d _ %H:%M:%S') # type: ignore
     

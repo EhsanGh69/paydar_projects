@@ -6,10 +6,10 @@ from account.models import User
 
 class MessageForm(forms.Form):
     use_required_attribute = False
-    FULL_NAMES = [(user.id, user.get_full_name()) for user in User.objects.all()]
-    receiver_name = forms.ChoiceField(
+    
+    receiver_name = forms.ModelChoiceField(
+        queryset=User.objects.all(),
         widget=forms.Select(),
-        choices=FULL_NAMES,
         label='گیرنده پیام',
         required=False
     )

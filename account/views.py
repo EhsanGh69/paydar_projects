@@ -179,6 +179,13 @@ class UpdateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
         })
         return initial
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = int(self.kwargs.get('pk'))
+        user = get_object_or_404(User, pk=id)
+        context['user_group'] = user.groups.all()[0]
+        return context
+    
     def form_valid(self, form):
         id = int(self.kwargs.get('pk'))
         user = get_object_or_404(User, pk=id)

@@ -17,6 +17,11 @@
               دسترسی‌های موجود
             </div>
             <div class="card-body">
+
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="live-search" placeholder="جستجو">
+                </div>
+
                 {% if request.resolver_match.url_name == 'group_create' %}
                     {% if form.permissions.errors %}
                         {{ form.permissions|add_class:"form-control border border-danger" }}
