@@ -87,7 +87,11 @@
                             <td class="action-td text-center">
                                 <a href="{% url 'account:user_update' user.pk %}" 
                                 class="btn btn-outline-info mb-2 pb-0" title="ویرایش">
-                                <i class="fa-solid fa-user-pen"></i>
+                                    <i class="fa-solid fa-user-pen"></i>
+                                </a>
+                                <a href="{% url 'account:change_user_password' user.pk %}" 
+                                class="btn btn-outline-info mb-2 pb-0" title="تغییر رمز عبور">
+                                    <i class="fa-solid fa-lock-open"></i>
                                 </a>
                                 <a href="javascript:void(0)"  
                                 data-toggle="modal"
@@ -95,7 +99,7 @@
                                 data-url="{% url 'account:user_delete' pk=user.pk %}"
                                 data-target="#deleteItemModal" title="حذف"
                                 data-message="آیا از حذف این کاربر اطمینان دارید؟">
-                                <i class="fa-solid fa-user-xmark"></i>
+                                    <i class="fa-solid fa-user-xmark"></i>
                                 </a>
                             </td> 
                         {% else %}

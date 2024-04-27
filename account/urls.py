@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     UsersList, CreateUser, UpdateUser, DeleteUser, SearchUsers,
     GroupList, CreateGroup, UpdateGroup, DeleteGroup, SearchGroups,
-    EditAccount
+    EditAccount, ChangeUserPassword
 )
 
 app_name = "account"
@@ -15,6 +15,7 @@ urlpatterns = [
     path('users/search/page/<int:page>', SearchUsers.as_view(), name="users_search"),
     path('users/create', CreateUser.as_view(), name="user_create"),
     path('users/update/<int:pk>', UpdateUser.as_view(), name="user_update"),
+    path('users/change_password/<int:pk>', ChangeUserPassword.as_view(), name="change_user_password"),
     path('users/delete/<int:pk>', DeleteUser.as_view(), name="user_delete"),
 
     path('groups/', GroupList.as_view(), name="groups"),

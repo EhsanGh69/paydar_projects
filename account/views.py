@@ -12,7 +12,8 @@ from utils.tools import valid_select_permissions, password_validation
 
 from .models import User
 from .forms import (
-    UserLogin, UserChangePassword, AddUserForm, UpdateUserForm, AddGroupForm, UpdateGroupForm, UserEditAccount
+    UserLogin, UserChangePassword, AddUserForm, UpdateUserForm, AddGroupForm, 
+    UpdateGroupForm, UserEditAccount, AdminChangePassword
 )
 
 
@@ -69,7 +70,7 @@ class ChangePassword(LoginRequiredMixin, SuccessMessageMixin, FormView):
         elif validation_result == 'similar_err':
             form.add_error('new_password', 'رمز عبور نباید شبیه نام کاربری باشد')
             return super().form_invalid(form)
-        elif new_password != confirm_new_password:
+        elif new_password and new_password != confirm_new_password:
             form.add_error('confirm_new_password', 'تایید رمز عبور با رمز عبور یکسان نمی باشد')
             return super().form_invalid(form)
 
@@ -221,7 +222,40 @@ class UpdateUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixi
         user.groups.add(new_group)
             
         return super().form_valid(form)
-    
+
+
+class ChangeUserPassword(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, FormView):
+    permission_required = 'account.change_user'
+    template_name = 'account/change_user_password.html'
+    form_class = AdminChangePassword
+    success_url = reverse_lazy('account:users')
+    success_message = "رمز عبور کاربر با موفقیت تغییر یافت"
+
+    def form_valid(self, form):
+        id = int(self.kwargs.get('pk'))
+        user = get_object_or_404(User, pk=id)
+        password = form.cleaned_data.get('password')
+        confirm_password = form.cleaned_data.get('confirm_password')
+        
+        validation_result = password_validation(password, user.username) # type: ignore
+
+        if validation_result == 'not_err':
+            user.set_password(password) # type: ignore
+            user.save()
+            return super().form_valid(form)
+        elif len(password) < 8: # type: ignore
+            form.add_error('password', 'رمز عبور باید حداقل هشت کاراکتر باشد')
+            return super().form_invalid(form)
+        elif validation_result == 'combine_err':
+            form.add_error('password', 'رمز عبور باید ترکیبی از حروف و اعداد باشد')
+            return super().form_invalid(form)
+        elif validation_result == 'similar_err':
+            form.add_error('password', 'رمز عبور نباید شبیه نام کاربری باشد')
+            return super().form_invalid(form)
+        elif password and password != confirm_password:
+            form.add_error('confirm_password', 'تایید رمز عبور با رمز عبور یکسان نمی باشد')
+            return super().form_invalid(form)
+
 
 class DeleteUser(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'account.delete_user'

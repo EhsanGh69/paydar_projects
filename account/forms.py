@@ -78,8 +78,6 @@ class UserChangePassword(forms.Form):
         confirm_new_password = self.cleaned_data.get('confirm_new_password')
         if not confirm_new_password and new_password:
             raise forms.ValidationError('لطفاً رمز عبور جدید خود تأیید نمایید')
-        if new_password and confirm_new_password != new_password:
-            raise forms.ValidationError('تأیید رمز عبور جدید با رمز عبور جدید یکسان نیست')
         
         return confirm_new_password
 
@@ -338,6 +336,22 @@ class UpdateUserForm(forms.Form):
         
         return username
         
+
+class AdminChangePassword(forms.Form):
+    use_required_attribute = False
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(),
+        required=True,
+        label='رمز عبور جدید'
+    )
+
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(),
+        required=True,
+        label='تأیید رمز عبور جدید',
+    )
+
 
 class AddGroupForm(forms.Form):
     use_required_attribute = False
