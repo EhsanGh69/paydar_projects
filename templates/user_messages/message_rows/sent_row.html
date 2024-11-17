@@ -10,19 +10,19 @@
         </a>
     </td>
     <td class="mailbox-name">
-        <a href="{% url 'user_messages:sent_message' msg.receiver msg.id %}" class="nav-link text-secondary">
+        <a href="{% url 'user_messages:sent_message' msg.receiver.username msg.id %}" class="nav-link text-secondary">
             <i class="fas fa-user text-muted" style="font-size:1.3rem;"></i>
             <strong>{{ msg.receiver.get_full_name }}</strong>
         </a>
     </td>
     <td class="mailbox-subject">
-        <a href="{% url 'user_messages:sent_message' msg.receiver msg.id %}" class="nav-link text-dark">
+        <a href="{% url 'user_messages:sent_message' msg.receiver.username msg.id %}" class="nav-link text-dark">
             <i class="fas fa-file-text text-muted" style="font-size:1.3rem;"></i>
             <b>{{ msg.subject }}</b>
         </a>
     </td>
     <td class="mailbox-date">
-        <a href="{% url 'user_messages:sent_message' msg.receiver msg.id %}" class="nav-link text-dark">
+        <a href="{% url 'user_messages:sent_message' msg.receiver.username msg.id %}" class="nav-link text-dark">
             <i class="fa-solid fa-clock text-muted mr-1" style="font-size:1.3rem;"></i>
             <i>{{ msg.date_time|timesince }} پیش</i>
         </a>

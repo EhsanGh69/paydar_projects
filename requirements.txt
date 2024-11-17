@@ -16,6 +16,7 @@ humanize==4.9.0
 jdatetime==4.1.1
 Pillow==9.5.0
 psycopg==3.1.9
+psycopg2-binary==2.9.10
 pycparser==2.21
 python-decouple==3.8
 reportlab==4.0.4

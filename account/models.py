@@ -16,11 +16,12 @@ class UserManager(BaseUserManager):
         )
         return self.get_queryset().filter(lookup).distinct()
     
-    def create_superuser(self, email, password):
+    def create_superuser(self, username, email, password):
         """
         Creates and saves a superuser with the given email and password.
         """
-        user = self.create_user( # type: ignore
+        user = self.create( # type: ignore
+            username, # type: ignore
             email,
             password=password,
         )
@@ -33,7 +34,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     mobile_number = models.CharField(max_length=20, unique=True, default="بدون شماره", verbose_name="شماره همراه")
 
-    objects = UserManager()
+    objects = UserManager() # type: ignore
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

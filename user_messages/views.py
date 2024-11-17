@@ -28,8 +28,8 @@ class SendMessage(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMix
         if receiver_username is not None:
             receiver = get_object_or_404(User, username=receiver_username)
         else:
-            receiver_id = form.cleaned_data.get('receiver_name')
-            receiver = get_object_or_404(User, pk=receiver_id)
+            receiver_obj = form.cleaned_data.get('receiver_name')
+            receiver = get_object_or_404(User, pk=receiver_obj.id) # type: ignore
         subject = form.cleaned_data.get('subject')
         content = form.cleaned_data.get('content')
         if receiver == self.request.user:
